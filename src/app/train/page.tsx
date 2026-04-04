@@ -15,9 +15,10 @@ import {
   Certificate,
   Blueprint,
   ListChecks,
+  Lock,
 } from "@phosphor-icons/react";
 import { modules, getTotalLessons } from "@/data/training-modules";
-import { getProgress, getCompletionPercentage } from "@/lib/progress-store";
+import { defaultProgress, refreshProgress, getProgress, getCompletionPercentage, isLessonUnlocked } from "@/lib/progress-store";
 import Link from "next/link";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -51,12 +52,14 @@ const fadeUp = {
 };
 
 export default function TrainPage() {
-  const [progress, setProgress] = useState(getProgress());
+  const [progress, setProgress] = useState(defaultProgress);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    setProgress(getProgress());
+    refreshProgress().then((p) => {
+      setProgress(p);
+      setMounted(true);
+    });
   }, []);
 
   const totalLessons = getTotalLessons();
@@ -79,9 +82,7 @@ export default function TrainPage() {
                 <ArrowLeft size={14} weight="bold" className="text-stone-500" />
               </Link>
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-[var(--accent)] flex items-center justify-center">
-                  <ShieldCheck size={14} weight="bold" className="text-white" />
-                </div>
+                <img src="/rest-group-logo.png" alt="REST Group" width={28} height={28} className="rounded-lg" />
                 <span className="text-sm font-semibold tracking-tight text-stone-700">
                   Training Modules
                 </span>
@@ -177,6 +178,17 @@ export default function TrainPage() {
                                 className="text-emerald-500"
                               />
                             )}
+                            {mounted && progress.completedModules?.includes(mod.id) && (
+                              <span
+                                className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                                style={{
+                                  backgroundColor: mod.color + "12",
+                                  color: mod.color,
+                                }}
+                              >
+                                {mod.badge.label}
+                              </span>
+                            )}
                           </div>
                           <h2 className="text-lg md:text-xl font-bold tracking-tight text-stone-800 mb-1">
                             {mod.title}
@@ -209,58 +221,77 @@ export default function TrainPage() {
                       {mod.lessons.map((lesson, lessonIndex) => {
                         const isCompleted =
                           mounted && progress.completedLessons.includes(lesson.id);
-                        const hasQuiz = lesson.quiz && lesson.quiz.length > 0;
+                        const isLocked =
+                          mounted && !isLessonUnlocked(lesson.id, modules);
                         const quizScore =
                           mounted ? progress.quizScores[lesson.id] : null;
 
-                        return (
-                          <Link
-                            key={lesson.id}
-                            href={`/train/${mod.id}/${lesson.id}`}
+                        const content = (
+                          <div
+                            className={`group px-6 md:px-8 py-4 flex items-center gap-4 transition-colors duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                              isLocked
+                                ? "opacity-40 cursor-not-allowed"
+                                : "hover:bg-stone-50/60"
+                            }`}
                           >
-                            <div className="group px-6 md:px-8 py-4 flex items-center gap-4 hover:bg-stone-50/60 transition-colors duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]">
-                              <div
-                                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-xs font-mono font-bold transition-all duration-300 ${
+                            <div
+                              className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-xs font-mono font-bold transition-all duration-300 ${
+                                isCompleted
+                                  ? "bg-emerald-50 text-emerald-600"
+                                  : isLocked
+                                  ? "bg-stone-100 text-stone-300"
+                                  : "bg-stone-100 text-stone-400 group-hover:bg-[var(--accent-muted)] group-hover:text-[var(--accent)]"
+                              }`}
+                            >
+                              {isCompleted ? (
+                                <CheckCircle size={18} weight="fill" />
+                              ) : isLocked ? (
+                                <Lock size={14} weight="bold" />
+                              ) : (
+                                `${modIndex + 1}.${lessonIndex + 1}`
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className={`text-sm font-medium transition-colors duration-300 ${
                                   isCompleted
-                                    ? "bg-emerald-50 text-emerald-600"
-                                    : "bg-stone-100 text-stone-400 group-hover:bg-[var(--accent-muted)] group-hover:text-[var(--accent)]"
+                                    ? "text-stone-400"
+                                    : isLocked
+                                    ? "text-stone-400"
+                                    : "text-stone-700 group-hover:text-[var(--accent)]"
                                 }`}
                               >
-                                {isCompleted ? (
-                                  <CheckCircle size={18} weight="fill" />
-                                ) : (
-                                  `${modIndex + 1}.${lessonIndex + 1}`
+                                {lesson.title}
+                              </p>
+                              <div className="flex items-center gap-3 mt-0.5">
+                                <span className="text-[11px] text-stone-300 flex items-center gap-1">
+                                  <Clock size={11} />
+                                  {lesson.duration}
+                                </span>
+                                {quizScore && (
+                                  <span className="text-[11px] text-stone-300">
+                                    Quiz: {quizScore.score}/{quizScore.total}
+                                  </span>
                                 )}
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <p
-                                  className={`text-sm font-medium transition-colors duration-300 ${
-                                    isCompleted
-                                      ? "text-stone-400"
-                                      : "text-stone-700 group-hover:text-[var(--accent)]"
-                                  }`}
-                                >
-                                  {lesson.title}
-                                </p>
-                                <div className="flex items-center gap-3 mt-0.5">
-                                  <span className="text-[11px] text-stone-300 flex items-center gap-1">
-                                    <Clock size={11} />
-                                    {lesson.duration}
-                                  </span>
-                                  {hasQuiz && (
-                                    <span className="text-[11px] text-stone-300">
-                                      {quizScore
-                                        ? `Quiz: ${quizScore.score}/${quizScore.total}`
-                                        : "Has quiz"}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
+                            </div>
+                            {!isLocked && (
                               <ArrowRight
                                 size={14}
                                 className="text-stone-200 group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all duration-400 ease-[cubic-bezier(0.32,0.72,0,1)] shrink-0"
                               />
-                            </div>
+                            )}
+                          </div>
+                        );
+
+                        return isLocked ? (
+                          <div key={lesson.id}>{content}</div>
+                        ) : (
+                          <Link
+                            key={lesson.id}
+                            href={`/train/${mod.id}/${lesson.id}`}
+                          >
+                            {content}
                           </Link>
                         );
                       })}

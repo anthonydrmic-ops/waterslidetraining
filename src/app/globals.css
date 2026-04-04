@@ -1,17 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafaf9;
-  --foreground: #1c1917;
-  --accent: #0d7377;
-  --accent-light: #f0fdfa;
-  --accent-dark: #0a5c5f;
-  --accent-muted: rgba(13, 115, 119, 0.08);
+  --background: #F5F7FA;
+  --foreground: #1A1A1A;
+  --accent: #0B3A66;
+  --accent-light: #e8f0f8;
+  --accent-dark: #0A2F4F;
+  --accent-muted: rgba(11, 58, 102, 0.08);
+  --cta: #F05A28;
+  --cta-dark: #d94d1f;
+  --cta-muted: rgba(240, 90, 40, 0.08);
+  --teal: #1F7A8C;
   --surface: #ffffff;
   --surface-elevated: #ffffff;
   --border: #e7e5e4;
   --border-light: #f5f5f4;
-  --muted: #78716c;
+  --muted: #6B7280;
   --danger: #b91c1c;
   --success: #047857;
   --warning: #b45309;
@@ -29,6 +33,10 @@
   --color-accent-light: var(--accent-light);
   --color-accent-dark: var(--accent-dark);
   --color-accent-muted: var(--accent-muted);
+  --color-cta: var(--cta);
+  --color-cta-dark: var(--cta-dark);
+  --color-cta-muted: var(--cta-muted);
+  --color-teal: var(--teal);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
   --color-border: var(--border);
@@ -50,7 +58,7 @@ body {
 }
 
 ::selection {
-  background: var(--accent);
+  background: var(--cta);
   color: white;
 }
 

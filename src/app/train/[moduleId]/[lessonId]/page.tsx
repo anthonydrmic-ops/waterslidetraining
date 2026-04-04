@@ -23,13 +23,21 @@ import {
   type LessonSection,
 } from "@/data/training-modules";
 import {
+  defaultProgress,
+  refreshProgress,
   getProgress,
   completeLesson,
+  completeModule,
   saveQuizScore,
   setCertified,
+  isLessonUnlocked,
+  getModuleCumulativeScore,
+  isModuleFullyQuizzed,
+  resetModuleProgress,
 } from "@/lib/progress-store";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { Diagram } from "@/components/diagrams";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16, filter: "blur(6px)" },
@@ -52,21 +60,26 @@ export default function LessonPage({
 
   if (!mod || !lesson) redirect("/train");
 
-  const [progress, setProgress] = useState(getProgress());
+  const router = useRouter();
+  const [progress, setProgress] = useState(defaultProgress);
   const [mounted, setMounted] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [certName, setCertName] = useState("");
-  const [showCert, setShowCert] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    setProgress(getProgress());
-  }, []);
+    refreshProgress().then((p) => {
+      setProgress(p);
+      setMounted(true);
+      // Gate locked lessons
+      if (!isLessonUnlocked(lessonId, modules)) {
+        router.replace("/train");
+      }
+    });
+  }, [lessonId, router]);
 
   const isCompleted = mounted && progress.completedLessons.includes(lessonId);
-  const hasQuiz = lesson.quiz && lesson.quiz.length > 0;
 
   const currentModIndex = modules.findIndex((m) => m.id === moduleId);
   const currentLessonIndex = mod.lessons.findIndex((l) => l.id === lessonId);
@@ -88,36 +101,89 @@ export default function LessonPage({
     nextLink = `/train/${nextMod.id}/${nextMod.lessons[0].id}`;
   }
 
-  const handleComplete = useCallback(() => {
-    const updated = completeLesson(lessonId);
-    setProgress(updated);
-  }, [lessonId]);
+  const isFinalAssessment = moduleId === "assessment";
+  const quizScore = mounted ? progress.quizScores[lessonId] : null;
+  const alreadyQuizzed = quizScore != null;
+  const [showModuleFail, setShowModuleFail] = useState(false);
+  const [moduleCumulativeResult, setModuleCumulativeResult] = useState<{ score: number; total: number; pct: number } | null>(null);
 
-  const handleQuizSubmit = useCallback(() => {
-    if (!lesson.quiz) return;
+  // If returning to a lesson that was already quizzed, show results immediately
+  useEffect(() => {
+    if (alreadyQuizzed && lesson.quiz) {
+      setQuizSubmitted(true);
+      // Reconstruct answers from the correct answers (for display purposes)
+      const restored: Record<string, number> = {};
+      for (const q of lesson.quiz) {
+        // We don't store individual answers, so we can't reconstruct them
+        // Quiz will show as submitted but without answer highlighting
+      }
+    }
+  }, [alreadyQuizzed, lesson.quiz]);
+
+  const handleQuizSubmit = useCallback(async () => {
+    if (!lesson.quiz || alreadyQuizzed) return;
     const score = lesson.quiz.reduce(
       (acc, q) => acc + (quizAnswers[q.id] === q.correctIndex ? 1 : 0),
       0
     );
-    const updated = saveQuizScore(lessonId, score, lesson.quiz.length);
-    setProgress(updated);
+    const total = lesson.quiz.length;
+    let updated = await saveQuizScore(lessonId, score, total);
+    updated = await completeLesson(lessonId);
     setQuizSubmitted(true);
-  }, [lesson.quiz, quizAnswers, lessonId]);
 
-  const quizScore = mounted ? progress.quizScores[lessonId] : null;
-  const isFinalAssessment = moduleId === "assessment";
+    // Check if all lessons in this module are now quizzed
+    if (moduleId !== "assessment") {
+      const allQuizzed = mod.lessons.every((l) => updated.quizScores[l.id] != null);
+      if (allQuizzed) {
+        const cumulative = getModuleCumulativeScore(moduleId, modules);
+        if (cumulative.pct >= 80) {
+          await completeModule(moduleId);
+          setProgress(getProgress());
+          router.push(`/train/${moduleId}/complete`);
+        } else {
+          // Module failed - reset all progress for this module immediately
+          setModuleCumulativeResult(cumulative);
+          const reset = await resetModuleProgress(moduleId, modules);
+          setProgress(reset);
+          setShowModuleFail(true);
+          return;
+        }
+      }
+    }
+    setProgress(updated);
+  }, [lesson.quiz, quizAnswers, lessonId, mod, moduleId, alreadyQuizzed, router]);
+
   const passedFinal =
     isFinalAssessment &&
     quizScore &&
     quizScore.score >= Math.ceil((quizScore.total || 1) * 0.8);
 
-  const handleCertify = useCallback(() => {
-    if (certName.trim()) {
-      setCertified(certName.trim());
-      setProgress(getProgress());
-      setShowCert(true);
+  const handleCertify = useCallback(async () => {
+    if (!certName.trim()) return;
+    // Call certify API to generate verification ID, then update local progress
+    try {
+      const res = await fetch("/api/certify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName: certName.trim() }),
+      });
+      if (res.ok) {
+        const { certId } = await res.json();
+        // Store certId locally too
+        await setCertified(certName.trim());
+        if (certId) {
+          localStorage.setItem("slidesure-cert-id", certId);
+        }
+      } else {
+        // Fallback if API fails (dev mode without Supabase)
+        await setCertified(certName.trim());
+      }
+    } catch {
+      // Fallback to local-only
+      await setCertified(certName.trim());
     }
-  }, [certName]);
+    router.push("/train/certified");
+  }, [certName, router]);
 
   // Calculate lesson position
   let globalLessonIndex = 0;
@@ -202,7 +268,7 @@ export default function LessonPage({
           {/* Key Takeaways */}
           {lesson.keyTakeaways.length > 0 && (
             <motion.div variants={fadeUp} className="mt-12">
-              <div className="card-shell" style={{ background: "rgba(13, 115, 119, 0.04)", borderColor: "rgba(13, 115, 119, 0.08)" }}>
+              <div className="card-shell" style={{ background: "rgba(11, 58, 102, 0.04)", borderColor: "rgba(11, 58, 102, 0.08)" }}>
                 <div className="card-core p-6 md:p-7">
                   <h3 className="text-sm font-semibold mb-4 flex items-center gap-2 text-stone-800">
                     <BookOpen size={17} weight="duotone" className="text-[var(--accent)]" />
@@ -228,93 +294,119 @@ export default function LessonPage({
             </motion.div>
           )}
 
-          {/* Actions */}
-          <motion.div variants={fadeUp} className="mt-10 space-y-3">
-            {!isCompleted && (
-              <button
-                onClick={handleComplete}
-                className="group w-full py-4 rounded-2xl bg-[var(--accent)] text-white font-medium hover:bg-[var(--accent-dark)] active:scale-[0.99] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-[0_4px_16px_rgba(13,115,119,0.2)] flex items-center justify-center gap-2"
-              >
-                <CheckCircle size={18} weight="bold" />
-                Mark Lesson Complete
-              </button>
-            )}
-
-            {hasQuiz && !showQuiz && (
-              <button
-                onClick={() => setShowQuiz(true)}
-                className="w-full py-4 rounded-2xl bg-stone-900 text-white font-medium hover:bg-stone-800 active:scale-[0.99] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
-              >
-                {quizScore
-                  ? `Retake Quiz (Previous: ${quizScore.score}/${quizScore.total})`
-                  : isFinalAssessment
-                  ? "Begin Final Assessment"
-                  : "Take Quiz"}
-              </button>
-            )}
-          </motion.div>
-
-          {/* Quiz */}
-          <AnimatePresence>
-            {showQuiz && hasQuiz && (
-              <motion.div
-                initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
-                transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-                className="mt-12"
-              >
+          {/* Quiz - one question at a time */}
+          <motion.div variants={fadeUp} className="mt-12">
                 <div className="card-shell">
                   <div className="card-core p-6 md:p-8">
-                    <h3 className="text-xl font-bold tracking-tight text-stone-900 mb-2">
-                      {isFinalAssessment ? "Final Assessment" : "Knowledge Check"}
-                    </h3>
-                    {isFinalAssessment && (
-                      <p className="text-sm text-stone-400 mb-8 leading-relaxed">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-xl font-bold tracking-tight text-stone-900">
+                        {isFinalAssessment ? "Final Assessment" : "Knowledge Check"}
+                      </h3>
+                      {!quizSubmitted && (
+                        <span className="text-xs font-mono text-stone-400 bg-stone-100 px-3 py-1.5 rounded-full">
+                          {currentQuizIndex + 1} / {lesson.quiz!.length}
+                        </span>
+                      )}
+                    </div>
+                    {isFinalAssessment && !quizSubmitted && (
+                      <p className="text-sm text-stone-400 mb-6 leading-relaxed">
                         You need 80% or higher to pass and earn your
                         certification. Take your time and review each question carefully.
                       </p>
                     )}
 
-                    <div className="space-y-8">
-                      {lesson.quiz!.map((q, qi) => (
-                        <QuizQuestionCard
-                          key={q.id}
-                          question={q}
-                          index={qi}
-                          selected={quizAnswers[q.id]}
-                          onSelect={(optIndex) => {
-                            if (!quizSubmitted) {
-                              setQuizAnswers((prev) => ({
-                                ...prev,
-                                [q.id]: optIndex,
-                              }));
-                            }
-                          }}
-                          submitted={quizSubmitted}
-                        />
-                      ))}
-                    </div>
-
                     {!quizSubmitted ? (
-                      <button
-                        onClick={handleQuizSubmit}
-                        disabled={
-                          Object.keys(quizAnswers).length !== lesson.quiz!.length
-                        }
-                        className="mt-8 w-full py-4 rounded-2xl bg-stone-900 text-white font-medium hover:bg-stone-800 active:scale-[0.99] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
-                      >
-                        Submit Answers
-                      </button>
+                      <>
+                        {/* Progress bar */}
+                        <div className="w-full h-1.5 rounded-full bg-stone-100 mb-8 overflow-hidden">
+                          <motion.div
+                            className="h-full rounded-full bg-[var(--accent)]"
+                            initial={false}
+                            animate={{ width: `${((currentQuizIndex + 1) / lesson.quiz!.length) * 100}%` }}
+                            transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+                          />
+                        </div>
+
+                        {/* Single question */}
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={currentQuizIndex}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                          >
+                            <QuizQuestionCard
+                              question={lesson.quiz![currentQuizIndex]}
+                              index={currentQuizIndex}
+                              selected={quizAnswers[lesson.quiz![currentQuizIndex].id]}
+                              onSelect={(optIndex) => {
+                                setQuizAnswers((prev) => ({
+                                  ...prev,
+                                  [lesson.quiz![currentQuizIndex].id]: optIndex,
+                                }));
+                              }}
+                              submitted={false}
+                            />
+                          </motion.div>
+                        </AnimatePresence>
+
+                        {/* Next / Submit button */}
+                        <div className="mt-8 flex gap-3">
+                          {currentQuizIndex > 0 && (
+                            <button
+                              onClick={() => setCurrentQuizIndex((i) => i - 1)}
+                              className="px-6 py-4 rounded-2xl bg-stone-100 text-stone-600 font-medium hover:bg-stone-200 active:scale-[0.99] transition-all duration-300"
+                            >
+                              <ArrowLeft size={16} weight="bold" />
+                            </button>
+                          )}
+                          {currentQuizIndex < lesson.quiz!.length - 1 ? (
+                            <button
+                              onClick={() => setCurrentQuizIndex((i) => i + 1)}
+                              disabled={quizAnswers[lesson.quiz![currentQuizIndex].id] == null}
+                              className="flex-1 py-4 rounded-2xl bg-stone-900 text-white font-medium hover:bg-stone-800 active:scale-[0.99] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex items-center justify-center gap-2"
+                            >
+                              Next Question
+                              <ArrowRight size={16} weight="bold" />
+                            </button>
+                          ) : (
+                            <button
+                              onClick={handleQuizSubmit}
+                              disabled={
+                                alreadyQuizzed || Object.keys(quizAnswers).length !== lesson.quiz!.length
+                              }
+                              className="flex-1 py-4 rounded-2xl bg-[var(--cta)] text-white font-medium hover:bg-[var(--cta-dark)] active:scale-[0.99] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
+                            >
+                              Submit Answers
+                            </button>
+                          )}
+                        </div>
+                      </>
                     ) : (
-                      <div className="mt-8">
+                      <div className="mt-6">
+                        {/* Results summary */}
                         <QuizResults
                           quiz={lesson.quiz!}
                           answers={quizAnswers}
                           isFinal={isFinalAssessment}
                         />
 
-                        {passedFinal && !progress.certified && !showCert && (
+                        {/* Show all questions with answers after submit */}
+                        <div className="mt-8 space-y-6">
+                          {lesson.quiz!.map((q, qi) => (
+                            <QuizQuestionCard
+                              key={q.id}
+                              question={q}
+                              index={qi}
+                              selected={quizAnswers[q.id]}
+                              onSelect={() => {}}
+                              submitted={true}
+                            />
+                          ))}
+                        </div>
+
+                        {passedFinal && !progress.certified && (
                           <motion.div
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -325,7 +417,7 @@ export default function LessonPage({
                               <div className="card-core p-6">
                                 <h4 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2">
                                   <Trophy size={18} weight="fill" className="text-emerald-600" />
-                                  Congratulations — You Passed
+                                  Congratulations - You Passed
                                 </h4>
                                 <p className="text-sm text-emerald-700/70 mb-5 leading-relaxed">
                                   Enter your name to generate your competency certificate.
@@ -351,36 +443,86 @@ export default function LessonPage({
                           </motion.div>
                         )}
 
-                        {showCert && (
-                          <CertificateCard
-                            name={certName}
-                            score={quizScore!.score}
-                            total={quizScore!.total}
-                            date={new Date().toLocaleDateString("en-AU", {
-                              day: "numeric",
-                              month: "long",
-                              year: "numeric",
-                            })}
-                          />
+                        {progress.certified && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                            className="mt-6"
+                          >
+                            <Link
+                              href="/train/certified"
+                              className="group w-full inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-emerald-600 text-white font-medium transition-all duration-500 hover:bg-emerald-700 active:scale-[0.97] shadow-[0_4px_16px_rgba(4,120,87,0.25)]"
+                            >
+                              <Certificate size={18} weight="bold" />
+                              View Your Certificate
+                            </Link>
+                          </motion.div>
                         )}
-
-                        <button
-                          onClick={() => {
-                            setQuizSubmitted(false);
-                            setQuizAnswers({});
-                          }}
-                          className="mt-4 w-full py-3.5 rounded-2xl bg-stone-100 text-stone-600 text-sm font-medium hover:bg-stone-200 active:scale-[0.99] transition-all duration-300"
-                        >
-                          Retake Quiz
-                        </button>
                       </div>
                     )}
+
+                    {/* Module Fail Popup */}
+                    <AnimatePresence>
+                      {showModuleFail && moduleCumulativeResult && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm"
+                        >
+                          <motion.div
+                            initial={{ scale: 0.92, opacity: 0, filter: "blur(8px)" }}
+                            animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+                            exit={{ scale: 0.92, opacity: 0 }}
+                            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+                            className="card-shell max-w-md w-full"
+                          >
+                            <div className="card-core p-8 text-center">
+                              <div className="w-16 h-16 rounded-full bg-red-50 border-2 border-red-100 flex items-center justify-center mx-auto mb-5">
+                                <X size={32} weight="bold" className="text-red-500" />
+                              </div>
+                              <h3 className="text-xl font-bold tracking-tight text-stone-900 mb-2">
+                                Module Not Passed
+                              </h3>
+                              <p className="text-stone-400 text-sm leading-relaxed mb-6 max-w-[38ch] mx-auto">
+                                You scored {moduleCumulativeResult.pct}% across this module.
+                                You need 80% or higher to pass and earn the module badge.
+                              </p>
+                              <div className="flex items-center justify-center gap-6 mb-6">
+                                <div className="text-center">
+                                  <p className="text-2xl font-bold font-mono text-red-600">{moduleCumulativeResult.score}/{moduleCumulativeResult.total}</p>
+                                  <p className="text-[10px] text-stone-400 uppercase tracking-wider mt-1">Your Score</p>
+                                </div>
+                                <div className="w-px h-10 bg-stone-200" />
+                                <div className="text-center">
+                                  <p className="text-2xl font-bold font-mono text-stone-800">{Math.ceil(moduleCumulativeResult.total * 0.8)}/{moduleCumulativeResult.total}</p>
+                                  <p className="text-[10px] text-stone-400 uppercase tracking-wider mt-1">Required</p>
+                                </div>
+                              </div>
+                              <p className="text-sm text-stone-500 leading-relaxed mb-8">
+                                Review the lesson material and try again. All quiz progress for this module will be reset.
+                              </p>
+                              <Link
+                                href={`/train/${moduleId}/${mod.lessons[0].id}`}
+                                className="w-full inline-flex items-center justify-center py-4 rounded-full bg-[var(--cta)] text-white font-medium hover:bg-[var(--cta-dark)] active:scale-[0.97] transition-all duration-500 shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
+                              >
+                                Review & Try Again
+                              </Link>
+                              <Link
+                                href="/train"
+                                className="mt-3 w-full inline-flex items-center justify-center py-3.5 rounded-full bg-stone-100 text-stone-600 text-sm font-medium hover:bg-stone-200 active:scale-[0.97] transition-all duration-300"
+                              >
+                                Back to Training
+                              </Link>
+                            </div>
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
+          </motion.div>
           {/* Navigation */}
           <motion.div
             variants={fadeUp}
@@ -400,7 +542,7 @@ export default function LessonPage({
             ) : (
               <div />
             )}
-            {nextLink ? (
+            {nextLink && isCompleted ? (
               <Link
                 href={nextLink}
                 className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-stone-900 text-white text-sm font-medium hover:bg-stone-800 active:scale-[0.97] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
@@ -411,6 +553,11 @@ export default function LessonPage({
                   className="group-hover:translate-x-0.5 transition-transform duration-300"
                 />
               </Link>
+            ) : nextLink ? (
+              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-stone-200 text-stone-400 text-sm font-medium cursor-not-allowed">
+                Next Lesson
+                <ArrowRight size={14} />
+              </span>
             ) : (
               <Link
                 href="/train"
@@ -427,6 +574,22 @@ export default function LessonPage({
 }
 
 function SectionRenderer({ section }: { section: LessonSection }) {
+  if (section.type === "diagram" && section.diagramId) {
+    return (
+      <div>
+        {section.heading && (
+          <h3 className="text-lg font-semibold tracking-tight text-stone-800 mb-3">
+            {section.heading}
+          </h3>
+        )}
+        {section.body && (
+          <p className="text-sm text-stone-400 leading-relaxed mb-3">{section.body}</p>
+        )}
+        <Diagram id={section.diagramId} />
+      </div>
+    );
+  }
+
   if (section.type === "warning") {
     return (
       <div className="p-5 rounded-2xl bg-amber-50/80 border border-amber-200/40">
@@ -464,9 +627,9 @@ function SectionRenderer({ section }: { section: LessonSection }) {
 
   if (section.type === "oem-reference") {
     return (
-      <div className="p-5 rounded-2xl bg-stone-50 border-l-[3px] border-l-[var(--accent)] border border-stone-200/30">
+      <div className="p-5 rounded-2xl bg-stone-50 border-l-[3px] border-l-[var(--teal)] border border-stone-200/30">
         <div className="flex items-start gap-3">
-          <div className="w-7 h-7 rounded-lg bg-teal-50 flex items-center justify-center shrink-0 mt-0.5">
+          <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
             <Info size={15} weight="fill" className="text-[var(--accent)]" />
           </div>
           <div>
@@ -635,18 +798,18 @@ function QuizResults({
   );
   const total = quiz.length;
   const pct = Math.round((score / total) * 100);
-  const passed = isFinal ? pct >= 80 : pct >= 60;
+  const good = pct >= 80;
 
   return (
     <div className="card-shell" style={{
-      background: passed ? "rgba(4, 120, 87, 0.04)" : "rgba(185, 28, 28, 0.04)",
-      borderColor: passed ? "rgba(4, 120, 87, 0.1)" : "rgba(185, 28, 28, 0.1)",
+      background: good ? "rgba(4, 120, 87, 0.04)" : "rgba(185, 28, 28, 0.04)",
+      borderColor: good ? "rgba(4, 120, 87, 0.1)" : "rgba(185, 28, 28, 0.1)",
     }}>
       <div className="card-core p-6">
         <div className="flex items-center gap-4">
           <div
             className={`w-14 h-14 rounded-2xl flex items-center justify-center text-lg font-bold font-mono ${
-              passed
+              good
                 ? "bg-emerald-100 text-emerald-700"
                 : "bg-red-100 text-red-700"
             }`}
@@ -655,17 +818,15 @@ function QuizResults({
           </div>
           <div>
             <p className="font-semibold text-stone-800">
-              {passed
-                ? isFinal
-                  ? "Assessment Passed"
-                  : "Well Done"
-                : isFinal
-                ? "Assessment Not Passed"
-                : "Review and Retry"}
+              {isFinal
+                ? good ? "Assessment Passed" : "Assessment Not Passed"
+                : "Quiz Complete"}
             </p>
             <p className="text-sm text-stone-400 mt-0.5">
               {score} of {total} correct
-              {isFinal && !passed && " — 80% required to pass"}
+              {!isFinal && " - this score contributes to your module total"}
+              {isFinal && !good && " - 80% required to pass"}
+              {isFinal && good && " - congratulations!"}
             </p>
           </div>
         </div>
@@ -674,73 +835,3 @@ function QuizResults({
   );
 }
 
-function CertificateCard({
-  name,
-  score,
-  total,
-  date,
-}: {
-  name: string;
-  score: number;
-  total: number;
-  date: string;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.96, filter: "blur(8px)" }}
-      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-      transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-      className="mt-6"
-    >
-      <div className="p-[6px] rounded-[2rem] bg-gradient-to-br from-teal-100/80 to-emerald-100/60 border border-teal-200/30">
-        <div className="rounded-[calc(2rem-6px)] bg-white p-8 md:p-12 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)]">
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center">
-              <Certificate size={30} weight="duotone" className="text-[var(--accent)]" />
-            </div>
-          </div>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400 mb-2 font-medium">
-            Certificate of Competency
-          </p>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-stone-900 mb-1">
-            SlideGuard<span className="text-[var(--accent)]">Pro</span>
-          </h2>
-          <p className="text-sm text-stone-400 mb-8">
-            Waterslide Operator Training System
-          </p>
-          <div className="border-t border-b border-stone-100 py-7 mb-7">
-            <p className="text-[11px] text-stone-400 mb-1 uppercase tracking-wider">
-              This certifies that
-            </p>
-            <p className="text-2xl font-bold tracking-tight text-stone-900">{name}</p>
-            <p className="text-sm text-stone-400 mt-3 max-w-[45ch] mx-auto leading-relaxed">
-              has successfully completed the SlideGuard Pro Waterslide Operator
-              Training program and demonstrated competency in operational safety,
-              defect recognition, and incident prevention.
-            </p>
-          </div>
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Score</p>
-              <p className="text-lg font-bold font-mono text-stone-800">
-                {score}/{total}
-              </p>
-            </div>
-            <div>
-              <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Date</p>
-              <p className="text-sm font-semibold text-stone-800">{date}</p>
-            </div>
-            <div>
-              <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Status</p>
-              <p className="text-sm font-semibold text-emerald-600">Passed</p>
-            </div>
-          </div>
-          <p className="text-[10px] text-stone-300 mt-8 leading-relaxed">
-            Content sourced from ProSlide Technology Inc. MA-10059 and Waterplay
-            Solutions Corp. FRP Maintenance and Repair Manual.
-          </p>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
