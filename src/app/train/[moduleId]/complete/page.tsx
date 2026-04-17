@@ -1,7 +1,8 @@
 "use client";
 
-import { use, useState, useEffect } from "react";
+import { use, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
+import confetti from "canvas-confetti";
 import {
   ShieldCheck,
   Lightning,
@@ -65,6 +66,57 @@ export default function ModuleCompletePage({
       setMounted(true);
     });
   }, [moduleId, mod]);
+  const fireConfetti = useCallback(() => {
+    const defaults = {
+      particleCount: 40,
+      spread: 55,
+      startVelocity: 30,
+      decay: 0.94,
+      gravity: 0.9,
+      ticks: 120,
+      colors: ["#1F7A8C", "#F05A28", "#FFD700"],
+      disableForReducedMotion: true,
+    };
+
+    // Burst from the left
+    confetti({
+      ...defaults,
+      angle: 60,
+      origin: { x: 0, y: 0.65 },
+    });
+
+    // Burst from the right
+    confetti({
+      ...defaults,
+      angle: 120,
+      origin: { x: 1, y: 0.65 },
+    });
+
+    // A softer second wave after a short delay
+    setTimeout(() => {
+      confetti({
+        ...defaults,
+        particleCount: 25,
+        angle: 75,
+        origin: { x: 0.15, y: 0.55 },
+      });
+      confetti({
+        ...defaults,
+        particleCount: 25,
+        angle: 105,
+        origin: { x: 0.85, y: 0.55 },
+      });
+    }, 250);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      // Small delay so the card animation has started before confetti fires
+      const timer = setTimeout(fireConfetti, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [mounted, fireConfetti]);
+
   const BadgeIcon = badgeIconMap[mod!.badge.icon] || ShieldCheck;
 
   // Find next module

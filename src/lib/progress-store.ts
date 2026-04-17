@@ -179,7 +179,15 @@ export function isLessonUnlocked(lessonId: string, allModules: Module[]): boolea
     const mod = allModules[mi];
     for (let li = 0; li < mod.lessons.length; li++) {
       if (mod.lessons[li].id === lessonId) {
-        // First lesson in any module is always accessible
+        // Assessment module requires all previous modules to be completed
+        if (mod.id === "assessment") {
+          const prevModules = allModules.filter((m) => m.id !== "assessment");
+          const allPrevCompleted = prevModules.every((m) =>
+            _cache.completedModules.includes(m.id)
+          );
+          if (!allPrevCompleted) return false;
+        }
+        // First lesson in a module is accessible (if module gate passed)
         if (li === 0) return true;
         // Within a module, previous lesson must have been quizzed
         return _cache.quizScores[mod.lessons[li - 1].id] != null;

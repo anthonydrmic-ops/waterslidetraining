@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useState, useEffect, useCallback } from "react";
+import { use, useState, useEffect, useCallback, useMemo } from "react";
+import confetti from "canvas-confetti";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -67,6 +68,33 @@ export default function LessonPage({
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [certName, setCertName] = useState("");
+  const [quizAttempt, setQuizAttempt] = useState(0);
+
+  const shuffledQuiz = useMemo(() => {
+    if (!lesson.quiz) return [];
+    let pool = [...lesson.quiz];
+    // For final assessment, select 20 random questions from the pool
+    if (moduleId === "assessment" && pool.length > 20) {
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      pool = pool.slice(0, 20);
+    }
+    return pool.map((q) => {
+      const indices = q.options.map((_, i) => i);
+      for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+      return {
+        ...q,
+        options: indices.map((i) => q.options[i]),
+        correctIndex: indices.indexOf(q.correctIndex),
+      };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lesson.quiz, quizAttempt]);
 
   useEffect(() => {
     refreshProgress().then((p) => {
@@ -105,7 +133,19 @@ export default function LessonPage({
   const quizScore = mounted ? progress.quizScores[lessonId] : null;
   const alreadyQuizzed = quizScore != null;
   const [showModuleFail, setShowModuleFail] = useState(false);
+  const [showFinalPass, setShowFinalPass] = useState(false);
   const [moduleCumulativeResult, setModuleCumulativeResult] = useState<{ score: number; total: number; pct: number } | null>(null);
+
+  const fireConfetti = useCallback(() => {
+    const burst = (opts: confetti.Options) =>
+      confetti({ ...opts, disableForReducedMotion: true });
+    burst({ particleCount: 40, angle: 60, spread: 55, origin: { x: 0, y: 0.65 }, colors: ["#1F7A8C", "#F05A28", "#FFD700"] });
+    burst({ particleCount: 40, angle: 120, spread: 55, origin: { x: 1, y: 0.65 }, colors: ["#1F7A8C", "#F05A28", "#FFD700"] });
+    setTimeout(() => {
+      burst({ particleCount: 25, angle: 60, spread: 70, origin: { x: 0.15, y: 0.7 }, colors: ["#1F7A8C", "#F05A28", "#FFD700"], decay: 0.94 });
+      burst({ particleCount: 25, angle: 120, spread: 70, origin: { x: 0.85, y: 0.7 }, colors: ["#1F7A8C", "#F05A28", "#FFD700"], decay: 0.94 });
+    }, 250);
+  }, []);
 
   // If returning to a lesson that was already quizzed, show results immediately
   useEffect(() => {
@@ -122,41 +162,43 @@ export default function LessonPage({
 
   const handleQuizSubmit = useCallback(async () => {
     if (!lesson.quiz || alreadyQuizzed) return;
-    const score = lesson.quiz.reduce(
+    const score = shuffledQuiz.reduce(
       (acc, q) => acc + (quizAnswers[q.id] === q.correctIndex ? 1 : 0),
       0
     );
-    const total = lesson.quiz.length;
+    const total = shuffledQuiz.length;
     let updated = await saveQuizScore(lessonId, score, total);
-    updated = await completeLesson(lessonId);
     setQuizSubmitted(true);
 
     // Check if all lessons in this module are now quizzed
-    if (moduleId !== "assessment") {
-      const allQuizzed = mod.lessons.every((l) => updated.quizScores[l.id] != null);
-      if (allQuizzed) {
-        const cumulative = getModuleCumulativeScore(moduleId, modules);
-        if (cumulative.pct >= 80) {
-          await completeModule(moduleId);
-          setProgress(getProgress());
-          router.push(`/train/${moduleId}/complete`);
-        } else {
-          // Module failed - reset all progress for this module immediately
+    const allQuizzed = mod.lessons.every((l) => updated.quizScores[l.id] != null);
+    if (allQuizzed) {
+      const cumulative = getModuleCumulativeScore(moduleId, modules);
+      if (cumulative.pct >= 80) {
+        updated = await completeLesson(lessonId);
+        await completeModule(moduleId);
+        setProgress(getProgress());
+        if (isFinalAssessment) {
+          // Final assessment passed - show congrats with confetti
           setModuleCumulativeResult(cumulative);
-          const reset = await resetModuleProgress(moduleId, modules);
-          setProgress(reset);
-          setShowModuleFail(true);
-          return;
+          setShowFinalPass(true);
+          fireConfetti();
+        } else {
+          router.push(`/train/${moduleId}/complete`);
         }
+      } else {
+        // Module/assessment failed - reset all progress
+        setModuleCumulativeResult(cumulative);
+        const reset = await resetModuleProgress(moduleId, modules);
+        setProgress(reset);
+        setShowModuleFail(true);
+        return;
       }
+    } else {
+      updated = await completeLesson(lessonId);
     }
     setProgress(updated);
-  }, [lesson.quiz, quizAnswers, lessonId, mod, moduleId, alreadyQuizzed, router]);
-
-  const passedFinal =
-    isFinalAssessment &&
-    quizScore &&
-    quizScore.score >= Math.ceil((quizScore.total || 1) * 0.8);
+  }, [lesson.quiz, shuffledQuiz, quizAnswers, lessonId, mod, moduleId, alreadyQuizzed, router]);
 
   const handleCertify = useCallback(async () => {
     if (!certName.trim()) return;
@@ -304,13 +346,13 @@ export default function LessonPage({
                       </h3>
                       {!quizSubmitted && (
                         <span className="text-xs font-mono text-stone-400 bg-stone-100 px-3 py-1.5 rounded-full">
-                          {currentQuizIndex + 1} / {lesson.quiz!.length}
+                          {currentQuizIndex + 1} / {shuffledQuiz.length}
                         </span>
                       )}
                     </div>
                     {isFinalAssessment && !quizSubmitted && (
                       <p className="text-sm text-stone-400 mb-6 leading-relaxed">
-                        You need 80% or higher to pass and earn your
+                        20 questions drawn randomly from across all modules. You need 80% or higher to pass and earn your
                         certification. Take your time and review each question carefully.
                       </p>
                     )}
@@ -322,34 +364,37 @@ export default function LessonPage({
                           <motion.div
                             className="h-full rounded-full bg-[var(--accent)]"
                             initial={false}
-                            animate={{ width: `${((currentQuizIndex + 1) / lesson.quiz!.length) * 100}%` }}
+                            animate={{ width: `${((currentQuizIndex + 1) / shuffledQuiz.length) * 100}%` }}
                             transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
                           />
                         </div>
 
-                        {/* Single question */}
-                        <AnimatePresence mode="wait">
-                          <motion.div
-                            key={currentQuizIndex}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-                          >
-                            <QuizQuestionCard
-                              question={lesson.quiz![currentQuizIndex]}
-                              index={currentQuizIndex}
-                              selected={quizAnswers[lesson.quiz![currentQuizIndex].id]}
-                              onSelect={(optIndex) => {
-                                setQuizAnswers((prev) => ({
-                                  ...prev,
-                                  [lesson.quiz![currentQuizIndex].id]: optIndex,
-                                }));
-                              }}
-                              submitted={false}
-                            />
-                          </motion.div>
-                        </AnimatePresence>
+                        {/* Single question with smooth height transition */}
+                        <motion.div layout transition={{ layout: { duration: 0.35, ease: [0.32, 0.72, 0, 1] } }}>
+                          <AnimatePresence mode="wait">
+                            <motion.div
+                              key={currentQuizIndex}
+                              layout
+                              initial={{ opacity: 0, x: 20, filter: "blur(4px)" }}
+                              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                              exit={{ opacity: 0, x: -20, filter: "blur(4px)" }}
+                              transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+                            >
+                              <QuizQuestionCard
+                                question={shuffledQuiz[currentQuizIndex]}
+                                index={currentQuizIndex}
+                                selected={quizAnswers[shuffledQuiz[currentQuizIndex].id]}
+                                onSelect={(optIndex) => {
+                                  setQuizAnswers((prev) => ({
+                                    ...prev,
+                                    [shuffledQuiz[currentQuizIndex].id]: optIndex,
+                                  }));
+                                }}
+                                submitted={false}
+                              />
+                            </motion.div>
+                          </AnimatePresence>
+                        </motion.div>
 
                         {/* Next / Submit button */}
                         <div className="mt-8 flex gap-3">
@@ -361,10 +406,10 @@ export default function LessonPage({
                               <ArrowLeft size={16} weight="bold" />
                             </button>
                           )}
-                          {currentQuizIndex < lesson.quiz!.length - 1 ? (
+                          {currentQuizIndex < shuffledQuiz.length - 1 ? (
                             <button
                               onClick={() => setCurrentQuizIndex((i) => i + 1)}
-                              disabled={quizAnswers[lesson.quiz![currentQuizIndex].id] == null}
+                              disabled={quizAnswers[shuffledQuiz[currentQuizIndex].id] == null}
                               className="flex-1 py-4 rounded-2xl bg-stone-900 text-white font-medium hover:bg-stone-800 active:scale-[0.99] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex items-center justify-center gap-2"
                             >
                               Next Question
@@ -374,7 +419,7 @@ export default function LessonPage({
                             <button
                               onClick={handleQuizSubmit}
                               disabled={
-                                alreadyQuizzed || Object.keys(quizAnswers).length !== lesson.quiz!.length
+                                alreadyQuizzed || Object.keys(quizAnswers).length !== shuffledQuiz.length
                               }
                               className="flex-1 py-4 rounded-2xl bg-[var(--cta)] text-white font-medium hover:bg-[var(--cta-dark)] active:scale-[0.99] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
                             >
@@ -387,14 +432,14 @@ export default function LessonPage({
                       <div className="mt-6">
                         {/* Results summary */}
                         <QuizResults
-                          quiz={lesson.quiz!}
+                          quiz={shuffledQuiz}
                           answers={quizAnswers}
                           isFinal={isFinalAssessment}
                         />
 
                         {/* Show all questions with answers after submit */}
                         <div className="mt-8 space-y-6">
-                          {lesson.quiz!.map((q, qi) => (
+                          {shuffledQuiz.map((q, qi) => (
                             <QuizQuestionCard
                               key={q.id}
                               question={q}
@@ -405,43 +450,6 @@ export default function LessonPage({
                             />
                           ))}
                         </div>
-
-                        {passedFinal && !progress.certified && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                            className="mt-6"
-                          >
-                            <div className="card-shell" style={{ background: "rgba(4, 120, 87, 0.04)", borderColor: "rgba(4, 120, 87, 0.1)" }}>
-                              <div className="card-core p-6">
-                                <h4 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2">
-                                  <Trophy size={18} weight="fill" className="text-emerald-600" />
-                                  Congratulations - You Passed
-                                </h4>
-                                <p className="text-sm text-emerald-700/70 mb-5 leading-relaxed">
-                                  Enter your name to generate your competency certificate.
-                                </p>
-                                <div className="flex gap-3">
-                                  <input
-                                    type="text"
-                                    value={certName}
-                                    onChange={(e) => setCertName(e.target.value)}
-                                    placeholder="Your full name"
-                                    className="flex-1 px-4 py-3 rounded-xl border border-emerald-200/80 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/40 transition-shadow"
-                                  />
-                                  <button
-                                    onClick={handleCertify}
-                                    disabled={!certName.trim()}
-                                    className="px-6 py-3 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 active:scale-[0.98] transition-all duration-300 disabled:opacity-30"
-                                  >
-                                    Generate
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
 
                         {progress.certified && (
                           <motion.div
@@ -462,64 +470,6 @@ export default function LessonPage({
                       </div>
                     )}
 
-                    {/* Module Fail Popup */}
-                    <AnimatePresence>
-                      {showModuleFail && moduleCumulativeResult && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm"
-                        >
-                          <motion.div
-                            initial={{ scale: 0.92, opacity: 0, filter: "blur(8px)" }}
-                            animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-                            exit={{ scale: 0.92, opacity: 0 }}
-                            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                            className="card-shell max-w-md w-full"
-                          >
-                            <div className="card-core p-8 text-center">
-                              <div className="w-16 h-16 rounded-full bg-red-50 border-2 border-red-100 flex items-center justify-center mx-auto mb-5">
-                                <X size={32} weight="bold" className="text-red-500" />
-                              </div>
-                              <h3 className="text-xl font-bold tracking-tight text-stone-900 mb-2">
-                                Module Not Passed
-                              </h3>
-                              <p className="text-stone-400 text-sm leading-relaxed mb-6 max-w-[38ch] mx-auto">
-                                You scored {moduleCumulativeResult.pct}% across this module.
-                                You need 80% or higher to pass and earn the module badge.
-                              </p>
-                              <div className="flex items-center justify-center gap-6 mb-6">
-                                <div className="text-center">
-                                  <p className="text-2xl font-bold font-mono text-red-600">{moduleCumulativeResult.score}/{moduleCumulativeResult.total}</p>
-                                  <p className="text-[10px] text-stone-400 uppercase tracking-wider mt-1">Your Score</p>
-                                </div>
-                                <div className="w-px h-10 bg-stone-200" />
-                                <div className="text-center">
-                                  <p className="text-2xl font-bold font-mono text-stone-800">{Math.ceil(moduleCumulativeResult.total * 0.8)}/{moduleCumulativeResult.total}</p>
-                                  <p className="text-[10px] text-stone-400 uppercase tracking-wider mt-1">Required</p>
-                                </div>
-                              </div>
-                              <p className="text-sm text-stone-500 leading-relaxed mb-8">
-                                Review the lesson material and try again. All quiz progress for this module will be reset.
-                              </p>
-                              <Link
-                                href={`/train/${moduleId}/${mod.lessons[0].id}`}
-                                className="w-full inline-flex items-center justify-center py-4 rounded-full bg-[var(--cta)] text-white font-medium hover:bg-[var(--cta-dark)] active:scale-[0.97] transition-all duration-500 shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
-                              >
-                                Review & Try Again
-                              </Link>
-                              <Link
-                                href="/train"
-                                className="mt-3 w-full inline-flex items-center justify-center py-3.5 rounded-full bg-stone-100 text-stone-600 text-sm font-medium hover:bg-stone-200 active:scale-[0.97] transition-all duration-300"
-                              >
-                                Back to Training
-                              </Link>
-                            </div>
-                          </motion.div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </div>
                 </div>
           </motion.div>
@@ -542,7 +492,25 @@ export default function LessonPage({
             ) : (
               <div />
             )}
-            {nextLink && isCompleted ? (
+            {moduleCumulativeResult && !showModuleFail ? (
+              <button
+                onClick={() => {
+                  setQuizSubmitted(false);
+                  setQuizAnswers({});
+                  setCurrentQuizIndex(0);
+                  setModuleCumulativeResult(null);
+                  setQuizAttempt((a) => a + 1);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--cta)] text-white text-sm font-medium hover:bg-[var(--cta-dark)] active:scale-[0.97] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
+              >
+                {isFinalAssessment ? "Retake Final Assessment" : "Retry Module"}
+                <ArrowRight
+                  size={14}
+                  className="group-hover:translate-x-0.5 transition-transform duration-300"
+                />
+              </button>
+            ) : nextLink && isCompleted ? (
               <Link
                 href={nextLink}
                 className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-stone-900 text-white text-sm font-medium hover:bg-stone-800 active:scale-[0.97] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-[0_2px_10px_rgba(0,0,0,0.1)]"
@@ -569,6 +537,137 @@ export default function LessonPage({
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Module Fail Popup - fixed to viewport */}
+      <AnimatePresence>
+        {showModuleFail && moduleCumulativeResult && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-6"
+          >
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0, filter: "blur(8px)" }}
+              animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+              className="card-shell max-w-md w-full relative"
+            >
+              <div className="card-core p-8 text-center">
+                <div className="w-16 h-16 rounded-full bg-red-50 border-2 border-red-100 flex items-center justify-center mx-auto mb-5">
+                  <X size={32} weight="bold" className="text-red-500" />
+                </div>
+                <h3 className="text-xl font-bold tracking-tight text-stone-900 mb-2">
+                  {isFinalAssessment ? "Assessment Not Passed" : "Module Not Passed"}
+                </h3>
+                <p className="text-stone-400 text-sm leading-relaxed mb-6 max-w-[38ch] mx-auto">
+                  You scored {moduleCumulativeResult.pct}% across {isFinalAssessment ? "the final assessment" : "this module"}.
+                  You need 80% or higher to pass{isFinalAssessment ? " and earn your certification" : " and earn the module badge"}.
+                </p>
+                <div className="flex items-center justify-center gap-6 mb-6">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold font-mono text-red-600">{moduleCumulativeResult.score}/{moduleCumulativeResult.total}</p>
+                    <p className="text-[10px] text-stone-400 uppercase tracking-wider mt-1">Your Score</p>
+                  </div>
+                  <div className="w-px h-10 bg-stone-200" />
+                  <div className="text-center">
+                    <p className="text-2xl font-bold font-mono text-stone-800">{Math.ceil(moduleCumulativeResult.total * 0.8)}/{moduleCumulativeResult.total}</p>
+                    <p className="text-[10px] text-stone-400 uppercase tracking-wider mt-1">Required</p>
+                  </div>
+                </div>
+                <p className="text-sm text-stone-500 leading-relaxed mb-8">
+                  {isFinalAssessment
+                    ? "Review your answers below then retake the assessment when ready."
+                    : "Review your answers below then head back to retry the module."}
+                </p>
+                <button
+                  onClick={() => setShowModuleFail(false)}
+                  className="w-full inline-flex items-center justify-center py-4 rounded-full bg-[var(--cta)] text-white font-medium hover:bg-[var(--cta-dark)] active:scale-[0.97] transition-all duration-500 shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
+                >
+                  Review My Answers
+                </button>
+                <Link
+                  href="/train"
+                  className="mt-3 w-full inline-flex items-center justify-center py-3.5 rounded-full bg-stone-100 text-stone-600 text-sm font-medium hover:bg-stone-200 active:scale-[0.97] transition-all duration-300"
+                >
+                  Back to Training
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Final Assessment Pass Popup */}
+      <AnimatePresence>
+        {showFinalPass && moduleCumulativeResult && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-6"
+          >
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0, filter: "blur(8px)" }}
+              animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+              className="card-shell max-w-md w-full relative"
+            >
+              <div className="card-core p-8 text-center">
+                <motion.div
+                  initial={{ scale: 0, rotate: -20 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2, ease: [0.34, 1.56, 0.64, 1] }}
+                  className="w-20 h-20 rounded-full bg-emerald-50 border-2 border-emerald-100 flex items-center justify-center mx-auto mb-5"
+                >
+                  <Trophy size={40} weight="fill" className="text-emerald-500" />
+                </motion.div>
+                <h3 className="text-xl font-bold tracking-tight text-stone-900 mb-2">
+                  Congratulations!
+                </h3>
+                <p className="text-stone-400 text-sm leading-relaxed mb-2 max-w-[38ch] mx-auto">
+                  You scored {moduleCumulativeResult.pct}% and passed the final assessment.
+                </p>
+                <div className="flex items-center justify-center gap-6 mb-6">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold font-mono text-emerald-600">{moduleCumulativeResult.score}/{moduleCumulativeResult.total}</p>
+                    <p className="text-[10px] text-stone-400 uppercase tracking-wider mt-1">Your Score</p>
+                  </div>
+                  <div className="w-px h-10 bg-stone-200" />
+                  <div className="text-center">
+                    <p className="text-2xl font-bold font-mono text-stone-800">{Math.ceil(moduleCumulativeResult.total * 0.8)}/{moduleCumulativeResult.total}</p>
+                    <p className="text-[10px] text-stone-400 uppercase tracking-wider mt-1">Required</p>
+                  </div>
+                </div>
+                <p className="text-sm text-stone-500 leading-relaxed mb-5">
+                  Enter your name to generate your competency certificate.
+                </p>
+                <div className="flex gap-3 mb-4">
+                  <input
+                    type="text"
+                    value={certName}
+                    onChange={(e) => setCertName(e.target.value)}
+                    placeholder="Your full name"
+                    className="flex-1 px-4 py-3.5 rounded-xl border border-stone-200/80 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/40 transition-shadow"
+                  />
+                </div>
+                <button
+                  onClick={handleCertify}
+                  disabled={!certName.trim()}
+                  className="w-full inline-flex items-center justify-center gap-2 py-4 rounded-full bg-emerald-600 text-white font-medium hover:bg-emerald-700 active:scale-[0.97] transition-all duration-500 shadow-[0_4px_16px_rgba(4,120,87,0.25)] disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <Certificate size={18} weight="bold" />
+                  Generate Certificate
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -576,7 +675,7 @@ export default function LessonPage({
 function SectionRenderer({ section }: { section: LessonSection }) {
   if (section.type === "diagram" && section.diagramId) {
     return (
-      <div>
+      <div className="w-full max-w-full">
         {section.heading && (
           <h3 className="text-lg font-semibold tracking-tight text-stone-800 mb-3">
             {section.heading}
@@ -590,14 +689,39 @@ function SectionRenderer({ section }: { section: LessonSection }) {
     );
   }
 
+  if (section.type === "case-study") {
+    return (
+      <div className="p-5 rounded-2xl bg-sky-50/80 border border-sky-200/40 overflow-hidden">
+        <div className="flex items-start gap-3">
+          <div className="w-7 h-7 rounded-lg bg-sky-100 flex items-center justify-center shrink-0 mt-0.5">
+            <BookOpen size={15} weight="fill" className="text-sky-600" />
+          </div>
+          <div className="break-words">
+            {section.heading && (
+              <p className="text-xs font-semibold uppercase tracking-wider text-sky-500 mb-1">
+                {section.heading}
+              </p>
+            )}
+            <p className="text-sm text-sky-900/80 leading-relaxed">{section.body}</p>
+            {section.source && (
+              <p className="text-[11px] text-sky-400 mt-2 font-mono">
+                {section.source}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (section.type === "warning") {
     return (
-      <div className="p-5 rounded-2xl bg-amber-50/80 border border-amber-200/40">
+      <div className="p-5 rounded-2xl bg-amber-50/80 border border-amber-200/40 overflow-hidden">
         <div className="flex items-start gap-3">
           <div className="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center shrink-0 mt-0.5">
             <Warning size={15} weight="fill" className="text-amber-600" />
           </div>
-          <p className="text-sm text-amber-900/80 leading-relaxed">{section.body}</p>
+          <p className="text-sm text-amber-900/80 leading-relaxed break-words">{section.body}</p>
         </div>
       </div>
     );
@@ -605,13 +729,13 @@ function SectionRenderer({ section }: { section: LessonSection }) {
 
   if (section.type === "critical") {
     return (
-      <div className="p-5 rounded-2xl bg-red-50/80 border border-red-200/40">
+      <div className="p-5 rounded-2xl bg-red-50/80 border border-red-200/40 overflow-hidden">
         <div className="flex items-start gap-3">
           <div className="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center shrink-0 mt-0.5">
             <WarningOctagon size={15} weight="fill" className="text-red-600" />
           </div>
           <div>
-            <p className="text-sm text-red-900/80 leading-relaxed font-medium">
+            <p className="text-sm text-red-900/80 leading-relaxed font-medium break-words">
               {section.body}
             </p>
             {section.source && (
@@ -627,14 +751,14 @@ function SectionRenderer({ section }: { section: LessonSection }) {
 
   if (section.type === "oem-reference") {
     return (
-      <div className="p-5 rounded-2xl bg-stone-50 border-l-[3px] border-l-[var(--teal)] border border-stone-200/30">
+      <div className="p-5 rounded-2xl bg-stone-50 border-l-[3px] border-l-[var(--teal)] border border-stone-200/30 overflow-hidden">
         <div className="flex items-start gap-3">
           <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
             <Info size={15} weight="fill" className="text-[var(--accent)]" />
           </div>
           <div>
-            <p className="text-sm text-stone-600 leading-relaxed italic">
-              &ldquo;{section.body}&rdquo;
+            <p className="text-sm text-stone-600 leading-relaxed break-words">
+              {section.body}
             </p>
             {section.source && (
               <p className="text-[11px] text-stone-400 mt-2 font-mono">

@@ -19,7 +19,7 @@ export interface Lesson {
 export interface LessonSection {
   heading?: string;
   body: string;
-  type: "text" | "warning" | "critical" | "checklist" | "oem-reference" | "diagram";
+  type: "text" | "warning" | "critical" | "checklist" | "oem-reference" | "diagram" | "case-study";
   items?: string[];
   source?: string;
   diagramId?: string;
@@ -39,12 +39,331 @@ export interface Module {
 
 export const modules: Module[] = [
   {
-    id: "system-understanding",
+    id: "standards-legislation",
     number: 1,
+    title: "Standards and Legislation",
+    subtitle: "The Rules That Keep Everyone Safe",
+    description:
+      "Understand the Australian regulatory framework, key standards and your legal obligations as a waterslide operator. This module establishes the foundation for everything that follows.",
+    icon: "scales",
+    color: "#4f46e5",
+    badge: { icon: "scales", label: "Compliance Certified" },
+    lessons: [
+      {
+        id: "1-sl-1",
+        title: "Australian WHS Framework",
+        duration: "12 min",
+        content: [
+          {
+            type: "text",
+            heading: "Work Health and Safety Act 2011",
+            body: "The Work Health and Safety (WHS) Act 2011 is the primary legislation governing workplace safety across most Australian states and territories. It establishes the legal duties owed by all parties in a workplace - including aquatic recreation facilities. As a waterslide operator, you are working within this framework every time you step onto a platform.",
+          },
+          {
+            type: "critical",
+            body: "The WHS Act applies to ALL persons at a workplace - not just employees. This includes contractors, visitors and members of the public using your facility. Failure to meet WHS obligations can result in significant penalties including fines and imprisonment for serious breaches.",
+          },
+          {
+            type: "text",
+            heading: "PCBU Duties",
+            body: "A Person Conducting a Business or Undertaking (PCBU) has the primary duty of care under the WHS Act. For waterslide operations, the facility owner or operator is typically the PCBU. Their duty is to ensure, so far as is reasonably practicable, the health and safety of workers and others who may be affected by the work. This includes providing safe plant and equipment, safe systems of work, adequate training and supervision and a safe working environment.",
+          },
+          {
+            type: "text",
+            heading: "Worker Duties",
+            body: "As a worker under the WHS Act, you have a duty to take reasonable care for your own health and safety, take reasonable care that your acts or omissions do not adversely affect the health and safety of others and comply with any reasonable instruction given by the PCBU. You must also cooperate with any reasonable policy or procedure relating to health and safety.",
+          },
+          {
+            type: "warning",
+            body: "Workers have the right to cease or refuse to carry out work if they have a reasonable concern that it would expose them or others to a serious risk to health or safety. This right is protected under the WHS Act. If you identify an unsafe condition on a waterslide, you are within your rights to stop operations.",
+          },
+          {
+            type: "text",
+            heading: "Officers and Due Diligence",
+            body: "Officers of a PCBU (directors, senior managers) have a positive duty to exercise due diligence to ensure the PCBU complies with its WHS obligations. This means they must acquire and keep up-to-date knowledge of WHS matters, understand the operations and associated hazards, ensure appropriate resources and processes are in place and verify that obligations are being met.",
+          },
+        ],
+        keyTakeaways: [
+          "The WHS Act 2011 is the primary safety legislation in Australia",
+          "PCBUs have the primary duty of care for all persons at the workplace",
+          "Workers must take reasonable care and follow safety procedures",
+          "Workers have the right to cease unsafe work",
+          "Officers must exercise due diligence in WHS compliance",
+        ],
+        quiz: [
+          {
+            id: "q-sl-1-1",
+            question: "Under the WHS Act 2011, who holds the primary duty of care?",
+            options: [
+              "The individual worker on shift",
+              "The Person Conducting a Business or Undertaking (PCBU)",
+              "The local council or government body",
+              "The equipment manufacturer",
+            ],
+            correctIndex: 1,
+            explanation: "The PCBU holds the primary duty of care under the WHS Act 2011. They must ensure, so far as is reasonably practicable, the health and safety of workers and others affected by the work.",
+            type: "knowledge",
+          },
+          {
+            id: "q-sl-1-2",
+            question: "You notice a structural crack on a slide support column during operations. Your supervisor says to keep dispatching while they investigate. What is your legal right?",
+            options: [
+              "You must follow your supervisor's instruction",
+              "You can cease work if you have a reasonable concern about serious risk",
+              "You must continue operating but file a formal complaint",
+              "You can only stop if another worker agrees with you",
+            ],
+            correctIndex: 1,
+            explanation: "Under the WHS Act, workers have the right to cease or refuse work if they have a reasonable concern that it would expose them or others to a serious risk to health or safety. A structural crack on a support column represents a serious risk.",
+            type: "scenario",
+          },
+          {
+            id: "q-sl-1-3",
+            question: "Which of the following is NOT a worker duty under the WHS Act?",
+            options: [
+              "Take reasonable care for your own health and safety",
+              "Comply with reasonable safety instructions",
+              "Personally inspect all structural components before each shift",
+              "Cooperate with reasonable safety policies and procedures",
+            ],
+            correctIndex: 2,
+            explanation: "Structural inspections are the responsibility of competent professionals, not individual operators. Worker duties focus on reasonable care, compliance with instructions and cooperation with safety policies.",
+            type: "knowledge",
+          },
+          {
+            id: "q-sl-1-4",
+            question: "The WHS Act applies to which persons at a waterslide facility?",
+            options: [
+              "Only paid employees of the facility",
+              "Employees and contractors only",
+              "All persons at the workplace including workers, contractors, visitors and members of the public",
+              "Only those who have signed a liability waiver",
+            ],
+            correctIndex: 2,
+            explanation: "The WHS Act applies to all persons at a workplace. The PCBU owes a duty of care to workers, contractors, visitors and members of the public who may be affected by the work carried out.",
+            type: "knowledge",
+          },
+        ],
+      },
+      {
+        id: "1-sl-2",
+        title: "Key Australian Standards",
+        duration: "15 min",
+        content: [
+          {
+            type: "text",
+            heading: "AS 3533 - Amusement Rides and Devices",
+            body: "AS 3533 is the primary Australian standard governing amusement rides and devices, including waterslides. It covers design, manufacture, installation, operation, maintenance and inspection requirements. Compliance with AS 3533 is typically a legal requirement under state and territory amusement device regulations. The standard is divided into multiple parts covering different aspects of amusement device safety.",
+          },
+          {
+            type: "oem-reference",
+            body: "AS 3533.1 covers design and construction requirements. AS 3533.2 covers operation and maintenance. AS 3533.3 covers in-service inspection. AS 3533.4 covers major inspections and testing. Together, these parts establish a comprehensive safety framework for the entire lifecycle of amusement devices including waterslides.",
+            source: "AS 3533 Parts 1-4",
+          },
+          {
+            type: "text",
+            heading: "EN 1069 - Water Slides",
+            body: "EN 1069 is the European standard specifically for water slides. While it is a European standard, it is widely referenced internationally and provides detailed technical guidance on water slide design, construction and operation. Many Australian facilities and manufacturers reference EN 1069 alongside AS 3533 for waterslide-specific requirements that go beyond general amusement device standards.",
+          },
+          {
+            type: "text",
+            heading: "ASTM F1193 - Amusement Rides and Devices",
+            body: "ASTM F1193 is an American standard covering the quality, design, manufacture and operation of amusement rides. It is particularly relevant for FRP (fiberglass reinforced plastic) maintenance and repair guidance. Many waterslide manufacturers reference ASTM F1193 in their maintenance documentation. Australian facilities often use ASTM F1193 alongside AS 3533 for technical guidance on fiberglass slide maintenance.",
+          },
+          {
+            type: "text",
+            heading: "AS/NZS ISO 31000 - Risk Management",
+            body: "AS/NZS ISO 31000 provides principles and guidelines for risk management. Under the WHS Act, PCBUs must manage risks to health and safety by following a systematic process: identify hazards, assess risks, implement controls and review effectiveness. ISO 31000 provides the framework for this process. Risk assessments for waterslide operations should follow this standard.",
+          },
+          {
+            type: "warning",
+            body: "Standards are updated periodically. It is the responsibility of the PCBU to ensure they are working to the current version of all applicable standards. Using an outdated standard does not provide a defence under the WHS Act.",
+          },
+          {
+            type: "text",
+            heading: "AS 1926 - Swimming Pool Safety",
+            body: "AS 1926 covers safety requirements for swimming pools, which intersects with waterslide operations at catch pools and landing areas. Requirements around fencing, water depth, supervision and signage may apply to waterslide catch pools depending on state and territory regulations.",
+          },
+        ],
+        keyTakeaways: [
+          "AS 3533 is the primary Australian standard for amusement devices including waterslides",
+          "EN 1069 provides waterslide-specific technical guidance",
+          "ASTM F1193 is key for FRP/fiberglass maintenance and repair",
+          "AS/NZS ISO 31000 provides the risk management framework required under WHS law",
+          "Standards are updated regularly - always work to the current version",
+        ],
+        quiz: [
+          {
+            id: "q-sl-2-1",
+            question: "Which Australian standard is the primary standard governing amusement rides and devices including waterslides?",
+            options: [
+              "EN 1069",
+              "ASTM F1193",
+              "AS 3533",
+              "ISO 31000",
+            ],
+            correctIndex: 2,
+            explanation: "AS 3533 is the primary Australian standard for amusement rides and devices. It covers design, manufacture, installation, operation, maintenance and inspection requirements for all amusement devices including waterslides.",
+            type: "knowledge",
+          },
+          {
+            id: "q-sl-2-2",
+            question: "What is ASTM F1193 particularly relevant for in waterslide maintenance?",
+            options: [
+              "Water quality testing procedures",
+              "FRP (fiberglass reinforced plastic) maintenance and repair guidance",
+              "Rider height and weight restrictions",
+              "Emergency evacuation procedures",
+            ],
+            correctIndex: 1,
+            explanation: "ASTM F1193 is widely referenced for its detailed guidance on FRP (fiberglass reinforced plastic) maintenance and repair, which is directly relevant to waterslide flume maintenance.",
+            type: "knowledge",
+          },
+          {
+            id: "q-sl-2-3",
+            question: "Your facility manager tells you they are following the 2008 version of AS 3533 because it was current when the slide was installed. Is this acceptable?",
+            options: [
+              "Yes - the standard at the time of installation applies for the life of the equipment",
+              "No - the PCBU must always work to the current version of applicable standards",
+              "Yes - as long as the manufacturer has not issued updates",
+              "Only if the state regulator has not mandated an upgrade",
+            ],
+            correctIndex: 1,
+            explanation: "Standards are updated periodically and it is the PCBU's responsibility to work to the current version. Using an outdated standard does not provide a defence under the WHS Act.",
+            type: "scenario",
+          },
+          {
+            id: "q-sl-2-4",
+            question: "Which standard provides the framework for conducting risk assessments required under Australian WHS law?",
+            options: [
+              "AS 3533",
+              "EN 1069",
+              "AS/NZS ISO 31000",
+              "ASTM F1193",
+            ],
+            correctIndex: 2,
+            explanation: "AS/NZS ISO 31000 provides the principles and guidelines for risk management. The WHS Act requires PCBUs to manage risks systematically, and ISO 31000 provides the accepted framework for doing so.",
+            type: "knowledge",
+          },
+        ],
+      },
+      {
+        id: "1-sl-3",
+        title: "Plant Registration and Compliance",
+        duration: "12 min",
+        content: [
+          {
+            type: "text",
+            heading: "Waterslides as Registered Plant",
+            body: "Under WHS Regulations, waterslides are classified as 'plant' and in most states and territories must be registered with the relevant regulator before they can be operated. Plant registration ensures that the design has been verified, the installation has been inspected and the equipment meets applicable standards. Operating an unregistered amusement device is a serious offence.",
+          },
+          {
+            type: "critical",
+            body: "Each state and territory has its own regulator and may have specific requirements for amusement device registration. Examples include SafeWork NSW, WorkSafe Victoria, Workplace Health and Safety Queensland and WorkSafe WA. Operators must be familiar with the requirements of their specific jurisdiction.",
+          },
+          {
+            type: "text",
+            heading: "Design Registration vs Item Registration",
+            body: "Most jurisdictions require two levels of registration. Design registration confirms the ride design meets applicable standards. Item registration confirms that a specific installation of that design has been correctly built, installed and inspected. Both must be current for a waterslide to operate legally.",
+          },
+          {
+            type: "text",
+            heading: "Competent Persons",
+            body: "WHS Regulations and AS 3533 require that certain inspection and maintenance tasks be carried out by a 'competent person' - someone who has the knowledge, training, qualifications and experience to carry out the task safely and effectively. As a waterslide operator, you are being trained to be competent in routine operational checks. Thorough inspections and structural assessments require higher-level competency, typically held by engineers or specialist inspectors.",
+          },
+          {
+            type: "checklist",
+            heading: "What Operators Should Know About Compliance",
+            body: "While compliance management is typically the responsibility of facility management, operators should be aware of the following:",
+            items: [
+              "The waterslide must have current plant registration in your state or territory",
+              "Inspection records must be maintained and available for regulatory audit",
+              "Any modifications to the ride must be assessed and may require re-registration",
+              "Incident notification obligations exist for serious injuries and dangerous occurrences",
+              "Routine inspection documentation is a legal requirement, not just best practice",
+            ],
+          },
+          {
+            type: "text",
+            heading: "Notifiable Incidents",
+            body: "Under the WHS Act, certain incidents must be reported to the regulator. These include death, serious injury or illness and dangerous incidents (near misses that could have caused serious harm). The PCBU must notify the regulator immediately and preserve the incident site. As an operator, you play a critical role in the initial response and documentation that supports this notification process.",
+          },
+          {
+            type: "warning",
+            body: "Incident notification to the regulator is a legal obligation, not a discretionary decision. Failure to notify a notifiable incident can result in significant penalties. If in doubt about whether an incident is notifiable, report it - it is better to over-report than to miss a notification obligation.",
+          },
+        ],
+        keyTakeaways: [
+          "Waterslides must be registered as plant under WHS Regulations",
+          "Both design registration and item registration are typically required",
+          "Certain tasks require a competent person with appropriate qualifications",
+          "Notifiable incidents must be reported to the regulator immediately",
+          "Inspection documentation is a legal requirement",
+        ],
+        quiz: [
+          {
+            id: "q-sl-3-1",
+            question: "Under WHS Regulations, waterslides are classified as what?",
+            options: [
+              "Recreational equipment",
+              "Building infrastructure",
+              "Registered plant",
+              "Temporary structures",
+            ],
+            correctIndex: 2,
+            explanation: "Waterslides are classified as 'plant' under WHS Regulations and must be registered with the relevant state or territory regulator before operation.",
+            type: "knowledge",
+          },
+          {
+            id: "q-sl-3-2",
+            question: "A rider breaks their arm on a waterslide at your facility. What is the PCBU's obligation regarding this incident?",
+            options: [
+              "Record it in the incident log and review at the next safety meeting",
+              "Notify the regulator immediately and preserve the incident site",
+              "Notify the regulator within 30 days if the rider makes a formal complaint",
+              "Only notify if the rider requires overnight hospitalisation",
+            ],
+            correctIndex: 1,
+            explanation: "A serious injury is a notifiable incident under the WHS Act. The PCBU must notify the regulator immediately and preserve the incident site. A broken bone constitutes a serious injury.",
+            type: "scenario",
+          },
+          {
+            id: "q-sl-3-3",
+            question: "What does 'competent person' mean in the context of waterslide inspections?",
+            options: [
+              "Any employee who has worked at the facility for more than 12 months",
+              "Someone with the knowledge, training, qualifications and experience to carry out the task safely",
+              "A person appointed by the facility manager regardless of qualifications",
+              "Only a licensed structural engineer",
+            ],
+            correctIndex: 1,
+            explanation: "A competent person has the knowledge, training, qualifications and experience to carry out the specific task safely and effectively. The level of competency required varies with the complexity and risk of the task.",
+            type: "knowledge",
+          },
+          {
+            id: "q-sl-3-4",
+            question: "A maintenance team modifies the landing pool depth on a waterslide to improve rider experience. What compliance step is required?",
+            options: [
+              "No action needed if the change improves safety",
+              "Update the operations manual only",
+              "The modification must be assessed against standards and may require re-registration",
+              "File a notice with the manufacturer within 90 days",
+            ],
+            correctIndex: 2,
+            explanation: "Any modification to a registered amusement device must be assessed against applicable standards and may require the design and/or item registration to be updated. Unapproved modifications can void registration.",
+            type: "scenario",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "system-understanding",
+    number: 2,
     title: "System Understanding",
     subtitle: "What You're Actually Operating",
     description:
-      "Understand the waterslide as an engineered system — flume, joints, supports, hydraulics — and the responsibilities that come with operating it.",
+      "Understand the waterslide as an engineered system - flume, joints, supports and hydraulics - and the responsibilities that come with operating it.",
     icon: "blueprint",
     color: "#0891b2",
     badge: { icon: "blueprint", label: "System Expert" },
@@ -73,18 +392,17 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Core system components:",
             items: [
-              "Flume — The fiberglass reinforced plastic (FRP) channel riders travel through. Subject to UV degradation, mineral deposits, friction wear, and structural cracking.",
-              "Joints — Connections between flume sections. Filled with flexible polyurethane sealant (e.g. Sikaflex 1a) to accommodate thermal expansion and contraction.",
-              "Support Structure — Steel or concrete framework holding the flume at correct angles and elevations. Subject to corrosion and fatigue.",
-              "Hydraulic System — Pumps, pipes, nozzles, and flow control that deliver water to the flume. Correct flow rate must be achieved before any rider enters.",
-              "Catch Pool / Runout — The deceleration and exit zone at the base. Must be clear before dispatch.",
-              "Tower / Platform — The elevated start position where riders are dispatched. Includes handrails, barriers, and communication systems.",
+              "Flume - The fiberglass reinforced plastic (FRP) channel riders travel through. Subject to UV degradation, mineral deposits, friction wear and structural cracking.",
+              "Joints - Connections between flume sections. Filled with flexible sealant to accommodate thermal expansion and contraction.",
+              "Support Structure - Steel or concrete framework holding the flume at correct angles and elevations. Subject to corrosion and fatigue.",
+              "Hydraulic System - Pumps, pipes, nozzles and flow control that deliver water to the flume. Correct flow rate must be achieved before any rider enters.",
+              "Catch Pool / Runout - The deceleration and exit zone at the base. Must be clear before dispatch.",
+              "Tower / Platform - The elevated start position where riders are dispatched. Includes handrails, barriers and communication systems.",
             ],
           },
           {
             type: "oem-reference",
-            body: "Manufacturer guidelines define the water ride as a complete system requiring coordinated maintenance across all components. Failure to maintain any single element compromises the entire ride's safety envelope.",
-            source: "Manufacturer Guidelines, Section 2",
+            body: "A water ride must be treated as an integrated system where all components require coordinated maintenance. Neglecting any individual element can compromise the safety of the entire ride.",
           },
           {
             heading: "Why This Matters",
@@ -94,7 +412,7 @@ export const modules: Module[] = [
         ],
         keyTakeaways: [
           "A waterslide is an engineered system, not a simple piece of equipment",
-          "Six core components must all function together: flume, joints, supports, hydraulics, catch pool, and tower",
+          "Six core components must all function together: flume, joints, supports, hydraulics, catch pool and tower",
           "Small degradations in any component can cascade into safety incidents",
           "System understanding is the foundation for all operational and maintenance decisions",
         ],
@@ -105,13 +423,13 @@ export const modules: Module[] = [
               "Which component connects flume sections and must accommodate thermal expansion?",
             options: [
               "Support structure",
-              "Joints filled with flexible polyurethane sealant",
+              "Joints filled with flexible sealant",
               "The catch pool",
               "Handrails",
             ],
             correctIndex: 1,
             explanation:
-              "Joints between flume sections are filled with flexible polyurethane sealant (such as Sikaflex 1a) to accommodate expansion and contraction from temperature changes.",
+              "Joints between flume sections are filled with flexible sealant to accommodate expansion and contraction from temperature changes.",
             type: "knowledge",
           },
           {
@@ -156,7 +474,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "The flume is made from fiberglass reinforced plastic (FRP). This material is subject to UV degradation, mineral deposits, friction wear, and structural cracking - all of which require monitoring.",
+              "The flume is made from fiberglass reinforced plastic (FRP). This material is subject to UV degradation, mineral deposits, friction wear and structural cracking - all of which require monitoring.",
             type: "knowledge",
           },
           {
@@ -183,7 +501,7 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Clear role definition prevents critical tasks from falling through the gaps. Manufacturer manuals explicitly define three tiers of responsibility — and your training must comply with all of them.",
+            body: "Clear role definition prevents critical tasks from falling through the gaps. Industry standards explicitly define three tiers of responsibility - and your training must comply with all of them.",
           },
           {
             heading: "Owner / Operator",
@@ -193,7 +511,6 @@ export const modules: Module[] = [
           {
             type: "critical",
             body: "WARNING: Failure to adhere to the inspection and maintenance recommendations of the ride may result in serious injury or death. Failure to follow and maintain documented records will void the manufacturer's warranty.",
-            source: "Manufacturer Guidelines, Section 5",
           },
           {
             heading: "Maintenance Team",
@@ -224,21 +541,20 @@ export const modules: Module[] = [
           },
           {
             type: "oem-reference",
-            body: "Training shall not be limited to inspection and maintenance activities, but must also include identification of hazards, working at heights procedures, PPE requirements, and Safety Data Sheet (SDS) training.",
-            source: "Manufacturer Guidelines, Section 5.1",
+            body: "Training should extend beyond inspection and maintenance tasks to cover hazard identification, working at heights procedures, PPE requirements and Safety Data Sheet (SDS) awareness.",
           },
         ],
         keyTakeaways: [
           "Three distinct roles: Owner/Operator, Maintenance Team, Operations Team",
           "Each role has specific, non-overlapping responsibilities",
           "Failure to maintain records voids manufacturer warranty",
-          "Training requirements extend beyond basic operations to include hazard identification and PPE",
+          "Training requirements extend beyond basic operations to include hazard identification, PPE and more",
         ],
         quiz: [
           {
             id: "q1-2-1",
             question:
-              "What consequence does manufacturer guidelines explicitly state for failure to follow maintenance recommendations?",
+              "What is the consequence of failure to follow maintenance recommendations?",
             options: [
               "A fine from the manufacturer",
               "Reduced slide performance only",
@@ -247,7 +563,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "Manufacturer guidelines explicitly warn that failure to adhere to inspection and maintenance recommendations may result in serious injury or death, and failure to maintain records will void the warranty.",
+              "Failure to adhere to inspection and maintenance recommendations may result in serious injury or death, and failure to maintain records will void the warranty.",
             type: "knowledge",
           },
           {
@@ -271,19 +587,19 @@ export const modules: Module[] = [
               "Training requirements for waterslide staff must include which of the following beyond basic operations?",
             options: [
               "Customer service and upselling techniques",
-              "Hazard identification, working at heights, PPE requirements, and Safety Data Sheet training",
+              "Hazard identification, working at heights, PPE requirements and Safety Data Sheet training",
               "Swimming proficiency and first aid certification only",
-              "Social media policy and park history",
+              "Social media policy and facility history",
             ],
             correctIndex: 1,
             explanation:
-              "Per manufacturer guidelines, training must not be limited to inspection and maintenance activities - it must also include hazard identification, working at heights procedures, PPE requirements, and Safety Data Sheet (SDS) training.",
+              "Training must not be limited to inspection and maintenance activities - it must also include hazard identification, working at heights procedures, PPE requirements and Safety Data Sheet (SDS) training.",
             type: "knowledge",
           },
           {
             id: "q1-2-4",
             question:
-              "A maintenance team member notices that water flow has dropped below the manufacturer's specified rate while the park is open. Whose responsibility is it to address this?",
+              "A maintenance team member notices that water flow has dropped below the manufacturer's specified rate while the facility is open. Whose responsibility is it to address this?",
             options: [
               "Only the Owner/Operator can authorise any action",
               "The maintenance team - they are responsible for monitoring water flows and levels continuously throughout operations",
@@ -307,53 +623,65 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "The Owner/Operator is responsible for operating and maintaining the water ride in accordance with their SOP, and ensuring that the staff who operate and maintain the ride are trained and fulfilling their responsibilities.",
+              "The Owner/Operator is responsible for operating and maintaining the water ride in accordance with their SOP and ensuring that the staff who operate and maintain the ride are trained and fulfilling their responsibilities.",
             type: "knowledge",
           },
         ],
       },
       {
         id: "1-3",
-        title: "What Fails — Real Failure Modes",
+        title: "What Fails - Real Failure Modes",
         duration: "15 min",
         content: [
           {
             type: "text",
-            body: "Understanding how waterslides fail is essential to preventing failure. Incidents rarely come from a single dramatic event — they develop through accumulated degradation, missed inspections, and operational shortcuts.",
+            body: "Understanding how waterslides fail is essential to preventing failure. Incidents rarely come from a single dramatic event - they develop through accumulated degradation, missed inspections and operational shortcuts.",
           },
           {
             heading: "Structural Failures",
             type: "text",
-            body: "Structural failures involve the physical integrity of the flume and support system. Cracks are signs of structural damage that require immediate attention. Fiberglass must be applied on both sides of the part. If the damage is too severe, the part may need to be replaced. Large fractures in the fiberglass are less common but very serious — a great amount of force must have been applied to cause them.",
+            body: "Structural failures involve the physical integrity of the flume and support system. Cracks are signs of structural damage that require immediate attention. Fiberglass must be applied on both sides of the part. If the damage is too severe, the part may need to be replaced. Large fractures in the fiberglass are less common but very serious - a great amount of force must have been applied to cause them.",
           },
           {
             heading: "Surface Failures",
             type: "text",
-            body: "Surface conditions directly impact rider safety. Mineral deposits appear as white scale and can cause unsafe rider conditions. Calcium buildup may cause riders to stick, which leads to unpredictable behaviour and unsafe conditions. UV radiation degrades FRP exposed to sunlight — over time, plastics lose colour, strength, and can crack and deteriorate.",
+            body: "Surface conditions directly impact rider safety. Mineral deposits appear as white scale and can cause unsafe rider conditions. Calcium buildup may cause riders to stick, which leads to unpredictable behaviour and unsafe conditions. UV radiation degrades FRP exposed to sunlight - over time, plastics lose colour and strength, and can crack and deteriorate.",
           },
           {
             heading: "Operational Failures",
             type: "checklist",
             body: "The most common operational failure modes include:",
             items: [
-              "Dispatch failures — sending a rider before the previous one has cleared the exit zone",
-              "Rider non-compliance — incorrect position, standing, spinning, or linking with others",
-              "Communication breakdown — loss of contact between top and bottom operators",
-              "Flow rate errors — operating with insufficient water, creating dry spots or speed changes",
-              "Queue pressure — sacrificing dispatch timing to manage guest volume",
-              "Supervision gaps — operator distraction, fatigue, or poor positioning",
+              "Dispatch failures - sending a rider before the previous one has cleared the exit zone",
+              "Rider non-compliance - incorrect position, standing, spinning or linking with others",
+              "Communication breakdown - loss of contact between top and bottom operators",
+              "Flow rate errors - operating with insufficient water, creating dry spots or speed changes",
+              "Queue pressure - sacrificing dispatch timing to manage guest volume",
+              "Supervision gaps - operator distraction, fatigue or poor positioning",
             ],
           },
           {
+            type: "case-study",
+            heading: "Real-World Example - Structural Failure",
+            body: "In multiple reported incidents across the industry, fiberglass waterslide sections have cracked or separated due to UV degradation, chemical erosion from pool water and fatigue cracking that went undetected by visual inspection alone. In several cases, subsurface delamination was only discovered after a section failed during operation. Scheduled non-destructive testing (tap testing, ultrasonic thickness measurements) and defined service-life replacement criteria could have prevented these failures.",
+            source: "Based on CPSC incident reports and industry safety bulletins",
+          },
+          {
+            type: "case-study",
+            heading: "Real-World Example - Dispatch Collision",
+            body: "Dispatch-related collisions are a recurring pattern across the industry. Riders collide at the bottom of enclosed slides because operators dispatched a second rider before the first cleared the runout zone. Common contributing factors include no visual confirmation of the landing area, over-reliance on timed intervals rather than positive confirmation and pressure to increase throughput during busy periods.",
+            source: "Based on industry incident pattern analysis",
+          },
+          {
             type: "warning",
-            body: "Most slide incidents are not technical failures — they are people failures. The intersection of degraded conditions and operational shortcuts is where incidents occur.",
+            body: "Most slide incidents are not technical failures - they are people failures. The intersection of degraded conditions and operational shortcuts is where incidents occur.",
           },
         ],
         keyTakeaways: [
-          "Failures are structural, surface-related, or operational",
+          "Failures fall into three categories: structural, surface-related or operational",
           "Structural cracks require immediate attention and may need part replacement",
           "Surface degradation (mineral deposits, UV damage) directly affects rider safety",
-          "Operational failures — especially dispatch errors and communication breakdowns — are the most common incident type",
+          "Operational failures - especially dispatch errors and communication breakdowns - are the most common incident type",
         ],
         quiz: [
           {
@@ -437,11 +765,11 @@ export const modules: Module[] = [
   },
   {
     id: "inspections",
-    number: 2,
+    number: 3,
     title: "Inspections",
     subtitle: "Your First Line of Defence",
     description:
-      "Master the daily, periodic, and annual inspection procedures that catch problems before they become incidents. Based on industry standards and manufacturer requirements.",
+      "Master the daily, periodic and annual inspection procedures that catch problems before they become incidents. Based on industry standards and manufacturer requirements.",
     icon: "clipboard",
     color: "#059669",
     badge: { icon: "clipboard", label: "Certified Inspector" },
@@ -453,12 +781,11 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Every operating day begins with a systematic inspection. This is not a walk-through — it is a structured process that must be completed and documented before any rider enters the slide.",
+            body: "Every operating day begins with a systematic inspection. This is not a walk-through - it is a structured process that must be completed and documented before any rider enters the slide.",
           },
           {
             type: "oem-reference",
-            body: "Prior to operating each day, every individual flume should be inspected by qualified personnel. This inspection should be performed just prior to turning on the water ride's water supply.",
-            source: "Manufacturer Guidelines, Section 7",
+            body: "It is essential that every individual flume is inspected by qualified personnel before each operating day. This inspection should take place before the water supply is turned on.",
           },
           {
             type: "diagram",
@@ -471,12 +798,12 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Walk every metre of every flume checking for:",
             items: [
-              "Cracks — any crack is a sign of structural damage requiring immediate attention",
-              "Chips and gouges — especially on the riding surface",
-              "Foreign objects — debris, leaves, insects, vandalism items",
-              "Joint condition — sealant failure, separation, sharp edges, lips",
-              "Surface condition — mineral deposits, dry rough patches, friction wear",
-              "Bolt and fastener integrity — loose, missing, or corroded connections",
+              "Cracks - any crack is a sign of structural damage requiring immediate attention",
+              "Chips and gouges - especially on the riding surface",
+              "Foreign objects - debris, leaves, insects, vandalism items",
+              "Joint condition - sealant failure, separation, sharp edges, lips",
+              "Surface condition - mineral deposits, dry rough patches, friction wear",
+              "Bolt and fastener integrity - loose, missing or corroded connections",
             ],
           },
           {
@@ -484,11 +811,11 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Check all structural elements:",
             items: [
-              "Handrails — secure, no sharp edges, proper height",
-              "Tower and platform — stable, no movement, drainage clear",
-              "Support columns — no visible corrosion, connections tight",
-              "Stairs and walkways — non-slip surfaces intact, no damage",
-              "Signage — all safety signs present and legible",
+              "Handrails - secure, no sharp edges, proper height",
+              "Tower and platform - stable, no movement, drainage clear",
+              "Support columns - no visible corrosion, connections tight",
+              "Stairs and walkways - non-slip surfaces intact, no damage",
+              "Signage - all safety signs present and legible",
             ],
           },
           {
@@ -496,17 +823,16 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Before turning on water supply:",
             items: [
-              "Check pump operation — no unusual noises or vibration",
+              "Check pump operation - no unusual noises or vibration",
               "Open clean-out valves and flush until water runs clear",
-              "Check all nozzles are functioning — clean any blocked tips",
+              "Check all nozzles are functioning - clean any blocked tips",
               "Achieve correct flow rate and water levels before anyone enters start position",
               "First rider should be a lifeguard or attendant as a final operational check",
             ],
           },
           {
             type: "oem-reference",
-            body: "It is recommended that the initial riders be a Lifeguard or Water Ride Attendant. This will act as a final check that the water ride is ready to be ridden by the general public.",
-            source: "Manufacturer Guidelines, Section 7",
+            body: "Industry best practice recommends that a lifeguard or water ride attendant should be the first to ride each day. This serves as a final operational check to confirm the ride is safe for the general public.",
           },
           {
             heading: "Communication and Safety Equipment",
@@ -518,6 +844,18 @@ export const modules: Module[] = [
               "Emergency equipment accessible and functional",
               "All lifeguards and attendants in position before public entry",
             ],
+          },
+          {
+            type: "case-study",
+            heading: "Real-World Example - Insufficient Water Flow",
+            body: "A rider suffered a spinal injury on a high-speed slide after becoming airborne and landing on a hard surface where water flow was insufficient. Inadequate water flow maintenance created dry spots that altered rider trajectory. Regular flow checks, scheduled pump system maintenance and documented flow-rate inspections before daily operation are critical controls to prevent this type of incident.",
+            source: "Based on publicly reported incident, late 1990s",
+          },
+          {
+            type: "case-study",
+            heading: "Real-World Example - Joint Deterioration",
+            body: "Several incidents at various facilities involved riders' hair or limbs becoming trapped in slide joints or gaps between slide sections, causing lacerations and avulsion injuries. Deteriorated joint covers, gaps from thermal expansion not accounted for and missed findings during routine inspections were common contributing factors. Daily slide surface walk-throughs with documented inspection checklists and immediate closure protocols when gaps exceed manufacturer tolerances are essential prevention measures.",
+            source: "Based on industry incident pattern analysis",
           },
         ],
         keyTakeaways: [
@@ -539,7 +877,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Per manufacturer requirements, the inspection should be performed just prior to turning on the water ride's water supply — before any water flows.",
+              "Per manufacturer requirements, the inspection should be performed just prior to turning on the water ride's water supply - before any water flows.",
             type: "knowledge",
           },
           {
@@ -549,7 +887,7 @@ export const modules: Module[] = [
             options: [
               "Note it for the weekly maintenance report",
               "Apply tape over it and continue opening",
-              "Immediately report it — cracks are signs of structural damage requiring immediate attention",
+              "Immediately report it - cracks are signs of structural damage requiring immediate attention",
               "Monitor it throughout the day to see if it gets worse",
             ],
             correctIndex: 2,
@@ -564,12 +902,12 @@ export const modules: Module[] = [
             options: [
               "To reward staff with the best ride experience",
               "To act as a final operational check confirming the ride is ready for the general public",
-              "Because guests are not allowed until the park officially opens",
+              "Because guests are not allowed until the facility officially opens",
               "To demonstrate correct riding position to waiting guests",
             ],
             correctIndex: 1,
             explanation:
-              "Manufacturer guidelines recommend that initial riders be a lifeguard or water ride attendant. This acts as a final check that the water ride is ready for the general public - a live operational test after all pre-opening checks are complete.",
+              "Industry best practice recommends that initial riders be a lifeguard or water ride attendant. This acts as a final check that the water ride is ready for the general public - a live operational test after all pre-opening checks are complete.",
             type: "knowledge",
           },
           {
@@ -593,13 +931,13 @@ export const modules: Module[] = [
               "What does 'bolt and fastener integrity' refer to in a flume inspection?",
             options: [
               "The decorative hardware on the slide tower",
-              "Checking that all structural connections are tight, not missing, and not corroded",
+              "Checking that all structural connections are tight, not missing and not corroded",
               "The locking mechanism on the starting gate",
               "Fasteners on rider equipment such as life vests",
             ],
             correctIndex: 1,
             explanation:
-              "Bolt and fastener integrity means checking for loose, missing, or corroded connections throughout the flume structure. Fastener failure can compromise the structural integrity of flume sections and their connections to the support structure.",
+              "Bolt and fastener integrity means checking for loose, missing or corroded connections throughout the flume structure. Fastener failure can compromise the structural integrity of flume sections and their connections to the support structure.",
             type: "knowledge",
           },
         ],
@@ -611,12 +949,12 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Water flow is not just about making the slide work — it is a critical safety control. Incorrect flow creates dry spots where riders decelerate unpredictably, or excessive speed zones where control is lost.",
+            body: "Water flow is not just about making the slide work - it is a critical safety control. Incorrect flow creates dry spots where riders decelerate unpredictably, or excessive speed zones where control is lost.",
           },
           {
             heading: "Flow Rate Requirements",
             type: "text",
-            body: "The correct flow rate and water levels must be achieved and maintained prior to allowing anyone to enter the start position. Flow rates are specified by the manufacturer for each individual ride and are documented in the Ride Operations Manual. These are not suggestions — they are engineered limits.",
+            body: "The correct flow rate and water levels must be achieved and maintained prior to allowing anyone to enter the start position. Flow rates are specified by the manufacturer for each individual ride and are documented in the Ride Operations Manual. These are not suggestions - they are engineered limits.",
           },
           {
             heading: "Sprinkler System Maintenance",
@@ -627,13 +965,13 @@ export const modules: Module[] = [
               "Allow water to flow until it runs clear",
               "Close clean-out valves on sprinkler pipes",
               "Turn on water and note any jets not functioning properly",
-              "Clean non-functioning nozzles by removing tips, cleaning, and replacing",
+              "Clean non-functioning nozzles by removing tips, cleaning and replacing",
               "System is ready for use only after all nozzles confirmed operational",
             ],
           },
           {
             type: "critical",
-            body: "Operating a slide with incorrect water flow is one of the most dangerous operational errors. Dry spots cause riders to stick, decelerate, and become vulnerable to collision from following riders. This is a non-negotiable operational control.",
+            body: "Operating a slide with incorrect water flow is one of the most dangerous operational errors. Dry spots cause riders to stick, decelerate and become vulnerable to collision from following riders. This is a non-negotiable operational control.",
           },
         ],
         keyTakeaways: [
@@ -649,13 +987,13 @@ export const modules: Module[] = [
               "What should you do if you discover a nozzle is not functioning during your pre-opening check?",
             options: [
               "Ignore it if most other nozzles are working",
-              "Remove the tip, clean it, replace it, and confirm it works before opening",
+              "Remove the tip, clean it, replace it and confirm it works before opening",
               "Report it at the end of the day",
               "Reduce the number of riders allowed on the slide",
             ],
             correctIndex: 1,
             explanation:
-              "Non-functioning nozzles must be cleaned by removing tips, cleaning, and replacing them. The system is only ready for use after all nozzles are confirmed operational.",
+              "Non-functioning nozzles must be cleaned by removing tips, cleaning and replacing them. The system is only ready for use after all nozzles are confirmed operational.",
             type: "knowledge",
           },
           {
@@ -727,38 +1065,64 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Inspections operate at three distinct levels, each with different scope, frequency, and qualification requirements. Understanding these tiers prevents both under-inspection (missing defects) and over-reliance on daily checks to catch everything.",
+            body: "Inspections operate at three distinct levels, each with different scope, frequency and qualification requirements. Understanding these tiers prevents both under-inspection (missing defects) and over-reliance on daily checks to catch everything.",
           },
           {
             type: "oem-reference",
-            body: "Manufacturer guidelines define four inspection tiers: Routine (daily), Periodic (monthly/quarterly/yearly), Thorough (by competent professional at defined intervals), and Structural (when damage is suspected).",
-            source: "Manufacturer Guidelines, Section 4",
+            body: "There are four levels of inspection: Routine (daily), Periodic (monthly/quarterly/yearly), Thorough (conducted by a competent professional at set intervals) and Structural (triggered when damage is suspected).",
           },
           {
             heading: "Routine Inspection (Daily)",
             type: "text",
-            body: "Performed by park maintenance staff every operating day. Intended to identify obvious hazards from vandalism, use, excessive wear, weather conditions, foreign bodies, damage, and structural integrity issues before starting operation.",
+            body: "Performed by facility maintenance staff every operating day. Intended to identify obvious hazards from vandalism, use, excessive wear, weather conditions, foreign bodies, damage and structural integrity issues before starting operation.",
+          },
+          {
+            type: "checklist",
+            body: "Example routine inspection checklist items:",
+            items: [
+              "Walk entire flume - check for cracks, chips, foreign objects and joint condition",
+              "Verify all handrails and barriers are secure with no sharp edges",
+              "Check pump operation - listen for unusual noise or vibration",
+              "Confirm all nozzles are functioning and flow rate is correct",
+              "Test communication equipment between top and bottom positions",
+              "Verify all safety signage is present and legible",
+              "Confirm lifesaving and emergency equipment is in place",
+              "Record all findings in the daily inspection log",
+            ],
           },
           {
             heading: "Periodic Inspection (Monthly/Quarterly/Yearly)",
             type: "text",
-            body: "More detailed than routine inspection. Performed by park maintenance staff to assess operation and stability of equipment, identify damage, wear, and corrosion. Includes checking all mechanical systems, reviewing maintenance logs, and assessing component lifecycle status.",
+            body: "More detailed than routine inspection. Performed by facility maintenance staff to assess operation and stability of equipment, identify damage, wear and corrosion. Includes checking all mechanical systems, reviewing maintenance logs and assessing component lifecycle status.",
+          },
+          {
+            type: "checklist",
+            body: "Example periodic inspection checklist items:",
+            items: [
+              "Detailed assessment of all joint sealant condition and integrity",
+              "Bolt torque checks on structural connections",
+              "Corrosion assessment on all steel and metal components",
+              "Pump performance testing against manufacturer specifications",
+              "Review of maintenance logs for recurring issues or trends",
+              "Surface condition assessment - friction testing and wear measurement",
+              "Component lifecycle review against manufacturer replacement schedules",
+            ],
           },
           {
             heading: "Thorough Inspection (Professional)",
             type: "text",
-            body: "Detailed visual inspection by a competent professional at defined intervals to check all components for signs of wear, structural degradation, corrosion (internal and external) or cracking. May be supplemented by non-destructive testing if deemed necessary.",
+            body: "A detailed visual inspection carried out by a competent professional at defined intervals, covering all components for signs of wear, structural degradation, corrosion (internal and external) or cracking. May be supplemented by non-destructive testing if deemed necessary.",
           },
           {
             heading: "Structural Inspection (As Needed)",
             type: "text",
-            body: "Triggered when damage, distress, or deterioration is suspected or known to exist. The purpose is to determine if the structure or component is structurally adequate to continue operating. This is a specialist assessment, not a staff-level check.",
+            body: "Triggered when damage, distress or deterioration is suspected or known to exist. The purpose is to determine if the structure or component is structurally adequate to continue operating. This is a specialist assessment, not a staff-level check.",
           },
         ],
         keyTakeaways: [
           "Four tiers: Routine (daily), Periodic (monthly+), Thorough (professional), Structural (specialist)",
-          "Daily inspections catch obvious hazards — they don't replace deeper inspection",
-          "Periodic inspections assess wear, corrosion, and component lifecycle",
+          "Daily inspections catch obvious hazards - they don't replace deeper inspection",
+          "Periodic inspections assess wear, corrosion and component lifecycle",
           "Thorough and structural inspections require qualified professionals",
         ],
         quiz: [
@@ -769,12 +1133,12 @@ export const modules: Module[] = [
             options: [
               "Paint over it to prevent further corrosion",
               "Document it and escalate for a periodic or thorough inspection by qualified personnel",
-              "Ignore it — corrosion is normal on steel",
-              "Close the entire water park immediately",
+              "Ignore it - corrosion is normal on steel",
+              "Close the entire facility immediately",
             ],
             correctIndex: 1,
             explanation:
-              "Routine inspections identify issues; they don't resolve structural concerns. Corrosion should be documented and escalated to the appropriate inspection tier — periodic or thorough — performed by qualified personnel.",
+              "Routine inspections identify issues; they don't resolve structural concerns. Corrosion should be documented and escalated to the appropriate inspection tier - periodic or thorough - performed by qualified personnel.",
             type: "scenario",
           },
           {
@@ -789,7 +1153,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "Thorough inspections are performed by a competent professional and involve detailed visual inspection of all components for wear, structural degradation, and corrosion. They may also be supplemented by non-destructive testing - a level of assessment beyond what routine staff inspections can achieve.",
+              "Thorough inspections are performed by a competent professional and involve detailed visual inspection of all components for wear, structural degradation and corrosion. They may also be supplemented by non-destructive testing - a level of assessment beyond what routine staff inspections can achieve.",
             type: "knowledge",
           },
           {
@@ -804,7 +1168,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "A Structural Inspection is triggered when damage, distress, or deterioration is suspected or known. Its purpose is to determine whether the structure or component is structurally adequate to continue operating - it is a specialist assessment, not a scheduled routine.",
+              "A Structural Inspection is triggered when damage, distress or deterioration is suspected or known. Its purpose is to determine whether the structure or component is structurally adequate to continue operating - it is a specialist assessment, not a scheduled routine.",
             type: "knowledge",
           },
           {
@@ -813,13 +1177,13 @@ export const modules: Module[] = [
               "What is the primary purpose of Periodic Inspections (monthly/quarterly/yearly)?",
             options: [
               "To replace daily inspections when staff are short",
-              "To assess operation and stability, identify damage, wear, and corrosion, and review component lifecycle status",
+              "To assess operation and stability, identify damage, wear and corrosion and review component lifecycle status",
               "To train new staff on what to look for",
               "To fulfil insurance requirements only",
             ],
             correctIndex: 1,
             explanation:
-              "Periodic inspections are more detailed than routine checks. They assess operation and stability, identify damage, wear, and corrosion, review maintenance logs, and assess component lifecycle status. They go beyond what a daily routine inspection covers.",
+              "Periodic inspections are more detailed than routine checks. They assess operation and stability, identify damage, wear and corrosion, review maintenance logs and assess component lifecycle status. They go beyond what a daily routine inspection covers.",
             type: "knowledge",
           },
           {
@@ -846,22 +1210,22 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "The decision to shut a slide is one of the most important judgement calls an operator makes. Manufacturer manuals are clear about non-negotiable shutdown conditions.",
+            body: "The decision to shut a slide is one of the most important judgement calls an operator makes. There are non-negotiable shutdown conditions that must always be followed.",
           },
           {
             type: "critical",
-            body: "The following conditions require immediate shutdown — no exceptions, no 'monitoring it for a while':",
+            body: "The following conditions require immediate shutdown - no exceptions, no 'monitoring it for a while':",
           },
           {
             type: "checklist",
             body: "Immediate shutdown triggers:",
             items: [
-              "Any crack in the flume surface — structural damage requiring immediate attention",
-              "Punctures or holes — integrity of the riding surface is compromised",
-              "Joint failure — sealant separation creating lips or sharp edges",
-              "Incorrect water flow — flow rate below manufacturer specification",
-              "Blocked nozzles creating dry zones — unpredictable rider deceleration",
-              "Large fractures — especially on bolting flanges critical to structural integrity",
+              "Any crack in the flume surface - structural damage requiring immediate attention",
+              "Punctures or holes - integrity of the riding surface is compromised",
+              "Joint failure - sealant separation creating lips or sharp edges",
+              "Incorrect water flow - flow rate below manufacturer specification",
+              "Blocked nozzles creating dry zones - unpredictable rider deceleration",
+              "Large fractures - especially on bolting flanges critical to structural integrity",
               "Missing or damaged safety signage",
               "Communication system failure between operators",
               "Any condition where the exit zone cannot be confirmed clear",
@@ -869,17 +1233,16 @@ export const modules: Module[] = [
           },
           {
             type: "oem-reference",
-            body: "Do not use a deficient flume until corrected. Any fractures to the slide component could seriously degrade the structural integrity of the slide section and must be fixed immediately.",
-            source: "Manufacturer Guidelines, Section 4",
+            body: "It is critical that a flume with any deficiency must not be operated until the issue is corrected. Fractures to any slide component have the potential to severely compromise the structural integrity of the section and must be repaired without delay.",
           },
           {
             type: "warning",
-            body: "The cost of shutting a slide is always less than the cost of an incident. Every time. Queue pressure, management pressure, and guest complaints are not valid reasons to keep a compromised slide operating.",
+            body: "The cost of shutting a slide is always less than the cost of an incident. Every time. Queue pressure, management pressure and guest complaints are not valid reasons to keep a compromised slide operating.",
           },
         ],
         keyTakeaways: [
           "Specific conditions require immediate, non-negotiable shutdown",
-          "Cracks, punctures, joint failure, and incorrect flow are always shutdown triggers",
+          "Cracks, punctures, joint failure and incorrect flow are always shutdown triggers",
           "The cost of closure is always less than the cost of an incident",
           "External pressure to remain open is never a valid safety override",
         ],
@@ -911,7 +1274,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "A single rider complaint is not an automatic shutdown trigger, though it should be investigated. Missing signage, communication failure, and flume cracks are all non-negotiable shutdown conditions.",
+              "A single rider complaint is not an automatic shutdown trigger, though it should be investigated. Missing signage, communication failure and flume cracks are all non-negotiable shutdown conditions.",
             type: "knowledge",
           },
           {
@@ -932,7 +1295,7 @@ export const modules: Module[] = [
           {
             id: "q2-4-4",
             question:
-              "What do manufacturer guidelines say about using a deficient flume?",
+              "What is the requirement regarding use of a deficient flume?",
             options: [
               "Deficient flumes may be used at reduced capacity until repairs can be scheduled",
               "Do not use a deficient flume until corrected - fractures seriously degrade structural integrity and must be fixed immediately",
@@ -941,7 +1304,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "The manufacturer's position is unambiguous: do not use a deficient flume until corrected. Any fractures to a slide component could seriously degrade structural integrity and must be fixed immediately - not managed, monitored, or worked around.",
+              "The position is unambiguous: do not use a deficient flume until corrected. Any fractures to a slide component could seriously degrade structural integrity and must be fixed immediately - not managed, monitored or worked around.",
             type: "knowledge",
           },
           {
@@ -965,11 +1328,11 @@ export const modules: Module[] = [
   },
   {
     id: "surface-rider-interaction",
-    number: 3,
+    number: 4,
     title: "Surface and Rider Interaction",
     subtitle: "Where Physics Meets Safety",
     description:
-      "Learn why surface condition is a critical safety control — not just cosmetic. From mineral deposits to UV degradation, understand how surface changes create incidents.",
+      "Learn why surface condition is a critical safety control - not just cosmetic. From mineral deposits to UV degradation, understand how surface changes create incidents.",
     icon: "waves",
     color: "#d97706",
     badge: { icon: "waves", label: "Surface Specialist" },
@@ -981,12 +1344,11 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Surface condition is not cosmetic maintenance — it is a direct safety control. The interaction between the rider's body (or raft) and the flume surface determines speed, control, and predictability. When surface conditions change, rider behaviour becomes unpredictable.",
+            body: "Surface condition is not cosmetic maintenance - it is a direct safety control. The interaction between the rider's body (or raft) and the flume surface determines speed, control and predictability. When surface conditions change, rider behaviour becomes unpredictable.",
           },
           {
             type: "oem-reference",
-            body: "Washed and waxed surfaces are critical to proper and safe operation. Calcium buildup, for example, may cause riders to stick, which may lead to unpredictable behaviour and unsafe conditions.",
-            source: "Manufacturer Guidelines, Section 3.3.2",
+            body: "Keeping surfaces washed and waxed is essential for safe operation. Calcium buildup is a particular concern, as it can cause riders to stick - leading to unpredictable behaviour and unsafe conditions.",
           },
           {
             type: "diagram",
@@ -997,23 +1359,23 @@ export const modules: Module[] = [
           {
             heading: "Mineral Deposits",
             type: "text",
-            body: "Water readily dissolves minerals from the ground and carries them as Total Dissolved Solids (TDS). When water evaporates from the flume surface, it leaves behind crystalline mineral deposits — calcium carbonate, calcium sulfate, magnesium compounds, iron, manganese, and others. These deposits appear as white scale ('water spots') and bond aggressively to surfaces. They create rough, high-friction zones that slow or stop riders unpredictably.",
+            body: "Water readily dissolves minerals from the ground and carries them as Total Dissolved Solids (TDS). When water evaporates from the flume surface, it leaves behind crystalline mineral deposits - calcium carbonate, calcium sulfate, magnesium compounds, iron, manganese and others. These deposits appear as white scale ('water spots') and bond aggressively to surfaces. They create rough, high-friction zones that slow or stop riders unpredictably.",
           },
           {
             heading: "The Chemistry of Removal",
             type: "text",
-            body: "Mineral deposits are salts. Removing them requires acid mixtures that dissolve the crystalline bonds. No single acid handles all mineral types — a combination is needed. Three variables control the reaction: acid concentration (limited by worker safety), temperature (higher = faster reaction), and time (the main controllable variable in site operations).",
+            body: "Mineral deposits are salts. Removing them requires acid mixtures that dissolve the crystalline bonds. No single acid handles all mineral types - a combination is needed. Three variables control the reaction: acid concentration (limited by worker safety), temperature (higher = faster reaction) and time (the main controllable variable in site operations).",
           },
           {
             type: "warning",
-            body: "A flume that looks clean can still have microscopic mineral buildup that changes rider dynamics. Regular cleaning and waxing on a 2-3 month cycle is a safety requirement, not just an aesthetic preference.",
+            body: "A flume that looks clean can still have microscopic mineral buildup that changes rider dynamics. Regular cleaning and waxing should be performed in line with the manufacturer's recommended schedule and adapted to your facility's conditions - frequency will depend on water chemistry, usage levels and environmental exposure. This is a safety requirement, not just an aesthetic preference.",
           },
         ],
         keyTakeaways: [
-          "Surface condition directly controls rider speed, control, and predictability",
-          "Mineral deposits cause riders to stick — creating collision risk",
+          "Surface condition directly controls rider speed, control and predictability",
+          "Mineral deposits cause riders to stick - creating collision risk",
           "Cleaning requires specific acid chemistry, not just soap and water",
-          "2-3 month buffing and waxing cycles are a safety requirement",
+          "Regular buffing and waxing cycles per manufacturer schedules are a safety requirement",
         ],
         quiz: [
           {
@@ -1028,7 +1390,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Per manufacturer guidelines, calcium buildup may cause riders to stick, which leads to unpredictable behaviour and unsafe conditions — primarily collision risk from following riders.",
+              "Calcium buildup may cause riders to stick, which leads to unpredictable behaviour and unsafe conditions - primarily collision risk from following riders.",
             type: "knowledge",
           },
           {
@@ -1043,7 +1405,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "TDS (Total Dissolved Solids) are minerals that water dissolves from the ground. When water evaporates from flume surfaces, these minerals are left behind as crystalline deposits - calcium carbonate, magnesium compounds, and others - that create rough, high-friction zones affecting rider speed and predictability.",
+              "TDS (Total Dissolved Solids) are minerals that water dissolves from the ground. When water evaporates from flume surfaces, these minerals are left behind as crystalline deposits - calcium carbonate, magnesium compounds and others - that create rough, high-friction zones affecting rider speed and predictability.",
             type: "knowledge",
           },
           {
@@ -1064,16 +1426,16 @@ export const modules: Module[] = [
           {
             id: "q3-1-4",
             question:
-              "How often should buffing and waxing of flume surfaces be performed, and what classification does this have?",
+              "What classification does regular buffing and waxing of flume surfaces have?",
             options: [
               "Once per season, as a cosmetic maintenance preference",
               "Only when visible discolouration is observed",
-              "Every 2-3 months, as a safety requirement - not just aesthetic preference",
+              "Per the manufacturer's recommended schedule, as a safety requirement - not just aesthetic preference",
               "Annually, alongside the thorough inspection",
             ],
             correctIndex: 2,
             explanation:
-              "A 2-3 month buffing and waxing cycle is a safety requirement. Waxed surfaces are critical to proper and safe operation per manufacturer guidelines - a flume that looks clean can still have microscopic mineral buildup that changes rider dynamics.",
+              "Regular buffing and waxing per manufacturer schedules is a safety requirement. Waxed surfaces are critical to proper and safe operation - a flume that looks clean can still have microscopic mineral buildup that changes rider dynamics. The exact frequency will depend on your facility's conditions.",
             type: "knowledge",
           },
           {
@@ -1100,22 +1462,22 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Understanding the types of surface degradation helps you identify problems early and determine the correct response — from routine maintenance to immediate shutdown.",
+            body: "Understanding the types of surface degradation helps you identify problems early and determine the correct response - from routine maintenance to immediate shutdown.",
           },
           {
             heading: "UV Degradation",
             type: "text",
-            body: "UV radiation degrades FRP exposed to sunlight. Over time, plastics lose their colour, strength, and can eventually crack and deteriorate, requiring replacement. Manufacturers use UV-inhibiting pigments, but reapplying absorbers and eventually gelcoat is needed over time. On surfaces with UV absorbent clear coat, any refinishing requires a new clear coat application.",
+            body: "UV radiation degrades FRP exposed to sunlight. Over time, plastics lose their colour and strength, and can eventually crack and deteriorate, requiring replacement. Manufacturers use UV-inhibiting pigments, but reapplying absorbers and eventually gelcoat is needed over time. On surfaces with UV absorbent clear coat, any refinishing requires a new clear coat application.",
           },
           {
             heading: "Friction Wear",
             type: "text",
-            body: "Riders wear down slide surfaces through direct contact. Ideally water separates riders from the surface, but movement causes contact. Airborne dust and metal objects on clothing also scratch surfaces between riders and the flume. These scratches require sanding, filling, and gelcoat reapplication.",
+            body: "Riders wear down slide surfaces through direct contact. Ideally water separates riders from the surface, but movement causes contact. Airborne dust and metal objects on clothing also scratch surfaces between riders and the flume. These scratches require sanding, filling and gelcoat reapplication.",
           },
           {
             heading: "Gelcoat Failure",
             type: "text",
-            body: "Gelcoat is the protective outer layer of the FRP. When it fails — through peeling, fading, cracking, or wearing through — the structural fiberglass beneath is exposed to water, chemicals, and UV. This accelerates degradation and creates rough surfaces that affect rider safety.",
+            body: "Gelcoat is the protective outer layer of the FRP. When it fails - through peeling, fading, cracking or wearing through - the structural fiberglass beneath is exposed to water, chemicals and UV. This accelerates degradation and creates rough surfaces that affect rider safety.",
           },
           {
             heading: "Stickers and Adhesives",
@@ -1127,7 +1489,7 @@ export const modules: Module[] = [
           "UV degradation is progressive - surfaces lose colour, strength, then crack",
           "Friction wear from riders requires periodic sanding and gelcoat repair",
           "Gelcoat failure exposes structural fiberglass to accelerated degradation",
-          "Even minor surface issues like sticker residue can affect rider dynamics",
+          "Even minor surface issues such as sticker residue can affect rider dynamics",
         ],
         quiz: [
           {
@@ -1136,13 +1498,13 @@ export const modules: Module[] = [
               "What happens when gelcoat fails on a fiberglass slide surface?",
             options: [
               "The slide looks faded but functions normally",
-              "The structural fiberglass beneath is exposed to water, chemicals, and UV - accelerating degradation",
+              "The structural fiberglass beneath is exposed to water, chemicals and UV - accelerating degradation",
               "The slide becomes faster due to reduced friction",
               "It only affects the colour of the slide",
             ],
             correctIndex: 1,
             explanation:
-              "Gelcoat is the protective outer layer. When it fails, the structural fiberglass is exposed to water, chemicals, and UV, which accelerates degradation and creates rough surfaces affecting rider safety.",
+              "Gelcoat is the protective outer layer. When it fails, the structural fiberglass is exposed to water, chemicals and UV, which accelerates degradation and creates rough surfaces affecting rider safety.",
             type: "defect",
           },
           {
@@ -1152,12 +1514,12 @@ export const modules: Module[] = [
             options: [
               "Leave it - stickers are cosmetic only",
               "Use lacquer thinner to dissolve it quickly",
-              "Remove with soap, warm water, and a soft putty scraper",
+              "Remove with soap, warm water and a soft putty scraper",
               "Sand it down with coarse grit sandpaper",
             ],
             correctIndex: 2,
             explanation:
-              "Stickers should be removed with soap, warm water, and a soft putty scraper. Residual adhesive creates sticky spots that can catch riders, making it a safety issue, not just cosmetic.",
+              "Stickers should be removed with soap, warm water and a soft putty scraper. Residual adhesive creates sticky spots that can catch riders, making it a safety issue, not just cosmetic.",
             type: "knowledge",
           },
           {
@@ -1172,7 +1534,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Gelcoat is the protective outer layer. When it fails and the structural fiberglass is exposed, water, chemicals, and UV accelerate degradation of the structural material beneath. The rough exposed surface also directly affects rider dynamics - creating friction that changes speed and predictability.",
+              "Gelcoat is the protective outer layer. When it fails and the structural fiberglass is exposed, water, chemicals and UV accelerate degradation of the structural material beneath. The rough exposed surface also directly affects rider dynamics - creating friction that changes speed and predictability.",
             type: "defect",
           },
           {
@@ -1187,7 +1549,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "UV degradation progresses in sequence: first plastics lose colour, then strength, and eventually crack and deteriorate - potentially requiring replacement. Understanding this progression means early colour change should prompt assessment of underlying strength rather than being dismissed as purely cosmetic.",
+              "UV degradation progresses in sequence: first plastics lose colour, then strength and eventually crack and deteriorate - potentially requiring replacement. Understanding this progression means early colour change should prompt assessment of underlying strength rather than being dismissed as purely cosmetic.",
             type: "knowledge",
           },
           {
@@ -1214,7 +1576,7 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Surface condition changes don't just affect the appearance of the slide — they directly alter how riders move through it. An operator who understands these dynamics can anticipate problems before they become incidents.",
+            body: "Surface condition changes don't just affect the appearance of the slide - they directly alter how riders move through it. An operator who understands these dynamics can anticipate problems before they become incidents.",
           },
           {
             heading: "Speed Changes",
@@ -1224,7 +1586,7 @@ export const modules: Module[] = [
           {
             heading: "Rider Collisions",
             type: "text",
-            body: "When a rider decelerates unexpectedly — whether from a rough patch, dry spot, or deposit — the following rider on the original dispatch timing will close the gap. If that gap closes to zero, you have a collision. This is the single most common slide incident pattern.",
+            body: "When a rider decelerates unexpectedly - whether from a rough patch, dry spot or deposit - the following rider on the original dispatch timing will close the gap. If that gap closes to zero, you have a collision. This is the single most common slide incident pattern.",
           },
           {
             heading: "Rider Stoppages",
@@ -1233,7 +1595,7 @@ export const modules: Module[] = [
           },
           {
             type: "critical",
-            body: "If you notice riders moving slower than usual, or if you receive reports of riders stopping, this is a surface condition issue. Do not simply increase dispatch intervals — investigate and address the root cause.",
+            body: "If you notice riders moving slower than usual, or if you receive reports of riders stopping, this is a surface condition issue. Do not simply increase dispatch intervals - investigate and address the root cause.",
           },
         ],
         keyTakeaways: [
@@ -1270,7 +1632,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "When a rider decelerates unexpectedly from a rough patch, dry spot, or deposit, the following rider on standard dispatch timing closes the gap. This collision pattern is the most common slide incident.",
+              "When a rider decelerates unexpectedly from a rough patch, dry spot or deposit, the following rider on standard dispatch timing closes the gap. This collision pattern is the most common slide incident.",
             type: "knowledge",
           },
           {
@@ -1324,11 +1686,11 @@ export const modules: Module[] = [
   },
   {
     id: "core-operations",
-    number: 4,
+    number: 5,
     title: "Core Operations",
     subtitle: "The Operator Skillset",
     description:
-      "Master the essential operational skills: pre-dispatch checks, rider positioning, dispatch control, and exit monitoring. No fluff — aligned with real operational requirements.",
+      "Master the essential operational skills: pre-dispatch checks, rider positioning, dispatch control and exit monitoring. No fluff - aligned with real operational requirements.",
     icon: "controls",
     color: "#7c3aed",
     badge: { icon: "controls", label: "Operations Pro" },
@@ -1340,7 +1702,7 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Pre-dispatch is the last point where you can prevent an incident. Once a rider is moving, your control is limited. Every dispatch decision must confirm three things: the rider is eligible, the slide is ready, and the exit is clear.",
+            body: "Pre-dispatch is the last point where you can prevent an incident. Once a rider is moving, your control is limited. Every dispatch decision must confirm three things: the rider is eligible, the slide is ready and the exit is clear.",
           },
           {
             type: "diagram",
@@ -1356,7 +1718,7 @@ export const modules: Module[] = [
               "Height requirement met (as posted for the specific ride)",
               "Weight within range (particularly for raft rides with maximum load limits)",
               "No prohibited items (glasses, jewellery, loose clothing, cameras)",
-              "Appropriate swimwear (no clothing with zippers, buckles, or rivets)",
+              "Appropriate swimwear (no clothing with zippers, buckles or rivets)",
               "No signs of intoxication or impairment",
               "Rider capable of understanding and following instructions",
             ],
@@ -1380,7 +1742,7 @@ export const modules: Module[] = [
         keyTakeaways: [
           "Pre-dispatch is your last control point before the rider is in the system",
           "Three confirmations every time: rider eligible, slide ready, exit clear",
-          "Never dispatch on assumed timing — require confirmed clearance",
+          "Never dispatch on assumed timing - require confirmed clearance",
         ],
         quiz: [
           {
@@ -1388,14 +1750,14 @@ export const modules: Module[] = [
             question:
               "A guest at the top of the slide is wearing sunglasses and a GoPro chest mount. They meet the height requirement. What do you do?",
             options: [
-              "Let them ride — they meet the height requirement",
+              "Let them ride - they meet the height requirement",
               "Ask them to remove the sunglasses but the GoPro is fine",
               "Require removal of both the sunglasses and camera before dispatch",
               "Ask a supervisor to make the decision",
             ],
             correctIndex: 2,
             explanation:
-              "Loose items including glasses and cameras are prohibited. They can detach during the ride, injure the rider or following riders, and create obstructions in the flume.",
+              "Loose items including glasses and cameras are prohibited. They can detach during the ride, injure the rider or following riders and create obstructions in the flume.",
             type: "scenario",
           },
           {
@@ -1410,7 +1772,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "One of the four required slide readiness checks is that the previous rider has completely exited the catch pool. The others are: correct water flow, no visual obstructions at the entry, and confirmed communication with the exit operator.",
+              "One of the four required slide readiness checks is that the previous rider has completely exited the catch pool. The others are: correct water flow, no visual obstructions at the entry and confirmed communication with the exit operator.",
             type: "knowledge",
           },
           {
@@ -1434,13 +1796,13 @@ export const modules: Module[] = [
               "What type of swimwear is explicitly prohibited on waterslides?",
             options: [
               "Swimwear with a UV protection rating",
-              "Swimwear with zippers, buckles, or rivets",
+              "Swimwear with zippers, buckles or rivets",
               "Board shorts longer than the knee",
               "Swimwear with a drawstring waist",
             ],
             correctIndex: 1,
             explanation:
-              "Clothing with zippers, buckles, or rivets is prohibited. These hard metal elements can catch on the flume surface, cause abrasion injuries to the rider, and damage the gelcoat over time.",
+              "Clothing with zippers, buckles or rivets is prohibited. These hard metal elements can catch on the flume surface, cause abrasion injuries to the rider and damage the gelcoat over time.",
             type: "knowledge",
           },
           {
@@ -1462,24 +1824,24 @@ export const modules: Module[] = [
       },
       {
         id: "4-2",
-        title: "Dispatch Timing — Risk-Based Decisions",
+        title: "Dispatch Timing - Risk-Based Decisions",
         duration: "12 min",
         content: [
           {
             type: "text",
-            body: "Dispatch timing is not a fixed number — it is a risk-based decision that must account for real-time conditions. The interval between riders is your primary collision prevention control.",
+            body: "Dispatch timing is not a fixed number - it is a risk-based decision that must account for real-time conditions. The interval between riders is your primary collision prevention control.",
           },
           {
             heading: "Factors That Affect Dispatch Timing",
             type: "checklist",
             body: "Dispatch intervals should be adjusted for:",
             items: [
-              "Water flow rate — reduced flow = slower riders = longer intervals needed",
-              "Rider size — heavier riders travel faster; lighter riders (especially children) travel slower",
-              "Surface condition — rougher surfaces slow riders unpredictably",
-              "Slide type — enclosed slides require longer intervals (no visual confirmation mid-ride)",
-              "Weather conditions — wind, rain, and temperature affect rider speed",
-              "Time of day — late afternoon heat can dry surfaces faster between riders",
+              "Water flow rate - reduced flow = slower riders = longer intervals needed",
+              "Rider size - heavier riders travel faster; lighter riders (especially children) travel slower",
+              "Surface condition - rougher surfaces slow riders unpredictably",
+              "Slide type - enclosed slides require longer intervals (no visual confirmation mid-ride)",
+              "Weather conditions - wind, rain and temperature affect rider speed",
+              "Time of day - late afternoon heat can dry surfaces faster between riders",
             ],
           },
           {
@@ -1494,7 +1856,7 @@ export const modules: Module[] = [
         ],
         keyTakeaways: [
           "Dispatch timing is dynamic, not fixed - adjust for real-time conditions",
-          "Six factors affect interval: flow, rider size, surface, slide type, weather, and time of day",
+          "Six factors affect interval: flow, rider size, surface, slide type, weather and time of day",
           "Small speed differences close gaps rapidly at slide velocities",
           "When in doubt, increase the interval - longer waits don't cause incidents",
         ],
@@ -1526,7 +1888,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "The six factors are: water flow rate, rider size/weight, surface condition, slide type, weather conditions, and time of day. Swimming ability is not a dispatch timing factor.",
+              "The six factors are: water flow rate, rider size/weight, surface condition, slide type, weather conditions and time of day. Swimming ability is not a dispatch timing factor.",
             type: "knowledge",
           },
           {
@@ -1565,7 +1927,7 @@ export const modules: Module[] = [
               "Late afternoon heat on a hot day may require you to increase dispatch intervals. Why?",
             options: [
               "Riders are more fatigued in the afternoon and move more slowly",
-              "Water flow pressure drops in the afternoon due to increased park demand",
+              "Water flow pressure drops in the afternoon due to increased facility demand",
               "Surface heat can dry the flume faster between riders, creating high-friction zones",
               "UV radiation affects the structural integrity of the flume in peak heat",
             ],
@@ -1588,7 +1950,7 @@ export const modules: Module[] = [
           {
             heading: "Correct Riding Positions",
             type: "text",
-            body: "Riding position varies by slide type and is specified in the manufacturer's operations manual. Generally: body slides require a supine (lying back, feet first) position. Raft slides have specific seating configurations for single, double, or multi-rider rafts. The rider must be in the correct position before dispatch — not correcting themselves mid-ride.",
+            body: "Riding position varies by slide type and is specified in the manufacturer's operations manual. Generally: body slides require a supine (lying back, feet first) position. Raft slides have specific seating configurations for single, double or multi-rider rafts. The rider must be in the correct position before dispatch - not correcting themselves mid-ride.",
           },
           {
             heading: "High-Risk Behaviours to Stop",
@@ -1606,7 +1968,7 @@ export const modules: Module[] = [
           {
             heading: "Communication Technique",
             type: "text",
-            body: "Instructions must be clear, assertive, and consistent. Use the same phrasing every time: 'Cross your arms over your chest. Lie back. Feet first.' Repetition builds compliance. If a rider refuses to comply after clear instruction, they do not ride. This is non-negotiable.",
+            body: "Instructions must be clear, assertive and consistent. Use the same phrasing every time: 'Cross your arms over your chest. Lie back. Feet first.' Repetition builds compliance. If a rider refuses to comply after clear instruction, they do not ride. This is non-negotiable.",
           },
         ],
         keyTakeaways: [
@@ -1643,7 +2005,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Instructions must be clear, assertive, and consistent. Using the same phrasing every time builds compliance through repetition. All riders receive instructions, not just those who appear uncertain.",
+              "Instructions must be clear, assertive and consistent. Using the same phrasing every time builds compliance through repetition. All riders receive instructions, not just those who appear uncertain.",
             type: "knowledge",
           },
           {
@@ -1673,7 +2035,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Position must be correct before dispatch because once a rider enters the flume and is moving, there is no safe way to stop or reposition them. The wrong position - head-first, standing, or sideways - will continue unchecked through the entire ride, dramatically increasing injury risk.",
+              "Position must be correct before dispatch because once a rider enters the flume and is moving, there is no safe way to stop or reposition them. The wrong position - head-first, standing or sideways - will continue unchecked through the entire ride, dramatically increasing injury risk.",
             type: "knowledge",
           },
           {
@@ -1688,7 +2050,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "Linking or chaining with other riders is one of the six high-risk behaviours listed for immediate intervention. Linked riders create an unpredictable mass that travels faster, exits at a wrong angle, and significantly increases collision and injury risk.",
+              "Linking or chaining with other riders is one of the six high-risk behaviours listed for immediate intervention. Linked riders create an unpredictable mass that travels faster, exits at a wrong angle and significantly increases collision and injury risk.",
             type: "scenario",
           },
         ],
@@ -1705,17 +2067,17 @@ export const modules: Module[] = [
           {
             heading: "Catch Pool Clearance",
             type: "text",
-            body: "The catch pool must be completely clear — no rider in the water, no rider climbing out, no rider standing at the edge — before the exit operator signals dispatch clearance to the top. 'Almost clear' is not clear.",
+            body: "The catch pool must be completely clear - no rider in the water, no rider climbing out, no rider standing at the edge - before the exit operator signals dispatch clearance to the top. 'Almost clear' is not clear.",
           },
           {
             heading: "Top-Bottom Coordination",
             type: "text",
-            body: "Dispatch operators at the top and exit operators at the bottom form a closed communication loop. The top cannot dispatch without bottom confirmation. The bottom cannot confirm until the exit zone is fully clear. If communication is lost — even momentarily — dispatch must stop until it is restored.",
+            body: "Dispatch operators at the top and exit operators at the bottom form a closed communication loop. The top cannot dispatch without bottom confirmation. The bottom cannot confirm until the exit zone is fully clear. If communication is lost - even momentarily - dispatch must stop until it is restored.",
           },
           {
             heading: "Blind Spots and Delays",
             type: "text",
-            body: "Many slide configurations have blind spots — curves, enclosed sections, or elevation changes that prevent direct visual confirmation of the full flume. In these configurations, the exit operator's signal is the only reliable information. Operators must be positioned for maximum visibility of both the exit zone and the flume section they can see.",
+            body: "Many slide configurations have blind spots - curves, enclosed sections or elevation changes that prevent direct visual confirmation of the full flume. In these configurations, the exit operator's signal is the only reliable information. Operators must be positioned for maximum visibility of both the exit zone and the flume section they can see.",
           },
           {
             type: "warning",
@@ -1736,7 +2098,7 @@ export const modules: Module[] = [
             options: [
               "Yes - the rider has exited the slide itself",
               "Yes - as long as the next rider is still 10 seconds away",
-              "No - the catch pool must be completely clear with no rider in the water, climbing out, or standing at the edge",
+              "No - the catch pool must be completely clear with no rider in the water, climbing out or standing at the edge",
               "No - but only if the next rider is a child",
             ],
             correctIndex: 2,
@@ -1796,12 +2158,12 @@ export const modules: Module[] = [
             options: [
               "The previous rider has exited the flume into the water",
               "The previous rider is swimming toward the pool edge",
-              "No rider is in the water, climbing out, or standing at the edge of the catch pool",
+              "No rider is in the water, climbing out or standing at the edge of the catch pool",
               "The previous rider has moved at least two metres from the slide exit",
             ],
             correctIndex: 2,
             explanation:
-              "Completely clear means no rider in the water, no rider climbing out, and no rider standing at the edge. Almost clear is not clear. A rider still at the edge of the catch pool is still in the hazard zone and clearance cannot be signalled.",
+              "Completely clear means no rider in the water, no rider climbing out and no rider standing at the edge. Almost clear is not clear. A rider still at the edge of the catch pool is still in the hazard zone and clearance cannot be signalled.",
             type: "knowledge",
           },
         ],
@@ -1810,11 +2172,11 @@ export const modules: Module[] = [
   },
   {
     id: "defect-recognition",
-    number: 5,
+    number: 6,
     title: "Defect Recognition",
     subtitle: "See It Before It Fails",
     description:
-      "Learn to identify structural defects, surface damage, and joint failures. This is what separates trained operators from generic staff.",
+      "Learn to identify structural defects, surface damage and joint failures. This is what separates trained operators from generic staff.",
     icon: "magnifier",
     color: "#dc2626",
     badge: { icon: "magnifier", label: "Defect Spotter" },
@@ -1831,7 +2193,7 @@ export const modules: Module[] = [
           {
             type: "diagram",
             heading: "Defect Recognition Quick Reference",
-            body: "A quick-reference guide to identifying structural, surface, and joint defects and their required response level.",
+            body: "A quick-reference guide to identifying structural, surface and joint defects and their required response level.",
             diagramId: "defect-recognition",
           },
           {
@@ -1847,15 +2209,15 @@ export const modules: Module[] = [
           {
             heading: "Large Fractures",
             type: "text",
-            body: "Large fractures are less common but very serious. Fiberglass does not tear easily — if it has fractured, significant force was applied. Fractures are usually found on outer edges and bolting flanges, which are critical to structural integrity. Any fracture could seriously degrade the structural integrity of the slide section.",
+            body: "Large fractures are less common but very serious. Fiberglass does not tear easily - if it has fractured, significant force was applied. Fractures are usually found on outer edges and bolting flanges, which are critical to structural integrity. Any fracture could seriously degrade the structural integrity of the slide section.",
           },
           {
             type: "critical",
-            body: "All structural defects require the slide to be taken out of service immediately. There is no condition under which a cracked, punctured, or fractured flume section should continue operating.",
+            body: "All structural defects require the slide to be taken out of service immediately. There is no condition under which a cracked, punctured or fractured flume section should continue operating.",
           },
         ],
         keyTakeaways: [
-          "Cracks indicate stress beyond design limits — immediate shutdown",
+          "Cracks indicate stress beyond design limits - immediate shutdown",
           "Punctures compromise slide integrity and allow water ingress",
           "Fractures on bolting flanges are critical structural failures",
           "All structural defects = immediate removal from service",
@@ -1868,12 +2230,12 @@ export const modules: Module[] = [
             options: [
               "Open the slide but increase dispatch intervals as a precaution",
               "Apply temporary repair and open the slide",
-              "Do not open the slide — fractures on bolting flanges critically degrade structural integrity and require professional repair",
+              "Do not open the slide - fractures on bolting flanges critically degrade structural integrity and require professional repair",
               "Open the slide for lighter riders only",
             ],
             correctIndex: 2,
             explanation:
-              "Per manufacturer guidelines, any fracture could seriously degrade structural integrity and must be fixed immediately. Scheduling pressure is never a valid reason to operate a structurally compromised slide.",
+              "Any fracture could seriously degrade structural integrity and must be fixed immediately. Scheduling pressure is never a valid reason to operate a structurally compromised slide.",
             type: "defect",
           },
           {
@@ -1894,7 +2256,7 @@ export const modules: Module[] = [
           {
             id: "q5-1-3",
             question:
-              "Where on the slide structure are large fractures most commonly found, and why does location matter?",
+              "Where on the slide structure are large fractures most commonly found, and why does their location matter?",
             options: [
               "On the inner riding surface, where rider friction is highest",
               "On outer edges and bolting flanges, which are critical to structural integrity",
@@ -1955,12 +2317,12 @@ export const modules: Module[] = [
           {
             heading: "Scratches",
             type: "text",
-            body: "Surface scratches from riders, maintenance tools, or debris increase local friction. Light scratches can be buffed out. Deeper scratches require filling with gelcoat putty, sanding, and refinishing.",
+            body: "Surface scratches from riders, maintenance tools or debris increase local friction. Light scratches can be buffed out. Deeper scratches require filling with gelcoat putty, sanding and refinishing.",
           },
           {
             heading: "Peeling or Faded Clear Coat / Gelcoat",
             type: "text",
-            body: "When the protective clear coat or gelcoat begins peeling or fading, the underlying FRP is exposed to UV, chemicals, and physical wear at an accelerated rate. This requires resurfacing — not just cosmetic attention.",
+            body: "When the protective clear coat or gelcoat begins peeling or fading, the underlying FRP is exposed to UV, chemicals and physical wear at an accelerated rate. This requires resurfacing - not just cosmetic attention.",
           },
           {
             heading: "Mineral Buildup",
@@ -2011,13 +2373,13 @@ export const modules: Module[] = [
               "A section of the flume has visible gelcoat peeling. Why is this more serious than just a cosmetic issue?",
             options: [
               "Peeling gelcoat increases rider friction and slows queue throughput",
-              "The underlying FRP is now exposed to UV, chemicals, and physical wear at an accelerated rate",
+              "The underlying FRP is now exposed to UV, chemicals and physical wear at an accelerated rate",
               "Peeling gelcoat creates sharp edges that will scratch riders",
               "It indicates the slide is overdue for its annual repaint",
             ],
             correctIndex: 1,
             explanation:
-              "Gelcoat is the protective layer over the FRP. When it peels, the underlying fiberglass is exposed to UV radiation, pool chemicals, and physical wear without protection. Degradation accelerates significantly - this is a maintenance issue, not just a cosmetic one.",
+              "Gelcoat is the protective layer over the FRP. When it peels, the underlying fiberglass is exposed to UV radiation, pool chemicals and physical wear without protection. Degradation accelerates significantly - this is a maintenance issue, not just a cosmetic one.",
             type: "defect",
           },
           {
@@ -2026,7 +2388,7 @@ export const modules: Module[] = [
               "What is the difference in treatment between light scratches and deeper scratches on the flume surface?",
             options: [
               "Both are treated the same way with gelcoat putty",
-              "Light scratches can be buffed out; deeper scratches require filling with gelcoat putty, sanding, and refinishing",
+              "Light scratches can be buffed out; deeper scratches require filling with gelcoat putty, sanding and refinishing",
               "Light scratches require immediate shutdown; deeper scratches are monitored",
               "Deeper scratches are buffed more aggressively; light scratches are ignored",
             ],
@@ -2064,23 +2426,22 @@ export const modules: Module[] = [
           {
             heading: "Sealant Deterioration",
             type: "text",
-            body: "Joint sealant (typically flexible polyurethane like Sikaflex 1a or 3M 5200) deteriorates over time from UV exposure, chemical contact, and thermal cycling. When it fails, the joint opens — creating a lip or gap that catches riders.",
+            body: "Joint sealant deteriorates over time from UV exposure, chemical contact and thermal cycling. When it fails, the joint opens - creating a lip or gap that catches riders.",
           },
           {
             heading: "What NOT to Do with Joints",
             type: "checklist",
             body: "Critical joint maintenance rules:",
             items: [
-              "DO NOT use plastic filler that will harden — joints must remain flexible",
-              "DO NOT pour lacquer thinner directly onto a joint — it dissolves the sealant",
-              "DO NOT put fiberglass over joints — glassed-over joints that crack leave jagged edges that can injure riders",
-              "DO NOT leave old filler in place when refilling — remove all old material first",
+              "DO NOT use plastic filler that will harden - joints must remain flexible",
+              "DO NOT pour lacquer thinner directly onto a joint - it dissolves the sealant",
+              "DO NOT put fiberglass over joints - glassed-over joints that crack leave jagged edges that can injure riders",
+              "DO NOT leave old filler in place when refilling - remove all old material first",
             ],
           },
           {
             type: "oem-reference",
-            body: "Fiberglass sections expand and contract with temperature changes. Use a flexible polyurethane adhesive sealant to fill joints between sections. Joint fills must go from bottom to top with no air pockets covered over by the sealant.",
-            source: "Manufacturer Guidelines, Section 3.4",
+            body: "Fiberglass sections move with temperature changes, so joints between sections must be filled with a flexible adhesive sealant (as specified by the manufacturer). The sealant should be applied from bottom to top, ensuring no air pockets are trapped beneath the surface.",
           },
         ],
         keyTakeaways: [
@@ -2126,13 +2487,13 @@ export const modules: Module[] = [
               "What causes joint sealant to deteriorate over time?",
             options: [
               "Rider weight pressing on joints during operation",
-              "UV exposure, chemical contact, and thermal cycling",
+              "UV exposure, chemical contact and thermal cycling",
               "High water pressure from the hydraulic system",
               "Insufficient maintenance team staffing",
             ],
             correctIndex: 1,
             explanation:
-              "Joint sealant (typically Sikaflex 1a or 3M 5200) deteriorates from UV exposure, chemical contact from pool water, and the constant thermal cycling as the fiberglass sections expand and contract with temperature changes. When it fails, the joint opens and creates a catching hazard.",
+              "Joint sealant deteriorates from UV exposure, chemical contact from pool water and the constant thermal cycling as the fiberglass sections expand and contract with temperature changes. When it fails, the joint opens and creates a catching hazard.",
             type: "knowledge",
           },
           {
@@ -2162,7 +2523,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Per manufacturer guidelines, joint fills must go from bottom to top with no air pockets covered over. Air voids beneath the sealant surface will compress and collapse under load - leading to premature joint failure and recreating the lip or gap hazard the repair was meant to fix.",
+              "As a fundamental principle, joint fills must go from bottom to top with no air pockets covered over. Air voids beneath the sealant surface will compress and collapse under load - leading to premature joint failure and recreating the lip or gap hazard the repair was meant to fix.",
             type: "knowledge",
           },
         ],
@@ -2174,22 +2535,22 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Operators are the first line of detection. Your role is not to repair defects — it is to identify them, assess their severity, and take the correct immediate action.",
+            body: "Operators are the first line of detection. Your role is not to repair defects - it is to identify them, assess their severity and take the correct immediate action.",
           },
           {
             heading: "The Three-Step Response",
             type: "checklist",
             body: "For any defect identified:",
             items: [
-              "REPORT — Document the defect immediately with location, type, size, and photographs where possible",
-              "ASSESS — Determine if the defect requires immediate shutdown or can be monitored during operation",
-              "ESCALATE — Contact maintenance team, supervisor, or manufacturer depending on severity",
+              "REPORT - Document the defect immediately with location, type, size and photographs where possible",
+              "ASSESS - Determine if the defect requires immediate shutdown or can be monitored during operation",
+              "ESCALATE - Contact maintenance team, supervisor or manufacturer depending on severity",
             ],
           },
           {
             heading: "Shutdown vs Monitor Decision",
             type: "text",
-            body: "Any structural defect (crack, puncture, fracture) = immediate shutdown. Surface defects (chips, scratches, minor scaling) = document and schedule maintenance. Joint issues = assess severity: minor sealant wear is monitored; any lip, gap, or sharp edge requires immediate shutdown. When in doubt, shut down. You will never be criticised for being too cautious with safety.",
+            body: "Any structural defect (crack, puncture, fracture) = immediate shutdown. Surface defects (chips, scratches, minor scaling) = document and schedule maintenance. Joint issues = assess severity: minor sealant wear is monitored; any lip, gap or sharp edge requires immediate shutdown. When in doubt, shut down. You will never be criticised for being too cautious with safety.",
           },
         ],
         keyTakeaways: [
@@ -2205,13 +2566,13 @@ export const modules: Module[] = [
               "You find a joint with minor sealant wear but no lip or gap. What is the correct action?",
             options: [
               "Shut the slide immediately",
-              "Document the wear, schedule maintenance, and monitor during operation",
+              "Document the wear, schedule maintenance and monitor during operation",
               "Ignore it - sealant wear is normal",
               "Attempt to repair it yourself between riders",
             ],
             correctIndex: 1,
             explanation:
-              "Minor sealant wear without a lip or sharp edge can be monitored during operation. Document it and schedule maintenance. However, any lip, gap, or sharp edge requires immediate shutdown.",
+              "Minor sealant wear without a lip or sharp edge can be monitored during operation. Document it and schedule maintenance. However, any lip, gap or sharp edge requires immediate shutdown.",
             type: "scenario",
           },
           {
@@ -2226,7 +2587,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "The three-step response is Report (document with location, type, size, photos), Assess (determine if immediate shutdown or monitored operation), and Escalate (contact appropriate personnel based on severity).",
+              "The three-step response is Report (document with location, type, size, photos), Assess (determine if immediate shutdown or monitored operation) and Escalate (contact appropriate personnel based on severity).",
             type: "knowledge",
           },
           {
@@ -2256,7 +2617,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "The defect response framework is clear: joint issues with a lip, gap, or sharp edge require immediate shutdown. Minor sealant wear without a lip can be monitored, but any catching hazard must be addressed before the slide can operate.",
+              "The defect response framework is clear: joint issues with a lip, gap or sharp edge require immediate shutdown. Minor sealant wear without a lip can be monitored, but any catching hazard must be addressed before the slide can operate.",
             type: "scenario",
           },
           {
@@ -2265,13 +2626,13 @@ export const modules: Module[] = [
               "When documenting a defect, what information should be included in the report?",
             options: [
               "The defect type and the name of the operator who found it",
-              "Location, type, size, and photographs where possible",
+              "Location, type, size and photographs where possible",
               "The estimated repair cost and preferred maintenance contractor",
               "The date only - other details are added by the maintenance team",
             ],
             correctIndex: 1,
             explanation:
-              "The Report step of the three-step response requires documenting the defect with its location, type, size, and photographs where possible. This information is essential for the maintenance team to assess severity, order materials, and prioritise repair work.",
+              "The Report step of the three-step response requires documenting the defect with its location, type, size and photographs where possible. This information is essential for the maintenance team to assess severity, order materials and prioritise repair work.",
             type: "knowledge",
           },
         ],
@@ -2280,11 +2641,11 @@ export const modules: Module[] = [
   },
   {
     id: "water-quality",
-    number: 6,
+    number: 7,
     title: "Water Quality and Performance",
     subtitle: "The Invisible Safety Factor",
     description:
-      "Understand how water chemistry affects slide materials, rider safety, and long-term equipment integrity. The connection most training programs miss.",
+      "Understand how water chemistry affects slide materials, rider safety and long-term equipment integrity. The connection most training programs miss.",
     icon: "droplet",
     color: "#0284c7",
     badge: { icon: "droplet", label: "Water Quality Certified" },
@@ -2296,17 +2657,16 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Water quality is not just a public health concern — it directly affects the physical condition of the slide materials, the performance of the ride, and the safety of every rider. This is the connection most training programs completely miss.",
+            body: "Water quality is not just a public health concern - it directly affects the physical condition of the slide materials, the performance of the ride and the safety of every rider. This is the connection most training programs completely miss.",
           },
           {
             type: "oem-reference",
-            body: "Water quality measurements (including the LSI and FAC levels) must be recorded at minimum on a monthly basis by qualified personnel in accordance with local regulations. These records must be documented and maintained. They may be requested by the manufacturer for any warranty claims.",
-            source: "Manufacturer Guidelines, Section 5.1.1",
+            body: "Water quality measurements, including LSI and FAC levels, must be recorded at least monthly by qualified personnel in line with local regulations. These records must be kept on file and may be requested by the manufacturer in relation to warranty claims.",
           },
           {
             type: "diagram",
             heading: "Water Chemistry Balance Parameters",
-            body: "The key water chemistry parameters, their target ranges, and the risks associated with values above or below those ranges.",
+            body: "The key water chemistry parameters, their target ranges and the risks associated with values above or below those ranges.",
             diagramId: "water-chemistry",
           },
           {
@@ -2317,14 +2677,20 @@ export const modules: Module[] = [
           {
             heading: "Free Available Chlorine (FAC)",
             type: "text",
-            body: "FAC is the active disinfectant in pool water. Too low = health risk. Too high = accelerated degradation of FRP gelcoat, rubber seals, and metal components. Maintaining FAC within manufacturer-specified limits protects both rider health and equipment integrity.",
+            body: "FAC is the active disinfectant in pool water. Too low = health risk. Too high = accelerated degradation of FRP gelcoat, rubber seals and metal components. Indoor facilities typically target 1.0-3.0 ppm, while outdoor facilities require a higher minimum of 2.0-4.0 ppm due to UV degradation of chlorine from sunlight. Maintaining FAC within manufacturer-specified limits protects both rider health and equipment integrity.",
+          },
+          {
+            type: "case-study",
+            heading: "Real-World Example - Water Quality Failure",
+            body: "An aquatic facility experienced multiple visitor illness cases linked to inadequate water treatment in interactive water features. Insufficient chlorination levels and inadequate monitoring during high-bather-load periods allowed pathogens to reach unsafe levels. Automated chemical monitoring systems, frequent manual water quality checks during peak periods and proper staff training on water chemistry protocols could have prevented the outbreak.",
+            source: "Based on CDC Aquatic Health Code incident reports",
           },
         ],
         keyTakeaways: [
-          "Water quality directly affects slide materials, performance, and rider safety",
-          "LSI measures scaling vs corrosion tendency - target near zero",
+          "Water quality directly affects slide materials, performance and rider safety",
+          "LSI measures scaling vs corrosion tendency - target is near zero",
           "FAC outside limits degrades equipment and creates health or safety risks",
-          "Monthly water quality records are mandatory and required for warranty claims",
+          "Monthly water quality records are mandatory and may be required for warranty claims",
         ],
         quiz: [
           {
@@ -2345,7 +2711,7 @@ export const modules: Module[] = [
           {
             id: "q6-1-2",
             question:
-              "Why must water quality measurements be documented monthly according to manufacturer guidelines?",
+              "Why must water quality measurements be documented monthly?",
             options: [
               "For marketing purposes only",
               "Because local council requires daily reports",
@@ -2354,7 +2720,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "Manufacturer guidelines require LSI and FAC levels to be recorded monthly by qualified personnel. These records must be maintained and may be requested by the manufacturer for warranty claims.",
+              "LSI and FAC levels must be recorded monthly by qualified personnel. These records must be maintained and may be requested by the manufacturer for warranty claims.",
             type: "knowledge",
           },
           {
@@ -2363,13 +2729,13 @@ export const modules: Module[] = [
               "What happens to metal components and FRP when the LSI is significantly negative?",
             options: [
               "Calcium deposits build up on all metal surfaces",
-              "The water becomes corrosive, attacking metal structures, pump housings, and FRP gelcoat",
+              "The water becomes corrosive, attacking metal structures, pump housings and FRP gelcoat",
               "Chlorine becomes less effective at disinfecting the water",
               "Rider speed increases due to reduced surface tension",
             ],
             correctIndex: 1,
             explanation:
-              "A negative LSI means the water is corrosive - it actively dissolves calcium carbonate and attacks metal and FRP surfaces. This corrodes structural steel, pump housings, and fasteners, and can strip the gelcoat from FRP sections over time.",
+              "A negative LSI means the water is corrosive - it actively dissolves calcium carbonate and attacks metal and FRP surfaces. This corrodes structural steel, pump housings and fasteners, and can strip the gelcoat from FRP sections over time.",
             type: "knowledge",
           },
           {
@@ -2378,13 +2744,13 @@ export const modules: Module[] = [
               "High Free Available Chlorine (FAC) levels - above the manufacturer's specified limits - can cause which type of damage?",
             options: [
               "Increased mineral scaling on flume surfaces",
-              "Accelerated degradation of FRP gelcoat, rubber seals, and metal components",
+              "Accelerated degradation of FRP gelcoat, rubber seals and metal components",
               "Decreased water flow rate through the hydraulic system",
               "Discolouration of the water without any structural damage",
             ],
             correctIndex: 1,
             explanation:
-              "While low FAC is a health risk, high FAC causes equipment damage. Excessive chlorine accelerates degradation of FRP gelcoat, rubber seals, and metal components. This is why FAC must stay within the manufacturer's specified range - not just above a minimum.",
+              "While low FAC is a health risk, high FAC causes equipment damage. Excessive chlorine accelerates degradation of FRP gelcoat, rubber seals and metal components. This is why FAC must stay within the manufacturer's specified range - not just above a minimum.",
             type: "knowledge",
           },
           {
@@ -2411,7 +2777,7 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Poor water quality manifests as visible and measurable changes to the slide system. Operators who understand these signs can identify water quality issues through routine observation — before they cause incidents.",
+            body: "Poor water quality manifests as visible and measurable changes to the slide system. Operators who understand these signs can identify water quality issues through routine observation - before they cause incidents.",
           },
           {
             heading: "Scaling",
@@ -2421,7 +2787,7 @@ export const modules: Module[] = [
           {
             heading: "Corrosion",
             type: "text",
-            body: "Low-LSI water is aggressive toward metals and can attack FRP gelcoat. Corrosion weakens structural steel, pump housings, and fasteners. The combination of chlorine and low-LSI water is particularly destructive.",
+            body: "Low-LSI water is aggressive toward metals and can attack FRP gelcoat. Corrosion weakens structural steel, pump housings and fasteners. The combination of chlorine and low-LSI water is particularly destructive.",
           },
           {
             heading: "Staining and Discolouration",
@@ -2431,7 +2797,7 @@ export const modules: Module[] = [
         ],
         keyTakeaways: [
           "Scaling reduces rider safety and equipment efficiency",
-          "Corrosive water attacks metals, FRP, and fasteners",
+          "Corrosive water attacks metals, FRP and fasteners",
           "Visible staining indicates underlying water chemistry problems",
           "Operators should report changes in surface appearance as potential water quality indicators",
         ],
@@ -2493,7 +2859,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Rust-coloured or dark staining is caused by iron and manganese in the water. While primarily cosmetic on the surface, heavy staining is a visible indicator of water chemistry problems that are simultaneously causing less visible damage to metal components, seals, and structural fasteners.",
+              "Rust-coloured or dark staining is caused by iron and manganese in the water. While primarily cosmetic on the surface, heavy staining is a visible indicator of water chemistry problems that are simultaneously causing less visible damage to metal components, seals and structural fasteners.",
             type: "defect",
           },
           {
@@ -2520,7 +2886,7 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Operators are not responsible for water chemistry management — but they are the most frequent observers of its effects. Knowing what to look for and when to escalate is a critical operational skill.",
+            body: "Facility staff share responsibility for water chemistry management and are the most frequent observers of its effects. Knowing what to look for, when to test and when to escalate is a critical operational skill.",
           },
           {
             heading: "Visual Indicators to Report",
@@ -2538,8 +2904,7 @@ export const modules: Module[] = [
           },
           {
             type: "oem-reference",
-            body: "Water quality measurements are also required after any pool shock treatments to confirm the water quality levels are within the correct limits before returning the ride to operation.",
-            source: "Manufacturer Guidelines, Section 5.1.1",
+            body: "Water quality must also be retested following any pool shock treatment, confirming levels are back within acceptable limits before the ride is reopened.",
           },
         ],
         keyTakeaways: [
@@ -2630,7 +2995,7 @@ export const modules: Module[] = [
   },
   {
     id: "incident-prevention",
-    number: 7,
+    number: 8,
     title: "Incident Prevention",
     subtitle: "Stop It Before It Happens",
     description:
@@ -2641,7 +3006,7 @@ export const modules: Module[] = [
     lessons: [
       {
         id: "7-1",
-        title: "Collision Scenario — Late Dispatch",
+        title: "Collision Scenario - Late Dispatch",
         duration: "12 min",
         content: [
           {
@@ -2677,7 +3042,7 @@ export const modules: Module[] = [
             items: [
               "Increase dispatch interval when a light rider is followed by a heavy rider",
               "Factor surface condition into every dispatch decision",
-              "Never rely on fixed intervals alone — assess real-time conditions",
+              "Never rely on fixed intervals alone - assess real-time conditions",
               "When visibility is limited, default to longer intervals",
               "Report surface condition changes that affect rider speed",
             ],
@@ -2747,7 +3112,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "The chain model means multiple failures combine to cause an incident: weight difference, surface condition, fixed timing, and zero visibility all contributed. Breaking the chain at any single point - adjusting interval for weight, factoring surface condition, or using conservative timing for enclosed slides - can prevent the outcome.",
+              "The chain model means multiple failures combine to cause an incident: weight difference, surface condition, fixed timing and zero visibility all contributed. Breaking the chain at any single point - adjusting interval for weight, factoring surface condition or using conservative timing for enclosed slides - can prevent the outcome.",
             type: "knowledge",
           },
           {
@@ -2774,7 +3139,7 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Non-compliant riders are an escalation management challenge. The operator must balance guest experience with absolute safety requirements — and safety always wins.",
+            body: "Non-compliant riders are an escalation management challenge. The operator must balance guest experience with absolute safety requirements - and safety always wins.",
           },
           {
             heading: "The Scenario",
@@ -2786,11 +3151,11 @@ export const modules: Module[] = [
             type: "checklist",
             body: "The operator's decision framework:",
             items: [
-              "First non-compliance — clear, firm instruction with reason: 'You must go feet-first. This prevents head and spinal injuries.'",
-              "Compliance after instruction — proceed with dispatch, remain alert for the group",
-              "Second non-compliance (different rider, same group) — halt dispatch for the group. Explain the ride will not operate until all members comply.",
-              "Continued non-compliance — remove the group from the ride. Contact supervisor if confrontation escalates.",
-              "Aggressive or threatening behaviour — activate security protocols. Do not engage in argument.",
+              "First non-compliance - clear, firm instruction with reason: 'You must go feet-first. This prevents head and spinal injuries.'",
+              "Compliance after instruction - proceed with dispatch, remain alert for the group",
+              "Second non-compliance (different rider, same group) - halt dispatch for the group. Explain the ride will not operate until all members comply.",
+              "Continued non-compliance - remove the group from the ride. Contact supervisor if confrontation escalates.",
+              "Aggressive or threatening behaviour - activate security protocols. Do not engage in argument.",
             ],
           },
           {
@@ -2843,7 +3208,7 @@ export const modules: Module[] = [
               "It wastes time and is unnecessary - riders just need to comply",
               "Reasons strengthen instructions and improve compliance by connecting the rule to the real risk",
               "It shifts legal liability to the rider if they choose to ignore the warning",
-              "It is required by law in all water park environments",
+              "It is required by law in all aquatic facility environments",
             ],
             correctIndex: 1,
             explanation:
@@ -2901,12 +3266,12 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Emergency protocol:",
             items: [
-              "STOP all dispatch immediately — signal the top operator",
+              "STOP all dispatch immediately - signal the top operator",
               "Do NOT send anyone into the slide to check",
               "Attempt verbal communication at entry and exit points",
               "If the slide has viewing windows or access panels, use them",
               "If the rider does not emerge within the emergency timeframe, activate rescue protocol",
-              "The second rider may have already impacted — treat as a potential injury event",
+              "The second rider may have already impacted - treat as a potential injury event",
             ],
           },
           {
@@ -3017,16 +3382,16 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Real-time decision framework:",
             items: [
-              "Queue length and guest frustration are management problems — not safety compromises",
+              "Queue length and guest frustration are management problems - not safety compromises",
               "Surface condition (4 months without waxing) means intervals should be INCREASED, not decreased",
               "Supervisor requests to reduce intervals should be responded to with the current risk assessment",
-              "If fatigue or distraction is affecting your performance, request rotation — don't push through",
+              "If fatigue or distraction is affecting your performance, request rotation - don't push through",
               "Document any pressure to compromise safety controls",
             ],
           },
           {
             type: "warning",
-            body: "The highest-risk period for waterslide incidents is peak attendance on hot days — the exact time when pressure to reduce intervals is strongest. This is not coincidence. Maintaining controls under this pressure is the single most important operational skill.",
+            body: "The highest-risk period for waterslide incidents is peak attendance on hot days - the exact time when pressure to reduce intervals is strongest. This is not coincidence. Maintaining controls under this pressure is the single most important operational skill.",
           },
         ],
         keyTakeaways: [
@@ -3042,7 +3407,7 @@ export const modules: Module[] = [
               "A supervisor asks you to reduce dispatch intervals because queue times are over 40 minutes. The flume surface hasn't been waxed in 4 months. What is the correct response?",
             options: [
               "Reduce intervals by 5 seconds as a compromise",
-              "Comply with the supervisor's instruction — they outrank you",
+              "Comply with the supervisor's instruction - they outrank you",
               "Explain the surface condition and recommend maintaining or increasing intervals, then document the exchange",
               "Ignore the supervisor and continue as normal without responding",
             ],
@@ -3059,7 +3424,7 @@ export const modules: Module[] = [
               "Slides deteriorate faster in heat, causing structural failures",
               "More riders are in the system and the pressure to reduce safety intervals is at its strongest - these factors combine",
               "Water temperature affects rider buoyancy and therefore speed",
-              "Staff are more distracted when the park is busy",
+              "Staff are more distracted when the facility is busy",
             ],
             correctIndex: 1,
             explanation:
@@ -3101,14 +3466,14 @@ export const modules: Module[] = [
             question:
               "A supervisor verbally pressures you to reduce dispatch intervals and you maintain your assessment-based intervals instead. What additional step does the lesson recommend?",
             options: [
-              "Report the supervisor to park management immediately",
+              "Report the supervisor to facility management immediately",
               "Document the exchange - any pressure to compromise safety controls should be recorded",
               "Request a written order from the supervisor before complying",
               "No further action is needed once you have refused",
             ],
             correctIndex: 1,
             explanation:
-              "The lesson explicitly recommends documenting any pressure to compromise safety controls. This creates a record that protects the operator, supports investigation if an incident later occurs, and establishes a pattern if the pressure is repeated.",
+              "The lesson explicitly recommends documenting any pressure to compromise safety controls. This creates a record that protects the operator, supports investigation if an incident later occurs and establishes a pattern if the pressure is repeated.",
             type: "scenario",
           },
         ],
@@ -3117,11 +3482,11 @@ export const modules: Module[] = [
   },
   {
     id: "response-shutdown",
-    number: 8,
+    number: 9,
     title: "Response and Shutdown",
     subtitle: "When Things Go Wrong",
     description:
-      "Emergency response protocols, communication chains, post-incident procedures. How to respond fast, correctly, and defensibly.",
+      "Emergency response protocols, communication chains, post-incident procedures. How to respond fast, correctly and defensibly.",
     icon: "siren",
     color: "#b91c1c",
     badge: { icon: "siren", label: "Response Ready" },
@@ -3138,7 +3503,7 @@ export const modules: Module[] = [
           {
             type: "diagram",
             heading: "Emergency Escalation Hierarchy",
-            body: "The escalation hierarchy showing who is contacted, in what order, and what actions are taken at each level of an emergency response.",
+            body: "The escalation hierarchy showing who is contacted, in what order and what actions are taken at each level of an emergency response.",
             diagramId: "emergency-response",
           },
           {
@@ -3146,14 +3511,14 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Any of these conditions require immediate dispatch cessation:",
             items: [
-              "Rider does not exit within expected timeframe — potential blockage",
+              "Rider does not exit within expected timeframe - potential blockage",
               "Rider exits with visible injury",
-              "Structural failure observed — crack, separation, collapse",
-              "Water flow interruption — pump failure, nozzle blockage",
+              "Structural failure observed - crack, separation, collapse",
+              "Water flow interruption - pump failure, nozzle blockage",
               "Communication system failure between operators",
-              "Uncontrolled entry — someone enters the flume without being dispatched",
-              "Weather event — lightning, severe wind, sudden heavy rain reducing visibility",
-              "Any gut feeling that something is wrong — do not override instinct with rationalisation",
+              "Uncontrolled entry - someone enters the flume without being dispatched",
+              "Weather event - lightning, severe wind, sudden heavy rain reducing visibility",
+              "Any gut feeling that something is wrong - do not override instinct with rationalisation",
             ],
           },
           {
@@ -3164,7 +3529,7 @@ export const modules: Module[] = [
         keyTakeaways: [
           "Stop protocols require no permission and no delay",
           "Eight specific trigger conditions require immediate shutdown",
-          "Instinct is a valid trigger - do not rationalise away a safety concern",
+          "Instinct is a valid trigger - never rationalise away a safety concern",
           "Every second of delay is a second a rider could be dispatched into danger",
         ],
         quiz: [
@@ -3259,18 +3624,18 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Contact in this order based on severity:",
             items: [
-              "Partner operator (top/bottom) — immediate coordination",
-              "Supervisor on duty — incident management and resource allocation",
-              "First aid / lifeguard team — if injury is suspected or confirmed",
-              "Emergency services (000 / site emergency number) — for serious injury, entrapment, or structural failure",
-              "Facility management — for non-immediate issues requiring maintenance response",
-              "Manufacturer support — for equipment failures requiring manufacturer guidance",
+              "Partner operator (top/bottom) - immediate coordination",
+              "Supervisor on duty - incident management and resource allocation",
+              "First aid / lifeguard team - if injury is suspected or confirmed",
+              "Emergency services (000 / site emergency number) - for serious injury, entrapment or structural failure",
+              "Facility management - for non-immediate issues requiring maintenance response",
+              "Manufacturer support - for equipment failures requiring manufacturer guidance",
             ],
           },
           {
             heading: "Communication Protocol",
             type: "text",
-            body: "Use structured communication: State your name, location, and the situation clearly. 'This is [name] at [slide name] top station. I have stopped dispatch because [reason]. The last rider dispatched at [time]. I need [specific response required].' Clear, structured messages prevent confusion and ensure the correct response is mobilised.",
+            body: "Use structured communication: State your name, location and the situation clearly. 'This is [name] at [slide name] top station. I have stopped dispatch because [reason]. The last rider dispatched at [time]. I need [specific response required].' Clear, structured messages prevent confusion and ensure the correct response is mobilised.",
           },
         ],
         keyTakeaways: [
@@ -3292,7 +3657,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Structured communication follows the format: state your name, location, the situation, when the last rider was dispatched, and what response you need. Clear, structured messages prevent confusion and mobilise the correct response.",
+              "Structured communication follows the format: state your name, location, the situation, when the last rider was dispatched and what response you need. Clear, structured messages prevent confusion and mobilise the correct response.",
             type: "knowledge",
           },
           {
@@ -3307,7 +3672,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "The escalation hierarchy includes manufacturer support for equipment failures requiring manufacturer-specific guidance. This is in addition to the immediate chain of partner operator, supervisor, first aid, and emergency services.",
+              "The escalation hierarchy includes manufacturer support for equipment failures requiring manufacturer-specific guidance. This is in addition to the immediate chain of partner operator, supervisor, first aid and emergency services.",
             type: "knowledge",
           },
           {
@@ -3322,7 +3687,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "The escalation hierarchy starts with the partner operator for immediate coordination. Emergency services, first aid, and management are escalated based on confirmed severity. The partner operator is contacted first because they may have critical information about the last dispatched rider.",
+              "The escalation hierarchy starts with the partner operator for immediate coordination. Emergency services, first aid and management are escalated based on confirmed severity. The partner operator is contacted first because they may have critical information about the last dispatched rider.",
             type: "knowledge",
           },
           {
@@ -3331,13 +3696,13 @@ export const modules: Module[] = [
               "A rider exits with a suspected spinal injury after an unusual stop partway down the slide. Which contacts should be activated from the escalation hierarchy?",
             options: [
               "Partner operator and supervisor only",
-              "Partner operator, supervisor, first aid team, and emergency services",
+              "Partner operator, supervisor, first aid team and emergency services",
               "Emergency services only - call 000 immediately and wait",
               "Supervisor and facility management only",
             ],
             correctIndex: 1,
             explanation:
-              "A suspected spinal injury is a confirmed serious injury requiring immediate coordination. The full escalation chain - partner operator, supervisor on duty, first aid team, and emergency services - should be activated. Each contact serves a distinct role in the response.",
+              "A suspected spinal injury is a confirmed serious injury requiring immediate coordination. The full escalation chain - partner operator, supervisor on duty, first aid team and emergency services - should be activated. Each contact serves a distinct role in the response.",
             type: "scenario",
           },
           {
@@ -3352,7 +3717,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Effective communication under the protocol includes: your name, your location, the reason for the stop, the time of the last dispatch, and the specific response needed. Vague messages cause confusion and slow the response. Structured messages mobilise exactly the right help.",
+              "Effective communication under the protocol includes: your name, your location, the reason for the stop, the time of the last dispatch and the specific response needed. Vague messages cause confusion and slow the response. Structured messages mobilise exactly the right help.",
             type: "knowledge",
           },
         ],
@@ -3364,12 +3729,12 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "What happens after an incident is as important as the response itself. Correct post-incident procedures protect the injured, preserve evidence, support investigation, and reduce your organisation's legal exposure.",
+            body: "What happens after an incident is as important as the response itself. Correct post-incident procedures protect the injured, preserve evidence, support investigation and reduce your organisation's legal exposure.",
           },
           {
             heading: "Scene Integrity",
             type: "text",
-            body: "Do not move equipment, clean surfaces, or alter the scene unless necessary for medical treatment. The scene as it exists at the time of the incident is evidence. Photographs should be taken as soon as practical. If the slide was operating, note the flow rate, dispatch times, and any equipment readings.",
+            body: "Do not move equipment, clean surfaces or alter the scene unless necessary for medical treatment. The scene as it exists at the time of the incident is evidence. Photographs should be taken as soon as practical. If the slide was operating, note the flow rate, dispatch times and any equipment readings.",
           },
           {
             heading: "Documentation Requirements",
@@ -3379,26 +3744,26 @@ export const modules: Module[] = [
               "Exact time of the incident",
               "Exact location on the slide (section number if possible)",
               "Who was involved (rider, operator, witness)",
-              "What happened — factual description, not interpretation",
+              "What happened - factual description, not interpretation",
               "What conditions were present (flow rate, surface condition, weather, queue state)",
               "What actions were taken in response",
               "Names and contact details of witnesses",
-              "Photographs of the scene, any damage, and relevant conditions",
+              "Photographs of the scene, any damage and relevant conditions",
             ],
           },
           {
             heading: "Emotional and Psychological Considerations",
             type: "text",
-            body: "Operators involved in incidents experience stress, guilt, and anxiety. These are normal responses. Post-incident debriefing should be conducted by a supervisor — not to assign blame, but to support the operator and capture learning. Access to employee assistance programs should be offered where available.",
+            body: "Operators involved in incidents experience stress, guilt and anxiety. These are normal responses. Post-incident debriefing should be conducted by a supervisor - not to assign blame, but to support the operator and capture learning. Access to employee assistance programs should be offered where available.",
           },
           {
             type: "warning",
-            body: "Never speculate on cause or blame in your documentation. Record facts only. 'The rider exited the catch pool with a visible laceration to the left forearm' — not 'The rider was injured because they were riding incorrectly.'",
+            body: "Never speculate on cause or blame in your documentation. Record facts only. 'The rider exited the catch pool with a visible laceration to the left forearm' - not 'The rider was injured because they were riding incorrectly.'",
           },
         ],
         keyTakeaways: [
           "Scene integrity is evidence - do not alter unless required for medical treatment",
-          "Document immediately with facts, not interpretations or blame",
+          "Document immediately with facts, not interpretations",
           "Eight specific data points must be recorded",
           "Operator welfare after incidents is a management responsibility",
         ],
@@ -3415,7 +3780,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Scene integrity is critical. Do not move equipment, clean surfaces, or alter the scene unless necessary for medical treatment. The scene as it exists at the time of the incident is evidence. Photographs should be taken as soon as practical.",
+              "Scene integrity is critical. Do not move equipment, clean surfaces or alter the scene unless necessary for medical treatment. The scene as it exists at the time of the incident is evidence. Photographs should be taken as soon as practical.",
             type: "scenario",
           },
           {
@@ -3430,7 +3795,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Documentation must record facts only, not interpretations, speculation, or blame. 'The rider exited with a visible laceration' is factual. Statements about cause or rider behaviour are interpretations that belong in an investigation, not in your incident record.",
+              "Documentation must record facts only, not interpretations, speculation or blame. 'The rider exited with a visible laceration' is factual. Statements about cause or rider behaviour are interpretations that belong in an investigation, not in your incident record.",
             type: "scenario",
           },
           {
@@ -3445,7 +3810,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "Operators involved in incidents experience stress, guilt, and anxiety. Post-incident debriefing should be conducted by a supervisor to support the operator and capture learning, not to assign blame. Access to employee assistance programs should be offered.",
+              "Operators involved in incidents experience stress, guilt and anxiety. Post-incident debriefing should be conducted by a supervisor to support the operator and capture learning, not to assign blame. Access to employee assistance programs should be offered.",
             type: "scenario",
           },
           {
@@ -3484,11 +3849,11 @@ export const modules: Module[] = [
   },
   {
     id: "assessment",
-    number: 9,
+    number: 10,
     title: "Assessment and Certification",
     subtitle: "Prove Your Competency",
     description:
-      "Comprehensive assessment covering knowledge, defect identification, and scenario-based decision making. Complete this to earn your certification.",
+      "Comprehensive assessment covering knowledge, defect identification and scenario-based decision making. Complete this to earn your certification.",
     icon: "certificate",
     color: "#059669",
     badge: { icon: "certificate", label: "Certified Operator" },
@@ -3500,13 +3865,14 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "This assessment tests your understanding of standards, manufacturer requirements, inspection procedures, and operational controls. You need 80% or higher to pass. Review any module you're unsure about before attempting.",
+            body: "This assessment draws 20 questions at random from a pool covering all 9 modules - standards, inspection procedures, defect recognition, water quality and operational controls. You need 80% or higher to pass. Each attempt presents a different set of questions. Review any module you're unsure about before attempting.",
           },
         ],
         keyTakeaways: [
           "80% pass mark required",
-          "Covers all 8 training modules",
-          "Review modules before attempting if unsure",
+          "20 questions drawn randomly from a pool of 45+",
+          "Covers all 9 training modules",
+          "Each attempt presents a different set of questions",
         ],
         quiz: [
           {
@@ -3527,7 +3893,7 @@ export const modules: Module[] = [
           {
             id: "q9-2",
             question:
-              "What water quality measurements must be recorded monthly according to manufacturer guidelines?",
+              "What water quality measurements must be recorded monthly?",
             options: [
               "pH and temperature only",
               "LSI and FAC levels",
@@ -3536,7 +3902,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Manufacturer guidelines require LSI (Langelier Saturation Index) and FAC (Free Available Chlorine) levels to be recorded monthly by qualified personnel.",
+              "LSI (Langelier Saturation Index) and FAC (Free Available Chlorine) levels must be recorded monthly by qualified personnel.",
             type: "knowledge",
           },
           {
@@ -3546,27 +3912,27 @@ export const modules: Module[] = [
             options: [
               "Rigid epoxy for maximum strength",
               "Silicone bathroom sealant",
-              "Flexible polyurethane adhesive sealant (e.g. Sikaflex 1a)",
+              "Flexible adhesive sealant (as specified by the manufacturer)",
               "Hot glue for quick repairs",
             ],
             correctIndex: 2,
             explanation:
-              "Joints must use flexible polyurethane adhesive sealant to accommodate thermal expansion and contraction. Rigid fillers will crack and create dangerous edges.",
+              "Joints must use a flexible adhesive sealant to accommodate thermal expansion and contraction. Rigid fillers will crack and create dangerous edges.",
             type: "knowledge",
           },
           {
             id: "q9-4",
             question:
-              "How often should buffing and waxing of the slide surface be performed?",
+              "What determines the frequency of buffing and waxing the slide surface?",
             options: [
-              "Once per year during shutdown",
-              "Every 2-3 months",
-              "Weekly",
-              "Only when visible damage appears",
+              "An annual schedule during shutdown periods",
+              "The manufacturer's recommended schedule, adapted to facility conditions such as water chemistry, usage and environmental exposure",
+              "A fixed weekly schedule regardless of conditions",
+              "Only when visible damage or discolouration appears",
             ],
             correctIndex: 1,
             explanation:
-              "Manufacturer guidelines recommend buffing and waxing every 2-3 months. This is a safety requirement, not just cosmetic — waxed surfaces prevent calcium buildup that causes riders to stick.",
+              "Buffing and waxing frequency should follow the manufacturer's recommended schedule and be adapted to your facility's conditions. This is a safety requirement, not just cosmetic - waxed surfaces prevent calcium buildup that causes riders to stick.",
             type: "knowledge",
           },
           {
@@ -3576,12 +3942,12 @@ export const modules: Module[] = [
             options: [
               "Follow the supervisor's instruction",
               "Refuse and walk off the position",
-              "Communicate the surface condition risk, maintain or increase intervals, and document the exchange",
+              "Communicate the surface condition risk, maintain or increase intervals and document the exchange",
               "Reduce intervals slightly as a compromise",
             ],
             correctIndex: 2,
             explanation:
-              "Safety controls are not subject to hierarchy override. Communicate the risk assessment, maintain safe intervals, and document any pressure to compromise controls.",
+              "Safety controls are not subject to hierarchy override. Communicate the risk assessment, maintain safe intervals and document any pressure to compromise controls.",
             type: "scenario",
           },
           {
@@ -3602,22 +3968,22 @@ export const modules: Module[] = [
           {
             id: "q9-7",
             question:
-              "You find a puncture hole in the flume surface during your morning inspection. The park opens in 20 minutes. What is the correct action?",
+              "You find a puncture hole in the flume surface during your morning inspection. The facility opens in 20 minutes. What is the correct action?",
             options: [
               "Cover it with waterproof tape and monitor it",
-              "The slide does not open — punctures must be repaired immediately to maintain slide integrity",
+              "The slide does not open - punctures must be repaired immediately to maintain slide integrity",
               "Open the slide but avoid dispatching riders over that section",
               "Fill it with silicone sealant for a temporary fix",
             ],
             correctIndex: 1,
             explanation:
-              "Per manufacturer guidelines, punctures must be repaired immediately to maintain the integrity of the slide. The slide should not operate with a punctured surface.",
+              "Punctures must be repaired immediately to maintain the integrity of the slide. The slide should not operate with a punctured surface.",
             type: "defect",
           },
           {
             id: "q9-8",
             question:
-              "What four inspection tiers are defined in manufacturer guidelines?",
+              "What are the four inspection tiers defined by industry standards?",
             options: [
               "Quick, Standard, Detailed, Emergency",
               "Routine, Periodic, Thorough, Structural",
@@ -3626,7 +3992,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Manufacturer guidelines define Routine (daily), Periodic (monthly/quarterly/yearly), Thorough (by competent professional), and Structural (when damage is suspected) inspection tiers.",
+              "Industry standards define Routine (daily), Periodic (monthly/quarterly/yearly), Thorough (by competent professional) and Structural (when damage is suspected) inspection tiers.",
             type: "knowledge",
           },
           {
@@ -3641,7 +4007,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 2,
             explanation:
-              "Per manufacturer guidelines, fiberglass must not be put over joints because glassed-over joints that crack may leave jagged edges that can injure riders.",
+              "Fiberglass must not be put over joints because glassed-over joints that crack may leave jagged edges that can injure riders.",
             type: "knowledge",
           },
           {
@@ -3651,13 +4017,546 @@ export const modules: Module[] = [
             options: [
               "Explain what you think happened to calm them down",
               "Apologise and accept responsibility to de-escalate",
-              "Provide factual, limited information and direct them to facility management — do not speculate on cause",
+              "Provide factual, limited information and direct them to facility management - do not speculate on cause",
               "Ignore them and focus on the scene",
             ],
             correctIndex: 2,
             explanation:
               "Post-incident communication should be factual and limited. Speculation on cause or acceptance of responsibility has legal implications. Direct the person to facility management who are trained in incident communication.",
             type: "scenario",
+          },
+          // --- Module 1: System Understanding (5 questions) ---
+          {
+            id: "q9-11",
+            question:
+              "A body slide, a tube slide and a mat racer all share the same support structure at a facility. During a periodic inspection, a crack is found in one support column. Which slides are affected?",
+            options: [
+              "Only the slide directly above the cracked column",
+              "All three slides - a shared support structure means all rides depend on it",
+              "Only the heaviest-traffic slide that places the most load on the column",
+              "None - support column cracks are cosmetic unless the column has fully collapsed",
+            ],
+            correctIndex: 1,
+            explanation:
+              "A shared support structure is a shared dependency. A crack in one column affects the structural integrity of the entire framework, meaning all rides it supports must be taken out of service until assessed by qualified personnel.",
+            type: "scenario",
+          },
+          {
+            id: "q9-12",
+            question:
+              "Why does thermal expansion matter for waterslide flume sections?",
+            options: [
+              "FRP sections expand and contract with temperature changes, which is why joints must use flexible sealant rather than rigid filler",
+              "Thermal expansion only affects metal support structures, not the FRP flume itself",
+              "It causes water temperature to fluctuate, which affects rider comfort",
+              "Thermal expansion is only relevant during the installation phase and does not affect daily operations",
+            ],
+            correctIndex: 0,
+            explanation:
+              "FRP sections expand and contract with temperature changes throughout the day. Joints between sections must accommodate this movement using flexible sealant. Rigid fillers crack under thermal cycling, creating lips and sharp edges that injure riders.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-13",
+            question:
+              "What is gelcoat and what role does it play in a waterslide system?",
+            options: [
+              "A decorative paint applied for branding and colour consistency",
+              "The protective outer layer of FRP that shields the structural fiberglass from water, chemicals and UV",
+              "A wax coating applied monthly to reduce rider friction",
+              "An anti-corrosion treatment applied to metal support columns",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Gelcoat is the protective outer layer of the FRP flume. When it fails through peeling, cracking or wearing through, the structural fiberglass beneath is exposed to water, chemicals and UV radiation, which accelerates degradation and creates rough surfaces that affect rider safety.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-14",
+            question:
+              "On a tube slide, the hydraulic system delivers water through nozzles along the flume. If three of twelve nozzles are blocked, what is the operational impact?",
+            options: [
+              "Rider experience is slightly reduced but there is no safety concern",
+              "Multiple dry spots form where riders lose water lubrication, causing unpredictable deceleration and making dispatch timing unreliable",
+              "Water pressure increases through the remaining nozzles, compensating for the blockages",
+              "The impact is limited to increased noise from the remaining nozzles",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Blocked nozzles create dry spots where riders lose the water lubrication they depend on. Multiple blocked nozzles create multiple unpredictable deceleration zones, making dispatch timing unreliable and significantly increasing collision risk. The slide should not operate until all nozzles are confirmed functional.",
+            type: "scenario",
+          },
+          {
+            id: "q9-15",
+            question:
+              "Which of the following best describes the catch pool in a waterslide system?",
+            options: [
+              "A decorative water feature at the base of the slide",
+              "The deceleration and exit zone at the base that must be confirmed clear before each dispatch",
+              "A filtration pool that recycles water back to the hydraulic system",
+              "An optional feature only required on slides taller than 10 metres",
+            ],
+            correctIndex: 1,
+            explanation:
+              "The catch pool is the deceleration and exit zone at the base of the slide. It is a critical safety component - it must be completely clear before each dispatch. A rider still in the catch pool area means the exit zone is not safe for the next rider.",
+            type: "knowledge",
+          },
+          // --- Module 2: Inspections (5 questions) ---
+          {
+            id: "q9-16",
+            question:
+              "A competent professional conducts a thorough inspection and identifies subsurface delamination using tap testing. Why could this defect not have been found during routine daily inspections?",
+            options: [
+              "Daily inspections are performed too quickly to notice anything",
+              "Routine inspections are visual checks for obvious hazards - subsurface delamination requires non-destructive testing methods beyond daily inspection scope",
+              "The defect only develops between routine inspection cycles",
+              "Daily inspectors are not allowed to touch the flume surface",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Routine daily inspections identify obvious surface hazards through visual and tactile checks. Subsurface delamination is internal structural degradation that requires specialist techniques like tap testing or ultrasonic measurement. This is why multiple inspection tiers exist - daily checks do not replace deeper professional assessment.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-17",
+            question:
+              "During a pre-opening inspection, you discover that two safety signs are missing from the tower entrance. The rest of the inspection is satisfactory. Can the slide open?",
+            options: [
+              "Yes - the signs can be replaced later in the day",
+              "No - missing or damaged safety signage is a listed shutdown condition that must be corrected before opening",
+              "Yes - as long as operators verbally communicate the rules to each rider",
+              "Only if a supervisor approves the opening without signage",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Missing or damaged safety signage is explicitly listed as an immediate shutdown trigger. Signage is a safety control that communicates ride rules, restrictions and warnings to riders before they enter. The slide must not open until all required signage is present and legible.",
+            type: "scenario",
+          },
+          {
+            id: "q9-18",
+            question:
+              "What is the purpose of performing the pre-opening flume inspection before the water supply is turned on?",
+            options: [
+              "To save water while the inspection is being completed",
+              "To allow the inspector to see the dry flume surface clearly and identify cracks, chips, foreign objects and joint conditions without water concealing them",
+              "Because the pump needs time to warm up before operation",
+              "To check that the drainage system is working before adding water",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Inspecting before water is turned on allows the inspector to see the dry flume surface in full detail. Water flowing over the surface can conceal cracks, chips, deposits and joint deterioration. Industry best practice requires this sequence to ensure all defects are identified.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-19",
+            question:
+              "A periodic inspection reveals that bolt torque on several structural connections has loosened since the last check. What does this finding indicate?",
+            options: [
+              "Normal settling that does not require action",
+              "Potential vibration fatigue or thermal cycling affecting the support structure, requiring re-torquing and increased monitoring frequency",
+              "The bolts were over-tightened during installation and are now at the correct tension",
+              "The inspection method was inaccurate and should be repeated",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Loosened bolt torque on structural connections indicates that vibration, thermal cycling or load stress is affecting the fasteners. Bolt torque checks are a periodic inspection item specifically because ongoing structural loads can loosen connections over time. Re-torque to specification and increase monitoring frequency to establish whether this is progressive.",
+            type: "defect",
+          },
+          {
+            id: "q9-20",
+            question:
+              "Industry best practice recommends that a lifeguard or attendant should be the first to ride each day. What is the purpose of this practice?",
+            options: [
+              "To reward staff with a ride before the facility opens",
+              "To serve as a final live operational check confirming the ride is safe for the general public",
+              "To warm up the flume surface before guests ride",
+              "To test whether the water temperature is comfortable",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Having a trained staff member ride first serves as a final operational check after all pre-opening inspections and system startups are complete. The staff rider can detect issues that static inspection might miss - unusual vibrations, unexpected speed changes, rough spots or abnormal water coverage.",
+            type: "knowledge",
+          },
+          // --- Module 3: Surface & Rider Interaction (5 questions) ---
+          {
+            id: "q9-21",
+            question:
+              "A facility operates both indoor and outdoor slides. During summer, the outdoor slides require more frequent waxing than the indoor slides. Why?",
+            options: [
+              "Outdoor slides are longer and therefore experience more friction",
+              "UV exposure, higher evaporation rates and greater environmental debris accelerate surface degradation on outdoor slides",
+              "Indoor slides have lower rider throughput so they wear more slowly",
+              "The waxing schedule is the same for all slides regardless of location",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Outdoor slides are exposed to UV radiation that degrades the gelcoat, higher temperatures that increase water evaporation and mineral deposit formation, and environmental debris. These factors accelerate surface degradation, requiring more frequent waxing to maintain safe friction levels. Waxing frequency should be adapted to facility conditions per industry best practice.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-22",
+            question:
+              "A heavier adult and a lighter child are dispatched at the same interval on the same slide. The child travels noticeably slower. What physical principle explains this speed difference?",
+            options: [
+              "Children have higher wind resistance due to their clothing",
+              "Heavier riders generate more gravitational force relative to friction, resulting in higher speeds - lighter riders experience proportionally more friction effect",
+              "The water flow pushes heavier riders faster",
+              "Children are more cautious and deliberately slow themselves down",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Rider weight affects the balance between gravitational force and friction. Heavier riders generate more gravitational force relative to surface friction, so they travel faster. Lighter riders experience proportionally greater friction effect, so they travel slower. This speed differential is a key dispatch timing consideration.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-23",
+            question:
+              "An operator observes that riders are arriving at the exit zone faster than usual after the slide was waxed yesterday. How should this affect operations?",
+            options: [
+              "No adjustment needed - faster riders clear the zone more quickly",
+              "Dispatch intervals may need adjustment because faster exit speeds change the dynamics in the catch pool and riders may overshoot the expected deceleration zone",
+              "The waxing was done incorrectly and should be removed",
+              "Reduce water flow to compensate for the increased speed",
+            ],
+            correctIndex: 1,
+            explanation:
+              "A freshly waxed surface reduces friction and increases rider speed. Faster riders arrive at the exit zone with more momentum, which can change catch pool dynamics. Operators should assess whether the increased speed requires dispatch timing adjustment and monitor exit zone clearance carefully until the new surface condition is understood.",
+            type: "scenario",
+          },
+          {
+            id: "q9-24",
+            question:
+              "What is the correct rider position for a standard body slide, and why must it be established before dispatch?",
+            options: [
+              "Seated upright with hands on the flume walls, confirmed during the ride via camera",
+              "Supine (lying back, feet first) with arms crossed, confirmed before dispatch because position cannot be safely corrected once the rider is moving",
+              "Head-first prone position for maximum speed and control",
+              "Any comfortable position chosen by the rider, as the water cushion prevents injury",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Standard body slides require a supine position - lying back, feet first. This must be confirmed before dispatch because once a rider enters the flume and is moving, there is no safe way to stop or reposition them. An incorrect position continues unchecked through the entire ride.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-25",
+            question:
+              "During a hot afternoon, you notice the time between riders clearing the exit has increased by several seconds compared to the morning. Water flow readings are unchanged. What is the most likely cause?",
+            options: [
+              "Riders are tired in the afternoon and move through the exit zone more slowly",
+              "Afternoon heat is drying the flume surface faster between riders, increasing friction and slowing riders down",
+              "The pump is losing efficiency due to overheating",
+              "Wind direction has changed, creating air resistance in the flume",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Afternoon heat causes water to evaporate from the flume surface more quickly between riders. Even with correct water flow, the surface between riders can become partially dry in hot conditions, increasing friction and slowing transit times. This is a recognised operational factor that requires increased dispatch intervals.",
+            type: "scenario",
+          },
+          // --- Module 4: Core Operations (4 questions) ---
+          {
+            id: "q9-26",
+            question:
+              "The operations manual specifies a minimum of two operators for a particular slide - one at the top and one at the exit. A colleague calls in sick and no replacement is available. Can the slide operate with one operator?",
+            options: [
+              "Yes - one experienced operator can manage both positions",
+              "No - the closed communication loop between top and bottom operators is a safety requirement and cannot function with a single operator",
+              "Yes - if the operator positions themselves at a midpoint with visibility of both zones",
+              "Only during low-attendance periods when rider volume is minimal",
+            ],
+            correctIndex: 1,
+            explanation:
+              "The dispatch system requires a closed communication loop between top and bottom operators. The top cannot dispatch without exit clearance from the bottom. A single operator cannot confirm exit clearance and manage dispatch simultaneously. Staffing requirements defined in the operations manual are not adjustable based on availability.",
+            type: "scenario",
+          },
+          {
+            id: "q9-27",
+            question:
+              "A rider meets the height requirement but is wearing board shorts with a metal zipper and a belt with a buckle. What items must be addressed before dispatch?",
+            options: [
+              "Only the belt - zippers on board shorts are acceptable",
+              "Both the belt with buckle and the shorts with metal zipper must be addressed - clothing with zippers, buckles or rivets is prohibited",
+              "Neither - clothing rules only apply to jewellery and accessories",
+              "Only the buckle - it is the only item that could catch on the flume",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Clothing with zippers, buckles or rivets is explicitly prohibited. Metal hardware can catch on the flume surface, cause abrasion injuries to the rider and damage the gelcoat. Both items must be removed or replaced before dispatch is permitted.",
+            type: "scenario",
+          },
+          {
+            id: "q9-28",
+            question:
+              "What does 'positive confirmation of exit clearance' mean in the context of dispatch control?",
+            options: [
+              "The top operator visually estimates that enough time has passed since the last dispatch",
+              "The exit operator actively signals that the catch pool is completely clear - no rider in the water, climbing out or standing at the edge",
+              "An automated sensor confirms the exit zone is empty",
+              "The previous rider waves to indicate they are safely out of the pool",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Positive confirmation means the exit operator actively signals that the catch pool is completely clear. This is not assumed from timing, estimated from the top or delegated to riders. The exit operator confirms full clearance every single time before dispatch can proceed.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-29",
+            question:
+              "An operator is positioned at the top station but cannot see the final curve before the exit due to the slide layout. How does this affect their dispatch responsibilities?",
+            options: [
+              "They should lean out to try to see the exit zone before each dispatch",
+              "They must rely entirely on the exit operator's clearance signal and cannot dispatch based on assumed timing or partial visibility",
+              "They should use a stopwatch to time intervals precisely and dispatch accordingly",
+              "They should reposition to see the exit, even if it means leaving the dispatch station",
+            ],
+            correctIndex: 1,
+            explanation:
+              "When the top operator has blind spots due to slide configuration, the exit operator's clearance signal becomes the only reliable confirmation. Dispatch based on assumed timing or partial visibility is not acceptable. The closed communication loop exists specifically for configurations where direct visual confirmation is impossible.",
+            type: "knowledge",
+          },
+          // --- Module 5: Defect Recognition (5 questions) ---
+          {
+            id: "q9-30",
+            question:
+              "You discover a network of fine surface lines across a section of flume that looks like cracked porcelain. The lines do not appear to penetrate the full thickness of the gelcoat. What type of defect is this?",
+            options: [
+              "Structural cracking requiring immediate shutdown",
+              "Crazing - fine surface cracks in the gelcoat that indicate stress or UV degradation and require assessment for potential escalation",
+              "Normal surface texture from rider friction wear",
+              "Mineral deposit patterns from hard water",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Crazing appears as a network of fine surface cracks, often resembling cracked porcelain. It indicates stress in the gelcoat from UV degradation, thermal cycling or chemical exposure. While crazing may not immediately compromise structural integrity, it exposes the FRP beneath and can progress to deeper cracking if left unaddressed. Document and escalate for assessment.",
+            type: "defect",
+          },
+          {
+            id: "q9-31",
+            question:
+              "During an inspection, you notice a section of the flume surface has a raised, bubble-like area approximately 5 cm across. The surface is not cracked but feels spongy when pressed. What defect is this?",
+            options: [
+              "A wax buildup from over-application during the last maintenance cycle",
+              "Osmotic blistering or delamination - water has penetrated beneath the gelcoat and is separating the layers",
+              "An air pocket trapped during the original manufacturing process that has always been there",
+              "Surface contamination from cleaning chemicals that will dissipate naturally",
+            ],
+            correctIndex: 1,
+            explanation:
+              "A raised, spongy area on the flume surface indicates osmotic blistering or delamination. Water has penetrated through the gelcoat and is separating the FRP layers beneath. This defect compromises the structural integrity of the section and must be documented, assessed and repaired. The slide should not operate with active delamination in the rider contact zone.",
+            type: "defect",
+          },
+          {
+            id: "q9-32",
+            question:
+              "A star-shaped pattern of cracks radiates from a single point on the flume. What does this indicate about the cause of the damage?",
+            options: [
+              "Thermal stress from prolonged sun exposure",
+              "A point impact - a hard object struck the surface with concentrated force at that location",
+              "Chemical erosion from pool water with low pH",
+              "Normal fatigue cracking from years of rider traffic",
+            ],
+            correctIndex: 1,
+            explanation:
+              "A star fracture pattern radiating from a central point is characteristic of point impact damage - a hard object struck the surface with concentrated force. This is a structural defect requiring immediate shutdown. The impact may have caused subsurface damage beyond what is visible, so professional assessment is required.",
+            type: "defect",
+          },
+          {
+            id: "q9-33",
+            question:
+              "An operator finds a joint where the sealant has not failed, but there is a slight lip where two flume sections meet. The lip is less than 1 mm high. Should the slide operate?",
+            options: [
+              "Yes - a 1 mm lip is negligible and will not affect riders",
+              "The operator should assess whether the lip creates a catching hazard - any lip that could catch a rider's skin or swimwear requires shutdown regardless of size",
+              "Yes - but only for raft rides where riders do not contact the surface directly",
+              "Only if the lip is sanded smooth before opening",
+            ],
+            correctIndex: 1,
+            explanation:
+              "The shutdown decision for joint issues is based on whether a lip, gap or sharp edge exists - not on a specific measurement threshold. Riders travelling at 20-40 km/h can catch even small edges. The operator must assess whether the lip creates a catching hazard. If there is any doubt, shut down and escalate for professional assessment.",
+            type: "defect",
+          },
+          {
+            id: "q9-34",
+            question:
+              "What is the difference between a chip and a puncture on a flume surface, and why does the distinction matter for the shutdown decision?",
+            options: [
+              "There is no meaningful difference - both are cosmetic issues",
+              "A chip removes surface gelcoat but may not penetrate through the FRP; a puncture is a hole through the slide surface. Punctures require immediate shutdown while chips are documented and scheduled for repair.",
+              "A chip is larger than a puncture and therefore more serious",
+              "A puncture only affects the underside of the flume while chips affect the riding surface",
+            ],
+            correctIndex: 1,
+            explanation:
+              "A chip damages the gelcoat surface layer and may expose the fiberglass beneath, but does not necessarily penetrate the full thickness. A puncture is a hole through the slide surface that compromises structural integrity and allows water ingress. Punctures are structural defects requiring immediate shutdown; chips are surface defects that are documented and scheduled for maintenance.",
+            type: "knowledge",
+          },
+          // --- Module 6: Water Quality (5 questions) ---
+          {
+            id: "q9-35",
+            question:
+              "An outdoor facility maintains FAC at 1.5 ppm. According to industry best practice, is this level appropriate?",
+            options: [
+              "Yes - 1.5 ppm is within the standard range for all facilities",
+              "No - outdoor facilities require 2.0-4.0 ppm because UV from sunlight degrades chlorine faster than in indoor environments",
+              "It depends on the number of riders using the facility that day",
+              "No - all facilities should maintain FAC above 4.0 ppm for maximum disinfection",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Industry best practice specifies different FAC ranges for indoor and outdoor facilities. Indoor facilities typically target 1.0-3.0 ppm, while outdoor facilities require a higher range of 2.0-4.0 ppm because UV radiation from sunlight degrades chlorine. At 1.5 ppm, this outdoor facility is below the recommended minimum.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-36",
+            question:
+              "The facility's water has a pH reading of 8.2. What concern does this raise?",
+            options: [
+              "No concern - pH 8.2 is within normal limits for aquatic facilities",
+              "The pH exceeds the recommended range of 7.2-7.8, which reduces chlorine effectiveness and can contribute to scaling on flume surfaces",
+              "The water is too acidic and will corrode metal components",
+              "The pH only matters for swimmer comfort and has no equipment impact",
+            ],
+            correctIndex: 1,
+            explanation:
+              "The recommended pH range is 7.2-7.8. At pH 8.2, the water is above the acceptable range. High pH significantly reduces the effectiveness of free chlorine as a disinfectant and shifts the LSI toward positive (scaling), which can accelerate mineral deposit formation on flume surfaces and equipment.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-37",
+            question:
+              "Who is responsible for water chemistry management at a waterslide facility?",
+            options: [
+              "The slide operators alone, since they are closest to the water",
+              "An external water treatment company that visits monthly",
+              "It is a shared responsibility - facility water treatment staff manage chemistry while operators report visual indicators and observations",
+              "The ride manufacturer, as part of the warranty obligations",
+            ],
+            correctIndex: 2,
+            explanation:
+              "Water chemistry management is a shared responsibility. Facility water treatment or maintenance staff manage the chemical balance, while operators serve as the most frequent observers and report visual indicators such as scaling, staining or changes in surface condition. Operators do not adjust water chemistry themselves.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-38",
+            question:
+              "A facility shock-treats the pool at 10 PM after closing. The facility opens at 9 AM the next day. A maintenance worker says the water looks clear so the slide can open. Is this correct?",
+            options: [
+              "Yes - overnight treatment gives sufficient time for chemistry to normalize",
+              "No - water quality measurements must confirm levels are within correct limits before the ride reopens, regardless of visual clarity",
+              "Yes - as long as the FAC is above zero, the slide can operate",
+              "Only if the shock treatment was a standard dose, not a double dose",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Industry best practice requires that water quality must be retested following any pool shock treatment, with measurements confirming levels are back within acceptable limits before the ride is reopened. Visual clarity is not a substitute for chemical testing. Shock treatment uses concentrated chemicals that may still be at levels unsafe for riders or equipment.",
+            type: "scenario",
+          },
+          {
+            id: "q9-39",
+            question:
+              "Calcium hardness in the facility's water supply has increased due to a change in the municipal water source. What effect could this have on waterslide operations if left unaddressed?",
+            options: [
+              "No effect - calcium hardness only matters for swimming pool clarity",
+              "Increased calcium hardness shifts the LSI positive, accelerating scale formation on flume surfaces, reducing rider speed predictability and blocking nozzles",
+              "It makes the water softer, which increases corrosion risk on metal components",
+              "It only affects the taste of the water and has no operational impact",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Calcium hardness is a component of the LSI calculation. Higher calcium hardness shifts the LSI positive (toward scaling). This accelerates mineral deposit formation on flume surfaces, creates variable friction zones affecting rider speed, and can block hydraulic nozzles. Water chemistry must be adjusted to compensate for source water changes.",
+            type: "scenario",
+          },
+          // --- Module 7: Incident Prevention (4 questions) ---
+          {
+            id: "q9-40",
+            question:
+              "The hierarchy of controls ranks elimination as the most effective control and PPE as the least effective. In waterslide operations, which of the following is an example of an engineering control?",
+            options: [
+              "Training operators to identify defects during inspections",
+              "Installing physical barriers at unauthorized access points to prevent uncontrolled entry into the flume",
+              "Posting safety signage at the top of the slide",
+              "Requiring riders to wear protective footwear",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Engineering controls are physical modifications that reduce risk without relying on human behaviour. Physical barriers at unauthorized access points prevent uncontrolled entry regardless of whether staff are present. Training is an administrative control, signage is an administrative control and PPE is the lowest tier in the hierarchy.",
+            type: "knowledge",
+          },
+          {
+            id: "q9-41",
+            question:
+              "A near-miss occurs when a rider stops briefly mid-slide but self-recovers and exits without injury. No collision occurred. Should this event be reported?",
+            options: [
+              "No - no injury means no report is required",
+              "Yes - near-miss reporting captures events that could have resulted in injury and helps identify developing risks before they cause an incident",
+              "Only if a supervisor witnessed the event",
+              "Only if the rider makes a formal complaint",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Near-miss reporting is a critical prevention tool. An event where a rider stops mid-slide but self-recovers indicates conditions exist that could cause a full stoppage and collision under slightly different circumstances. Reporting near-misses helps identify developing risks - such as surface degradation or flow issues - before they cause an actual injury.",
+            type: "scenario",
+          },
+          {
+            id: "q9-42",
+            question:
+              "A severe thunderstorm warning is issued for the area. The storm is forecast to arrive in 45 minutes. Rider queues are at capacity. What is the correct operational response?",
+            options: [
+              "Continue operating until rain begins, then shut down",
+              "Begin orderly shutdown procedures now - clear riders from the queue, close the slide and prepare for severe weather before the storm arrives",
+              "Continue operating and monitor the weather radar for the storm's actual position",
+              "Reduce queue size by half and continue dispatching until lightning is visible",
+            ],
+            correctIndex: 1,
+            explanation:
+              "Weather protocols require proactive response, not reactive. A severe thunderstorm warning with a 45-minute lead time requires beginning shutdown procedures immediately. Clearing riders from elevated tower positions and exposed slides before dangerous conditions arrive is the safe approach. Waiting for visible lightning puts riders and staff at risk.",
+            type: "scenario",
+          },
+          {
+            id: "q9-43",
+            question:
+              "An operator is screening riders at the top of the slide and notices a guest who appears to have a medical condition that may be affected by the ride forces. The guest does not meet any of the posted exclusion criteria. What should the operator do?",
+            options: [
+              "Allow the rider - they do not meet any listed exclusion criteria",
+              "Refuse the rider based on their appearance",
+              "Politely ask the rider if they have any medical conditions that may be affected by the ride, and if uncertain, consult the supervisor or facility first aid team",
+              "Allow the rider but increase the dispatch interval as a precaution",
+            ],
+            correctIndex: 2,
+            explanation:
+              "Rider screening requires professional judgment beyond checking posted criteria. If an operator has a reasonable concern about a guest's ability to ride safely, they should politely inquire and consult with a supervisor or first aid team if uncertain. This protects both the rider and the facility without making assumptions based on appearance alone.",
+            type: "scenario",
+          },
+          // --- Module 8: Response & Shutdown (3 questions) ---
+          {
+            id: "q9-44",
+            question:
+              "After a rider exits with a visible laceration, the slide is shut down and emergency response is activated. A manager asks you to restart the slide 30 minutes later because the injury 'was not that serious.' What is the correct response?",
+            options: [
+              "Restart - the manager has assessed the severity and made the decision",
+              "The slide should not restart until the cause of the injury has been investigated, the defect (if any) has been identified and corrected, and the slide has been cleared for operation",
+              "Restart but increase dispatch intervals as a precaution",
+              "Restart only if the injured rider confirms they are satisfied",
+            ],
+            correctIndex: 1,
+            explanation:
+              "A rider injury triggers investigation requirements. The slide should not restart until the cause has been investigated, any contributing defect has been identified and corrected, and the slide has been formally cleared for operation. The severity of the injury does not determine whether investigation is required - any injury event requires root cause assessment.",
+            type: "scenario",
+          },
+          {
+            id: "q9-45",
+            question:
+              "Following a serious incident, an operator is asked to write their account of what happened. Which of the following statements should NOT appear in the documentation?",
+            options: [
+              "\"The rider exited at 2:47 PM with a visible injury to the right ankle.\"",
+              "\"Surface condition appeared dry in section 4, and waxing had not been completed in the last 3 months.\"",
+              "\"The incident was caused by the rider ignoring the positioning instructions I gave them.\"",
+              "\"The last dispatch was at 2:46 PM with a 20-second interval.\"",
+            ],
+            correctIndex: 2,
+            explanation:
+              "Post-incident documentation must record facts only, not interpretations or blame. Stating that the incident 'was caused by' the rider's behaviour is speculation and attribution of blame. The other options record factual observations - time, visible condition, surface state and dispatch data - which are appropriate for incident documentation.",
+            type: "knowledge",
           },
         ],
       },

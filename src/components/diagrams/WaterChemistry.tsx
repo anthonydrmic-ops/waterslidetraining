@@ -3,7 +3,8 @@
 export function WaterChemistry() {
   const params = [
     { label: "pH Level", low: "6.0", target: "7.2 - 7.8", high: "9.0", lowRisk: "Corrosive", highRisk: "Scaling", color: "#0891b2" },
-    { label: "Free Chlorine", low: "0", target: "1.0 - 3.0 ppm", high: "5.0+", lowRisk: "Infection risk", highRisk: "Surface damage", color: "#22c55e" },
+    { label: "FAC (Indoor)", low: "0", target: "1.0 - 3.0 ppm", high: "5.0+", lowRisk: "Infection risk", highRisk: "Surface damage", color: "#22c55e" },
+    { label: "FAC (Outdoor)", low: "0", target: "2.0 - 4.0 ppm", high: "5.0+", lowRisk: "Infection risk", highRisk: "Surface damage", color: "#16a34a" },
     { label: "LSI Index", low: "-2.0", target: "-0.3 to +0.3", high: "+2.0", lowRisk: "Dissolves surfaces", highRisk: "Heavy scaling", color: "#8b5cf6" },
   ];
 
@@ -12,8 +13,8 @@ export function WaterChemistry() {
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Water Chemistry Balance - Key Parameters
       </p>
-      <svg viewBox="0 0 700 350" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-        <rect width="700" height="350" rx="12" fill="#fafaf9" />
+      <svg viewBox="0 0 700 450" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+        <rect width="700" height="450" rx="12" fill="#fafaf9" />
 
         {params.map((param, i) => {
           const y = 30 + i * 100;
@@ -74,8 +75,8 @@ export function WaterChemistry() {
         })}
 
         {/* Footer */}
-        <rect x="160" y="318" width="380" height="24" rx="12" fill="#8b5cf6" opacity="0.06" />
-        <text x="350" y="335" textAnchor="middle" fontSize="11" fill="#78716c" fontFamily="system-ui">
+        <rect x="160" y="418" width="380" height="24" rx="12" fill="#8b5cf6" opacity="0.06" />
+        <text x="350" y="435" textAnchor="middle" fontSize="11" fill="#78716c" fontFamily="system-ui">
           LSI (Langelier Saturation Index) = tendency to scale or corrode
         </text>
       </svg>

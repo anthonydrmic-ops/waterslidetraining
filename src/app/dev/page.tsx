@@ -38,6 +38,24 @@ export default function DevPage() {
     router.push("/train/certified");
   };
 
+  const simulatePreAssessment = async () => {
+    setStatus("Completing modules 1-9...");
+    await refreshProgress();
+
+    for (const mod of modules) {
+      if (mod.id === "assessment") continue;
+      for (const lesson of mod.lessons) {
+        const total = lesson.quiz.length;
+        await saveQuizScore(lesson.id, total, total);
+        await completeLesson(lesson.id);
+      }
+      await completeModule(mod.id);
+    }
+
+    setStatus("Done - modules 1-9 complete. Assessment unlocked.");
+    router.push("/train");
+  };
+
   const handleReset = async () => {
     await resetProgress();
     setStatus("Progress reset");
@@ -72,6 +90,13 @@ export default function DevPage() {
               className="w-full py-3.5 rounded-full bg-[var(--cta)] text-white text-sm font-medium hover:bg-[var(--cta-dark)] active:scale-[0.97] transition-all duration-300 shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
             >
               Simulate Full Completion
+            </button>
+
+            <button
+              onClick={simulatePreAssessment}
+              className="w-full py-3.5 rounded-full bg-[var(--accent)] text-white text-sm font-medium hover:bg-[var(--accent-dark)] active:scale-[0.97] transition-all duration-300 shadow-[0_4px_16px_rgba(11,58,102,0.2)]"
+            >
+              Unlock Final Assessment (Complete Modules 1-9)
             </button>
 
             <button

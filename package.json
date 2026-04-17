@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^7.0.8",
     "@phosphor-icons/react": "^2.1.10",
     "@supabase/supabase-js": "^2.101.1",
+    "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.38.0",
     "html2canvas-pro": "^2.0.2",
     "jspdf": "^4.2.1",
@@ -21,7 +22,9 @@
     "stripe": "^22.0.0"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.9",
     "@tailwindcss/postcss": "^4",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

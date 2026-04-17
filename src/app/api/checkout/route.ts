@@ -45,8 +45,8 @@ export async function POST(request: Request) {
       seats: String(seats),
       clerkUserId: userId,
     },
-    success_url: `${appUrl}/training?purchased=true`,
-    cancel_url: `${appUrl}/training`,
+    success_url: `${appUrl}/training/slidesure?purchased=true`,
+    cancel_url: `${appUrl}/training/slidesure`,
   });
 
   return NextResponse.json({ url: session.url });
