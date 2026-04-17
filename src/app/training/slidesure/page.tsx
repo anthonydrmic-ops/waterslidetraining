@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth, useUser, useClerk } from "@clerk/nextjs";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import {
@@ -15,6 +15,7 @@ import {
   CheckCircle,
   Clock,
   SignIn as SignInIcon,
+  SignOut as SignOutIcon,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 
@@ -88,6 +89,7 @@ export default function TrainingPage() {
 function TrainingPageInner() {
   const { isSignedIn, isLoaded } = useAuth();
   const { user } = useUser();
+  const { signOut } = useClerk();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [selectedTier, setSelectedTier] = useState("team");
@@ -132,9 +134,11 @@ function TrainingPageInner() {
       } else if (data.error === "Unauthorized") {
         router.push("/sign-in?redirect_url=/training/slidesure");
       } else {
+        console.error("Checkout error:", data);
         alert("Payment system is being configured. Check back soon.");
       }
-    } catch {
+    } catch (err) {
+      console.error("Checkout exception:", err);
       alert("Payment system is being configured. Check back soon.");
     } finally {
       setLoading(false);
@@ -183,7 +187,7 @@ function TrainingPageInner() {
             )}
             {isLoaded && isSignedIn && (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-stone-400">{user?.primaryEmailAddress?.emailAddress}</span>
+                <span className="text-xs text-stone-400 hidden sm:inline">{user?.primaryEmailAddress?.emailAddress}</span>
                 {licensed && (
                   <Link
                     href="/train"
@@ -192,6 +196,13 @@ function TrainingPageInner() {
                     Go to Course
                   </Link>
                 )}
+                <button
+                  onClick={() => signOut({ redirectUrl: "/training/slidesure" })}
+                  className="px-3 py-2 rounded-full bg-stone-100 text-stone-500 text-xs font-medium hover:bg-stone-200 transition-all duration-300 flex items-center gap-1.5"
+                >
+                  <SignOutIcon size={12} weight="bold" />
+                  Sign Out
+                </button>
               </div>
             )}
           </div>
