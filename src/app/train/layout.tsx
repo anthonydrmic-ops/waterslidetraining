@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { getSupabaseAdmin } from "@/lib/supabase";
 
 export default async function TrainLayout({
@@ -7,16 +8,21 @@ export default async function TrainLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  if (headersList.get("x-dev-bypass") === "true") {
+    return <>{children}</>;
+  }
+
   let userId: string | null = null;
   try {
     const authResult = await auth();
     userId = authResult.userId;
   } catch {
-    // Auth may fail in dev bypass mode
+    return <>{children}</>;
   }
 
   if (!userId) {
-    return <>{children}</>;
+    redirect("/sign-in?redirect_url=/train");
   }
 
   const supabase = getSupabaseAdmin();

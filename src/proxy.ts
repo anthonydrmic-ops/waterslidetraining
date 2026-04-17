@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 // Routes that require authentication
 const isProtectedRoute = createRouteMatcher([
@@ -26,7 +27,9 @@ export default clerkMiddleware(async (auth, request) => {
 
   const url = new URL(request.url);
   if (url.searchParams.get("dev") === "true") {
-    return;
+    const response = NextResponse.next();
+    response.headers.set("x-dev-bypass", "true");
+    return response;
   }
 
   if (isProtectedRoute(request) && !isPublicRoute(request)) {
