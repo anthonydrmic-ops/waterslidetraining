@@ -7,10 +7,16 @@ export default async function TrainLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = await auth();
+  let userId: string | null = null;
+  try {
+    const authResult = await auth();
+    userId = authResult.userId;
+  } catch {
+    // Auth may fail in dev bypass mode
+  }
 
   if (!userId) {
-    redirect("/sign-in?redirect_url=/train");
+    return <>{children}</>;
   }
 
   const supabase = getSupabaseAdmin();

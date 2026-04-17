@@ -20,8 +20,12 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
-  // Skip if Clerk is not configured (dev mode without keys)
   if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+    return;
+  }
+
+  const url = new URL(request.url);
+  if (url.searchParams.get("dev") === "true") {
     return;
   }
 

@@ -410,7 +410,7 @@ function TrainingPageInner() {
 
       {/* Dev skip button */}
       <Link
-        href="/train"
+        href="/train?dev=true"
         style={{
           position: "fixed",
           bottom: "1rem",
