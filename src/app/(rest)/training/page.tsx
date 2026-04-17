@@ -165,34 +165,35 @@ export default function TrainingLandingPage() {
                 </div>
               </div>
 
-              {/* Coming Soon - Ride Operations */}
+              {/* Coming Soon - Emergency Planning & Response */}
               <div className="card-shell reveal reveal-delay-2" style={{ opacity: 0.6 }}>
                 <div className="card-core" style={{ display: "flex", flexDirection: "column", minHeight: "340px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-                    <div className="icon-circle icon-circle--navy" style={{ marginBottom: 0 }}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    <div className="icon-circle icon-circle--orange" style={{ marginBottom: 0 }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                     </div>
                     <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
                   </div>
-                  <h3 style={{ marginBottom: "0.75rem" }}>Ride &amp; Attraction Operations</h3>
-                  <p style={{ flex: 1 }}>Operational safety training for mechanical rides, attractions and amusement devices. Covers pre-start checks, operational protocols and emergency procedures.</p>
+                  <h3 style={{ marginBottom: "0.75rem" }}>Emergency Planning &amp; Response</h3>
+                  <p style={{ flex: 1 }}>Structured emergency planning training aligned to AS 3745 with a leisure industry focus. Covers emergency procedures, evacuation planning and incident response for aquatics, stadiums, parks, attractions and tourism sites.</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>AS 3745 Aligned</span>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>In Development</span>
                   </div>
                 </div>
               </div>
 
-              {/* Coming Soon - Aquatic Facility */}
+              {/* Coming Soon - Entertainment Staging & Rigging */}
               <div className="card-shell reveal reveal-delay-3" style={{ opacity: 0.6 }}>
                 <div className="card-core" style={{ display: "flex", flexDirection: "column", minHeight: "340px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-                    <div className="icon-circle icon-circle--orange" style={{ marginBottom: 0 }}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>
+                    <div className="icon-circle icon-circle--navy" style={{ marginBottom: 0 }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                     </div>
                     <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
                   </div>
-                  <h3 style={{ marginBottom: "0.75rem" }}>Aquatic Facility Management</h3>
-                  <p style={{ flex: 1 }}>Comprehensive training for aquatic centre operations including pool plant systems, water chemistry, lifeguard coordination and regulatory compliance.</p>
+                  <h3 style={{ marginBottom: "0.75rem" }}>Entertainment Staging &amp; Rigging</h3>
+                  <p style={{ flex: 1 }}>Arena operations and technical rigging fundamentals for arena crew, riggers and event technicians. Covers CAD map interpretation, thrust calculations, SR/SR ratings, staging safety and interfacing with touring production teams.</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>In Development</span>
                   </div>
