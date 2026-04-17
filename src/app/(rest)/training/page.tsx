@@ -303,38 +303,6 @@ export default function TrainingLandingPage() {
         </div>
       </footer>
 
-      {/* Dev Tools Button - bottom right corner */}
-      <a
-        href="/train"
-        style={{
-          position: "fixed",
-          bottom: "1rem",
-          right: "5.5rem",
-          padding: "0.4rem 0.8rem",
-          fontSize: "0.65rem",
-          fontWeight: 500,
-          color: "rgba(107, 114, 128, 0.4)",
-          background: "transparent",
-          border: "1px solid rgba(107, 114, 128, 0.15)",
-          borderRadius: "6px",
-          cursor: "pointer",
-          letterSpacing: "0.05em",
-          transition: "all 0.3s ease",
-          zIndex: 50,
-          textDecoration: "none",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = "rgba(107, 114, 128, 0.7)";
-          e.currentTarget.style.borderColor = "rgba(107, 114, 128, 0.3)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = "rgba(107, 114, 128, 0.4)";
-          e.currentTarget.style.borderColor = "rgba(107, 114, 128, 0.15)";
-        }}
-      >
-        Dev
-      </a>
-
       {/* Admin Button - bottom right corner */}
       <button
         onClick={() => setShowPasswordBox(true)}

@@ -407,6 +407,29 @@ function TrainingPageInner() {
 
         </motion.div>
       </div>
+
+      {/* Dev skip button */}
+      <Link
+        href="/train"
+        style={{
+          position: "fixed",
+          bottom: "1rem",
+          right: "1rem",
+          padding: "0.4rem 0.8rem",
+          fontSize: "0.65rem",
+          fontWeight: 500,
+          color: "rgba(107, 114, 128, 0.4)",
+          background: "transparent",
+          border: "1px solid rgba(107, 114, 128, 0.15)",
+          borderRadius: "6px",
+          letterSpacing: "0.05em",
+          transition: "all 0.3s ease",
+          zIndex: 50,
+          textDecoration: "none",
+        }}
+      >
+        Dev
+      </Link>
     </div>
   );
 }
