@@ -1,8 +1,30 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function TrainingLandingPage() {
+  const [showPasswordBox, setShowPasswordBox] = useState(false);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (showPasswordBox && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [showPasswordBox]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === "godaddysucks") {
+      window.location.href = "/training/slidesure";
+    } else {
+      setError(true);
+      setPassword("");
+      setTimeout(() => setError(false), 2000);
+    }
+  };
+
   useEffect(() => {
     const reveals = document.querySelectorAll(".reveal");
     const revealObserver = new IntersectionObserver(
@@ -116,47 +138,32 @@ export default function TrainingLandingPage() {
           </div>
         </section>
 
-        {/* Courses Grid */}
+        {/* Coming Soon Section */}
         <section className="section">
           <div className="container">
             <div className="reveal" style={{ textAlign: "center", marginBottom: "4rem" }}>
-              <span className="eyebrow">Available Courses</span>
-              <h2 style={{ marginTop: "1.5rem", marginBottom: "1rem" }}>Choose your program</h2>
-              <p style={{ maxWidth: "55ch", margin: "0 auto" }}>Each course includes interactive modules, knowledge assessments, and a downloadable certificate of completion.</p>
+              <span className="eyebrow">Coming Soon</span>
+              <h2 style={{ marginTop: "1.5rem", marginBottom: "1rem" }}>We&apos;re building something great</h2>
+              <p style={{ maxWidth: "55ch", margin: "0 auto" }}>Our comprehensive training and certification platform is currently under development. Stay tuned for industry-leading courses designed to elevate your team&apos;s capabilities.</p>
             </div>
 
             <div className="bento-grid bento-grid--3">
-              {/* SlideSure - Available */}
-              <a href="/training/slidesure" className="card-shell card-shell--link reveal reveal-delay-1">
+              {/* SlideSure - Coming Soon */}
+              <div className="card-shell reveal reveal-delay-1" style={{ opacity: 0.6 }}>
                 <div className="card-core" style={{ display: "flex", flexDirection: "column", minHeight: "340px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
                     <div className="icon-circle icon-circle--teal" style={{ marginBottom: 0 }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
-                    <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(4, 120, 87, 0.08)", border: "1px solid rgba(4, 120, 87, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#047857" }}>Available Now</span>
+                    <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
                   </div>
                   <h3 style={{ marginBottom: "0.75rem" }}>SlideSure - Waterslide Safety &amp; Competency</h3>
                   <p style={{ flex: 1 }}>Comprehensive waterslide operator training covering system understanding, inspections, surface management, water quality, incident prevention and emergency response.</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(11, 58, 102, 0.04)", border: "1px solid rgba(11, 58, 102, 0.08)", fontSize: "0.75rem", color: "var(--navy)" }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                      9 Modules
-                    </span>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(11, 58, 102, 0.04)", border: "1px solid rgba(11, 58, 102, 0.08)", fontSize: "0.75rem", color: "var(--navy)" }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                      8-12 Hours
-                    </span>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(11, 58, 102, 0.04)", border: "1px solid rgba(11, 58, 102, 0.08)", fontSize: "0.75rem", color: "var(--navy)" }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                      Certificate
-                    </span>
-                  </div>
-                  <div style={{ marginTop: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.85rem", fontWeight: 600, color: "var(--orange)" }}>
-                    View Course
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>In Development</span>
                   </div>
                 </div>
-              </a>
+              </div>
 
               {/* Coming Soon - Ride Operations */}
               <div className="card-shell reveal reveal-delay-2" style={{ opacity: 0.6 }}>
@@ -191,6 +198,17 @@ export default function TrainingLandingPage() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Notify CTA */}
+            <div className="reveal reveal-delay-2" style={{ textAlign: "center", marginTop: "3rem" }}>
+              <p style={{ color: "var(--mid-grey)", fontSize: "0.95rem" }}>Want to be notified when our training programs launch?</p>
+              <a href="/contact" className="btn-primary" style={{ marginTop: "1rem", display: "inline-flex" }}>
+                Register Your Interest
+                <span className="btn-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </span>
+              </a>
             </div>
           </div>
         </section>
@@ -283,6 +301,139 @@ export default function TrainingLandingPage() {
           <p>&copy; 2026 REST Group Asia Pacific Pty Ltd</p>
         </div>
       </footer>
+
+      {/* Admin Button - bottom right corner */}
+      <button
+        onClick={() => setShowPasswordBox(true)}
+        style={{
+          position: "fixed",
+          bottom: "1rem",
+          right: "1rem",
+          padding: "0.4rem 0.8rem",
+          fontSize: "0.65rem",
+          fontWeight: 500,
+          color: "rgba(107, 114, 128, 0.4)",
+          background: "transparent",
+          border: "1px solid rgba(107, 114, 128, 0.15)",
+          borderRadius: "6px",
+          cursor: "pointer",
+          letterSpacing: "0.05em",
+          transition: "all 0.3s ease",
+          zIndex: 50,
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = "rgba(107, 114, 128, 0.7)";
+          e.currentTarget.style.borderColor = "rgba(107, 114, 128, 0.3)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = "rgba(107, 114, 128, 0.4)";
+          e.currentTarget.style.borderColor = "rgba(107, 114, 128, 0.15)";
+        }}
+      >
+        Admin
+      </button>
+
+      {/* Password Dialog */}
+      {showPasswordBox && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 100,
+            backdropFilter: "blur(4px)",
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowPasswordBox(false);
+              setPassword("");
+              setError(false);
+            }
+          }}
+        >
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              background: "var(--white, #fff)",
+              borderRadius: "16px",
+              padding: "2rem",
+              width: "100%",
+              maxWidth: "360px",
+              margin: "0 1rem",
+              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.15)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
+              <h3 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--charcoal, #1A1A1A)", margin: 0, fontFamily: "var(--font-body)" }}>Admin Access</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPasswordBox(false);
+                  setPassword("");
+                  setError(false);
+                }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "4px",
+                  color: "var(--mid-grey, #6B7280)",
+                  fontSize: "1.2rem",
+                  lineHeight: 1,
+                }}
+              >
+                &times;
+              </button>
+            </div>
+            <input
+              ref={inputRef}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              style={{
+                width: "100%",
+                padding: "0.75rem 1rem",
+                border: `1.5px solid ${error ? "#ef4444" : "rgba(107, 114, 128, 0.2)"}`,
+                borderRadius: "10px",
+                fontSize: "0.875rem",
+                outline: "none",
+                fontFamily: "var(--font-body)",
+                boxSizing: "border-box",
+                transition: "border-color 0.2s ease",
+                background: error ? "rgba(239, 68, 68, 0.04)" : "transparent",
+              }}
+            />
+            {error && (
+              <p style={{ color: "#ef4444", fontSize: "0.75rem", marginTop: "0.5rem", marginBottom: 0 }}>
+                Incorrect password
+              </p>
+            )}
+            <button
+              type="submit"
+              style={{
+                width: "100%",
+                marginTop: "1rem",
+                padding: "0.75rem",
+                background: "var(--navy, #0B3A66)",
+                color: "#fff",
+                border: "none",
+                borderRadius: "10px",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                cursor: "pointer",
+                fontFamily: "var(--font-body)",
+                transition: "background 0.2s ease",
+              }}
+            >
+              Continue
+            </button>
+          </form>
+        </div>
+      )}
     </>
   );
 }

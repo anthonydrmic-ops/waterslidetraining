@@ -418,6 +418,10 @@
     radial-gradient(ellipse 60% 50% at 20% 80%, rgba(240, 90, 40, 0.04) 0%, transparent 70%),
     var(--cream);
   z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .rest-site .hero-video-wrap {
@@ -428,6 +432,8 @@
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
   mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
   pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .rest-site .hero-video {
@@ -437,6 +443,10 @@
   object-position: center;
   opacity: 0.18;
   transform: translateZ(0);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Hide video entirely when autoplay fails (no static frame / play button) */

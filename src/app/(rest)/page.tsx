@@ -170,7 +170,7 @@ export default function HomePage() {
         <section className="hero">
           <div className="hero-bg"></div>
           <div className="hero-video-wrap">
-            <video className="hero-video" autoPlay muted playsInline preload="auto" disablePictureInPicture>
+            <video className="hero-video" autoPlay muted playsInline preload="auto" disablePictureInPicture tabIndex={-1} onContextMenu={(e) => e.preventDefault()}>
               <source src="/rest-assets/hero-video.mp4" type="video/mp4" />
             </video>
           </div>
