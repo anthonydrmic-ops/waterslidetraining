@@ -394,16 +394,6 @@ function TrainingPageInner() {
             </>
           )}
 
-          {/* Dev skip button */}
-          <motion.div variants={fadeUp} className="mt-10 text-center">
-            <Link
-              href="/train"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-100 border border-stone-200 text-stone-400 text-xs font-medium hover:bg-stone-200 hover:text-stone-600 transition-all duration-300"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 17l5-5-5-5"/><path d="M6 17l5-5-5-5"/></svg>
-              Dev - Skip to Training
-            </Link>
-          </motion.div>
         </motion.div>
       </div>
     </div>
