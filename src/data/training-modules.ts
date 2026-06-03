@@ -19,7 +19,7 @@ export interface Lesson {
 export interface LessonSection {
   heading?: string;
   body: string;
-  type: "text" | "warning" | "critical" | "checklist" | "oem-reference" | "diagram" | "case-study";
+  type: "text" | "warning" | "critical" | "checklist" | "numbered" | "oem-reference" | "diagram" | "case-study";
   items?: string[];
   source?: string;
   diagramId?: string;
@@ -56,52 +56,59 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            heading: "Work Health and Safety Act 2011",
-            body: "The Work Health and Safety (WHS) Act 2011 is the primary legislation governing workplace safety across most Australian states and territories. It establishes the legal duties owed by all parties in a workplace - including aquatic recreation facilities. As a waterslide operator, you are working within this framework every time you step onto a platform.",
+            heading: "How Work Safety Is Regulated in Australia",
+            body: "Workplace safety in Australia is governed by a harmonised set of laws known as the model Work Health and Safety (WHS) Act. It has been adopted by the Commonwealth and every state and territory except Victoria, which operates under its own Occupational Health and Safety (OHS) Act 2004. Western Australia adopted its version, the WHS Act 2020, in 2022. The wording and some terminology differ between jurisdictions, but the core safety duties are very similar across the country. As a waterslide operator, you are working within this framework every time you step onto a platform - so it is important to know which Act and regulator apply where you work.",
+          },
+          {
+            type: "diagram",
+            heading: "Which Act Applies Where",
+            body: "Select a state or territory to see the work-safety Act that applies and the regulator that enforces it.",
+            diagramId: "whs-jurisdiction-map",
           },
           {
             type: "critical",
-            body: "The WHS Act applies to ALL persons at a workplace - not just employees. This includes contractors, visitors and members of the public using your facility. Failure to meet WHS obligations can result in significant penalties including fines and imprisonment for serious breaches.",
+            body: "Work health and safety law applies to ALL persons at a workplace - not just employees. This includes contractors, visitors and members of the public using your facility. Failure to meet these obligations can result in significant penalties including fines and imprisonment for serious breaches.",
           },
           {
             type: "text",
             heading: "PCBU Duties",
-            body: "A Person Conducting a Business or Undertaking (PCBU) has the primary duty of care under the WHS Act. For waterslide operations, the facility owner or operator is typically the PCBU. Their duty is to ensure, so far as is reasonably practicable, the health and safety of workers and others who may be affected by the work. This includes providing safe plant and equipment, safe systems of work, adequate training and supervision and a safe working environment.",
+            body: "A Person Conducting a Business or Undertaking (PCBU) has the primary duty of care under WHS law. In Victoria, this duty holder is referred to as the 'employer' under the OHS Act rather than a 'PCBU', but the obligation is equivalent. For waterslide operations, the facility owner or operator is typically the PCBU (or employer). Their duty is to ensure, so far as is reasonably practicable, the health and safety of workers and others who may be affected by the work. This includes providing safe plant and equipment, safe systems of work, adequate training and supervision and a safe working environment.",
           },
           {
             type: "text",
             heading: "Worker Duties",
-            body: "As a worker under the WHS Act, you have a duty to take reasonable care for your own health and safety, take reasonable care that your acts or omissions do not adversely affect the health and safety of others and comply with any reasonable instruction given by the PCBU. You must also cooperate with any reasonable policy or procedure relating to health and safety.",
+            body: "As a worker under WHS (or Victorian OHS) law, you have a duty to take reasonable care for your own health and safety, take reasonable care that your acts or omissions do not adversely affect the health and safety of others and comply with any reasonable instruction given by the PCBU or employer. You must also cooperate with any reasonable policy or procedure relating to health and safety.",
           },
           {
             type: "warning",
-            body: "Workers have the right to cease or refuse to carry out work if they have a reasonable concern that it would expose them or others to a serious risk to health or safety. This right is protected under the WHS Act. If you identify an unsafe condition on a waterslide, you are within your rights to stop operations.",
+            body: "Workers have the right to cease or refuse to carry out work if they have a reasonable concern that it would expose them or others to a serious risk to health or safety. This right is protected under work health and safety law in every Australian jurisdiction. If you identify an unsafe condition on a waterslide, you are within your rights to stop operations.",
           },
           {
             type: "text",
             heading: "Officers and Due Diligence",
-            body: "Officers of a PCBU (directors, senior managers) have a positive duty to exercise due diligence to ensure the PCBU complies with its WHS obligations. This means they must acquire and keep up-to-date knowledge of WHS matters, understand the operations and associated hazards, ensure appropriate resources and processes are in place and verify that obligations are being met.",
+            body: "Officers of a PCBU or employer (directors, senior managers) have a positive duty to exercise due diligence to ensure the organisation complies with its safety obligations. This means they must acquire and keep up-to-date knowledge of work health and safety matters, understand the operations and associated hazards, ensure appropriate resources and processes are in place and verify that obligations are being met.",
           },
         ],
         keyTakeaways: [
-          "The WHS Act 2011 is the primary safety legislation in Australia",
-          "PCBUs have the primary duty of care for all persons at the workplace",
+          "The harmonised model WHS laws apply in every state and territory except Victoria, which uses its own OHS Act 2004 (WA uses the WHS Act 2020)",
+          "The core safety duties are very similar across all jurisdictions - know which Act and regulator apply where you work",
+          "PCBUs (called 'employers' in Victoria) have the primary duty of care for all persons at the workplace",
           "Workers must take reasonable care and follow safety procedures",
           "Workers have the right to cease unsafe work",
-          "Officers must exercise due diligence in WHS compliance",
+          "Officers must exercise due diligence in safety compliance",
         ],
         quiz: [
           {
             id: "q-sl-1-1",
-            question: "Under the WHS Act 2011, who holds the primary duty of care?",
+            question: "Under Australian work health and safety law, who holds the primary duty of care?",
             options: [
               "The individual worker on shift",
-              "The Person Conducting a Business or Undertaking (PCBU)",
+              "The Person Conducting a Business or Undertaking (PCBU), or 'employer' in Victoria",
               "The local council or government body",
               "The equipment manufacturer",
             ],
             correctIndex: 1,
-            explanation: "The PCBU holds the primary duty of care under the WHS Act 2011. They must ensure, so far as is reasonably practicable, the health and safety of workers and others affected by the work.",
+            explanation: "The PCBU holds the primary duty of care under the model WHS laws. In Victoria, the equivalent duty holder under the OHS Act 2004 is the 'employer'. Either way, they must ensure, so far as is reasonably practicable, the health and safety of workers and others affected by the work.",
             type: "knowledge",
           },
           {
@@ -132,7 +139,7 @@ export const modules: Module[] = [
           },
           {
             id: "q-sl-1-4",
-            question: "The WHS Act applies to which persons at a waterslide facility?",
+            question: "Work health and safety law applies to which persons at a waterslide facility?",
             options: [
               "Only paid employees of the facility",
               "Employees and contractors only",
@@ -140,16 +147,20 @@ export const modules: Module[] = [
               "Only those who have signed a liability waiver",
             ],
             correctIndex: 2,
-            explanation: "The WHS Act applies to all persons at a workplace. The PCBU owes a duty of care to workers, contractors, visitors and members of the public who may be affected by the work carried out.",
+            explanation: "Work health and safety law applies to all persons at a workplace. The PCBU (or employer) owes a duty of care to workers, contractors, visitors and members of the public who may be affected by the work carried out.",
             type: "knowledge",
           },
         ],
       },
       {
         id: "1-sl-2",
-        title: "Key Australian Standards",
+        title: "Key Standards and Codes",
         duration: "15 min",
         content: [
+          {
+            type: "text",
+            body: "Waterslide safety in Australia draws on more than just Australian Standards. The primary reference is the Australian AS 3533 series, but because waterslides are a global product, Australian facilities and manufacturers also reference international standards - including the European EN 1069 and American ASTM standards - for waterslide-specific guidance. The standards below are the ones you are most likely to encounter.",
+          },
           {
             type: "text",
             heading: "AS 3533 - Amusement Rides and Devices",
@@ -162,61 +173,56 @@ export const modules: Module[] = [
           },
           {
             type: "text",
-            heading: "EN 1069 - Water Slides",
-            body: "EN 1069 is the European standard specifically for water slides. While it is a European standard, it is widely referenced internationally and provides detailed technical guidance on water slide design, construction and operation. Many Australian facilities and manufacturers reference EN 1069 alongside AS 3533 for waterslide-specific requirements that go beyond general amusement device standards.",
+            heading: "EN 1069 - Water Slides (European)",
+            body: "EN 1069 is the European standard written specifically for water slides (EN 1069-1 covers safety requirements and test methods; EN 1069-2 covers instructions for use). It is widely referenced internationally and provides detailed, waterslide-specific guidance on design, construction and operation. Some Australian facilities and manufacturers reference EN 1069 for this detail, but AS 3533 remains the governing Australian standard - EN 1069 is supplementary, not a substitute.",
           },
           {
             type: "text",
-            heading: "ASTM F1193 - Amusement Rides and Devices",
-            body: "ASTM F1193 is an American standard covering the quality, design, manufacture and operation of amusement rides. It is particularly relevant for FRP (fiberglass reinforced plastic) maintenance and repair guidance. Many waterslide manufacturers reference ASTM F1193 in their maintenance documentation. Australian facilities often use ASTM F1193 alongside AS 3533 for technical guidance on fiberglass slide maintenance.",
+            heading: "ASTM F2376 - Water Slide Systems (American)",
+            body: "ASTM F2376 is the American standard specific to water slide systems, covering their classification, design, manufacture, construction and operation. It is the most directly relevant ASTM reference for waterslides. (A separate, more general standard, ASTM F1193, covers the quality, manufacture and construction of amusement rides and devices broadly - it is not a waterslide- or fibreglass-repair-specific standard.) As with EN 1069, ASTM standards are used as supplementary international guidance alongside AS 3533, particularly where a slide was designed or manufactured overseas.",
           },
           {
             type: "text",
             heading: "AS/NZS ISO 31000 - Risk Management",
-            body: "AS/NZS ISO 31000 provides principles and guidelines for risk management. Under the WHS Act, PCBUs must manage risks to health and safety by following a systematic process: identify hazards, assess risks, implement controls and review effectiveness. ISO 31000 provides the framework for this process. Risk assessments for waterslide operations should follow this standard.",
+            body: "AS/NZS ISO 31000 provides principles and guidelines for risk management. Under the relevant WHS or OHS Act, duty holders must manage risks to health and safety by following a systematic process: identify hazards, assess risks, implement controls and review effectiveness. ISO 31000 provides the framework for this process. Risk assessments for waterslide operations should follow this standard.",
           },
           {
             type: "warning",
-            body: "Standards are updated periodically. It is the responsibility of the PCBU to ensure they are working to the current version of all applicable standards. Using an outdated standard does not provide a defence under the WHS Act.",
-          },
-          {
-            type: "text",
-            heading: "AS 1926 - Swimming Pool Safety",
-            body: "AS 1926 covers safety requirements for swimming pools, which intersects with waterslide operations at catch pools and landing areas. Requirements around fencing, water depth, supervision and signage may apply to waterslide catch pools depending on state and territory regulations.",
+            body: "Standards are updated periodically. It is the responsibility of the PCBU or employer to ensure they are working to the current version of all applicable standards. Using an outdated standard does not provide a defence under work health and safety law.",
           },
         ],
         keyTakeaways: [
-          "AS 3533 is the primary Australian standard for amusement devices including waterslides",
-          "EN 1069 provides waterslide-specific technical guidance",
-          "ASTM F1193 is key for FRP/fiberglass maintenance and repair",
-          "AS/NZS ISO 31000 provides the risk management framework required under WHS law",
+          "AS 3533 is the governing Australian standard for amusement devices including waterslides",
+          "EN 1069 (European) and ASTM F2376 (American) are waterslide-specific standards used as supplementary international guidance",
+          "Australian Standards are not the only references - international standards apply where a slide was designed or built overseas",
+          "AS/NZS ISO 31000 provides the risk management framework required under WHS and OHS law",
           "Standards are updated regularly - always work to the current version",
         ],
         quiz: [
           {
             id: "q-sl-2-1",
-            question: "Which Australian standard is the primary standard governing amusement rides and devices including waterslides?",
+            question: "Which standard is the governing Australian standard for amusement rides and devices including waterslides?",
             options: [
               "EN 1069",
-              "ASTM F1193",
+              "ASTM F2376",
               "AS 3533",
               "ISO 31000",
             ],
             correctIndex: 2,
-            explanation: "AS 3533 is the primary Australian standard for amusement rides and devices. It covers design, manufacture, installation, operation, maintenance and inspection requirements for all amusement devices including waterslides.",
+            explanation: "AS 3533 is the governing Australian standard for amusement rides and devices. It covers design, manufacture, installation, operation, maintenance and inspection requirements for all amusement devices including waterslides. EN 1069 and ASTM F2376 are international standards used as supplementary guidance.",
             type: "knowledge",
           },
           {
             id: "q-sl-2-2",
-            question: "What is ASTM F1193 particularly relevant for in waterslide maintenance?",
+            question: "Which American standard is written specifically for water slide systems?",
             options: [
-              "Water quality testing procedures",
-              "FRP (fiberglass reinforced plastic) maintenance and repair guidance",
-              "Rider height and weight restrictions",
-              "Emergency evacuation procedures",
+              "ASTM F1193 - the general amusement rides and devices standard",
+              "ASTM F2376 - classification, design, manufacture, construction and operation of water slide systems",
+              "ASTM E1300 - structural glass",
+              "ASTM D2563 - fibreglass defect classification",
             ],
             correctIndex: 1,
-            explanation: "ASTM F1193 is widely referenced for its detailed guidance on FRP (fiberglass reinforced plastic) maintenance and repair, which is directly relevant to waterslide flume maintenance.",
+            explanation: "ASTM F2376 is the American standard specific to water slide systems. ASTM F1193 is a broader standard covering amusement rides and devices generally - it is not waterslide-specific. Both are international references used alongside the governing Australian standard, AS 3533.",
             type: "knowledge",
           },
           {
@@ -234,15 +240,15 @@ export const modules: Module[] = [
           },
           {
             id: "q-sl-2-4",
-            question: "Which standard provides the framework for conducting risk assessments required under Australian WHS law?",
+            question: "Which standard provides the framework for conducting risk assessments required under Australian work safety law?",
             options: [
               "AS 3533",
               "EN 1069",
               "AS/NZS ISO 31000",
-              "ASTM F1193",
+              "ASTM F2376",
             ],
             correctIndex: 2,
-            explanation: "AS/NZS ISO 31000 provides the principles and guidelines for risk management. The WHS Act requires PCBUs to manage risks systematically, and ISO 31000 provides the accepted framework for doing so.",
+            explanation: "AS/NZS ISO 31000 provides the principles and guidelines for risk management. WHS and OHS law requires duty holders to manage risks systematically, and ISO 31000 provides the accepted framework for doing so.",
             type: "knowledge",
           },
         ],
@@ -254,17 +260,23 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            heading: "Waterslides as Registered Plant",
-            body: "Under WHS Regulations, waterslides are classified as 'plant' and in most states and territories must be registered with the relevant regulator before they can be operated. Plant registration ensures that the design has been verified, the installation has been inspected and the equipment meets applicable standards. Operating an unregistered amusement device is a serious offence.",
+            heading: "Waterslides and Plant Registration",
+            body: "Under WHS Regulations, an amusement device can be 'registrable plant' - meaning its design and each installed item must be registered with the regulator before use. Importantly, the model WHS Regulations specifically EXCLUDE 'water slides where water facilitates patrons to slide easily, predominantly under gravity, along a static structure' from this registration requirement (Schedule 5). So a typical gravity-fed waterslide generally does NOT require design or item registration. Waterslides may, however, need to be registered as plant under specific state WHS Regulations - particularly where a slide is powered or uses moving parts and falls into another amusement-device class, or where a state has its own rules. Always confirm your specific device's classification with your regulator.",
           },
           {
             type: "critical",
-            body: "Each state and territory has its own regulator and may have specific requirements for amusement device registration. Examples include SafeWork NSW, WorkSafe Victoria, Workplace Health and Safety Queensland and WorkSafe WA. Operators must be familiar with the requirements of their specific jurisdiction.",
+            body: "Being excluded from registration does NOT remove your safety duties. Even an unregistered gravity waterslide must still be maintained, inspected and tested as necessary, including a thorough inspection by a competent person at least once every 12 months. Inadequate design, installation, inspection, maintenance and training have caused serious waterslide injuries.",
+            source: "Safe Work Australia, Guide for Amusement Devices; WorkSafe WA water slide guidance",
+          },
+          {
+            type: "text",
+            heading: "Which Jurisdictions Require Registration?",
+            body: "There is no Australian jurisdiction that requires a standard gravity-fed waterslide to be plant-registered. The six harmonised states and territories that follow the model WHS Regulations - NSW, Queensland, South Australia, Tasmania, the ACT and the Northern Territory - all apply the same Schedule 5 exclusion for gravity water slides. Western Australia (under its WHS Act 2020 and 2022 regulations) mirrors the model. Victoria runs a separate regime under its OHS Regulations 2017, where 'amusement structures' to which AS 3533.1 applies are registrable plant, subject to listed exceptions. Because the detail and the exceptions differ, operators must check the current requirements with their own regulator rather than assume.",
           },
           {
             type: "text",
             heading: "Design Registration vs Item Registration",
-            body: "Most jurisdictions require two levels of registration. Design registration confirms the ride design meets applicable standards. Item registration confirms that a specific installation of that design has been correctly built, installed and inspected. Both must be current for a waterslide to operate legally.",
+            body: "Where an amusement device IS registrable, there are two distinct levels. Design registration confirms the ride design meets applicable standards and is registered once per design by the designer, manufacturer, importer or supplier. Item registration confirms that a specific installed item of that design has been correctly built, installed and inspected, and is held by the person with management or control of the device. Item registration requires the design to already be registered. For registrable water rides, both must be current to operate legally - but remember a standard gravity waterslide is generally excluded from both.",
           },
           {
             type: "text",
@@ -276,7 +288,7 @@ export const modules: Module[] = [
             heading: "What Operators Should Know About Compliance",
             body: "While compliance management is typically the responsibility of facility management, operators should be aware of the following:",
             items: [
-              "The waterslide must have current plant registration in your state or territory",
+              "The waterslide may need to have current plant registration in your state or territory",
               "Inspection records must be maintained and available for regulatory audit",
               "Any modifications to the ride must be assessed and may require re-registration",
               "Incident notification obligations exist for serious injuries and dangerous occurrences",
@@ -294,8 +306,9 @@ export const modules: Module[] = [
           },
         ],
         keyTakeaways: [
-          "Waterslides must be registered as plant under WHS Regulations",
-          "Both design registration and item registration are typically required",
+          "Typical gravity-fed waterslides are excluded from plant design/item registration under the model WHS Regulations (Schedule 5)",
+          "Waterslides may still need registration in some cases (e.g. powered water rides, or under a state's own rules) - confirm with your regulator",
+          "Exclusion from registration does not remove safety duties: maintenance, inspection and a thorough inspection at least every 12 months still apply",
           "Certain tasks require a competent person with appropriate qualifications",
           "Notifiable incidents must be reported to the regulator immediately",
           "Inspection documentation is a legal requirement",
@@ -303,15 +316,15 @@ export const modules: Module[] = [
         quiz: [
           {
             id: "q-sl-3-1",
-            question: "Under WHS Regulations, waterslides are classified as what?",
+            question: "Under the model WHS Regulations, how is a typical gravity-fed waterslide treated for plant registration?",
             options: [
-              "Recreational equipment",
-              "Building infrastructure",
-              "Registered plant",
-              "Temporary structures",
+              "It must be design and item registered before it can operate",
+              "It is specifically excluded from registration, but is still subject to maintenance and inspection duties",
+              "It only needs registration if it is more than 10 metres tall",
+              "Registration is optional and decided by the facility owner",
             ],
-            correctIndex: 2,
-            explanation: "Waterslides are classified as 'plant' under WHS Regulations and must be registered with the relevant state or territory regulator before operation.",
+            correctIndex: 1,
+            explanation: "Schedule 5 of the model WHS Regulations specifically excludes 'water slides where water facilitates patrons to slide easily, predominantly under gravity, along a static structure' from design and item registration. The slide is still plant and remains subject to the full range of safety duties - maintenance, inspection and a thorough inspection at least every 12 months. Powered water rides or other amusement-device classes may still require registration.",
             type: "knowledge",
           },
           {
@@ -662,15 +675,15 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Real-World Example - Structural Failure",
-            body: "In multiple reported incidents across the industry, fiberglass waterslide sections have cracked or separated due to UV degradation, chemical erosion from pool water and fatigue cracking that went undetected by visual inspection alone. In several cases, subsurface delamination was only discovered after a section failed during operation. Scheduled non-destructive testing (tap testing, ultrasonic thickness measurements) and defined service-life replacement criteria could have prevented these failures.",
-            source: "Based on CPSC incident reports and industry safety bulletins",
+            heading: "Real-World Example - Verrückt, Kansas (2016)",
+            body: "Verrückt, then the world's tallest waterslide, killed 10-year-old Caleb Schwab when the raft he was riding went airborne and struck an overhead structure. Investigations found the ride had been designed using crude trial-and-error methods rather than proper engineering calculations, and an accelerometer test a week before opening had warned that rafts in a certain weight range could go airborne - the ride opened anyway with the design unchanged. It is the clearest modern example of why design must be verified, not assumed.",
+            source: "Verrückt fatality, Schlitterbahn, Kansas City KS, August 2016 (Texas Monthly; TIME; NPR)",
           },
           {
             type: "case-study",
-            heading: "Real-World Example - Dispatch Collision",
-            body: "Dispatch-related collisions are a recurring pattern across the industry. Riders collide at the bottom of enclosed slides because operators dispatched a second rider before the first cleared the runout zone. Common contributing factors include no visual confirmation of the landing area, over-reliance on timed intervals rather than positive confirmation and pressure to increase throughput during busy periods.",
-            source: "Based on industry incident pattern analysis",
+            heading: "Illustrative Scenario - Dispatch Collision",
+            body: "A common dispatch-collision pattern: riders collide at the bottom of an enclosed slide because the operator dispatched a second rider before the first had cleared the runout zone. Typical contributing factors are no visual confirmation of the landing area, over-reliance on timed intervals rather than positive confirmation, and pressure to increase throughput during busy periods. This is an illustrative composite of well-documented dispatch failures, not a single named incident.",
+            source: "Illustrative composite based on common dispatch-collision patterns",
           },
           {
             type: "warning",
@@ -785,7 +798,7 @@ export const modules: Module[] = [
           },
           {
             type: "oem-reference",
-            body: "It is essential that every individual flume is inspected by qualified personnel before each operating day. This inspection should take place before the water supply is turned on.",
+            body: "It is essential that every individual flume is inspected by competent personnel before each operating day. This inspection should take place before the water supply is turned on.",
           },
           {
             type: "diagram",
@@ -847,15 +860,15 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Real-World Example - Insufficient Water Flow",
-            body: "A rider suffered a spinal injury on a high-speed slide after becoming airborne and landing on a hard surface where water flow was insufficient. Inadequate water flow maintenance created dry spots that altered rider trajectory. Regular flow checks, scheduled pump system maintenance and documented flow-rate inspections before daily operation are critical controls to prevent this type of incident.",
-            source: "Based on publicly reported incident, late 1990s",
+            heading: "Illustrative Scenario - Insufficient Water Flow",
+            body: "A rider on a high-speed slide becomes airborne and lands hard on a section where water flow is insufficient, suffering a spinal injury. Inadequate flow maintenance created dry spots that altered the rider's trajectory. Regular flow checks, scheduled pump-system maintenance and documented flow-rate inspections before daily operation are the critical controls. WorkSafe WA's water slide guidance notes that inadequate design, installation, inspection and maintenance have contributed to serious waterslide injuries.",
+            source: "Illustrative scenario; principle per WorkSafe WA Health and Safety Bulletin No. 7 - Water slide health and safety requirements",
           },
           {
             type: "case-study",
-            heading: "Real-World Example - Joint Deterioration",
-            body: "Several incidents at various facilities involved riders' hair or limbs becoming trapped in slide joints or gaps between slide sections, causing lacerations and avulsion injuries. Deteriorated joint covers, gaps from thermal expansion not accounted for and missed findings during routine inspections were common contributing factors. Daily slide surface walk-throughs with documented inspection checklists and immediate closure protocols when gaps exceed manufacturer tolerances are essential prevention measures.",
-            source: "Based on industry incident pattern analysis",
+            heading: "Real-World Example - Joint Entrapment, Mt Albert NZ (2025-26)",
+            body: "Within weeks, two riders were seriously hurt on the same hydroslide at the Mt Albert Aquatic Centre in Auckland. A man's finger was degloved when his ring snagged on a bolt at the slide entrance, and days later a child was thrown against the slide's internal joiners, smashing his front teeth. WorkSafe NZ investigated and returned to the site after the second serious injury. The case shows how protruding fasteners, joint misalignment and gaps between sections - exactly what a daily walk-through is meant to catch - cause real, avoidable injuries.",
+            source: "Mt Albert Aquatic Centre, Auckland NZ, 2025-2026 (NZ Herald; RNZ); WorkSafe NZ investigation",
           },
         ],
         keyTakeaways: [
@@ -1702,7 +1715,16 @@ export const modules: Module[] = [
         content: [
           {
             type: "text",
-            body: "Pre-dispatch is the last point where you can prevent an incident. Once a rider is moving, your control is limited. Every dispatch decision must confirm three things: the rider is eligible, the slide is ready and the exit is clear.",
+            body: "Pre-dispatch is the last point where you can prevent an incident. Once a rider is moving, your control is limited. Every dispatch decision must confirm three things:",
+          },
+          {
+            type: "numbered",
+            body: "",
+            items: [
+              "The rider is eligible",
+              "The slide is ready",
+              "The exit is clear",
+            ],
           },
           {
             type: "diagram",
@@ -2549,8 +2571,18 @@ export const modules: Module[] = [
           },
           {
             heading: "Shutdown vs Monitor Decision",
-            type: "text",
-            body: "Any structural defect (crack, puncture, fracture) = immediate shutdown. Surface defects (chips, scratches, minor scaling) = document and schedule maintenance. Joint issues = assess severity: minor sealant wear is monitored; any lip, gap or sharp edge requires immediate shutdown. When in doubt, shut down. You will never be criticised for being too cautious with safety.",
+            type: "checklist",
+            body: "Use these rules to decide what to do with a defect:",
+            items: [
+              "Structural defect (crack, puncture, fracture) = immediate shutdown",
+              "Surface defect (chips, scratches, minor scaling) = document and schedule maintenance",
+              "Joint issue - minor sealant wear with no lip or gap = monitor during operation",
+              "Joint issue - any lip, gap or sharp edge = immediate shutdown",
+            ],
+          },
+          {
+            type: "warning",
+            body: "When in doubt, shut down. You will never be criticised for being too cautious with safety.",
           },
         ],
         keyTakeaways: [
@@ -2661,7 +2693,7 @@ export const modules: Module[] = [
           },
           {
             type: "oem-reference",
-            body: "Water quality measurements, including LSI and FAC levels, must be recorded at least monthly by qualified personnel in line with local regulations. These records must be kept on file and may be requested by the manufacturer in relation to warranty claims.",
+            body: "Free available chlorine (FAC) and pH are core safety parameters and must be tested frequently throughout each operating day - commonly every few hours, and continuously where automated monitoring is installed. Water balance (the LSI) and its slower-moving inputs such as total alkalinity and calcium hardness are typically checked weekly. Always follow the specific testing frequencies set out in your jurisdiction's public aquatic facility guidelines. All readings must be recorded, kept on file, and may be requested by the manufacturer in relation to warranty claims.",
           },
           {
             type: "diagram",
@@ -2681,16 +2713,22 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Real-World Example - Water Quality Failure",
-            body: "An aquatic facility experienced multiple visitor illness cases linked to inadequate water treatment in interactive water features. Insufficient chlorination levels and inadequate monitoring during high-bather-load periods allowed pathogens to reach unsafe levels. Automated chemical monitoring systems, frequent manual water quality checks during peak periods and proper staff training on water chemistry protocols could have prevented the outbreak.",
-            source: "Based on CDC Aquatic Health Code incident reports",
+            heading: "Illustrative Scenario - Water Quality Failure",
+            body: "An aquatic facility experiences multiple visitor illness cases linked to inadequate water treatment in interactive water features. Insufficient chlorination and inadequate monitoring during high-bather-load periods allowed pathogens to reach unsafe levels. Automated chemical monitoring, frequent manual checks during peak periods and proper staff training on water chemistry protocols are the controls that prevent this. For real reporting and requirements in Australia, follow your state health department's public aquatic facility guidelines rather than overseas codes.",
+            source: "Illustrative scenario; refer to your state guidance, e.g. Victorian Department of Health - Water quality guidelines for public aquatic facilities",
+          },
+          {
+            type: "text",
+            heading: "Follow Your Jurisdiction's Guidelines",
+            body: "Water quality requirements are set by each state and territory, not by a single national code. Victoria's Department of Health publishes the 'Water quality guidelines for public aquatic facilities'; other states have their own (for example NSW Health's public swimming pool and spa pool advisory document, and equivalents in Queensland, WA and SA). These set the specific target ranges and testing frequencies you must meet. Different jurisdictions have different resources and rules - always work to the guideline that applies where your facility operates.",
           },
         ],
         keyTakeaways: [
           "Water quality directly affects slide materials, performance and rider safety",
           "LSI measures scaling vs corrosion tendency - target is near zero",
           "FAC outside limits degrades equipment and creates health or safety risks",
-          "Monthly water quality records are mandatory and may be required for warranty claims",
+          "FAC and pH are tested frequently through the day (often every few hours); water balance (LSI) is typically checked weekly - follow your jurisdiction's guidelines",
+          "All readings must be recorded and may be required for warranty claims",
         ],
         quiz: [
           {
@@ -2711,16 +2749,16 @@ export const modules: Module[] = [
           {
             id: "q6-1-2",
             question:
-              "Why must water quality measurements be documented monthly?",
+              "How often should free available chlorine (FAC) and pH be tested at a public aquatic facility during operation?",
             options: [
-              "For marketing purposes only",
-              "Because local council requires daily reports",
-              "They are required for warranty claims and regulatory compliance",
-              "They are optional but recommended",
+              "Once a month, when the warranty records are compiled",
+              "Once a week, at the same time as the water balance check",
+              "Frequently throughout each operating day - commonly every few hours, or continuously where automated monitoring is installed",
+              "Only when a rider reports the water looks cloudy",
             ],
             correctIndex: 2,
             explanation:
-              "LSI and FAC levels must be recorded monthly by qualified personnel. These records must be maintained and may be requested by the manufacturer for warranty claims.",
+              "FAC and pH are core safety parameters and must be tested frequently throughout the operating day (commonly every few hours, or continuously with automated monitoring) - far more often than monthly. Water balance (LSI) is typically checked weekly. Always follow the testing frequencies in your jurisdiction's public aquatic facility guidelines.",
             type: "knowledge",
           },
           {
@@ -3878,31 +3916,31 @@ export const modules: Module[] = [
           {
             id: "q9-1",
             question:
-              "What standard is commonly referenced for slide maintenance requirements?",
+              "Which Australian standard governs the operation and maintenance of amusement devices including waterslides?",
             options: [
               "ISO 31000",
               "ASTM F1193",
               "EN 1069",
               "AS 3533",
             ],
-            correctIndex: 1,
+            correctIndex: 3,
             explanation:
-              "FRP maintenance and repair guidance references ASTM F1193 standards for water slide maintenance requirements.",
+              "AS 3533 is the governing Australian standard for amusement devices; AS 3533.2 specifically covers operation and maintenance. EN 1069 (European) and ASTM F2376 (American) are supplementary water-slide-specific international standards.",
             type: "knowledge",
           },
           {
             id: "q9-2",
             question:
-              "What water quality measurements must be recorded monthly?",
+              "How often should free available chlorine (FAC) be tested during operation, and how often is water balance (LSI) typically checked?",
             options: [
-              "pH and temperature only",
-              "LSI and FAC levels",
-              "Turbidity and colour",
-              "Chlorine and bromine",
+              "FAC monthly; LSI monthly",
+              "FAC frequently through the day (often every few hours); LSI weekly",
+              "FAC weekly; LSI daily",
+              "FAC and LSI only need checking when water looks cloudy",
             ],
             correctIndex: 1,
             explanation:
-              "LSI (Langelier Saturation Index) and FAC (Free Available Chlorine) levels must be recorded monthly by qualified personnel.",
+              "FAC and pH are core safety parameters tested frequently throughout the operating day - commonly every few hours, or continuously with automated monitoring. Water balance (LSI) is typically checked weekly. Neither is a monthly-only check. Always follow your jurisdiction's public aquatic facility guidelines for exact frequencies.",
             type: "knowledge",
           },
           {

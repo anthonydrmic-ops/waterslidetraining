@@ -19,6 +19,7 @@ import {
   Trophy,
   CaretDown,
   Scales,
+  PersonSimpleSwim,
 } from "@phosphor-icons/react";
 import { modules, getTotalLessons } from "@/data/training-modules";
 import { defaultProgress, refreshProgress, getProgress, getCompletionPercentage, isLessonUnlocked } from "@/lib/progress-store";
@@ -28,7 +29,7 @@ import Link from "next/link";
 const iconMap: Record<string, React.ComponentType<any>> = {
   blueprint: Blueprint,
   clipboard: ListChecks,
-  waves: Drop,
+  waves: PersonSimpleSwim,
   controls: Lightning,
   magnifier: Eye,
   droplet: Drop,
@@ -156,79 +157,76 @@ export default function TrainPage() {
                         : ""
                     }`}
                   >
-                    {/* Outer hexagon-ish shield shape */}
-                    <div
-                      className={`absolute inset-0 rounded-2xl transition-all duration-700 ${
-                        earned
-                          ? "shadow-[0_4px_20px_rgba(0,0,0,0.12),0_0_40px_var(--badge-glow)] group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.18),0_0_60px_var(--badge-glow)]"
-                          : "shadow-none"
-                      }`}
-                      style={{
-                        "--badge-glow": earned ? mod.color + "30" : "transparent",
-                        background: earned
-                          ? `linear-gradient(145deg, ${mod.color}18, ${mod.color}08)`
-                          : "rgba(0,0,0,0.02)",
-                        border: earned
-                          ? `2px solid ${mod.color}30`
-                          : "2px solid rgba(0,0,0,0.04)",
-                      } as React.CSSProperties}
-                    />
-
-                    {/* Inner medal disc */}
-                    <div
-                      className={`absolute inset-[5px] rounded-xl flex items-center justify-center transition-all duration-700 ${
-                        earned
-                          ? ""
-                          : ""
-                      }`}
-                      style={{
-                        background: earned
-                          ? `linear-gradient(145deg, #ffffff, ${mod.color}08)`
-                          : "linear-gradient(145deg, #fafafa, #f0f0f0)",
-                        boxShadow: earned
-                          ? `inset 0 1px 2px rgba(255,255,255,0.8), inset 0 -1px 2px ${mod.color}15, 0 2px 8px rgba(0,0,0,0.06)`
-                          : "inset 0 1px 2px rgba(255,255,255,0.5), 0 1px 3px rgba(0,0,0,0.03)",
-                      }}
-                    >
-                      {/* Metallic rim accent */}
+                    {earned ? (
+                      /* Earned: faceted hexagonal medal - a distinct shape, not just a recoloured square */
                       <div
-                        className="absolute inset-0 rounded-xl"
+                        className="absolute inset-0"
                         style={{
-                          border: earned
-                            ? `1.5px solid ${mod.color}25`
-                            : "1.5px solid rgba(0,0,0,0.04)",
-                          background: earned
-                            ? `linear-gradient(180deg, ${mod.color}10 0%, transparent 40%, ${mod.color}08 100%)`
-                            : "none",
+                          filter: `drop-shadow(0 4px 10px ${mod.color}40) drop-shadow(0 0 16px ${mod.color}33)`,
                         }}
-                      />
-
-                      <Icon
-                        size={28}
-                        weight="fill"
-                        className="relative z-10"
-                        style={{
-                          color: earned ? mod.color : "#ccc",
-                          filter: earned
-                            ? `drop-shadow(0 1px 2px ${mod.color}40)`
-                            : "grayscale(100%)",
-                          opacity: earned ? 1 : 0.3,
-                        }}
-                      />
-                    </div>
-
-                    {/* Shine overlay for earned badges */}
-                    {earned && (
-                      <div
-                        className="absolute inset-[5px] rounded-xl overflow-hidden pointer-events-none"
                       >
+                        {/* Coloured rim hexagon */}
                         <div
-                          className="absolute -inset-full opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                          className="absolute inset-0"
                           style={{
-                            background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.5) 50%, transparent 60%)",
-                            animation: "none",
+                            clipPath:
+                              "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
+                            background: `linear-gradient(145deg, ${mod.color}, ${mod.color}b0)`,
                           }}
                         />
+                        {/* Inner face */}
+                        <div
+                          className="absolute inset-[3px] flex items-center justify-center overflow-hidden"
+                          style={{
+                            clipPath:
+                              "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
+                            background: `linear-gradient(150deg, #ffffff 0%, ${mod.color}12 100%)`,
+                          }}
+                        >
+                          {/* Top sheen */}
+                          <div
+                            className="absolute inset-x-0 top-0 h-1/2"
+                            style={{
+                              background:
+                                "linear-gradient(180deg, rgba(255,255,255,0.7) 0%, transparent 100%)",
+                            }}
+                          />
+                          {/* Hover shine sweep */}
+                          <div
+                            className="absolute -inset-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                            style={{
+                              background:
+                                "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%)",
+                            }}
+                          />
+                          <Icon
+                            size={26}
+                            weight="fill"
+                            className="relative z-10"
+                            style={{
+                              color: mod.color,
+                              filter: `drop-shadow(0 1px 1px ${mod.color}55)`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      /* Locked: plain muted rounded square with a lock */
+                      <div
+                        className="absolute inset-0 rounded-2xl flex items-center justify-center"
+                        style={{
+                          background: "rgba(0,0,0,0.02)",
+                          border: "2px solid rgba(0,0,0,0.05)",
+                        }}
+                      >
+                        <Icon
+                          size={26}
+                          weight="fill"
+                          style={{ color: "#ccc", filter: "grayscale(100%)", opacity: 0.25 }}
+                        />
+                        <div className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-stone-200 flex items-center justify-center">
+                          <Lock size={9} weight="bold" className="text-stone-400" />
+                        </div>
                       </div>
                     )}
                   </div>

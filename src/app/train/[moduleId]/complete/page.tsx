@@ -14,6 +14,7 @@ import {
   ListChecks,
   ArrowRight,
   Trophy,
+  PersonSimpleSwim,
 } from "@phosphor-icons/react";
 import { modules } from "@/data/training-modules";
 import {
@@ -30,7 +31,7 @@ import { redirect } from "next/navigation";
 const badgeIconMap: Record<string, React.ComponentType<any>> = {
   blueprint: Blueprint,
   clipboard: ListChecks,
-  waves: Drop,
+  waves: PersonSimpleSwim,
   controls: Lightning,
   magnifier: Eye,
   droplet: Drop,
@@ -201,14 +202,33 @@ export default function ModuleCompletePage({
                   }}
                 >
                   <div
-                    className="w-14 h-14 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: mod!.color + "15" }}
+                    className="relative w-16 h-16"
+                    style={{ filter: `drop-shadow(0 4px 10px ${mod!.color}40)` }}
                   >
-                    <BadgeIcon
-                      size={28}
-                      weight="duotone"
-                      style={{ color: mod!.color }}
+                    {/* Coloured rim hexagon */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        clipPath:
+                          "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
+                        background: `linear-gradient(145deg, ${mod!.color}, ${mod!.color}b0)`,
+                      }}
                     />
+                    {/* Inner face */}
+                    <div
+                      className="absolute inset-[3px] flex items-center justify-center"
+                      style={{
+                        clipPath:
+                          "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
+                        background: `linear-gradient(150deg, #ffffff 0%, ${mod!.color}12 100%)`,
+                      }}
+                    >
+                      <BadgeIcon
+                        size={28}
+                        weight="fill"
+                        style={{ color: mod!.color, filter: `drop-shadow(0 1px 1px ${mod!.color}55)` }}
+                      />
+                    </div>
                   </div>
                   <div>
                     <p
