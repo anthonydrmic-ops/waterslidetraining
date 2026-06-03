@@ -22,7 +22,7 @@ const JURISDICTIONS: Jurisdiction[] = [
     regulator: "WorkSafe WA",
     note: "Adopted the model WHS laws in 2022 (its own 2020 Act). Uses PCBU.",
     gridColumn: "1",
-    gridRow: "1 / span 2",
+    gridRow: "2",
   },
   {
     code: "NT",
@@ -39,7 +39,7 @@ const JURISDICTIONS: Jurisdiction[] = [
     act: "Work Health and Safety Act 2011",
     regulator: "Workplace Health and Safety Queensland",
     note: "Harmonised model WHS law. Uses PCBU.",
-    gridColumn: "3 / span 2",
+    gridColumn: "3",
     gridRow: "1",
   },
   {
