@@ -9,8 +9,6 @@ interface Meta {
   regulator: string;
   note: string;
   exception?: boolean;
-  /** for tiny jurisdictions (ACT), draw a leader to an offset tag */
-  callout?: { x: number; y: number };
 }
 
 const META: Record<string, Meta> = {
@@ -44,7 +42,6 @@ const META: Record<string, Meta> = {
     act: "Work Health and Safety Act 2011",
     regulator: "WorkSafe ACT",
     note: "Harmonised model WHS law. Uses PCBU.",
-    callout: { x: 542, y: 405 },
   },
   VIC: {
     name: "Victoria",
@@ -58,6 +55,22 @@ const META: Record<string, Meta> = {
     regulator: "WorkSafe Tasmania",
     note: "Harmonised model WHS law. Uses PCBU.",  },
 };
+
+// bounding box of an SVG path made of M/L/Z commands
+function pathBBox(d: string) {
+  const nums = d.replace(/[MLZ]/g, " ").trim().split(/\s+/).map(Number);
+  let a = Infinity, b = -Infinity, c = Infinity, e = -Infinity;
+  for (let i = 0; i < nums.length - 1; i += 2) {
+    const x = nums[i], y = nums[i + 1];
+    if (x < a) a = x;
+    if (x > b) b = x;
+    if (y < c) c = y;
+    if (y > e) e = y;
+  }
+  return { x: a, y: c, w: b - a, h: e - c, cx: (a + b) / 2, cy: (c + e) / 2 };
+}
+
+const INSET_MARGIN = 160; // right-hand space for the magnified ACT inset
 
 export function AustraliaWHSMap() {
   const [active, setActive] = useState<string>("NSW");
@@ -79,8 +92,8 @@ export function AustraliaWHSMap() {
       <div className="flex flex-col md:flex-row gap-5 items-center md:items-stretch">
         {/* Real map */}
         <svg
-          viewBox={`0 0 ${auMap.width} ${auMap.height}`}
-          className="w-full md:w-1/2 h-auto shrink-0"
+          viewBox={`0 0 ${auMap.width + INSET_MARGIN} ${auMap.height}`}
+          className="w-full md:w-[58%] h-auto shrink-0"
           role="group"
           aria-label="Map of Australia - select a state or territory"
         >
@@ -110,37 +123,13 @@ export function AustraliaWHSMap() {
             );
           })}
 
-          {/* Code labels + ACT leader/callout */}
+          {/* Code labels for every jurisdiction except ACT (shown via inset) */}
           {states.map((s) => {
+            if (s.code === "ACT") return null;
             const m = META[s.code];
             if (!m) return null;
             const isActive = s.code === active;
             const color = m.exception ? "#b45309" : "#075985";
-            if (m.callout) {
-              return (
-                <g key={`lbl-${s.code}`} style={{ pointerEvents: "none" }}>
-                  <line
-                    x1={s.cx}
-                    y1={s.cy}
-                    x2={m.callout.x}
-                    y2={m.callout.y}
-                    stroke="#94a3b8"
-                    strokeWidth={1}
-                  />
-                  <circle cx={s.cx} cy={s.cy} r={3} fill={isActive ? "#b45309" : "#475569"} />
-                  <text
-                    x={m.callout.x + 4}
-                    y={m.callout.y + 4}
-                    fontSize="14"
-                    fontWeight="700"
-                    fontFamily="system-ui"
-                    fill={isActive ? color : "#64748b"}
-                  >
-                    {s.code}
-                  </text>
-                </g>
-              );
-            }
             return (
               <text
                 key={`lbl-${s.code}`}
@@ -158,6 +147,76 @@ export function AustraliaWHSMap() {
               </text>
             );
           })}
+
+          {/* Magnified ACT inset (it is too small to click in place) */}
+          {(() => {
+            const act = states.find((s) => s.code === "ACT");
+            if (!act) return null;
+            const isActive = active === "ACT";
+            const base = "#0891b2";
+            const bb = pathBBox(act.d);
+            const size = 62;
+            const s = size / Math.max(bb.w, bb.h);
+            const ix = auMap.width + INSET_MARGIN / 2 - 6;
+            const iy = bb.cy; // keep inset roughly level with real ACT
+            return (
+              <g>
+                {/* leader from real location to the inset */}
+                <line
+                  x1={act.cx}
+                  y1={act.cy}
+                  x2={ix}
+                  y2={iy}
+                  stroke="#94a3b8"
+                  strokeWidth={1}
+                  strokeDasharray="3 3"
+                />
+                <circle cx={act.cx} cy={act.cy} r={3} fill={isActive ? base : "#475569"} />
+                {/* magnification backing */}
+                <circle
+                  cx={ix}
+                  cy={iy}
+                  r={size * 0.72}
+                  fill="#ffffff"
+                  stroke={isActive ? base : "#cbd5e1"}
+                  strokeWidth={1.25}
+                />
+                {/* scaled ACT shape, centred on (ix, iy) */}
+                <g
+                  transform={`translate(${ix} ${iy}) scale(${s}) translate(${-bb.cx} ${-bb.cy})`}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Australian Capital Territory: Work Health and Safety Act 2011"
+                  onMouseEnter={() => setActive("ACT")}
+                  onFocus={() => setActive("ACT")}
+                  onClick={() => setActive("ACT")}
+                  style={{ cursor: "pointer", outline: "none" }}
+                >
+                  <path
+                    d={act.d}
+                    style={{
+                      fill: isActive ? base : `${base}40`,
+                      stroke: base,
+                      strokeWidth: 1.2 / s,
+                      transition: "fill 0.25s ease",
+                    }}
+                  />
+                </g>
+                <text
+                  x={ix}
+                  y={iy + size * 0.72 + 14}
+                  textAnchor="middle"
+                  fontSize="13"
+                  fontWeight="700"
+                  fontFamily="system-ui"
+                  fill={isActive ? "#075985" : "#64748b"}
+                  style={{ pointerEvents: "none" }}
+                >
+                  ACT
+                </text>
+              </g>
+            );
+          })()}
         </svg>
 
         {/* Detail panel */}
