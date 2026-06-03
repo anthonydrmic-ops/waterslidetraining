@@ -796,6 +796,31 @@ function SectionRenderer({ section }: { section: LessonSection }) {
     );
   }
 
+  if (section.type === "numbered") {
+    return (
+      <div>
+        {section.heading && (
+          <h3 className="text-lg font-semibold tracking-tight text-stone-800 mb-3">
+            {section.heading}
+          </h3>
+        )}
+        {section.body && (
+          <p className="text-sm text-stone-400 mb-4 leading-relaxed">{section.body}</p>
+        )}
+        <ol className="space-y-2.5">
+          {section.items?.map((item, i) => (
+            <li key={i} className="flex items-start gap-3 text-sm text-stone-600">
+              <span className="w-6 h-6 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0 text-[11px] font-bold mt-0.5">
+                {i + 1}
+              </span>
+              <span className="leading-relaxed pt-0.5">{item}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    );
+  }
+
   return (
     <div>
       {section.heading && (

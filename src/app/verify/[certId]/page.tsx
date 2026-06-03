@@ -1,6 +1,58 @@
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { Certificate, CheckCircle, XCircle } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
+import type { Metadata } from "next";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://slidesure.com.au";
+
+// Open Graph tags so that when a certificate verification link is shared
+// (e.g. on LinkedIn), the platform renders a rich preview card with an image.
+// TODO (deploy): replace ogImage with a dynamic certificate tile endpoint
+// (e.g. /api/og/certificate?name=...) using @vercel/og for a personalised image.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ certId: string }>;
+}): Promise<Metadata> {
+  const { certId } = await params;
+  const supabase = getSupabaseAdmin();
+
+  let name: string | null = null;
+  if (supabase) {
+    const { data } = await supabase
+      .from("certificates")
+      .select("user_name, verified")
+      .eq("id", certId)
+      .single();
+    if (data?.verified) name = data.user_name;
+  }
+
+  const title = name
+    ? `${name} - SlideSure Certified`
+    : "SlideSure Certificate Verification";
+  const description =
+    "Waterslide Assurance & Competency System - a REST Group product. Verify this certification of competency in waterslide operational safety.";
+  const ogImage = `${APP_URL}/rest-group-logo.png`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${APP_URL}/verify/${certId}`,
+      siteName: "SlideSure",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: "SlideSure Certified" }],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
+    },
+  };
+}
 
 export default async function VerifyPage({
   params,

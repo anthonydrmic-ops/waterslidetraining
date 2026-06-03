@@ -8,6 +8,7 @@ import { DefectRecognition } from "./DefectRecognition";
 import { WaterChemistry } from "./WaterChemistry";
 import { IncidentChain } from "./IncidentChain";
 import { EmergencyResponse } from "./EmergencyResponse";
+import { AustraliaWHSMap } from "./AustraliaWHSMap";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const diagramMap: Record<string, React.ComponentType<any>> = {
@@ -19,6 +20,7 @@ const diagramMap: Record<string, React.ComponentType<any>> = {
   "water-chemistry": WaterChemistry,
   "incident-chain": IncidentChain,
   "emergency-response": EmergencyResponse,
+  "whs-jurisdiction-map": AustraliaWHSMap,
 };
 
 export function Diagram({ id }: { id: string }) {
