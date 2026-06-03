@@ -19,6 +19,7 @@ import {
   Trophy,
   CaretDown,
   Scales,
+  PersonSimpleSwim,
 } from "@phosphor-icons/react";
 import { modules, getTotalLessons } from "@/data/training-modules";
 import { defaultProgress, refreshProgress, getProgress, getCompletionPercentage, isLessonUnlocked } from "@/lib/progress-store";
@@ -28,7 +29,7 @@ import Link from "next/link";
 const iconMap: Record<string, React.ComponentType<any>> = {
   blueprint: Blueprint,
   clipboard: ListChecks,
-  waves: Drop,
+  waves: PersonSimpleSwim,
   controls: Lightning,
   magnifier: Eye,
   droplet: Drop,

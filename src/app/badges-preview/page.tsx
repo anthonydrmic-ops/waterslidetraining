@@ -11,6 +11,7 @@ import {
   ListChecks,
   Lock,
   Scales,
+  PersonSimpleSwim,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react";
 import { modules } from "@/data/training-modules";
@@ -18,7 +19,7 @@ import { modules } from "@/data/training-modules";
 const iconMap: Record<string, PhosphorIcon> = {
   blueprint: Blueprint,
   clipboard: ListChecks,
-  waves: Drop,
+  waves: PersonSimpleSwim,
   controls: Lightning,
   magnifier: Eye,
   droplet: Drop,

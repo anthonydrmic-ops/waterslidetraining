@@ -14,6 +14,7 @@ import {
   ListChecks,
   ArrowRight,
   Trophy,
+  PersonSimpleSwim,
 } from "@phosphor-icons/react";
 import { modules } from "@/data/training-modules";
 import {
@@ -30,7 +31,7 @@ import { redirect } from "next/navigation";
 const badgeIconMap: Record<string, React.ComponentType<any>> = {
   blueprint: Blueprint,
   clipboard: ListChecks,
-  waves: Drop,
+  waves: PersonSimpleSwim,
   controls: Lightning,
   magnifier: Eye,
   droplet: Drop,
