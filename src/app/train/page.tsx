@@ -39,6 +39,20 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   scales: Scales,
 };
 
+// The next lesson the user should do: the first unlocked, not-yet-completed
+// lesson in order. Drives the resume banner and the auto-expanded module.
+function findResumeTarget(completedLessons: string[]) {
+  for (const m of modules) {
+    const idx = m.lessons.findIndex(
+      (l) => !completedLessons.includes(l.id) && isLessonUnlocked(l.id, modules)
+    );
+    if (idx !== -1) {
+      return { module: m, lesson: m.lessons[idx], lessonNumber: idx + 1, total: m.lessons.length };
+    }
+  }
+  return null;
+}
+
 const stagger = {
   hidden: {},
   show: {
@@ -61,17 +75,46 @@ export default function TrainPage() {
   const [mounted, setMounted] = useState(false);
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
   const [showAssessmentPrompt, setShowAssessmentPrompt] = useState(false);
+  const [newlyEarned, setNewlyEarned] = useState<string[]>([]);
 
   useEffect(() => {
     refreshProgress().then((p) => {
       setProgress(p);
       setMounted(true);
+
+      // Detect badges earned since the user last saw this page, so they can be
+      // celebrated with a one-time "announce" animation rather than appearing
+      // silently. Seen badges are remembered in localStorage.
+      try {
+        const SEEN_KEY = "slidesure-seen-badges";
+        const earned = (p.completedModules ?? []).filter((id) => id !== "assessment");
+        const seen: string[] = JSON.parse(localStorage.getItem(SEEN_KEY) || "[]");
+        const fresh = earned.filter((id) => !seen.includes(id));
+        if (fresh.length > 0) setNewlyEarned(fresh);
+        localStorage.setItem(SEEN_KEY, JSON.stringify(earned));
+      } catch {
+        /* localStorage unavailable — skip the celebration, no harm done */
+      }
+
+      // Land the user looking at exactly where they left off by opening the
+      // module that holds their next lesson (assessment has no body to open).
+      const rt = findResumeTarget(p.completedLessons);
+      if (rt && rt.module.id !== "assessment") {
+        setExpandedModule(rt.module.id);
+      }
     });
   }, []);
 
   const totalLessons = getTotalLessons();
   const completionPct = mounted ? getCompletionPercentage(totalLessons) : 0;
   const completedCount = mounted ? progress.completedLessons.length : 0;
+
+  const resumeTarget = mounted ? findResumeTarget(progress.completedLessons) : null;
+  const hasStarted = completedCount > 0;
+
+  const ResumeIcon = resumeTarget
+    ? iconMap[resumeTarget.module.icon] || ShieldCheck
+    : ShieldCheck;
 
   return (
     <div className="min-h-[100dvh] bg-[var(--background)] relative">
@@ -113,6 +156,22 @@ export default function TrainPage() {
                 </span>
               </div>
             )}
+            {/* Compact progress for small screens */}
+            {mounted && (
+              <div className="flex md:hidden items-center gap-2">
+                <div className="w-14 h-1.5 rounded-full bg-stone-200/60 overflow-hidden">
+                  <motion.div
+                    className="h-full rounded-full bg-[var(--accent)]"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${completionPct}%` }}
+                    transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
+                  />
+                </div>
+                <span className="text-[11px] font-mono font-semibold text-stone-600">
+                  {completionPct}%
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </nav>
@@ -132,7 +191,7 @@ export default function TrainPage() {
             <h1 className="text-3xl md:text-4xl font-bold tracking-tighter text-stone-900 mb-2">
               Your Training Path
             </h1>
-            <p className="text-stone-400 text-base max-w-[55ch] leading-relaxed">
+            <p className="text-stone-500 text-base max-w-[55ch] leading-relaxed">
               Work through each module sequentially. Complete all lessons and pass
               the final assessment to earn your certification.
             </p>
@@ -143,13 +202,32 @@ export default function TrainPage() {
             {modules.filter((m) => m.id !== "assessment").map((mod) => {
               const Icon = iconMap[mod.icon] || ShieldCheck;
               const earned = mounted && progress.completedModules?.includes(mod.id);
+              const isNew = earned && newlyEarned.includes(mod.id);
               return (
-                <div
+                <motion.div
                   key={mod.id}
-                  className="group"
+                  className="group relative"
                   title={`${mod.badge.label}${earned ? " - Earned" : " - Locked"}`}
                   style={{ perspective: "600px" }}
+                  initial={isNew ? { scale: 0.4, opacity: 0 } : false}
+                  animate={isNew ? { scale: 1, opacity: 1 } : undefined}
+                  transition={
+                    isNew
+                      ? {
+                          type: "spring",
+                          stiffness: 320,
+                          damping: 15,
+                          delay: 0.3 + newlyEarned.indexOf(mod.id) * 0.14,
+                        }
+                      : undefined
+                  }
                 >
+                  {isNew && (
+                    <span
+                      className="badge-ring"
+                      style={{ border: `2px solid ${mod.color}` }}
+                    />
+                  )}
                   <div
                     className={`relative w-[68px] h-[68px] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
                       earned
@@ -230,7 +308,7 @@ export default function TrainPage() {
                       </div>
                     )}
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -262,6 +340,56 @@ export default function TrainPage() {
                     </p>
                   </div>
                   <ArrowRight size={16} className="text-emerald-400 shrink-0" />
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+        )}
+
+        {/* Resume / Start banner — drops the user straight back into their next lesson */}
+        {mounted && !progress.certified && resumeTarget && (
+          <motion.div
+            initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+            className="mb-8"
+          >
+            <Link href={`/train/${resumeTarget.module.id}/${resumeTarget.lesson.id}`}>
+              <div
+                className="card-shell"
+                style={{
+                  background: `color-mix(in srgb, ${resumeTarget.module.color} 5%, transparent)`,
+                  borderColor: `color-mix(in srgb, ${resumeTarget.module.color} 16%, transparent)`,
+                }}
+              >
+                <div className="card-core p-5 flex items-center gap-4 group transition-colors duration-300 hover:bg-white/40">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: `color-mix(in srgb, ${resumeTarget.module.color} 14%, transparent)` }}
+                  >
+                    <ResumeIcon size={24} weight="duotone" style={{ color: resumeTarget.module.color }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p
+                      className="text-[10px] font-semibold uppercase tracking-wider mb-0.5"
+                      style={{ color: resumeTarget.module.color }}
+                    >
+                      {hasStarted ? "Resume training" : "Start training"}
+                    </p>
+                    <p className="text-sm font-semibold text-stone-800 truncate">
+                      {resumeTarget.module.title} &middot; {resumeTarget.lesson.title}
+                    </p>
+                    <p className="text-xs text-stone-400 mt-0.5">
+                      Lesson {resumeTarget.lessonNumber} of {resumeTarget.total} &middot; {resumeTarget.lesson.duration}
+                    </p>
+                  </div>
+                  <span className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-900 text-white text-sm font-medium group-hover:bg-stone-800 transition-colors duration-300 shrink-0">
+                    {hasStarted ? "Continue" : "Begin"}
+                    <ArrowRight
+                      size={14}
+                      className="group-hover:translate-x-0.5 transition-transform duration-300"
+                    />
+                  </span>
                 </div>
               </div>
             </Link>
@@ -381,7 +509,7 @@ export default function TrainPage() {
                           <h2 className="text-lg md:text-xl font-bold tracking-tight text-stone-800 mb-1">
                             {mod.title}
                           </h2>
-                          <p className={`text-sm text-stone-400 leading-relaxed max-w-[65ch] transition-all duration-500 ${isExpanded ? "opacity-100" : "opacity-70"}`}>
+                          <p className={`text-sm text-stone-500 leading-relaxed max-w-[65ch] transition-all duration-500 ${isExpanded ? "opacity-100" : "opacity-70"}`}>
                             {mod.description}
                           </p>
                           {isAssessmentLocked && (

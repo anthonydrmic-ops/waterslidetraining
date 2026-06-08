@@ -16,6 +16,8 @@ import {
 } from "@/lib/progress-store";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { CertifiedSkeleton } from "@/components/TrainSkeletons";
+import { GuillocheBackdrop, FoilSeal } from "@/components/CertificateArtwork";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16, filter: "blur(6px)" },
@@ -45,6 +47,8 @@ export default function CertifiedPage() {
   const [mounted, setMounted] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
+  const [certId, setCertId] = useState<string | null>(null);
+  const [qrDataUrl, setQrDataUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const certRef = useRef<HTMLDivElement>(null);
 
@@ -59,13 +63,38 @@ export default function CertifiedPage() {
       // Build the public verification URL so a LinkedIn share renders a rich
       // preview card (with the certificate's Open Graph image) rather than text only.
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://slidesure.com.au";
-      const certId =
+      const storedCertId =
         typeof window !== "undefined"
           ? localStorage.getItem("slidesure-cert-id")
           : null;
-      setShareUrl(certId ? `${appUrl}/verify/${certId}` : appUrl);
+      setCertId(storedCertId);
+      setShareUrl(storedCertId ? `${appUrl}/verify/${storedCertId}` : appUrl);
     });
   }, []);
+
+  // Generate the verification QR code (points at the public /verify URL) once the
+  // share URL is known. Loaded on demand to keep it out of the initial bundle.
+  useEffect(() => {
+    if (!shareUrl) return;
+    let cancelled = false;
+    import("qrcode")
+      .then((mod) =>
+        mod.toDataURL(shareUrl, {
+          margin: 1,
+          width: 240,
+          color: { dark: "#0B3A66", light: "#ffffff" },
+        })
+      )
+      .then((url) => {
+        if (!cancelled) setQrDataUrl(url);
+      })
+      .catch(() => {
+        /* QR is decorative-with-purpose; if it fails the cert still renders */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [shareUrl]);
 
   const handleCopyCaption = useCallback(async () => {
     try {
@@ -121,11 +150,7 @@ export default function CertifiedPage() {
   }, [userName]);
 
   if (!mounted) {
-    return (
-      <div className="min-h-[100dvh] bg-[var(--background)]">
-        <div className="noise-overlay" />
-      </div>
-    );
+    return <CertifiedSkeleton />;
   }
 
   return (
@@ -193,44 +218,99 @@ export default function CertifiedPage() {
             <div className="card-shell">
               <div className="card-core p-2">
                 {/* Certificate Preview */}
-                <div ref={certRef} className="rounded-[calc(1.25rem-2px)] bg-white p-8 md:p-12 text-center">
-                  <div className="flex justify-center mb-6">
-                    <img src="/rest-group-logo.png" alt="REST Group" width={80} height={80} className="rounded-2xl" />
-                  </div>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400 mb-2 font-medium">
-                    Certificate of Competency
-                  </p>
-                  <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-stone-900 mb-1">
-                    Slide<span className="text-[var(--cta)]">Sure</span>
-                  </h2>
-                  <p className="text-sm text-stone-400 mb-8">
-                    Waterslide Assurance &amp; Competency System
-                  </p>
-                  <div className="border-t border-b border-stone-100 py-7 mb-7">
-                    <p className="text-[11px] text-stone-400 mb-1 uppercase tracking-wider">
-                      This certifies that
-                    </p>
-                    <p className="text-2xl font-bold tracking-tight text-stone-900">{userName}</p>
-                    <p className="text-sm text-stone-400 mt-3 max-w-[45ch] mx-auto leading-relaxed">
-                      has successfully completed the SlideSure Waterslide Assurance
-                      &amp; Competency program and demonstrated competency in operational
-                      safety, defect recognition, and incident prevention.
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-center">
-                    <div>
-                      <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Date</p>
-                      <p className="text-sm font-semibold text-stone-800">{certDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Status</p>
-                      <p className="text-sm font-semibold text-emerald-600">Passed</p>
-                    </div>
-                  </div>
-                  <p className="text-[10px] text-stone-300 mt-2 leading-relaxed">
-                    A REST Group product. Standards-aligned waterslide operator training.
-                  </p>
+                <div
+                  ref={certRef}
+                  className="relative overflow-hidden rounded-[calc(1.25rem-2px)] bg-white p-8 md:p-12 text-center"
+                >
+                  <GuillocheBackdrop />
 
+                  {/* Faint security-print watermark behind the content */}
+                  <img
+                    src="/rest-group-logo.png"
+                    alt=""
+                    aria-hidden
+                    className="pointer-events-none absolute left-1/2 top-1/2 w-56 -translate-x-1/2 -translate-y-1/2 opacity-[0.04]"
+                  />
+
+                  <div className="relative z-10">
+                    <div className="flex justify-center mb-6">
+                      <img src="/rest-group-logo.png" alt="REST Group" width={72} height={72} className="rounded-2xl" />
+                    </div>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400 mb-2 font-medium">
+                      Certificate of Competency
+                    </p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-stone-900 mb-1">
+                      Slide<span className="text-[var(--cta)]">Sure</span>
+                    </h2>
+                    <p className="text-sm text-stone-400 mb-8">
+                      Waterslide Assurance &amp; Competency System
+                    </p>
+                    <div className="border-t border-b border-stone-100 py-7 mb-7">
+                      <p className="text-[11px] text-stone-400 mb-1 uppercase tracking-wider">
+                        This certifies that
+                      </p>
+                      <p className="text-2xl font-bold tracking-tight text-stone-900">{userName}</p>
+                      <p className="text-sm text-stone-400 mt-3 max-w-[45ch] mx-auto leading-relaxed">
+                        has successfully completed the SlideSure Waterslide Assurance
+                        &amp; Competency program and demonstrated competency in operational
+                        safety, defect recognition, and incident prevention.
+                      </p>
+                    </div>
+                    <div className="flex items-start justify-center gap-8 flex-wrap">
+                      <div>
+                        <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Date</p>
+                        <p className="text-sm font-semibold text-stone-800">{certDate}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Status</p>
+                        <p className="text-sm font-semibold text-emerald-600">Passed</p>
+                      </div>
+                      {certId && (
+                        <div>
+                          <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">
+                            Certificate ID
+                          </p>
+                          <p className="text-xs font-mono font-semibold text-stone-700">{certId}</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Signature · Foil seal · Verification QR */}
+                    <div className="flex items-end justify-between gap-4 mt-9">
+                      <div className="text-left">
+                        <p className="font-serif italic text-lg text-stone-700 leading-none">
+                          REST Group
+                        </p>
+                        <div className="w-32 border-t border-stone-300 mt-1.5 mb-1" />
+                        <p className="text-[9px] uppercase tracking-wider text-stone-400">
+                          Authorised Signatory
+                        </p>
+                      </div>
+
+                      <FoilSeal size={72} />
+
+                      <div className="flex flex-col items-center">
+                        {qrDataUrl ? (
+                          <img
+                            src={qrDataUrl}
+                            alt="Scan to verify this certificate"
+                            width={60}
+                            height={60}
+                            className="rounded-md border border-stone-100"
+                          />
+                        ) : (
+                          <div className="w-[60px] h-[60px] rounded-md bg-stone-50 border border-stone-100" />
+                        )}
+                        <p className="text-[8px] uppercase tracking-wider text-stone-400 mt-1">
+                          Scan to verify
+                        </p>
+                      </div>
+                    </div>
+
+                    <p className="text-[10px] text-stone-300 mt-8 leading-relaxed">
+                      A REST Group product. Standards-aligned waterslide operator training.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { MotionProvider } from "@/components/MotionProvider";
 
 export default async function TrainLayout({
   children,
@@ -10,7 +11,7 @@ export default async function TrainLayout({
 }) {
   const headersList = await headers();
   if (headersList.get("x-dev-bypass") === "true") {
-    return <>{children}</>;
+    return <MotionProvider>{children}</MotionProvider>;
   }
 
   let userId: string | null = null;
@@ -18,7 +19,7 @@ export default async function TrainLayout({
     const authResult = await auth();
     userId = authResult.userId;
   } catch {
-    return <>{children}</>;
+    return <MotionProvider>{children}</MotionProvider>;
   }
 
   if (!userId) {
@@ -51,5 +52,5 @@ export default async function TrainLayout({
     }
   }
 
-  return <>{children}</>;
+  return <MotionProvider>{children}</MotionProvider>;
 }

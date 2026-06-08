@@ -143,3 +143,98 @@ html {
     padding-bottom: 8rem;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Loading skeletons — branded ghost surfaces with a slow shimmer sweep.
+   Used in place of blank screens while progress hydrates.
+--------------------------------------------------------------------------- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.045);
+  border-radius: 0.75rem;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  animation: skeleton-sweep 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes skeleton-sweep {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Newly-earned badge announce — a one-time expanding ring + soft glow pulse.
+--------------------------------------------------------------------------- */
+.badge-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: badge-ring 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes badge-ring {
+  0% {
+    transform: scale(0.55);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Wrong-answer feedback — a brief horizontal shake on an incorrectly chosen
+   quiz option once the answer is submitted. Tactile, reinforces the miss.
+--------------------------------------------------------------------------- */
+.shake {
+  animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility — honour the user's reduced-motion preference for any
+   CSS keyframe animation (framer-motion is handled separately via MotionConfig).
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .skeleton::after {
+    animation: none;
+  }
+}

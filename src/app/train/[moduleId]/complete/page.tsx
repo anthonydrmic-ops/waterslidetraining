@@ -26,6 +26,7 @@ import {
 } from "@/lib/progress-store";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { CenteredCardSkeleton } from "@/components/TrainSkeletons";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const badgeIconMap: Record<string, React.ComponentType<any>> = {
@@ -128,11 +129,7 @@ export default function ModuleCompletePage({
       : null;
 
   if (!mounted) {
-    return (
-      <div className="min-h-[100dvh] bg-[var(--background)]">
-        <div className="noise-overlay" />
-      </div>
-    );
+    return <CenteredCardSkeleton />;
   }
 
   return (

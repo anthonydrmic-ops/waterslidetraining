@@ -2,7 +2,14 @@
 
 import { use, useState, useEffect, useCallback, useMemo } from "react";
 import confetti from "canvas-confetti";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  animate,
+  useReducedMotion,
+} from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,6 +24,7 @@ import {
   X,
   Trophy,
   Certificate,
+  Clock,
 } from "@phosphor-icons/react";
 import {
   modules,
@@ -101,6 +109,14 @@ export default function LessonPage({
   const [certName, setCertName] = useState("");
   const [quizAttempt, setQuizAttempt] = useState(0);
 
+  // Scroll-linked reading progress, themed in the module's colour.
+  const { scrollYProgress } = useScroll();
+  const readingProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    mass: 0.4,
+  });
+
   const shuffledQuiz = useMemo(() => {
     if (!lesson.quiz) return [];
     const rng = mulberry32(hashSeed(`${moduleId}:${lessonId}:${quizAttempt}`));
@@ -149,12 +165,41 @@ export default function LessonPage({
     prevLink = `/train/${prevMod.id}/${prevMod.lessons[prevMod.lessons.length - 1].id}`;
   }
 
+  // A preview of what comes after this lesson, used by the "Up next" card so
+  // finishing one lesson flows straight into the next without a detour home.
+  let nextLessonInfo:
+    | { title: string; duration: string; moduleTitle: string; color: string; isNewModule: boolean }
+    | null = null;
+
   if (currentLessonIndex < mod.lessons.length - 1) {
-    nextLink = `/train/${moduleId}/${mod.lessons[currentLessonIndex + 1].id}`;
+    const nl = mod.lessons[currentLessonIndex + 1];
+    nextLink = `/train/${moduleId}/${nl.id}`;
+    nextLessonInfo = { title: nl.title, duration: nl.duration, moduleTitle: mod.title, color: mod.color, isNewModule: false };
   } else if (currentModIndex < modules.length - 1) {
     const nextMod = modules[currentModIndex + 1];
-    nextLink = `/train/${nextMod.id}/${nextMod.lessons[0].id}`;
+    const nl = nextMod.lessons[0];
+    nextLink = `/train/${nextMod.id}/${nl.id}`;
+    nextLessonInfo = { title: nl.title, duration: nl.duration, moduleTitle: nextMod.title, color: nextMod.color, isNewModule: true };
   }
+
+  // Keyboard navigation: ← previous lesson, → next (only when this one is done,
+  // mirroring the on-screen gating). Ignored while typing in a field.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = e.target as HTMLElement | null;
+      if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable)) {
+        return;
+      }
+      if (e.key === "ArrowLeft" && prevLink) {
+        router.push(prevLink);
+      } else if (e.key === "ArrowRight" && nextLink && isCompleted) {
+        router.push(nextLink);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [prevLink, nextLink, isCompleted, router]);
 
   const isFinalAssessment = moduleId === "assessment";
   const quizScore = mounted ? progress.quizScores[lessonId] : null;
@@ -254,6 +299,14 @@ export default function LessonPage({
     router.push("/train/certified");
   }, [certName, router]);
 
+  // The first text section reads as a "lede" — larger, darker opening paragraph.
+  const ledeIndex = lesson.content.findIndex((s) => s.type === "text");
+
+  // Show the rich "Up next" preview once this lesson is done and another follows,
+  // making it the single forward action (the plain Next button steps aside).
+  const showUpNext =
+    mounted && isCompleted && !!nextLink && !!nextLessonInfo && !moduleCumulativeResult;
+
   // Calculate lesson position
   let globalLessonIndex = 0;
   let totalGlobalLessons = 0;
@@ -267,8 +320,18 @@ export default function LessonPage({
   }
 
   return (
-    <div className="min-h-[100dvh] bg-[var(--background)] relative">
+    <div
+      className="min-h-[100dvh] bg-[var(--background)] relative"
+      style={{ "--mod": mod.color } as React.CSSProperties}
+    >
       <div className="noise-overlay" />
+
+      {/* Scroll-linked reading progress — themed to this module */}
+      <motion.div
+        aria-hidden
+        className="fixed top-0 left-0 right-0 h-[2px] origin-left z-[55]"
+        style={{ scaleX: readingProgress, background: mod.color }}
+      />
 
       {/* Floating Nav */}
       <nav className="fixed top-0 left-0 right-0 z-40 px-4 pt-5">
@@ -323,13 +386,21 @@ export default function LessonPage({
             <h1 className="text-2xl md:text-3xl font-bold tracking-tighter text-stone-900 mb-2">
               {lesson.title}
             </h1>
+            <div className="flex items-center gap-1.5 text-[13px] text-stone-400 font-medium">
+              <Clock size={14} weight="duotone" style={{ color: mod.color }} />
+              <span>{lesson.duration} read</span>
+            </div>
           </motion.div>
 
           {/* Content sections */}
           <div className="space-y-6">
             {lesson.content.map((section, i) => (
               <motion.div key={i} variants={fadeUp}>
-                <SectionRenderer section={section} />
+                <SectionRenderer
+                  section={section}
+                  accent={mod.color}
+                  isLede={i === ledeIndex}
+                />
               </motion.div>
             ))}
           </div>
@@ -337,10 +408,16 @@ export default function LessonPage({
           {/* Key Takeaways */}
           {lesson.keyTakeaways.length > 0 && (
             <motion.div variants={fadeUp} className="mt-12">
-              <div className="card-shell" style={{ background: "rgba(11, 58, 102, 0.04)", borderColor: "rgba(11, 58, 102, 0.08)" }}>
+              <div
+                className="card-shell"
+                style={{
+                  background: `color-mix(in srgb, ${mod.color} 5%, transparent)`,
+                  borderColor: `color-mix(in srgb, ${mod.color} 14%, transparent)`,
+                }}
+              >
                 <div className="card-core p-6 md:p-7">
                   <h3 className="text-sm font-semibold mb-4 flex items-center gap-2 text-stone-800">
-                    <BookOpen size={17} weight="duotone" className="text-[var(--accent)]" />
+                    <BookOpen size={17} weight="duotone" style={{ color: mod.color }} />
                     Key Takeaways
                   </h3>
                   <ul className="space-y-3">
@@ -352,7 +429,8 @@ export default function LessonPage({
                         <Check
                           size={15}
                           weight="bold"
-                          className="text-[var(--accent)] mt-0.5 shrink-0"
+                          className="mt-0.5 shrink-0"
+                          style={{ color: mod.color }}
                         />
                         {takeaway}
                       </li>
@@ -389,7 +467,8 @@ export default function LessonPage({
                         {/* Progress bar */}
                         <div className="w-full h-1.5 rounded-full bg-stone-100 mb-8 overflow-hidden">
                           <motion.div
-                            className="h-full rounded-full bg-[var(--accent)]"
+                            className="h-full rounded-full"
+                            style={{ background: "var(--mod)" }}
                             initial={false}
                             animate={{ width: `${((currentQuizIndex + 1) / shuffledQuiz.length) * 100}%` }}
                             transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
@@ -410,6 +489,7 @@ export default function LessonPage({
                               <QuizQuestionCard
                                 question={shuffledQuiz[currentQuizIndex]}
                                 index={currentQuizIndex}
+                                accent={mod.color}
                                 selected={quizAnswers[shuffledQuiz[currentQuizIndex].id]}
                                 onSelect={(optIndex) => {
                                   setQuizAnswers((prev) => ({
@@ -471,6 +551,7 @@ export default function LessonPage({
                               key={q.id}
                               question={q}
                               index={qi}
+                              accent={mod.color}
                               selected={quizAnswers[q.id]}
                               onSelect={() => {}}
                               submitted={true}
@@ -500,10 +581,55 @@ export default function LessonPage({
                   </div>
                 </div>
           </motion.div>
+          {/* Up next — a peek at the following lesson so momentum carries over */}
+          {showUpNext && nextLessonInfo && nextLink && (
+            <motion.div variants={fadeUp} className="mt-14">
+              <Link href={nextLink} className="group block">
+                <div
+                  className="card-shell"
+                  style={{
+                    background: `color-mix(in srgb, ${nextLessonInfo.color} 5%, transparent)`,
+                    borderColor: `color-mix(in srgb, ${nextLessonInfo.color} 16%, transparent)`,
+                  }}
+                >
+                  <div className="card-core p-5 flex items-center gap-4 transition-colors duration-300 group-hover:bg-white/40">
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: `color-mix(in srgb, ${nextLessonInfo.color} 14%, transparent)` }}
+                    >
+                      <ArrowRight size={20} weight="bold" style={{ color: nextLessonInfo.color }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p
+                        className="text-[10px] font-semibold uppercase tracking-wider mb-0.5"
+                        style={{ color: nextLessonInfo.color }}
+                      >
+                        {nextLessonInfo.isNewModule ? "Next module" : "Up next"}
+                      </p>
+                      <p className="text-sm font-semibold text-stone-800 truncate">
+                        {nextLessonInfo.title}
+                      </p>
+                      <p className="text-xs text-stone-400 mt-0.5 truncate">
+                        {nextLessonInfo.moduleTitle} &middot; {nextLessonInfo.duration}
+                      </p>
+                    </div>
+                    <span className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-stone-600 group-hover:text-stone-900 transition-colors duration-300 shrink-0">
+                      Continue
+                      <ArrowRight
+                        size={14}
+                        className="group-hover:translate-x-0.5 transition-transform duration-300"
+                      />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          )}
+
           {/* Navigation */}
           <motion.div
             variants={fadeUp}
-            className="mt-14 flex items-center justify-between gap-4"
+            className={`${showUpNext ? "mt-4" : "mt-14"} flex items-center justify-between gap-4`}
           >
             {prevLink ? (
               <Link
@@ -537,6 +663,9 @@ export default function LessonPage({
                   className="group-hover:translate-x-0.5 transition-transform duration-300"
                 />
               </button>
+            ) : showUpNext ? (
+              /* Forward action lives in the Up next card above */
+              <div />
             ) : nextLink && isCompleted ? (
               <Link
                 href={nextLink}
@@ -699,17 +828,59 @@ export default function LessonPage({
   );
 }
 
-function SectionRenderer({ section }: { section: LessonSection }) {
+/** Section heading with a short module-coloured accent tick for visual rhythm. */
+function SectionHeading({
+  children,
+  accent,
+}: {
+  children: React.ReactNode;
+  accent: string;
+}) {
+  return (
+    <h3 className="text-lg font-semibold tracking-tight text-stone-800 mb-3 flex items-center gap-2.5">
+      <span
+        aria-hidden
+        className="inline-block w-[3px] h-[1.05em] rounded-full shrink-0"
+        style={{ backgroundColor: accent }}
+      />
+      <span>{children}</span>
+    </h3>
+  );
+}
+
+/** Animated count-up for a percentage, honouring reduced-motion. */
+function CountUpPct({ value }: { value: number }) {
+  const reduce = useReducedMotion();
+  const [display, setDisplay] = useState(0);
+  useEffect(() => {
+    if (reduce) return; // reduced motion renders the final value directly below
+    const controls = animate(0, value, {
+      duration: 0.9,
+      ease: [0.32, 0.72, 0, 1],
+      onUpdate: (v) => setDisplay(Math.round(v)),
+    });
+    return () => controls.stop();
+  }, [value, reduce]);
+  return <>{reduce ? value : display}%</>;
+}
+
+function SectionRenderer({
+  section,
+  accent,
+  isLede = false,
+}: {
+  section: LessonSection;
+  accent: string;
+  isLede?: boolean;
+}) {
   if (section.type === "diagram" && section.diagramId) {
     return (
       <div className="w-full max-w-full">
         {section.heading && (
-          <h3 className="text-lg font-semibold tracking-tight text-stone-800 mb-3">
-            {section.heading}
-          </h3>
+          <SectionHeading accent={accent}>{section.heading}</SectionHeading>
         )}
         {section.body && (
-          <p className="text-sm text-stone-400 leading-relaxed mb-3">{section.body}</p>
+          <p className="text-sm text-stone-500 leading-relaxed mb-3">{section.body}</p>
         )}
         <Diagram id={section.diagramId} />
       </div>
@@ -802,18 +973,17 @@ function SectionRenderer({ section }: { section: LessonSection }) {
     return (
       <div>
         {section.heading && (
-          <h3 className="text-lg font-semibold tracking-tight text-stone-800 mb-3">
-            {section.heading}
-          </h3>
+          <SectionHeading accent={accent}>{section.heading}</SectionHeading>
         )}
-        <p className="text-sm text-stone-400 mb-4 leading-relaxed">{section.body}</p>
+        <p className="text-sm text-stone-500 mb-4 leading-relaxed">{section.body}</p>
         <ul className="space-y-2.5">
           {section.items?.map((item, i) => (
             <li key={i} className="flex items-start gap-3 text-sm text-stone-600">
               <ListChecks
                 size={15}
                 weight="duotone"
-                className="text-[var(--accent)] mt-0.5 shrink-0"
+                className="mt-0.5 shrink-0"
+                style={{ color: accent }}
               />
               <span className="leading-relaxed">{item}</span>
             </li>
@@ -827,17 +997,21 @@ function SectionRenderer({ section }: { section: LessonSection }) {
     return (
       <div>
         {section.heading && (
-          <h3 className="text-lg font-semibold tracking-tight text-stone-800 mb-3">
-            {section.heading}
-          </h3>
+          <SectionHeading accent={accent}>{section.heading}</SectionHeading>
         )}
         {section.body && (
-          <p className="text-sm text-stone-400 mb-4 leading-relaxed">{section.body}</p>
+          <p className="text-sm text-stone-500 mb-4 leading-relaxed">{section.body}</p>
         )}
         <ol className="space-y-2.5">
           {section.items?.map((item, i) => (
             <li key={i} className="flex items-start gap-3 text-sm text-stone-600">
-              <span className="w-6 h-6 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] flex items-center justify-center shrink-0 text-[11px] font-bold mt-0.5">
+              <span
+                className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[11px] font-bold mt-0.5"
+                style={{
+                  backgroundColor: `color-mix(in srgb, ${accent} 12%, transparent)`,
+                  color: accent,
+                }}
+              >
                 {i + 1}
               </span>
               <span className="leading-relaxed pt-0.5">{item}</span>
@@ -851,11 +1025,15 @@ function SectionRenderer({ section }: { section: LessonSection }) {
   return (
     <div>
       {section.heading && (
-        <h3 className="text-lg font-semibold tracking-tight text-stone-800 mb-3">
-          {section.heading}
-        </h3>
+        <SectionHeading accent={accent}>{section.heading}</SectionHeading>
       )}
-      <p className="text-base text-stone-500 leading-relaxed max-w-[65ch]">
+      <p
+        className={
+          isLede
+            ? "text-lg text-stone-700 leading-relaxed max-w-[65ch]"
+            : "text-base text-stone-600 leading-relaxed max-w-[65ch]"
+        }
+      >
         {section.body}
       </p>
     </div>
@@ -865,16 +1043,21 @@ function SectionRenderer({ section }: { section: LessonSection }) {
 function QuizQuestionCard({
   question,
   index,
+  accent,
   selected,
   onSelect,
   submitted,
 }: {
   question: QuizQuestion;
   index: number;
+  accent: string;
   selected: number | undefined;
   onSelect: (idx: number) => void;
   submitted: boolean;
 }) {
+  const answered = selected != null;
+  const gotItRight = answered && selected === question.correctIndex;
+
   return (
     <div>
       <p className="text-sm font-semibold text-stone-800 mb-3">
@@ -887,8 +1070,10 @@ function QuizQuestionCard({
         {question.options.map((opt, oi) => {
           const isSelected = selected === oi;
           const isCorrect = question.correctIndex === oi;
+          const dotSelected = isSelected && !submitted;
           let borderClass = "border-stone-200/80 hover:border-stone-300";
           let bgClass = "bg-white";
+          let optStyle: React.CSSProperties | undefined;
 
           if (submitted) {
             if (isCorrect) {
@@ -899,24 +1084,36 @@ function QuizQuestionCard({
               bgClass = "bg-red-50/60";
             }
           } else if (isSelected) {
-            borderClass = "border-[var(--accent)]/40";
-            bgClass = "bg-teal-50/40";
+            borderClass = "";
+            bgClass = "";
+            optStyle = {
+              borderColor: `color-mix(in srgb, ${accent} 45%, transparent)`,
+              backgroundColor: `color-mix(in srgb, ${accent} 7%, transparent)`,
+            };
           }
 
           return (
             <button
               key={oi}
               onClick={() => onSelect(oi)}
-              className={`w-full text-left px-4 py-3.5 rounded-xl border ${borderClass} ${bgClass} text-sm transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] flex items-center gap-3 active:scale-[0.99]`}
+              style={optStyle}
+              className={`w-full text-left px-4 py-3.5 rounded-xl border ${borderClass} ${bgClass} ${
+                submitted && isSelected && !isCorrect ? "shake" : ""
+              } text-sm transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] flex items-center gap-3 active:scale-[0.99]`}
             >
               <span
+                style={
+                  dotSelected
+                    ? { borderColor: accent, backgroundColor: accent, color: "#fff" }
+                    : undefined
+                }
                 className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 text-[10px] font-bold transition-all duration-300 ${
                   submitted && isCorrect
                     ? "border-emerald-500 bg-emerald-500 text-white"
                     : submitted && isSelected && !isCorrect
                     ? "border-red-400 bg-red-400 text-white"
-                    : isSelected
-                    ? "border-[var(--accent)] bg-[var(--accent)] text-white"
+                    : dotSelected
+                    ? ""
                     : "border-stone-300 text-stone-400"
                 }`}
               >
@@ -945,14 +1142,23 @@ function QuizQuestionCard({
       </div>
       <AnimatePresence>
         {submitted && (
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, height: 0, marginTop: 0 }}
             animate={{ opacity: 1, height: "auto", marginTop: 12 }}
             exit={{ opacity: 0, height: 0, marginTop: 0 }}
-            className="text-xs text-stone-400 leading-relaxed pl-9"
+            className="pl-9 overflow-hidden"
           >
-            {question.explanation}
-          </motion.p>
+            <p
+              className={`text-[11px] font-semibold uppercase tracking-wider mb-1 ${
+                gotItRight ? "text-emerald-600" : answered ? "text-red-500" : "text-stone-400"
+              }`}
+            >
+              {gotItRight ? "Correct" : answered ? "Not quite" : "Explanation"}
+            </p>
+            <p className="text-xs text-stone-500 leading-relaxed">
+              {question.explanation}
+            </p>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
@@ -990,7 +1196,7 @@ function QuizResults({
                 : "bg-red-100 text-red-700"
             }`}
           >
-            {pct}%
+            <CountUpPct value={pct} />
           </div>
           <div>
             <p className="font-semibold text-stone-800">
