@@ -195,6 +195,12 @@ export const modules: Module[] = [
             type: "warning",
             body: "Standards are updated periodically. It is the responsibility of the PCBU or employer to ensure they are working to the current version of all applicable standards. Using an outdated standard does not provide a defence under work health and safety law.",
           },
+          {
+            type: "case-study",
+            heading: "Real-World Incident - Action Park's Cannonball Loop (1985)",
+            body: "Action Park in New Jersey built the Cannonball Loop, an enclosed waterslide with a full vertical loop, with little genuine engineering behind it. Test riders were paid to try it and came back with bloody noses, and some early riders were cut by teeth that had been knocked loose and lodged in the slide wall. A physician measured forces of up to nine Gs through the loop. State amusement-ride regulators shut it down barely a month after it opened. It is the clearest example of why a slide must be properly engineered and verified against recognised standards before anyone rides it - not built on guesswork and tested on the public.",
+            source: "Action Park Cannonball Loop, Vernon NJ, opened 1985 (History.com; Wikipedia)",
+          },
         ],
         keyTakeaways: [
           "AS 3533 is the governing Australian standard for amusement devices including waterslides",
@@ -878,8 +884,9 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Scenario - Insufficient Water Flow",
-            body: "A rider on a high-speed slide becomes airborne and lands hard on a section where water flow is insufficient, suffering a spinal injury. Inadequate flow maintenance created dry spots that altered the rider's trajectory. Regular flow checks, scheduled pump-system maintenance and documented flow-rate inspections before daily operation are the critical controls. WorkSafe WA's water slide guidance notes that inadequate design, installation, inspection and maintenance have contributed to serious waterslide injuries.",
+            heading: "Real-World Incident - Waterworld USA, California (1997)",
+            body: "On a 1997 graduation outing, a group of students crowded onto the Banzai Pipeline slide at Waterworld USA in Concord, California, trying to set a record for the most riders descending at once. A 20-foot section gave way under roughly three times its design load, dropping them more than nine metres onto concrete. Eighteen-year-old Quimby Ghilotti was killed and 32 others were injured, two with fractured vertebrae. It is a stark reminder that a slide has a designed load limit, that structural condition must be inspected before use, and that operators must control how many riders are on a structure at once.",
+            source: "Banzai Pipeline collapse, Waterworld USA, Concord CA, June 1997 (CNN)",
           },
           {
             type: "case-study",
@@ -1783,6 +1790,12 @@ export const modules: Module[] = [
           {
             type: "warning",
             body: "Never dispatch based on assumed timing alone. Visual or communicated confirmation of exit clearance is required every single time.",
+          },
+          {
+            type: "case-study",
+            heading: "Real-World Incident - Disney's Humunga Kowabunga (2019)",
+            body: "In 2019 a woman was seriously injured on the Humunga Kowabunga body slide at Disney's Typhoon Lagoon in Florida. At the bottom of the high-speed slide, standing water brought her to an abrupt stop and forced water into her body, causing severe internal injuries. The lawsuit alleged the ride failed to warn riders of the risk or require protective clothing such as shorts. It is a reminder that rider eligibility includes appropriate clothing, that hazard warnings must be clear and acted on, and that runout conditions are part of a safe dispatch decision.",
+            source: "Humunga Kowabunga injury, Disney's Typhoon Lagoon, Florida, 2019 (NBC News; NPR)",
           },
         ],
         keyTakeaways: [
@@ -3271,6 +3284,12 @@ export const modules: Module[] = [
             type: "warning",
             body: "Queue pressure is real but irrelevant to safety decisions. Other guests waiting in line are safer with a delayed dispatch than with a non-compliant rider in the system.",
           },
+          {
+            type: "case-study",
+            heading: "Real-World Incident - Aquagan Waterpark, Croatia (2024)",
+            body: "In 2024 a 21-month-old child died at the Aquagan waterpark in Lopar, Croatia, after slipping from a parent's arms while going down a waterslide and falling around four metres onto concrete. The local mayor said it was the first such accident on that slide in 20 years. It is a hard reminder that height, age and supervision rules exist for a reason: small children must meet the ride's stated requirements and be managed according to the operating procedure, not simply held by an adult on a slide never designed to carry them that way.",
+            source: "Toddler fatality, Aquagan waterpark, Lopar, Croatia, 2024 (The Sun)",
+          },
         ],
         keyTakeaways: [
           "Escalation follows clear steps: instruct, halt, remove, escalate",
@@ -3501,6 +3520,12 @@ export const modules: Module[] = [
           {
             type: "warning",
             body: "The highest-risk period for waterslide incidents is peak attendance on hot days - the exact time when pressure to reduce intervals is strongest. This is not coincidence. Maintaining controls under this pressure is the single most important operational skill.",
+          },
+          {
+            type: "case-study",
+            heading: "Real-World Incident - Typhoon Twister, Hurricane Harbor Missouri",
+            body: "At Six Flags Hurricane Harbor in Missouri, three riders on the Typhoon Twister multi-person raft slide were seriously injured when their raft flipped during the ride, leaving them with spinal fractures, concussions and memory loss. Their 2025 lawsuit alleges the operator failed to properly maintain and inspect the slide and to train staff. Multi-rider raft slides depend on correct loading, weight checks and a well-maintained running surface - rushing riders through under throughput pressure removes exactly the checks that keep a heavy raft stable.",
+            source: "Typhoon Twister raft injuries, Six Flags Hurricane Harbor, Missouri (lawsuit filed 2025; KSDK, Fox2Now)",
           },
         ],
         keyTakeaways: [
