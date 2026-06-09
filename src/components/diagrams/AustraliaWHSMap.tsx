@@ -243,10 +243,6 @@ export function AustraliaWHSMap() {
           <p className="text-xs text-stone-500 leading-relaxed">{meta.note}</p>
         </div>
       </div>
-
-      <p className="text-[11px] text-stone-400 mt-3 text-center md:text-left">
-        Hover or tap a state or territory. Victoria (amber) is the only jurisdiction outside the harmonised model WHS laws.
-      </p>
     </div>
   );
 }
