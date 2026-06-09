@@ -878,9 +878,8 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Illustrative Scenario - Insufficient Water Flow",
+            heading: "Scenario - Insufficient Water Flow",
             body: "A rider on a high-speed slide becomes airborne and lands hard on a section where water flow is insufficient, suffering a spinal injury. Inadequate flow maintenance created dry spots that altered the rider's trajectory. Regular flow checks, scheduled pump-system maintenance and documented flow-rate inspections before daily operation are the critical controls. WorkSafe WA's water slide guidance notes that inadequate design, installation, inspection and maintenance have contributed to serious waterslide injuries.",
-            source: "Illustrative scenario; principle per WorkSafe WA Health and Safety Bulletin No. 7 - Water slide health and safety requirements",
           },
           {
             type: "case-study",
@@ -2766,9 +2765,8 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Illustrative Scenario - Water Quality Failure",
+            heading: "Scenario - Water Quality Failure",
             body: "An aquatic facility experiences multiple visitor illness cases linked to inadequate water treatment in interactive water features. Insufficient chlorination and inadequate monitoring during high-bather-load periods allowed pathogens to reach unsafe levels. Automated chemical monitoring, frequent manual checks during peak periods and proper staff training on water chemistry protocols are the controls that prevent this. For real reporting and requirements in Australia, follow your state health department's public aquatic facility guidelines rather than overseas codes.",
-            source: "Illustrative scenario; refer to your state guidance, e.g. Victorian Department of Health - Water quality guidelines for public aquatic facilities",
           },
           {
             type: "text",
