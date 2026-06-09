@@ -293,7 +293,6 @@ export const modules: Module[] = [
             heading: "What Operators Should Know About Compliance",
             body: "While compliance management is typically the responsibility of facility management, operators should be aware of the following:",
             items: [
-              "The waterslide may need to have current plant registration in your state or territory",
               "Inspection records must be maintained and available for regulatory audit",
               "Any modifications to the ride must be assessed and may require re-registration",
               "Incident notification obligations exist for serious injuries and dangerous occurrences",
