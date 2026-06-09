@@ -59,7 +59,8 @@ export default function ModuleCompletePage({
   if (moduleId === "assessment") redirect("/train");
 
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [minElapsed, setMinElapsed] = useState(false);
   const [progress, setProgress] = useState(defaultProgress);
   const [result, setResult] = useState<{ score: number; total: number; pct: number }>({
     score: 0,
@@ -68,7 +69,12 @@ export default function ModuleCompletePage({
   });
   const [retaking, setRetaking] = useState(false);
 
+  // Hold the loader for a brief minimum so scoring reads as a deliberate moment
+  // rather than a flicker, even when the tally resolves instantly.
+  const mounted = dataLoaded && minElapsed;
+
   useEffect(() => {
+    const minTimer = setTimeout(() => setMinElapsed(true), 900);
     refreshProgress().then(async (p) => {
       // Can't grade a module until every lesson has been quizzed — send them back
       // to finish first.
@@ -86,8 +92,9 @@ export default function ModuleCompletePage({
       } else {
         setProgress(p);
       }
-      setMounted(true);
+      setDataLoaded(true);
     });
+    return () => clearTimeout(minTimer);
   }, [moduleId, mod]);
 
   const passed = result.pct >= 80;

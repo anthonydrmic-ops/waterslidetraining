@@ -9,33 +9,75 @@ import { ArrowLeft } from "@phosphor-icons/react";
  * resolved, so dynamic content (resume banner, badges, scores) animates in once
  * rather than popping in piecemeal after the page has already painted.
  */
-export function TrainPageLoader({ label = "Loading your training…" }: { label?: string }) {
+export function TrainPageLoader({ label = "Preparing your training" }: { label?: string }) {
   return (
-    <div className="min-h-[100dvh] bg-[var(--background)] relative flex flex-col items-center justify-center">
+    <div className="min-h-[100dvh] bg-[var(--background)] relative flex flex-col items-center justify-center overflow-hidden">
       <div className="noise-overlay" />
+      {/* Soft brand glow behind the mark */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(55% 45% at 50% 42%, rgba(31,122,140,0.07), transparent 70%)",
+        }}
+      />
       <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
         className="relative flex flex-col items-center"
       >
-        <motion.img
-          src="/rest-group-logo.png"
-          alt="REST Group"
-          width={56}
-          height={56}
-          className="rounded-2xl mb-7"
-          animate={{ opacity: [0.45, 1, 0.45] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <div className="w-40 h-1.5 rounded-full bg-stone-200/70 overflow-hidden">
+        {/* Logo inside a softly-shadowed tile, wrapped by a rotating accent arc */}
+        <div className="relative w-20 h-20 mb-8 flex items-center justify-center">
+          <span
+            aria-hidden
+            className="absolute inset-0 rounded-full border border-stone-200/60"
+          />
+          <motion.span
+            aria-hidden
+            className="absolute inset-0 rounded-full"
+            style={{
+              background:
+                "conic-gradient(from 0deg, transparent 0deg, transparent 240deg, var(--teal) 312deg, var(--cta) 360deg)",
+              WebkitMask:
+                "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
+              mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+          />
+          <div className="w-14 h-14 rounded-2xl bg-white shadow-[0_10px_30px_rgba(11,58,102,0.10)] flex items-center justify-center">
+            <img
+              src="/rest-group-logo.png"
+              alt="REST Group"
+              width={34}
+              height={34}
+              className="rounded-lg"
+            />
+          </div>
+        </div>
+
+        {/* Slim indeterminate progress sweep */}
+        <div className="w-48 h-[3px] rounded-full bg-stone-200/60 overflow-hidden">
           <motion.div
-            className="h-full w-1/2 rounded-full bg-[var(--accent)]"
-            animate={{ x: ["-110%", "210%"] }}
-            transition={{ duration: 1.15, repeat: Infinity, ease: "easeInOut" }}
+            className="h-full w-1/3 rounded-full"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, var(--teal), var(--cta), transparent)",
+            }}
+            animate={{ x: ["-150%", "330%"] }}
+            transition={{ duration: 1.25, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
           />
         </div>
-        <p className="mt-4 text-xs font-medium tracking-wide text-stone-400">{label}</p>
+
+        <motion.p
+          className="mt-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          {label}
+        </motion.p>
       </motion.div>
     </div>
   );

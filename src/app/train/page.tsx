@@ -74,15 +74,21 @@ const fadeUp = {
 
 export default function TrainPage() {
   const [progress, setProgress] = useState(defaultProgress);
-  const [mounted, setMounted] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [minElapsed, setMinElapsed] = useState(false);
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
   const [showAssessmentPrompt, setShowAssessmentPrompt] = useState(false);
   const [newlyEarned, setNewlyEarned] = useState<string[]>([]);
 
+  // Hold the loader for a brief minimum so it reads as a deliberate transition
+  // rather than a flicker, even when progress resolves instantly from cache.
+  const mounted = dataLoaded && minElapsed;
+
   useEffect(() => {
+    const minTimer = setTimeout(() => setMinElapsed(true), 750);
     refreshProgress().then((p) => {
       setProgress(p);
-      setMounted(true);
+      setDataLoaded(true);
 
       // Detect badges earned since the user last saw this page, so they can be
       // celebrated with a one-time "announce" animation rather than appearing
@@ -105,6 +111,7 @@ export default function TrainPage() {
         setExpandedModule(rt.module.id);
       }
     });
+    return () => clearTimeout(minTimer);
   }, []);
 
   const totalLessons = getTotalLessons();
