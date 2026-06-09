@@ -19,10 +19,15 @@ export interface Lesson {
 export interface LessonSection {
   heading?: string;
   body: string;
-  type: "text" | "warning" | "critical" | "checklist" | "numbered" | "oem-reference" | "diagram" | "case-study";
+  type: "text" | "warning" | "critical" | "checklist" | "numbered" | "oem-reference" | "diagram" | "case-study" | "image";
   items?: string[];
   source?: string;
   diagramId?: string;
+  // Image sections: file lives in public/lesson-images/. `aspect` controls the
+  // frame ratio (defaults to 4:3); `body` is used as the optional caption.
+  imageSrc?: string;
+  alt?: string;
+  aspect?: "16:9" | "4:3" | "1:1";
 }
 
 export interface Module {
@@ -389,6 +394,13 @@ export const modules: Module[] = [
           {
             type: "text",
             body: "A waterslide is not a simple recreational fixture. It is an engineered system made up of multiple interdependent components, each of which must function correctly for the ride to be safe. Understanding this system is the foundation of everything else in this training.",
+          },
+          {
+            type: "image",
+            imageSrc: "/lesson-images/01-hero.jpg",
+            alt: "A modern outdoor Australian aquatic leisure centre with fibreglass body-slide flumes curving down to a catch pool",
+            aspect: "16:9",
+            body: "",
           },
           {
             heading: "Slide as a System",
@@ -795,6 +807,13 @@ export const modules: Module[] = [
           {
             type: "text",
             body: "Every operating day begins with a systematic inspection. This is not a walk-through - it is a structured process that must be completed and documented before any rider enters the slide.",
+          },
+          {
+            type: "image",
+            imageSrc: "/lesson-images/06-preopening-inspection.jpg",
+            alt: "A uniformed aquatic-centre lifeguard kneeling at the top of a waterslide before opening, running a gloved hand along the dry flume surface",
+            aspect: "4:3",
+            body: "An operator checking the dry flume surface by hand before the slide opens for the day.",
           },
           {
             type: "oem-reference",
@@ -1718,6 +1737,13 @@ export const modules: Module[] = [
             body: "Pre-dispatch is the last point where you can prevent an incident. Once a rider is moving, your control is limited. Every dispatch decision must confirm three things:",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/07-dispatch-position.jpg",
+            alt: "An aquatic-centre operator standing at the dispatch point at the top of a waterslide tower with one arm raised in a wait signal, a rider seated and ready",
+            aspect: "4:3",
+            body: "An operator holds a rider at the dispatch point until the slide and exit are confirmed clear.",
+          },
+          {
             type: "numbered",
             body: "",
             items: [
@@ -2213,6 +2239,13 @@ export const modules: Module[] = [
             body: "Structural defects compromise the physical integrity of the slide. They are the most serious category of defect and often require immediate shutdown and professional repair.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/02-crack-structural.jpg",
+            alt: "Extreme close-up of a hairline-to-through crack across the white gelcoat of a fibreglass waterslide flume",
+            aspect: "1:1",
+            body: "A through-wall crack in the gelcoat exposes the fibreglass beneath - a structural defect needing immediate shutdown.",
+          },
+          {
             type: "diagram",
             heading: "Defect Recognition Quick Reference",
             body: "A quick-reference guide to identifying structural, surface and joint defects and their required response level.",
@@ -2332,6 +2365,13 @@ export const modules: Module[] = [
             body: "Surface defects affect the riding surface quality and rider safety. While less immediately dangerous than structural defects, they can escalate quickly and contribute to incidents through altered rider dynamics.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/03-gelcoat-delamination.jpg",
+            alt: "Macro photograph of glossy white gelcoat flaking and lifting to expose the matte fibreglass layer beneath",
+            aspect: "1:1",
+            body: "Glossy gelcoat lifting and flaking away from the matte fibreglass layer beneath.",
+          },
+          {
             heading: "Chips and Gouges",
             type: "text",
             body: "Small chips in the gelcoat expose the fiberglass beneath. If left unrepaired, water penetration will cause the chip to expand through osmotic blistering. Gouges are deeper and may affect rider comfort and safety by creating catching points.",
@@ -2444,6 +2484,13 @@ export const modules: Module[] = [
           {
             type: "text",
             body: "Joints between flume sections are engineered connection points that must accommodate thermal movement while maintaining a smooth, continuous riding surface. Joint failure is one of the most common and dangerous maintenance issues.",
+          },
+          {
+            type: "image",
+            imageSrc: "/lesson-images/04-joint-misalignment.jpg",
+            alt: "Close-up along the inside of a waterslide flume at a panel joint where two sections meet slightly misaligned, creating a raised lip",
+            aspect: "1:1",
+            body: "A small raised lip where two flume sections meet slightly misaligned at a joint.",
           },
           {
             heading: "Sealant Deterioration",
@@ -2692,6 +2739,13 @@ export const modules: Module[] = [
             body: "Water quality is not just a public health concern - it directly affects the physical condition of the slide materials, the performance of the ride and the safety of every rider. This is the connection most training programs completely miss.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/08-water-testing.jpg",
+            alt: "Close-up of an operator's hands at poolside holding a water-testing comparator vial that has turned pink from a DPD reagent tablet",
+            aspect: "4:3",
+            body: "A poolside water test - DPD reagent turns the sample pink to show the chlorine level.",
+          },
+          {
             type: "oem-reference",
             body: "Free available chlorine (FAC) and pH are core safety parameters and must be tested frequently throughout each operating day - commonly every few hours, and continuously where automated monitoring is installed. Water balance (the LSI) and its slower-moving inputs such as total alkalinity and calcium hardness are typically checked weekly. Always follow the specific testing frequencies set out in your jurisdiction's public aquatic facility guidelines. All readings must be recorded, kept on file, and may be requested by the manufacturer in relation to warranty claims.",
           },
@@ -2816,6 +2870,13 @@ export const modules: Module[] = [
           {
             type: "text",
             body: "Poor water quality manifests as visible and measurable changes to the slide system. Operators who understand these signs can identify water quality issues through routine observation - before they cause incidents.",
+          },
+          {
+            type: "image",
+            imageSrc: "/lesson-images/05-mineral-scaling.jpg",
+            alt: "Macro photograph of chalky white-grey mineral scale and calcium buildup crusting a blue fibreglass waterslide surface",
+            aspect: "1:1",
+            body: "Chalky white mineral scale crusting the flume surface - a sign of high-LSI water.",
           },
           {
             heading: "Scaling",
@@ -3050,6 +3111,13 @@ export const modules: Module[] = [
           {
             type: "text",
             body: "This is the most common waterslide incident pattern. Understanding the chain of events that leads to collision allows you to break the chain at multiple points.",
+          },
+          {
+            type: "image",
+            imageSrc: "/lesson-images/09-enclosed-flume.jpg",
+            alt: "Looking down the inside of a dark enclosed tube waterslide, the tunnel curving away into darkness so what is ahead cannot be seen",
+            aspect: "16:9",
+            body: "Inside an enclosed tube slide the curve hides what is ahead, so mid-ride visibility is zero.",
           },
           {
             type: "diagram",
@@ -3543,6 +3611,13 @@ export const modules: Module[] = [
           {
             type: "text",
             body: "Stop protocols are the emergency brake of slide operations. They must be executed without hesitation and without requiring approval. The time between recognising a problem and stopping dispatch is the critical safety window.",
+          },
+          {
+            type: "image",
+            imageSrc: "/lesson-images/10-slide-closed.jpg",
+            alt: "The entrance to a waterslide blocked by a plain safety barrier and folding stand at the top of the tower, the flume empty and dry",
+            aspect: "4:3",
+            body: "A slide entrance closed off with a safety barrier during a shutdown.",
           },
           {
             type: "diagram",

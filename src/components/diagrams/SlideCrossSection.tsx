@@ -1,6 +1,14 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
+
+const FLUME_D =
+  "M100 100 C130 100, 150 120, 202 210 C240 280, 300 300, 352 305 C395 308, 440 318, 502 338 C540 348, 590 352, 640 355";
+const RETURN_D = "M722 418 L722 435 L80 435 L80 85";
+
 export function SlideCrossSection() {
+  const reduce = useReducedMotion();
+
   return (
     <div className="w-full">
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
@@ -44,7 +52,7 @@ export function SlideCrossSection() {
 
         {/* Flume body */}
         <path
-          d="M100 100 C130 100, 150 120, 202 210 C240 280, 300 300, 352 305 C395 308, 440 318, 502 338 C540 348, 590 352, 640 355"
+          d={FLUME_D}
           stroke="url(#flumeGrad)"
           strokeWidth="26"
           strokeLinecap="round"
@@ -53,7 +61,7 @@ export function SlideCrossSection() {
         />
         {/* Inner highlight for a tube-like sheen */}
         <path
-          d="M100 100 C130 100, 150 120, 202 210 C240 280, 300 300, 352 305 C395 308, 440 318, 502 338 C540 348, 590 352, 640 355"
+          d={FLUME_D}
           stroke="#ffffff"
           strokeWidth="6"
           strokeLinecap="round"
@@ -62,12 +70,30 @@ export function SlideCrossSection() {
           transform="translate(0,-5)"
         />
         <path
-          d="M100 100 C130 100, 150 120, 202 210 C240 280, 300 300, 352 305 C395 308, 440 318, 502 338 C540 348, 590 352, 640 355"
+          d={FLUME_D}
           stroke="#1F7A8C"
           strokeWidth="26"
           strokeLinecap="round"
           fill="none"
           opacity="0.08"
+        />
+
+        {/* Flowing water - droplets travelling down the flume */}
+        <motion.path
+          d={FLUME_D}
+          stroke="#1F7A8C"
+          strokeWidth="8"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.55"
+          strokeDasharray="2 24"
+          initial={false}
+          animate={reduce ? undefined : { strokeDashoffset: [0, -26] }}
+          transition={
+            reduce
+              ? undefined
+              : { duration: 0.85, repeat: Infinity, ease: "linear" }
+          }
         />
 
         {/* Water flow arrows */}
@@ -87,7 +113,19 @@ export function SlideCrossSection() {
 
         {/* Catch pool */}
         <rect x="620" y="355" width="140" height="28" rx="6" fill="url(#waterGrad)" stroke="#1F7A8C" strokeWidth="1.5" opacity="0.8" />
-        <path d="M635 364 Q650 360 665 364 Q680 368 695 364 Q710 360 725 364 Q740 368 748 364" stroke="#1F7A8C" strokeWidth="1" opacity="0.4" />
+        <motion.path
+          d="M635 364 Q650 360 665 364 Q680 368 695 364 Q710 360 725 364 Q740 368 748 364"
+          stroke="#1F7A8C"
+          strokeWidth="1"
+          fill="none"
+          initial={false}
+          animate={reduce ? { opacity: 0.4 } : { opacity: [0.25, 0.5, 0.25] }}
+          transition={
+            reduce
+              ? undefined
+              : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
+          }
+        />
 
         {/* Pump house */}
         <rect x="695" y="380" width="55" height="38" rx="3" fill="#d6d3d1" stroke="#a8a29e" strokeWidth="1" />
@@ -96,12 +134,29 @@ export function SlideCrossSection() {
 
         {/* Return pipe */}
         <path
-          d="M722 418 L722 435 L80 435 L80 85"
+          d={RETURN_D}
           stroke="#1F7A8C"
           strokeWidth="2"
           strokeDasharray="6 4"
           opacity="0.3"
           fill="none"
+        />
+        {/* Flowing water - pumped back up the return loop to the launch platform */}
+        <motion.path
+          d={RETURN_D}
+          stroke="#1F7A8C"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.55"
+          strokeDasharray="2 14"
+          initial={false}
+          animate={reduce ? undefined : { strokeDashoffset: [0, -16] }}
+          transition={
+            reduce
+              ? undefined
+              : { duration: 0.7, repeat: Infinity, ease: "linear" }
+          }
         />
 
         {/* Labels - all sized for readability */}

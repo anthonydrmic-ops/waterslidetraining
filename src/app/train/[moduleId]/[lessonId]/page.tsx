@@ -44,6 +44,7 @@ import {
   resetModuleQuizzes,
 } from "@/lib/progress-store";
 import Link from "next/link";
+import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { Diagram } from "@/components/diagrams";
 import { TrainPageLoader } from "@/components/TrainSkeletons";
@@ -927,6 +928,38 @@ function SectionRenderer({
   accent: string;
   isLede?: boolean;
 }) {
+  if (section.type === "image" && section.imageSrc) {
+    const ratio =
+      section.aspect === "16:9"
+        ? "aspect-video"
+        : section.aspect === "1:1"
+        ? "aspect-square"
+        : "aspect-[4/3]";
+    return (
+      <figure className="w-full max-w-full">
+        {section.heading && (
+          <SectionHeading accent={accent}>{section.heading}</SectionHeading>
+        )}
+        <div
+          className={`relative w-full ${ratio} overflow-hidden rounded-2xl bg-stone-100 ring-1 ring-stone-200/60`}
+        >
+          <Image
+            src={section.imageSrc}
+            alt={section.alt ?? section.heading ?? ""}
+            fill
+            sizes="(max-width: 768px) 100vw, 720px"
+            className="object-cover"
+          />
+        </div>
+        {section.body && (
+          <figcaption className="text-xs text-stone-500 leading-relaxed mt-2">
+            {section.body}
+          </figcaption>
+        )}
+      </figure>
+    );
+  }
+
   if (section.type === "diagram" && section.diagramId) {
     return (
       <div className="w-full max-w-full">
