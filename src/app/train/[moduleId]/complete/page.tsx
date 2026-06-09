@@ -32,7 +32,7 @@ import {
 } from "@/lib/progress-store";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
-import { CenteredCardSkeleton } from "@/components/TrainSkeletons";
+import { TrainPageLoader } from "@/components/TrainSkeletons";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const badgeIconMap: Record<string, React.ComponentType<any>> = {
@@ -138,7 +138,7 @@ export default function ModuleCompletePage({
   const required = Math.ceil(result.total * 0.8);
 
   if (!mounted) {
-    return <CenteredCardSkeleton />;
+    return <TrainPageLoader label="Tallying your module score…" />;
   }
 
   // ---------------------------------------------------------------------------
@@ -182,8 +182,9 @@ export default function ModuleCompletePage({
 
                   <p className="text-stone-400 text-sm md:text-base leading-relaxed max-w-[40ch] mx-auto mb-6">
                     You scored{" "}
-                    <span className="font-semibold text-emerald-600">{result.pct}%</span> across
-                    this module&apos;s {result.total} questions — well above the 80% pass mark.
+                    <span className="font-semibold text-emerald-600">{result.pct}%</span>{" "}
+                    across this module&apos;s {result.total} questions - well above the 80% pass
+                    mark.
                   </p>
 
                   {/* Score chips */}

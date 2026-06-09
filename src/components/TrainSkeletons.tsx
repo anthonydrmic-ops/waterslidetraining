@@ -1,7 +1,45 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { ArrowLeft } from "@phosphor-icons/react";
+
+/**
+ * Full-screen branded loader. Held in place until a page's data has fully
+ * resolved, so dynamic content (resume banner, badges, scores) animates in once
+ * rather than popping in piecemeal after the page has already painted.
+ */
+export function TrainPageLoader({ label = "Loading your training…" }: { label?: string }) {
+  return (
+    <div className="min-h-[100dvh] bg-[var(--background)] relative flex flex-col items-center justify-center">
+      <div className="noise-overlay" />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+        className="relative flex flex-col items-center"
+      >
+        <motion.img
+          src="/rest-group-logo.png"
+          alt="REST Group"
+          width={56}
+          height={56}
+          className="rounded-2xl mb-7"
+          animate={{ opacity: [0.45, 1, 0.45] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="w-40 h-1.5 rounded-full bg-stone-200/70 overflow-hidden">
+          <motion.div
+            className="h-full w-1/2 rounded-full bg-[var(--accent)]"
+            animate={{ x: ["-110%", "210%"] }}
+            transition={{ duration: 1.15, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+        <p className="mt-4 text-xs font-medium tracking-wide text-stone-400">{label}</p>
+      </motion.div>
+    </div>
+  );
+}
 
 /** Shared floating-nav shell so skeletons match the real chrome exactly. */
 function NavShell({ label, maxWidth }: { label: string; maxWidth: string }) {

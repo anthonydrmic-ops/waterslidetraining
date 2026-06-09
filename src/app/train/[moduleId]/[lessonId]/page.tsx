@@ -46,6 +46,7 @@ import {
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { Diagram } from "@/components/diagrams";
+import { TrainPageLoader } from "@/components/TrainSkeletons";
 
 // Deterministic, seeded shuffling so the server and client render the same
 // question/option order (avoids React hydration mismatches). Re-shuffles only
@@ -107,6 +108,9 @@ export default function LessonPage({
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [certName, setCertName] = useState("");
   const [quizAttempt, setQuizAttempt] = useState(0);
+  // True while handing off from the last lesson straight to the module score
+  // screen — shows a transition instead of flashing this lesson's own results.
+  const [navigating, setNavigating] = useState(false);
 
   // Scroll-linked reading progress, themed in the module's colour.
   const { scrollYProgress } = useScroll();
@@ -256,6 +260,20 @@ export default function LessonPage({
       }
     }
 
+    // Finishing the last lesson of a content module: skip this lesson's own
+    // answer review and transition straight to the module score / pass-fail
+    // screen, so there's no flash of per-lesson results first.
+    const finishesContentModule =
+      !isFinalAssessment &&
+      mod.lessons.every((l) => l.id === lessonId || progress.quizScores[l.id] != null);
+    if (finishesContentModule) {
+      setNavigating(true);
+      await saveQuizScore(lessonId, score, total, chosenAnswers);
+      await completeLesson(lessonId);
+      router.push(`/train/${moduleId}/complete`);
+      return;
+    }
+
     await saveQuizScore(lessonId, score, total, chosenAnswers);
     setQuizSubmitted(true);
     const updated = await completeLesson(lessonId);
@@ -279,15 +297,7 @@ export default function LessonPage({
       return;
     }
 
-    // Content modules: each lesson's Knowledge Check just saves its score and
-    // advances. Once every lesson in the module has been quizzed, hand off to the
-    // module completion screen, which tallies the true cumulative score and owns
-    // pass / fail / full review / whole-module retake.
-    const allQuizzed = mod.lessons.every((l) => updated.quizScores[l.id] != null);
-    if (allQuizzed) {
-      router.push(`/train/${moduleId}/complete`);
-      return;
-    }
+    // A non-final lesson within the module: save, mark done, surface "Up next".
     setProgress(updated);
   }, [
     lesson.quiz,
@@ -298,6 +308,7 @@ export default function LessonPage({
     moduleId,
     alreadyQuizzed,
     isFinalAssessment,
+    progress.quizScores,
     fireConfetti,
     router,
   ]);
@@ -348,6 +359,9 @@ export default function LessonPage({
       }
     }
   }
+
+  // Transitioning from the final lesson into the module score screen.
+  if (navigating) return <TrainPageLoader label="Tallying your module score…" />;
 
   return (
     <div

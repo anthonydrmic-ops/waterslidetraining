@@ -23,7 +23,8 @@ import {
   PersonSimpleSwim,
 } from "@phosphor-icons/react";
 import { modules, getTotalLessons } from "@/data/training-modules";
-import { defaultProgress, refreshProgress, getProgress, getCompletionPercentage, isLessonUnlocked } from "@/lib/progress-store";
+import { defaultProgress, refreshProgress, getCompletionPercentage, isLessonUnlocked } from "@/lib/progress-store";
+import { TrainPageLoader } from "@/components/TrainSkeletons";
 import Link from "next/link";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -116,6 +117,11 @@ export default function TrainPage() {
   const ResumeIcon = resumeTarget
     ? iconMap[resumeTarget.module.icon] || ShieldCheck
     : ShieldCheck;
+
+  // Hold a branded loader until progress has resolved, so the resume banner,
+  // badges and completion stats animate in together instead of popping in after
+  // the page has already painted.
+  if (!mounted) return <TrainPageLoader />;
 
   return (
     <div className="min-h-[100dvh] bg-[var(--background)] relative">
@@ -720,7 +726,7 @@ export default function TrainPage() {
                                     >
                                       {passed
                                         ? "Module passed"
-                                        : "Module not passed — review & retake"}
+                                        : "Module not passed - review & retake"}
                                     </p>
                                     <p className="text-[11px] text-stone-400 mt-0.5">
                                       Module result &middot; {pct}%
