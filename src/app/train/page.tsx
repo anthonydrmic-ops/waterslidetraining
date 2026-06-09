@@ -18,6 +18,7 @@ import {
   Lock,
   Trophy,
   CaretDown,
+  ArrowCounterClockwise,
   Scales,
   PersonSimpleSwim,
 } from "@phosphor-icons/react";
@@ -670,6 +671,68 @@ export default function TrainPage() {
                                 </Link>
                               );
                             })}
+
+                            {/* Module result — once every lesson is quizzed, link
+                                to the result screen (pass celebration, or review +
+                                retake on a fail). */}
+                            {(() => {
+                              const fullyQuizzed =
+                                mounted &&
+                                mod.lessons.every(
+                                  (l) => progress.quizScores[l.id] != null
+                                );
+                              if (!fullyQuizzed) return null;
+                              let s = 0;
+                              let t = 0;
+                              for (const l of mod.lessons) {
+                                const qs = progress.quizScores[l.id];
+                                if (qs) {
+                                  s += qs.score;
+                                  t += qs.total;
+                                }
+                              }
+                              const pct = t > 0 ? Math.round((s / t) * 100) : 0;
+                              const passed = pct >= 80;
+                              return (
+                                <Link
+                                  href={`/train/${mod.id}/complete`}
+                                  className="group flex items-center gap-4 px-6 md:px-8 py-4 border-t transition-colors duration-300 hover:bg-stone-50/60"
+                                  style={{ borderColor: mod.color + "15" }}
+                                >
+                                  <div
+                                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                                      passed
+                                        ? "bg-emerald-50 text-emerald-600"
+                                        : "bg-red-50 text-red-500"
+                                    }`}
+                                  >
+                                    {passed ? (
+                                      <Trophy size={16} weight="fill" />
+                                    ) : (
+                                      <ArrowCounterClockwise size={15} weight="bold" />
+                                    )}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p
+                                      className={`text-sm font-medium ${
+                                        passed ? "text-emerald-700" : "text-red-600"
+                                      }`}
+                                    >
+                                      {passed
+                                        ? "Module passed"
+                                        : "Module not passed — review & retake"}
+                                    </p>
+                                    <p className="text-[11px] text-stone-400 mt-0.5">
+                                      Module result &middot; {pct}%
+                                    </p>
+                                  </div>
+                                  <ArrowRight
+                                    size={14}
+                                    className="text-stone-300 group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all duration-300 shrink-0"
+                                  />
+                                </Link>
+                              );
+                            })()}
                           </div>
                         </motion.div>
                       )}

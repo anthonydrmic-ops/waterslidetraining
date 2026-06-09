@@ -41,7 +41,6 @@ import {
   setCertified,
   isLessonUnlocked,
   getModuleCumulativeScore,
-  isModuleFullyQuizzed,
   resetModuleQuizzes,
 } from "@/lib/progress-store";
 import Link from "next/link";
@@ -257,39 +256,51 @@ export default function LessonPage({
       }
     }
 
-    let updated = await saveQuizScore(lessonId, score, total, chosenAnswers);
+    await saveQuizScore(lessonId, score, total, chosenAnswers);
     setQuizSubmitted(true);
+    const updated = await completeLesson(lessonId);
 
-    // Check if all lessons in this module are now quizzed
-    const allQuizzed = mod.lessons.every((l) => updated.quizScores[l.id] != null);
-    if (allQuizzed) {
+    // The final assessment is a single lesson, so it's graded inline right here:
+    // pass -> certificate flow, fail -> review + retake the whole assessment.
+    if (isFinalAssessment) {
       const cumulative = getModuleCumulativeScore(moduleId, modules);
+      setModuleCumulativeResult(cumulative);
       if (cumulative.pct >= 80) {
-        updated = await completeLesson(lessonId);
         await completeModule(moduleId);
         setProgress(getProgress());
-        if (isFinalAssessment) {
-          // Final assessment passed - show congrats with confetti
-          setModuleCumulativeResult(cumulative);
-          setShowFinalPass(true);
-          fireConfetti();
-        } else {
-          router.push(`/train/${moduleId}/complete`);
-        }
+        setShowFinalPass(true);
+        fireConfetti();
       } else {
-        // Module/assessment failed — clear the quiz scores so it can be retaken,
-        // but keep lessons-read so the learner doesn't have to re-read everything.
-        setModuleCumulativeResult(cumulative);
+        // Clear the score so it can be retaken; the review below stays on screen.
         const reset = await resetModuleQuizzes(moduleId, modules);
         setProgress(reset);
         setShowModuleFail(true);
-        return;
       }
-    } else {
-      updated = await completeLesson(lessonId);
+      return;
+    }
+
+    // Content modules: each lesson's Knowledge Check just saves its score and
+    // advances. Once every lesson in the module has been quizzed, hand off to the
+    // module completion screen, which tallies the true cumulative score and owns
+    // pass / fail / full review / whole-module retake.
+    const allQuizzed = mod.lessons.every((l) => updated.quizScores[l.id] != null);
+    if (allQuizzed) {
+      router.push(`/train/${moduleId}/complete`);
+      return;
     }
     setProgress(updated);
-  }, [lesson.quiz, shuffledQuiz, quizAnswers, lessonId, mod, moduleId, alreadyQuizzed, router]);
+  }, [
+    lesson.quiz,
+    shuffledQuiz,
+    quizAnswers,
+    lessonId,
+    mod,
+    moduleId,
+    alreadyQuizzed,
+    isFinalAssessment,
+    fireConfetti,
+    router,
+  ]);
 
   const handleCertify = useCallback(async () => {
     if (!certName.trim()) return;
