@@ -28,34 +28,15 @@ export function TrainPageLoader({ label = "Preparing your training" }: { label?:
         transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
         className="relative flex flex-col items-center"
       >
-        {/* Logo inside a softly-shadowed tile, wrapped by a rotating accent arc */}
-        <div className="relative w-20 h-20 mb-8 flex items-center justify-center">
-          <span
-            aria-hidden
-            className="absolute inset-0 rounded-full border border-stone-200/60"
+        {/* Logo inside a softly-shadowed tile */}
+        <div className="w-16 h-16 mb-8 rounded-2xl bg-white shadow-[0_10px_30px_rgba(11,58,102,0.10)] flex items-center justify-center">
+          <img
+            src="/rest-group-logo.png"
+            alt="REST Group"
+            width={38}
+            height={38}
+            className="rounded-lg"
           />
-          <motion.span
-            aria-hidden
-            className="absolute inset-0 rounded-full"
-            style={{
-              background:
-                "conic-gradient(from 0deg, transparent 0deg, transparent 240deg, var(--teal) 312deg, var(--cta) 360deg)",
-              WebkitMask:
-                "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
-              mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
-            }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-          />
-          <div className="w-14 h-14 rounded-2xl bg-white shadow-[0_10px_30px_rgba(11,58,102,0.10)] flex items-center justify-center">
-            <img
-              src="/rest-group-logo.png"
-              alt="REST Group"
-              width={34}
-              height={34}
-              className="rounded-lg"
-            />
-          </div>
         </div>
 
         {/* Slim indeterminate progress sweep */}
