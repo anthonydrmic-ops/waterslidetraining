@@ -263,10 +263,13 @@ export default function LessonPage({
 
     // Finishing the last lesson of a content module: skip this lesson's own
     // answer review and transition straight to the module score / pass-fail
-    // screen, so there's no flash of per-lesson results first.
+    // screen, so there's no flash of per-lesson results first. Trigger purely on
+    // lesson position (lessons unlock strictly in order, so the last lesson is
+    // always finished last) — checking "all other lessons quizzed" would fire
+    // early if a later lesson still held a score from an earlier attempt.
+    const lessonIndex = mod.lessons.findIndex((l) => l.id === lessonId);
     const finishesContentModule =
-      !isFinalAssessment &&
-      mod.lessons.every((l) => l.id === lessonId || progress.quizScores[l.id] != null);
+      !isFinalAssessment && lessonIndex === mod.lessons.length - 1;
     if (finishesContentModule) {
       setNavigating(true);
       await saveQuizScore(lessonId, score, total, chosenAnswers);
@@ -309,7 +312,6 @@ export default function LessonPage({
     moduleId,
     alreadyQuizzed,
     isFinalAssessment,
-    progress.quizScores,
     fireConfetti,
     router,
   ]);
