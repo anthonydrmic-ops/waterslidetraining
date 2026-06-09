@@ -692,9 +692,9 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Illustrative Scenario - Dispatch Collision",
-            body: "A common dispatch-collision pattern: riders collide at the bottom of an enclosed slide because the operator dispatched a second rider before the first had cleared the runout zone. Typical contributing factors are no visual confirmation of the landing area, over-reliance on timed intervals rather than positive confirmation, and pressure to increase throughput during busy periods. This is an illustrative composite of well-documented dispatch failures, not a single named incident.",
-            source: "Illustrative composite based on common dispatch-collision patterns",
+            heading: "Real-World Incident - Pt Erin Pools, Auckland (2019)",
+            body: "In February 2019, 15-year-old Lech-Walensa Lo Tam was left a tetraplegic at Pt Erin Pools in Herne Bay, Auckland. He went head-first down a slide that emptied into water only about a metre deep, struck the bottom on entry and fractured his C3-C5 vertebrae, sustaining a complete spinal cord injury. The water beneath the slide was too shallow to safely absorb a rider, and the depth hazard was not clearly communicated to users. After the incident the operator added clearer signage detailing the water depth and safe slide use, enforced the slide's age restrictions more strictly, and retrained staff. It is a stark reminder that a slide which does not meet modern design and runout standards - and where depth, signage and supervision are treated as formalities - can cause a life-changing injury in a single ride.",
+            source: "Pt Erin Pools spinal injury, Herne Bay, Auckland, February 2019 (NZ Herald)",
           },
           {
             type: "warning",
