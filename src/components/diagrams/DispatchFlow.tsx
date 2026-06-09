@@ -81,16 +81,17 @@ export function DispatchFlow() {
                 </div>
               </div>
 
-              {/* Connector */}
-              {i < STEPS.length - 1 && (
-                <div className="flex items-center justify-center px-1 sm:py-1 sm:px-0">
-                  <CaretRight
-                    size={16}
-                    weight="bold"
-                    className="text-stone-300 rotate-90 sm:rotate-0"
-                  />
-                </div>
-              )}
+              {/* Connector — always rendered (hidden on the last step) so every
+                  card reserves the same space and stays identically sized. */}
+              <div className="flex items-center justify-center px-1 sm:py-1 sm:px-0">
+                <CaretRight
+                  size={16}
+                  weight="bold"
+                  className={`text-stone-300 rotate-90 sm:rotate-0 ${
+                    i === STEPS.length - 1 ? "invisible" : ""
+                  }`}
+                />
+              </div>
             </div>
           );
         })}
