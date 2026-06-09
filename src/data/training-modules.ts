@@ -3063,6 +3063,12 @@ export const modules: Module[] = [
             body: "A child (light weight, slow rider) is dispatched. Standard 15-second interval is applied. An adult (heavier, faster rider) is dispatched next. The child hits a section with minor mineral buildup and decelerates. The adult, traveling faster, closes the gap. Impact occurs in the mid-section of an enclosed flume where neither operator has visibility.",
           },
           {
+            type: "diagram",
+            heading: "Watch the Gap Close",
+            body: "The same light-then-heavy pairing on a standard interval versus a risk-based interval. The only difference is the dispatch timing.",
+            diagramId: "dispatch-collision",
+          },
+          {
             heading: "What Went Wrong",
             type: "checklist",
             body: "Multiple failures contributed:",
