@@ -75,11 +75,21 @@ export default function ModuleCompletePage({
 
   useEffect(() => {
     const minTimer = setTimeout(() => setMinElapsed(true), 900);
-    refreshProgress().then(async (p) => {
-      // Can't grade a module until every lesson has been quizzed — send them back
-      // to finish first.
+    let cancelled = false;
+    (async () => {
+      // The lesson flow saves every score before sending us here, so the cache
+      // usually already holds them. Only hit the network when it doesn't (a direct
+      // visit or hard refresh) — a stale reload must never clobber the scores we
+      // just wrote and bounce the learner out of their own result screen.
       if (!isModuleFullyQuizzed(moduleId, modules)) {
-        redirect(`/train/${moduleId}/${mod!.lessons[0].id}`);
+        await refreshProgress();
+      }
+      if (cancelled) return;
+      // Still not fully graded means the module genuinely isn't finished — send
+      // them back to complete it. Use the router: redirect() throws and cannot be
+      // called from an async callback (only during render).
+      if (!isModuleFullyQuizzed(moduleId, modules)) {
+        router.replace(`/train/${moduleId}/${mod!.lessons[0].id}`);
         return;
       }
       const r = getModuleCumulativeScore(moduleId, modules);
@@ -88,14 +98,16 @@ export default function ModuleCompletePage({
       // so the learner can review and retake.
       if (r.pct >= 80) {
         await completeModule(moduleId);
-        setProgress(getProgress());
-      } else {
-        setProgress(p);
       }
+      if (cancelled) return;
+      setProgress(getProgress());
       setDataLoaded(true);
-    });
-    return () => clearTimeout(minTimer);
-  }, [moduleId, mod]);
+    })();
+    return () => {
+      cancelled = true;
+      clearTimeout(minTimer);
+    };
+  }, [moduleId, mod, router]);
 
   const passed = result.pct >= 80;
 

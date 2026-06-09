@@ -14,7 +14,7 @@ import {
   refreshProgress,
   type UserProgress,
 } from "@/lib/progress-store";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CertifiedSkeleton } from "@/components/TrainSkeletons";
 import { GuillocheBackdrop, FoilSeal } from "@/components/CertificateArtwork";
@@ -51,11 +51,14 @@ export default function CertifiedPage() {
   const [qrDataUrl, setQrDataUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const certRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     refreshProgress().then((p) => {
       if (!p.certified) {
-        redirect("/train");
+        // Use the router, not redirect() — redirect() throws and cannot be called
+        // from an async callback (only during render).
+        router.replace("/train");
         return;
       }
       setProgress(p);
@@ -70,7 +73,7 @@ export default function CertifiedPage() {
       setCertId(storedCertId);
       setShareUrl(storedCertId ? `${appUrl}/verify/${storedCertId}` : appUrl);
     });
-  }, []);
+  }, [router]);
 
   // Generate the verification QR code (points at the public /verify URL) once the
   // share URL is known. Loaded on demand to keep it out of the initial bundle.
