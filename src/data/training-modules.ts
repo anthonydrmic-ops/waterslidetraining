@@ -396,7 +396,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/01-hero.jpg",
+            imageSrc: "/lesson-images/01-hero.png",
             alt: "A modern outdoor Australian aquatic leisure centre with fibreglass body-slide flumes curving down to a catch pool",
             aspect: "16:9",
             body: "",

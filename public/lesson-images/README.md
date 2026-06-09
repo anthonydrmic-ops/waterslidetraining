@@ -9,7 +9,7 @@ instead, update the `imageSrc` in `src/data/training-modules.ts` to match.
 
 | # | Filename | Aspect | Where it goes |
 |---|----------|--------|---------------|
-| 1 | `01-hero.jpg` | 16:9 | Module 2 opener + marketing page |
+| 1 | `01-hero.png` | 16:9 | Module 2 opener + marketing page (real image wired in) |
 | 2 | `02-crack-structural.jpg` | 1:1 | Module 6 (Structural), reuse Module 4 |
 | 3 | `03-gelcoat-delamination.jpg` | 1:1 | Module 6 / Module 4 (Surface Failures) |
 | 4 | `04-joint-misalignment.jpg` | 1:1 | Module 6 (Joint Failures) |
