@@ -6,7 +6,7 @@ export function InspectionZones() {
     { label: "Upper Flume", color: "#f97316", items: ["Joint seals intact", "Water flow rate", "Surface smoothness"], y: 100 },
     { label: "Mid Section", color: "#eab308", items: ["Support stability", "Flume alignment", "No debris"], y: 180 },
     { label: "Run-out / Exit", color: "#22c55e", items: ["Deceleration clear", "Splash padding", "Exit path open"], y: 260 },
-    { label: "Catch Pool", color: "#0891b2", items: ["Water depth correct", "Drain covers secure", "Water clarity OK"], y: 340 },
+    { label: "Catch Pool", color: "#1F7A8C", items: ["Water depth correct", "Drain covers secure", "Water clarity OK"], y: 340 },
   ];
 
   return (

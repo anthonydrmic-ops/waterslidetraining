@@ -13,13 +13,17 @@ export function SlideCrossSection() {
             <stop offset="100%" stopColor="#e0f2fe" />
           </linearGradient>
           <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0891b2" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#0891b2" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#1F7A8C" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#1F7A8C" stopOpacity="0.1" />
           </linearGradient>
           <linearGradient id="flumeGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#e7e5e4" />
-            <stop offset="100%" stopColor="#d6d3d1" />
+            <stop offset="0%" stopColor="#f5f5f4" />
+            <stop offset="55%" stopColor="#e7e5e4" />
+            <stop offset="100%" stopColor="#c9c5c1" />
           </linearGradient>
+          <filter id="flumeShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#0B3A66" floodOpacity="0.12" />
+          </filter>
         </defs>
 
         <rect width="800" height="450" rx="12" fill="url(#skyGrad)" />
@@ -45,10 +49,21 @@ export function SlideCrossSection() {
           strokeWidth="26"
           strokeLinecap="round"
           fill="none"
+          filter="url(#flumeShadow)"
+        />
+        {/* Inner highlight for a tube-like sheen */}
+        <path
+          d="M100 100 C130 100, 150 120, 202 210 C240 280, 300 300, 352 305 C395 308, 440 318, 502 338 C540 348, 590 352, 640 355"
+          stroke="#ffffff"
+          strokeWidth="6"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.5"
+          transform="translate(0,-5)"
         />
         <path
           d="M100 100 C130 100, 150 120, 202 210 C240 280, 300 300, 352 305 C395 308, 440 318, 502 338 C540 348, 590 352, 640 355"
-          stroke="#0891b2"
+          stroke="#1F7A8C"
           strokeWidth="26"
           strokeLinecap="round"
           fill="none"
@@ -56,10 +71,10 @@ export function SlideCrossSection() {
         />
 
         {/* Water flow arrows */}
-        <path d="M140 105 L158 112 L140 119" fill="#0891b2" opacity="0.4" />
-        <path d="M240 240 L258 248 L240 256" fill="#0891b2" opacity="0.4" />
-        <path d="M400 310 L418 316 L400 322" fill="#0891b2" opacity="0.4" />
-        <path d="M560 350 L578 354 L560 358" fill="#0891b2" opacity="0.4" />
+        <path d="M140 105 L158 112 L140 119" fill="#1F7A8C" opacity="0.4" />
+        <path d="M240 240 L258 248 L240 256" fill="#1F7A8C" opacity="0.4" />
+        <path d="M400 310 L418 316 L400 322" fill="#1F7A8C" opacity="0.4" />
+        <path d="M560 350 L578 354 L560 358" fill="#1F7A8C" opacity="0.4" />
 
         {/* Joint markers */}
         <circle cx="202" cy="210" r="7" fill="white" stroke="#f05a28" strokeWidth="2.5" />
@@ -71,18 +86,18 @@ export function SlideCrossSection() {
         <rect x="58" y="66" width="84" height="12" rx="4" fill="#a8a29e" />
 
         {/* Catch pool */}
-        <rect x="620" y="355" width="140" height="28" rx="6" fill="url(#waterGrad)" stroke="#0891b2" strokeWidth="1.5" opacity="0.8" />
-        <path d="M635 364 Q650 360 665 364 Q680 368 695 364 Q710 360 725 364 Q740 368 748 364" stroke="#0891b2" strokeWidth="1" opacity="0.4" />
+        <rect x="620" y="355" width="140" height="28" rx="6" fill="url(#waterGrad)" stroke="#1F7A8C" strokeWidth="1.5" opacity="0.8" />
+        <path d="M635 364 Q650 360 665 364 Q680 368 695 364 Q710 360 725 364 Q740 368 748 364" stroke="#1F7A8C" strokeWidth="1" opacity="0.4" />
 
         {/* Pump house */}
         <rect x="695" y="380" width="55" height="38" rx="3" fill="#d6d3d1" stroke="#a8a29e" strokeWidth="1" />
-        <circle cx="722" cy="398" r="6" fill="none" stroke="#0891b2" strokeWidth="1.5" />
-        <path d="M722 394 L722 402 M718 398 L726 398" stroke="#0891b2" strokeWidth="1" />
+        <circle cx="722" cy="398" r="6" fill="none" stroke="#1F7A8C" strokeWidth="1.5" />
+        <path d="M722 394 L722 402 M718 398 L726 398" stroke="#1F7A8C" strokeWidth="1" />
 
         {/* Return pipe */}
         <path
           d="M722 418 L722 435 L80 435 L80 85"
-          stroke="#0891b2"
+          stroke="#1F7A8C"
           strokeWidth="2"
           strokeDasharray="6 4"
           opacity="0.3"
@@ -97,8 +112,8 @@ export function SlideCrossSection() {
         </text>
 
         {/* Flume label */}
-        <rect x="228" y="248" width="100" height="24" rx="12" fill="#0891b2" opacity="0.1" />
-        <text x="278" y="265" textAnchor="middle" fontSize="13" fontWeight="600" fill="#0891b2" fontFamily="system-ui">
+        <rect x="228" y="248" width="100" height="24" rx="12" fill="#1F7A8C" opacity="0.1" />
+        <text x="278" y="265" textAnchor="middle" fontSize="13" fontWeight="600" fill="#1F7A8C" fontFamily="system-ui">
           Flume Body
         </text>
 
@@ -117,7 +132,7 @@ export function SlideCrossSection() {
         </text>
 
         {/* Catch pool label */}
-        <text x="690" y="348" textAnchor="middle" fontSize="13" fontWeight="600" fill="#0891b2" fontFamily="system-ui">
+        <text x="690" y="348" textAnchor="middle" fontSize="13" fontWeight="600" fill="#1F7A8C" fontFamily="system-ui">
           Catch Pool
         </text>
 
@@ -127,13 +142,13 @@ export function SlideCrossSection() {
         </text>
 
         {/* Water return label */}
-        <rect x="330" y="422" width="110" height="22" rx="11" fill="#0891b2" opacity="0.08" />
-        <text x="385" y="437" textAnchor="middle" fontSize="11" fontWeight="500" fill="#0891b2" fontFamily="system-ui">
+        <rect x="330" y="422" width="110" height="22" rx="11" fill="#1F7A8C" opacity="0.08" />
+        <text x="385" y="437" textAnchor="middle" fontSize="11" fontWeight="500" fill="#1F7A8C" fontFamily="system-ui">
           Water Return
         </text>
 
         {/* Flow arrow on return pipe */}
-        <path d="M280 438 L268 432 L268 444 Z" fill="#0891b2" opacity="0.3" />
+        <path d="M280 438 L268 432 L268 444 Z" fill="#1F7A8C" opacity="0.3" />
       </svg>
     </div>
   );

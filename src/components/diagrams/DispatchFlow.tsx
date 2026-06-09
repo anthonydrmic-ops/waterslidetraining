@@ -15,13 +15,13 @@ const STEPS = [
     icon: IdentificationCard,
     label: "Rider Briefing",
     sub: "Confirm rules, position and signals",
-    color: "#0891b2",
+    color: "#1F7A8C",
   },
   {
     icon: Eye,
     label: "Clear Check",
     sub: "Catch pool and runout clear?",
-    color: "#0891b2",
+    color: "#1F7A8C",
   },
   {
     icon: MegaphoneSimple,
@@ -39,7 +39,7 @@ const STEPS = [
     icon: ArrowsClockwise,
     label: "Next Rider",
     sub: "Repeat from step 1",
-    color: "#0891b2",
+    color: "#1F7A8C",
   },
 ];
 

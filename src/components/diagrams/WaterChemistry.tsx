@@ -2,10 +2,10 @@
 
 export function WaterChemistry() {
   const params = [
-    { label: "pH Level", low: "6.0", target: "7.2 - 7.8", high: "9.0", lowRisk: "Corrosive", highRisk: "Scaling", color: "#0891b2" },
+    { label: "pH Level", low: "6.0", target: "7.2 - 7.8", high: "9.0", lowRisk: "Corrosive", highRisk: "Scaling", color: "#1F7A8C" },
     { label: "FAC (Indoor)", low: "0", target: "1.0 - 3.0 ppm", high: "5.0+", lowRisk: "Infection risk", highRisk: "Surface damage", color: "#22c55e" },
     { label: "FAC (Outdoor)", low: "0", target: "2.0 - 4.0 ppm", high: "5.0+", lowRisk: "Infection risk", highRisk: "Surface damage", color: "#16a34a" },
-    { label: "LSI Index", low: "-2.0", target: "-0.3 to +0.3", high: "+2.0", lowRisk: "Dissolves surfaces", highRisk: "Heavy scaling", color: "#8b5cf6" },
+    { label: "LSI Index", low: "-2.0", target: "-0.3 to +0.3", high: "+2.0", lowRisk: "Dissolves surfaces", highRisk: "Heavy scaling", color: "#0B3A66" },
   ];
 
   return (
@@ -75,7 +75,7 @@ export function WaterChemistry() {
         })}
 
         {/* Footer */}
-        <rect x="160" y="418" width="380" height="24" rx="12" fill="#8b5cf6" opacity="0.06" />
+        <rect x="160" y="418" width="380" height="24" rx="12" fill="#0B3A66" opacity="0.06" />
         <text x="350" y="435" textAnchor="middle" fontSize="11" fill="#78716c" fontFamily="system-ui">
           LSI (Langelier Saturation Index) = tendency to scale or corrode
         </text>

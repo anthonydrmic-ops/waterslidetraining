@@ -80,11 +80,15 @@ export function IncidentChain() {
                 {label}
               </text>
 
-              {/* Scissors */}
-              <circle cx={x} cy={y - 4} r="8" fill="#f0fdf4" stroke="#22c55e" strokeWidth="1.5" />
-              <text x={x} y={y} textAnchor="middle" fontSize="10" fill="#22c55e" fontFamily="system-ui">
-                x
-              </text>
+              {/* Cut point — a clean intervention node sitting on the chain */}
+              <circle cx={x} cy={y - 4} r="9" fill="#16a34a" />
+              <circle cx={x} cy={y - 4} r="9" fill="none" stroke="#16a34a" strokeOpacity="0.25" strokeWidth="4" />
+              <path
+                d={`M${x - 3.4} ${y - 7.4} L${x + 3.4} ${y - 0.6} M${x + 3.4} ${y - 7.4} L${x - 3.4} ${y - 0.6}`}
+                stroke="#ffffff"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+              />
             </g>
           );
         })}
