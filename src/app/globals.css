@@ -238,3 +238,19 @@ html {
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Keyboard focus — a clear, branded ring shown only for keyboard users
+   (:focus-visible). Mouse/touch interactions stay clean; tabbing through
+   buttons, links, the accordion and quiz options is always visible. Modern
+   browsers follow each element's border-radius, so it hugs the pill shapes.
+--------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* Suppress the legacy outline only when focus-visible isn't matched, so we
+   never double up or leave keyboard users without an indicator. */
+:focus:not(:focus-visible) {
+  outline: none;
+}

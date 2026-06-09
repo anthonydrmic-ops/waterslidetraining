@@ -42,7 +42,7 @@ import {
   isLessonUnlocked,
   getModuleCumulativeScore,
   isModuleFullyQuizzed,
-  resetModuleProgress,
+  resetModuleQuizzes,
 } from "@/lib/progress-store";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
@@ -146,8 +146,28 @@ export default function LessonPage({
       // Gate locked lessons
       if (!isLessonUnlocked(lessonId, modules)) {
         router.replace("/train");
+        return;
+      }
+      // If this lesson's quiz was already taken, show it in its submitted state
+      // and restore which option the learner picked so they can review misses.
+      const entry = p.quizScores[lessonId];
+      if (entry) {
+        setQuizSubmitted(true);
+        if (entry.answers) {
+          const restored: Record<string, number> = {};
+          for (const sq of shuffledQuiz) {
+            const chosenText = entry.answers[sq.id];
+            if (chosenText == null) continue;
+            const idx = sq.options.indexOf(chosenText);
+            if (idx >= 0) restored[sq.id] = idx;
+          }
+          setQuizAnswers(restored);
+        }
       }
     });
+    // shuffledQuiz is the attempt-0 shuffle at mount, which matches the order the
+    // stored answers are reconstructed against — intentionally not a dependency.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonId, router]);
 
   const isCompleted = mounted && progress.completedLessons.includes(lessonId);
@@ -219,19 +239,6 @@ export default function LessonPage({
     }, 250);
   }, []);
 
-  // If returning to a lesson that was already quizzed, show results immediately
-  useEffect(() => {
-    if (alreadyQuizzed && lesson.quiz) {
-      setQuizSubmitted(true);
-      // Reconstruct answers from the correct answers (for display purposes)
-      const restored: Record<string, number> = {};
-      for (const q of lesson.quiz) {
-        // We don't store individual answers, so we can't reconstruct them
-        // Quiz will show as submitted but without answer highlighting
-      }
-    }
-  }, [alreadyQuizzed, lesson.quiz]);
-
   const handleQuizSubmit = useCallback(async () => {
     if (!lesson.quiz || alreadyQuizzed) return;
     const score = shuffledQuiz.reduce(
@@ -239,7 +246,18 @@ export default function LessonPage({
       0
     );
     const total = shuffledQuiz.length;
-    let updated = await saveQuizScore(lessonId, score, total);
+
+    // Record the option *text* the learner chose for each question, so a later
+    // revisit can show their picks regardless of how the quiz re-shuffles.
+    const chosenAnswers: Record<string, string> = {};
+    for (const q of shuffledQuiz) {
+      const sel = quizAnswers[q.id];
+      if (sel != null && q.options[sel] != null) {
+        chosenAnswers[q.id] = q.options[sel];
+      }
+    }
+
+    let updated = await saveQuizScore(lessonId, score, total, chosenAnswers);
     setQuizSubmitted(true);
 
     // Check if all lessons in this module are now quizzed
@@ -259,9 +277,10 @@ export default function LessonPage({
           router.push(`/train/${moduleId}/complete`);
         }
       } else {
-        // Module/assessment failed - reset all progress
+        // Module/assessment failed — clear the quiz scores so it can be retaken,
+        // but keep lessons-read so the learner doesn't have to re-read everything.
         setModuleCumulativeResult(cumulative);
-        const reset = await resetModuleProgress(moduleId, modules);
+        const reset = await resetModuleQuizzes(moduleId, modules);
         setProgress(reset);
         setShowModuleFail(true);
         return;
@@ -360,7 +379,7 @@ export default function LessonPage({
                   Done
                 </div>
               )}
-              <span className="text-[10px] font-mono text-stone-300">
+              <span className="text-[10px] font-mono text-stone-400">
                 {globalLessonIndex}/{totalGlobalLessons}
               </span>
             </div>
@@ -691,6 +710,16 @@ export default function LessonPage({
               </Link>
             )}
           </motion.div>
+
+          {/* Keyboard navigation hint (desktop only) */}
+          {(prevLink || nextLink) && (
+            <p className="hidden md:flex items-center justify-center gap-1.5 mt-6 text-[11px] text-stone-400">
+              Tip: use
+              <kbd className="px-1.5 py-0.5 rounded bg-stone-100 border border-stone-200 font-mono text-[10px] text-stone-500">←</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-stone-100 border border-stone-200 font-mono text-[10px] text-stone-500">→</kbd>
+              to move between lessons
+            </p>
+          )}
         </motion.div>
       </div>
 
@@ -736,7 +765,7 @@ export default function LessonPage({
                 <p className="text-sm text-stone-500 leading-relaxed mb-8">
                   {isFinalAssessment
                     ? "Review your answers below then retake the assessment when ready."
-                    : "Review your answers below then head back to retry the module."}
+                    : "Review your answers below, then retake the quizzes when ready - your lesson progress is saved, so there's no need to read everything again."}
                 </p>
                 <button
                   onClick={() => setShowModuleFail(false)}
@@ -1061,7 +1090,7 @@ function QuizQuestionCard({
   return (
     <div>
       <p className="text-sm font-semibold text-stone-800 mb-3">
-        <span className="text-stone-300 font-mono mr-2 text-xs">
+        <span className="text-stone-400 font-mono mr-2 text-xs">
           {String(index + 1).padStart(2, "0")}
         </span>
         {question.question}

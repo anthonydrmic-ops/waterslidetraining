@@ -484,7 +484,7 @@ export default function TrainPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1.5">
-                            <span className="text-[10px] font-mono uppercase tracking-wider text-stone-300">
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400">
                               Module {String(mod.number).padStart(2, "0")}
                             </span>
                             {isModuleComplete && (
@@ -639,12 +639,12 @@ export default function TrainPage() {
                                       {lesson.title}
                                     </p>
                                     <div className="flex items-center gap-3 mt-0.5">
-                                      <span className="text-[11px] text-stone-300 flex items-center gap-1">
+                                      <span className="text-[11px] text-stone-400 flex items-center gap-1">
                                         <Clock size={11} />
                                         {lesson.duration}
                                       </span>
                                       {quizScore && (
-                                        <span className="text-[11px] text-stone-300">
+                                        <span className="text-[11px] text-stone-400">
                                           Quiz: {quizScore.score}/{quizScore.total}
                                         </span>
                                       )}

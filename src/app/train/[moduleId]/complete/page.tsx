@@ -276,7 +276,7 @@ export default function ModuleCompletePage({
 
               {/* Progress note */}
               {mounted && (
-                <p className="text-[11px] text-stone-300 mt-8">
+                <p className="text-[11px] text-stone-400 mt-8">
                   {progress.completedModules.length} of {modules.length - 1}{" "}
                   training modules completed
                 </p>

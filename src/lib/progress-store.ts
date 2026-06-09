@@ -6,7 +6,14 @@ export interface UserProgress {
   userId: string | null;
   completedLessons: string[];
   completedModules: string[];
-  quizScores: Record<string, { score: number; total: number; date: string }>;
+  // `answers` records the option *text* the user chose for each question id, so
+  // a revisited quiz can show exactly what they picked. Storing text (not an
+  // index) keeps it correct across re-shuffles and retries, and it lives inside
+  // the existing quiz_scores JSONB column — no schema change required.
+  quizScores: Record<
+    string,
+    { score: number; total: number; date: string; answers?: Record<string, string> }
+  >;
   currentModule: string | null;
   currentLesson: string | null;
   certified: boolean;
@@ -114,13 +121,14 @@ export async function completeLesson(lessonId: string): Promise<UserProgress> {
 export async function saveQuizScore(
   lessonId: string,
   score: number,
-  total: number
+  total: number,
+  answers?: Record<string, string>
 ): Promise<UserProgress> {
   const progress = {
     ..._cache,
     quizScores: {
       ..._cache.quizScores,
-      [lessonId]: { score, total, date: new Date().toISOString() },
+      [lessonId]: { score, total, date: new Date().toISOString(), answers },
     },
   };
   _cache = progress;
@@ -234,6 +242,29 @@ export async function resetModuleProgress(moduleId: string, allModules: Module[]
   const progress = {
     ..._cache,
     completedLessons: _cache.completedLessons.filter((id) => !lessonIds.includes(id)),
+    completedModules: _cache.completedModules.filter((id) => id !== moduleId),
+    quizScores: { ..._cache.quizScores },
+  };
+  for (const id of lessonIds) {
+    delete progress.quizScores[id];
+  }
+  _cache = progress;
+  await persist(progress);
+  return progress;
+}
+
+/**
+ * Gentler than resetModuleProgress: clears only the quiz scores for a module
+ * (so the learner can re-attempt) while KEEPING their lessons-read progress.
+ * Used when a module quiz is failed — they shouldn't have to re-read everything
+ * to retry, just retake the quizzes. The module badge is removed until re-passed.
+ */
+export async function resetModuleQuizzes(moduleId: string, allModules: Module[]): Promise<UserProgress> {
+  const mod = allModules.find((m) => m.id === moduleId);
+  if (!mod) return _cache;
+  const lessonIds = mod.lessons.map((l) => l.id);
+  const progress = {
+    ..._cache,
     completedModules: _cache.completedModules.filter((id) => id !== moduleId),
     quizScores: { ..._cache.quizScores },
   };

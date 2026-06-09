@@ -6,9 +6,8 @@ import type { Metadata } from "next";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://slidesure.com.au";
 
 // Open Graph tags so that when a certificate verification link is shared
-// (e.g. on LinkedIn), the platform renders a rich preview card with an image.
-// TODO (deploy): replace ogImage with a dynamic certificate tile endpoint
-// (e.g. /api/og/certificate?name=...) using @vercel/og for a personalised image.
+// (e.g. on LinkedIn), the platform renders a rich preview card with a
+// personalised certificate tile (see /api/og/certificate).
 export async function generateMetadata({
   params,
 }: {
@@ -32,7 +31,9 @@ export async function generateMetadata({
     : "SlideSure Certificate Verification";
   const description =
     "Waterslide Assurance & Competency System - a REST Group product. Verify this certification of competency in waterslide operational safety.";
-  const ogImage = `${APP_URL}/rest-group-logo.png`;
+  // Personalised certificate tile (renders the holder's name) so a shared
+  // verification link previews as a real certificate, not a bare logo.
+  const ogImage = `${APP_URL}/api/og/certificate?id=${certId}`;
 
   return {
     title,
@@ -166,7 +167,7 @@ export default async function VerifyPage({
               <p className="text-sm text-stone-400 mb-2">
                 No valid certificate exists for ID: <span className="font-mono font-bold">{certId}</span>
               </p>
-              <p className="text-xs text-stone-300 mb-6">
+              <p className="text-xs text-stone-400 mb-6">
                 This may be an invalid or expired certificate. Contact the certificate holder for clarification.
               </p>
             </div>

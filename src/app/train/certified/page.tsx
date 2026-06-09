@@ -107,13 +107,32 @@ export default function CertifiedPage() {
   }, []);
 
   const userName = progress.userName || "Candidate";
-  const certDate = progress.certificationDate
-    ? new Date(progress.certificationDate).toLocaleDateString("en-AU", {
+  const certIssued = progress.certificationDate ? new Date(progress.certificationDate) : null;
+  const certDate = certIssued
+    ? certIssued.toLocaleDateString("en-AU", {
         day: "numeric",
         month: "long",
         year: "numeric",
       })
     : "";
+
+  // Deep link into LinkedIn's "Add licence or certification" flow, pre-filled
+  // with the credential details so a graduate can add it to their profile in
+  // one tap (name, issuer, issue date, the verification URL, and cert ID).
+  const linkedInAddUrl = (() => {
+    const params = new URLSearchParams({
+      startTask: "CERTIFICATION_NAME",
+      name: "SlideSure Waterslide Assurance & Competency",
+      organizationName: "REST Group",
+    });
+    if (certIssued) {
+      params.set("issueYear", String(certIssued.getFullYear()));
+      params.set("issueMonth", String(certIssued.getMonth() + 1));
+    }
+    if (shareUrl) params.set("certUrl", shareUrl);
+    if (certId) params.set("certId", certId);
+    return `https://www.linkedin.com/profile/add?${params.toString()}`;
+  })();
   const handleDownloadPdf = useCallback(async () => {
     if (!certRef.current) return;
     setDownloadingPdf(true);
@@ -307,7 +326,7 @@ export default function CertifiedPage() {
                       </div>
                     </div>
 
-                    <p className="text-[10px] text-stone-300 mt-8 leading-relaxed">
+                    <p className="text-[10px] text-stone-400 mt-8 leading-relaxed">
                       A REST Group product. Standards-aligned waterslide operator training.
                     </p>
                   </div>
@@ -347,6 +366,21 @@ export default function CertifiedPage() {
                 )}
               </button>
             </div>
+
+            {/* Add directly to a LinkedIn profile's Licenses & Certifications */}
+            <a
+              href={linkedInAddUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group mt-3 w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full bg-white border-2 border-[#0A66C2] text-[#0A66C2] font-medium hover:bg-[#0A66C2]/5 active:scale-[0.97] transition-all duration-300"
+              title="Add this certification to your LinkedIn profile"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#0A66C2">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              Add to LinkedIn profile
+            </a>
+
             <button
               onClick={handleDownloadPdf}
               disabled={downloadingPdf}
