@@ -58,15 +58,17 @@ function Rider({
   progress,
   color,
   letter,
+  opacity,
 }: {
   progress: ReturnType<typeof useMotionValue<number>>;
   color: string;
   letter: string;
+  opacity?: ReturnType<typeof useMotionValue<number>>;
 }) {
   const x = useTransform(progress, (p) => pointAt(p).x);
   const y = useTransform(progress, (p) => pointAt(p).y);
   return (
-    <motion.g style={{ x, y }}>
+    <motion.g style={{ x, y, opacity }}>
       <circle r="11" fill={color} stroke="#ffffff" strokeWidth="2.5" filter="url(#riderShadow)" />
       <text textAnchor="middle" dy="3.6" fontSize="11" fontWeight="700" fill="#ffffff" fontFamily="system-ui">
         {letter}
@@ -79,20 +81,37 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
   const reduce = useReducedMotion();
   const aProg = useMotionValue(variant === "problem" ? 0.46 : 0.5);
   const bProg = useMotionValue(variant === "problem" ? 0.46 : 0.3);
+  const aOpacity = useMotionValue(1);
 
   useEffect(() => {
     if (reduce) return;
+    const isProblem = variant === "problem";
     // Light rider (both tracks): decelerates through the rough / enclosed mid.
-    const ctrlA = animate(aProg, [0, 0.4, 0.5, 1], {
-      duration: LOOP,
-      times: [0, 0.45, 0.62, 1],
-      repeat: Infinity,
-      ease: "linear",
-    });
+    // On the solution track it reaches the pool EARLY (t=0.8 of the loop) and
+    // then climbs out (fade) — the pool must be empty before the next arrival,
+    // and the two riders must never reach the bottom together.
+    const ctrlA = animate(
+      aProg,
+      isProblem ? [0, 0.4, 0.5, 1] : [0, 0.4, 0.5, 1, 1],
+      {
+        duration: LOOP,
+        times: isProblem ? [0, 0.45, 0.62, 1] : [0, 0.45, 0.62, 0.8, 1],
+        repeat: Infinity,
+        ease: "linear",
+      }
+    );
+    const ctrlAOp = isProblem
+      ? null
+      : animate(aOpacity, [1, 1, 0, 0], {
+          duration: LOOP,
+          times: [0, 0.82, 0.92, 1],
+          repeat: Infinity,
+          ease: "linear",
+        });
     // Heavy rider: waits at the top, then constant speed. A short wait (problem)
     // lets it catch the light rider in the blind mid-section; a longer wait
-    // (solution) keeps a safe gap the whole way down.
-    const bTimes = variant === "problem" ? [0, 0.16, 1] : [0, 0.34, 1];
+    // (solution) keeps a safe gap and lands in an already-cleared pool.
+    const bTimes = isProblem ? [0, 0.16, 1] : [0, 0.34, 1];
     const ctrlB = animate(bProg, [0, 0, 1], {
       duration: LOOP,
       times: bTimes,
@@ -101,9 +120,10 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
     });
     return () => {
       ctrlA.stop();
+      ctrlAOp?.stop();
       ctrlB.stop();
     };
-  }, [variant, reduce, aProg, bProg]);
+  }, [variant, reduce, aProg, bProg, aOpacity]);
 
   const isProblem = variant === "problem";
 
@@ -135,7 +155,7 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
       <circle cx="60" cy="60" r="6" fill={NAVY} opacity="0.5" />
       <ellipse cx="668" cy="312" rx="30" ry="11" fill={TEAL} opacity="0.18" />
 
-      <Rider progress={aProg} color={TEAL} letter="L" />
+      <Rider progress={aProg} color={TEAL} letter="L" opacity={aOpacity} />
       <Rider progress={bProg} color={ORANGE} letter="H" />
 
       {/* Outcome badge */}
@@ -225,7 +245,7 @@ export function DispatchCollision() {
           </div>
           <Track variant="solution" />
           <p className="text-[11px] text-stone-500 leading-snug mt-1.5">
-            A longer interval holds a safe separation the whole way down, so both riders reach the catch pool clear.
+            A longer interval holds a safe separation the whole way down - the light rider has already exited the catch pool before the heavy rider arrives.
           </p>
         </div>
       </div>
