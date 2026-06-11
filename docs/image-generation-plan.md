@@ -1,5 +1,30 @@
 # SlideSure lesson imagery - AI generation plan (v2)
 
+## 0. `00-marketing-hero.jpg` - 16:9 - the SlideSure landing page hero
+
+Separate from the lesson set and its calm editorial style - this one is pure
+marketing energy (reference: multi-lane racer, riders on tubes mid-splash,
+intertwined colourful flumes, deep blue sky). Save as
+`public/lesson-images/00-marketing-hero.jpg` and the landing page will be
+pointed at it. Do NOT overwrite `01-hero.png` - that stays the lesson style
+anchor.
+
+> Ultra-vibrant low-angle action shot from the base of a multi-lane mat
+> racer waterslide at a modern Australian water park: two laughing riders on
+> inflatable tubes racing down parallel lanes in saturated pink, yellow,
+> teal and blue, sheets of white spray frozen mid-splash around them. Above
+> and behind, a dense canopy of intertwined fibreglass flumes in magenta,
+> lime green, orange and turquoise loops against a deep cobalt summer sky
+> with small white clouds, galvanised steel support towers, palm fronds at
+> the edges. Shot on a wide 16mm lens, crisp midday sunlight, glossy wet
+> fibreglass reflections, high colour saturation, sharp detail, theme-park
+> campaign photography.
+
+Negative: distorted limbs, extra fingers, warped or melting flume geometry,
+brand logos, readable signage, motion blur on faces, fisheye horizon bend.
+
+
+
 Updated 2026-06-11. This supersedes the original 10-image plan. All 10 original
 slots are KEPT (branded placeholders are live in `public/lesson-images/`), and
 5 new images are added. Two image ideas were reviewed and deliberately
