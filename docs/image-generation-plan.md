@@ -9,21 +9,28 @@ intertwined colourful flumes, deep blue sky). Save as
 pointed at it. Do NOT overwrite `01-hero.png` - that stays the lesson style
 anchor.
 
-Compact prompt (~700 chars - generator fields truncate around 1,000):
+Nano Banana Pro prompt (positive-only - NB Pro ignores negatives, so the
+scene is simplified to one hero structure and the background is defocused
+to hide any residual geometry errors):
 
-> Vibrant low-angle action shot at a modern Australian water park: two
-> laughing riders on inflatable tubes racing down four straight parallel
-> lanes in pink, yellow, teal and blue, white spray frozen mid-splash. The
-> lanes run straight down from one launch tower behind them. Around the
-> tower, four separate fibreglass flumes in magenta, lime, orange and
-> turquoise, each a single continuous tube spiralling smoothly from
-> platform to ground - no merging, no dead ends, never uphill - all
-> supported by steel columns reaching the ground. One horizon, sun high
-> left, cobalt sky, palm fronds at the edges, glossy wet fibreglass, sharp
-> theme-park campaign photography, structurally plausible.
+> Professional theme-park campaign photograph, low angle from the splash
+> run-out: two laughing riders on inflatable tubes race down a four-lane
+> racing waterslide, the lanes coloured pink, yellow, teal and blue,
+> running straight and parallel from a single launch platform at the top
+> to the shallow run-out in the foreground, white spray bursting around
+> the tubes. Behind the racer, slightly out of focus, one orange enclosed
+> flume curves in a single smooth S-bend from that same platform down to
+> the ground, held up by straight vertical steel columns. Clear cobalt
+> sky, palm fronds at the frame edges, bright midday sun from the upper
+> left, glossy wet fibreglass, crisp detail on the riders, soft background
+> depth of field.
 
-Negative (short): warped or tangled flumes, floating track, dead-end or
-uphill tubes, distorted limbs, extra fingers, logos, text, motion blur.
+NB Pro workflow: attach the original REAL reference photo + "Use this photo
+as a composition reference: same camera angle and energy." If a seed still
+tangles the background, reply to it: "keep everything the same but simplify
+the background to just one flume and blur it more" - iterative editing
+beats re-rolling. Zero-risk fallback: delete the background flume sentence
+and use "Above and behind, only clear cobalt sky and palm fronds."
 
 Tip: use the original REAL photo reference as a structure/composition
 reference at ~50-60% strength (never a previous AI output with structural
