@@ -277,11 +277,21 @@ export default function TrainPage() {
                       style={{ border: `2px solid ${mod.color}` }}
                     />
                   )}
-                  {/* Hover tooltip — badge name + module score, themed to the module */}
+                  {/* Hover tooltip — badge name + module score, themed to the module.
+                      Opens BELOW the badge: the fixed nav glass sits above page
+                      content, so an upward tooltip would slide behind it on the
+                      top row. Below always has free space and never meets the bar. */}
                   <div
-                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 pointer-events-none opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-30 pointer-events-none opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
                     role="tooltip"
                   >
+                    <div
+                      className="w-2 h-2 bg-white rotate-45 mx-auto -mb-[5px] relative z-10"
+                      style={{
+                        borderLeft: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
+                        borderTop: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
+                      }}
+                    />
                     <div
                       className="bg-white rounded-xl px-3.5 py-2.5 w-max max-w-[200px] text-center shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
                       style={{
@@ -311,13 +321,6 @@ export default function TrainPage() {
                         </p>
                       )}
                     </div>
-                    <div
-                      className="w-2 h-2 bg-white rotate-45 mx-auto -mt-[5px]"
-                      style={{
-                        borderRight: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
-                        borderBottom: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
-                      }}
-                    />
                   </div>
                   <div
                     className={`relative w-[68px] h-[68px] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
