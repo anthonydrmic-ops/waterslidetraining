@@ -23,7 +23,13 @@ import {
   PersonSimpleSwim,
 } from "@phosphor-icons/react";
 import { modules, getTotalLessons } from "@/data/training-modules";
-import { defaultProgress, refreshProgress, getCompletionPercentage, isLessonUnlocked } from "@/lib/progress-store";
+import {
+  defaultProgress,
+  refreshProgress,
+  getCompletionPercentage,
+  isLessonUnlocked,
+  getModuleCumulativeScore,
+} from "@/lib/progress-store";
 import { TrainPageLoader } from "@/components/TrainSkeletons";
 import Link from "next/link";
 
@@ -246,11 +252,11 @@ export default function TrainPage() {
               const Icon = iconMap[mod.icon] || ShieldCheck;
               const earned = mounted && progress.completedModules?.includes(mod.id);
               const isNew = earned && newlyEarned.includes(mod.id);
+              const badgeScore = earned ? getModuleCumulativeScore(mod.id, modules) : null;
               return (
                 <motion.div
                   key={mod.id}
                   className="group relative"
-                  title={`${mod.badge.label}${earned ? " - Earned" : " - Locked"}`}
                   style={{ perspective: "600px" }}
                   initial={isNew ? { scale: 0.4, opacity: 0 } : false}
                   animate={isNew ? { scale: 1, opacity: 1 } : undefined}
@@ -271,6 +277,48 @@ export default function TrainPage() {
                       style={{ border: `2px solid ${mod.color}` }}
                     />
                   )}
+                  {/* Hover tooltip — badge name + module score, themed to the module */}
+                  <div
+                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 pointer-events-none opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                    role="tooltip"
+                  >
+                    <div
+                      className="bg-white rounded-xl px-3.5 py-2.5 w-max max-w-[200px] text-center shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+                      style={{
+                        border: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
+                      }}
+                    >
+                      <p className="text-[10px] font-mono uppercase tracking-wider text-stone-400">
+                        Module {String(mod.number).padStart(2, "0")}
+                      </p>
+                      <p
+                        className="text-[12px] font-semibold tracking-tight mt-0.5"
+                        style={{ color: mod.color }}
+                      >
+                        {mod.badge.label}
+                      </p>
+                      {earned && badgeScore && badgeScore.total > 0 ? (
+                        <p className="text-[13px] font-mono font-bold text-stone-800 mt-1">
+                          {badgeScore.pct}%
+                          <span className="text-stone-400 font-medium text-[11px]">
+                            {" "}&middot; {badgeScore.score}/{badgeScore.total}
+                          </span>
+                        </p>
+                      ) : (
+                        <p className="text-[10px] text-stone-400 mt-1 flex items-center justify-center gap-1">
+                          <Lock size={9} weight="bold" />
+                          Not yet earned
+                        </p>
+                      )}
+                    </div>
+                    <div
+                      className="w-2 h-2 bg-white rotate-45 mx-auto -mt-[5px]"
+                      style={{
+                        borderRight: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
+                        borderBottom: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
+                      }}
+                    />
+                  </div>
                   <div
                     className={`relative w-[68px] h-[68px] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
                       earned

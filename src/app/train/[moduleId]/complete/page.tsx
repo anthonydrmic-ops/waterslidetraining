@@ -310,7 +310,11 @@ export default function ModuleCompletePage({
                   )}
                 </motion.div>
 
-                <p className="text-[11px] text-stone-400 mt-8">
+                <p className="text-[11px] text-stone-400 mt-8 leading-relaxed">
+                  Chasing a higher score? Reopen any lesson in this module and retake its
+                  Knowledge Check - your best result counts.
+                </p>
+                <p className="text-[11px] text-stone-400 mt-2">
                   {progress.completedModules.length} of {modules.length - 1} training modules
                   completed
                 </p>

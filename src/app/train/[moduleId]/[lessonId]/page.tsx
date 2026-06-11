@@ -24,6 +24,7 @@ import {
   Trophy,
   Certificate,
   Clock,
+  ArrowCounterClockwise,
 } from "@phosphor-icons/react";
 import {
   modules,
@@ -121,6 +122,11 @@ export default function LessonPage({
   // True while handing off from the last lesson straight to the module score
   // screen — shows a transition instead of flashing this lesson's own results.
   const [navigating, setNavigating] = useState(false);
+  // Post-pass retakes: once the module badge is earned, any lesson quiz can be
+  // retaken to chase a better score. Best score counts — a worse run is never
+  // saved, so the module result (and badge) can only improve.
+  const [retakeMode, setRetakeMode] = useState(false);
+  const [retakeOutcome, setRetakeOutcome] = useState<"improved" | "kept" | null>(null);
 
   // Scroll-linked reading progress, themed in the module's colour.
   const { scrollYProgress } = useScroll();
@@ -253,7 +259,7 @@ export default function LessonPage({
   }, []);
 
   const handleQuizSubmit = useCallback(async () => {
-    if (!lesson.quiz || alreadyQuizzed) return;
+    if (!lesson.quiz || (alreadyQuizzed && !retakeMode)) return;
     const score = shuffledQuiz.reduce(
       (acc, q) => acc + (quizAnswers[q.id] === q.correctIndex ? 1 : 0),
       0
@@ -268,6 +274,20 @@ export default function LessonPage({
       if (sel != null && q.options[sel] != null) {
         chosenAnswers[q.id] = q.options[sel];
       }
+    }
+
+    // Post-pass retake: only persist if it beats the stored score, then show
+    // results inline — no module-complete handoff, no re-completion.
+    if (retakeMode) {
+      const prev = getProgress().quizScores[lessonId];
+      const improved = !prev || score > prev.score;
+      if (improved) {
+        const updated = await saveQuizScore(lessonId, score, total, chosenAnswers);
+        setProgress(updated);
+      }
+      setRetakeOutcome(improved ? "improved" : "kept");
+      setQuizSubmitted(true);
+      return;
     }
 
     // Finishing the last lesson of a content module: skip this lesson's own
@@ -320,10 +340,24 @@ export default function LessonPage({
     mod,
     moduleId,
     alreadyQuizzed,
+    retakeMode,
     isFinalAssessment,
     fireConfetti,
     router,
   ]);
+
+  // Module already passed (badge earned) — unlocks per-lesson score retakes.
+  const modulePassed =
+    mounted && !isFinalAssessment && !!progress.completedModules?.includes(moduleId);
+
+  const startRetake = useCallback(() => {
+    setRetakeMode(true);
+    setRetakeOutcome(null);
+    setQuizAnswers({});
+    setCurrentQuizIndex(0);
+    setQuizAttempt((a) => a + 1);
+    setQuizSubmitted(false);
+  }, []);
 
   // Quiz keyboard shortcuts: 1-4 / A-D pick an option for the current question,
   // Enter advances (or submits on the last question). Skipped once submitted,
@@ -626,7 +660,8 @@ export default function LessonPage({
                             <button
                               onClick={handleQuizSubmit}
                               disabled={
-                                alreadyQuizzed || Object.keys(quizAnswers).length !== shuffledQuiz.length
+                                (alreadyQuizzed && !retakeMode) ||
+                                Object.keys(quizAnswers).length !== shuffledQuiz.length
                               }
                               className="flex-1 py-4 rounded-2xl bg-[var(--cta)] text-white font-medium hover:bg-[var(--cta-dark)] active:scale-[0.99] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] disabled:opacity-30 disabled:cursor-not-allowed shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
                             >
@@ -654,6 +689,67 @@ export default function LessonPage({
                           answers={quizAnswers}
                           isFinal={isFinalAssessment}
                         />
+
+                        {/* Retake outcome — best score policy, stated plainly */}
+                        {retakeOutcome && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
+                            className={`mt-3 px-4 py-3 rounded-2xl border text-sm flex items-center gap-2.5 ${
+                              retakeOutcome === "improved"
+                                ? "bg-emerald-50/70 border-emerald-200/60 text-emerald-800"
+                                : "bg-stone-50 border-stone-200/70 text-stone-500"
+                            }`}
+                          >
+                            {retakeOutcome === "improved" ? (
+                              <>
+                                <Trophy size={16} weight="fill" className="text-emerald-500 shrink-0" />
+                                New personal best - saved to your module score.
+                              </>
+                            ) : (
+                              <>
+                                <ArrowCounterClockwise size={16} weight="bold" className="text-stone-400 shrink-0" />
+                                Your previous best stays on record - retake anytime.
+                              </>
+                            )}
+                          </motion.div>
+                        )}
+
+                        {/* Post-pass score retake — earn the badge first, then chase the score */}
+                        {modulePassed && (
+                          <button
+                            onClick={startRetake}
+                            className="group/retake mt-3 w-full px-5 py-3.5 rounded-2xl border bg-white text-left flex items-center gap-3 transition-all duration-300 hover:shadow-[0_4px_18px_rgba(0,0,0,0.05)] active:scale-[0.99]"
+                            style={{
+                              borderColor: "color-mix(in srgb, var(--mod) 28%, transparent)",
+                            }}
+                          >
+                            <div
+                              className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                              style={{ backgroundColor: "color-mix(in srgb, var(--mod) 12%, transparent)" }}
+                            >
+                              <ArrowCounterClockwise
+                                size={17}
+                                weight="bold"
+                                className="transition-transform duration-500 group-hover/retake:-rotate-180"
+                                style={{ color: "var(--mod)" }}
+                              />
+                            </div>
+                            <span className="flex-1">
+                              <span className="block text-sm font-semibold text-stone-800">
+                                Retake this Knowledge Check
+                              </span>
+                              <span className="block text-[11px] text-stone-400 mt-0.5">
+                                Best score counts - your module result can only improve
+                              </span>
+                            </span>
+                            <ArrowRight
+                              size={14}
+                              className="text-stone-300 group-hover/retake:translate-x-0.5 transition-transform duration-300 shrink-0"
+                            />
+                          </button>
+                        )}
 
                         {/* Show all questions with answers after submit */}
                         <div className="mt-8 space-y-6">
