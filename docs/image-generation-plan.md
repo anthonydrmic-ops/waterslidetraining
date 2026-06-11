@@ -101,18 +101,35 @@ exposing material; (4) add context wear (light scratches, water droplets,
 staining). Negative: torn paper, shattered ceramic, earthquake fissure,
 gaping hole, raised broken edges, 3D render, CGI, studio lighting, cartoon.
 
-Corrected prompt for `02-crack-structural.jpg`:
+Every defect prompt starts with "Inspection photograph taken on a
+smartphone during a waterslide maintenance check:" and ends with "Realistic
+phone-camera look, slightly imperfect framing, true-to-life scale,
+documentary record for a safety training manual." Defect cores:
 
-> Inspection photograph taken on a smartphone during a waterslide
-> maintenance check: a tight structural crack about two millimetres wide
-> running diagonally across the white gelcoat of a fibreglass flume,
-> visible as a sharp dark line with tiny chips along its edges and faint
-> spider-web hairline branches spreading from it, slight grey staining
-> along the crack where water has penetrated, the gently curved glossy
-> flume surface showing light wear scratches and a few water droplets,
-> soft outdoor daylight. Realistic phone-camera look, slightly imperfect
-> framing, true-to-life scale, documentary record for a safety training
-> manual.
+- `02-crack-structural.jpg`: a tight structural crack about two millimetres
+  wide running diagonally across the white gelcoat of a fibreglass flume,
+  visible as a sharp dark line with tiny chips along its edges and faint
+  spider-web hairline branches, slight grey staining along the crack where
+  water has penetrated, curved glossy surface with light wear scratches and
+  water droplets, soft outdoor daylight.
+- `03-gelcoat-delamination.jpg`: a patch of white gelcoat about the size of
+  a hand flaking off the curved flume surface, thin brittle flakes lifted a
+  few millimetres at their edges, dull slightly fibrous laminate showing
+  where flakes have come away, fine blistering at the patch edges,
+  surrounding surface glossy with light scratches and droplets.
+- `04-joint-misalignment.jpg`: the joint line where two flume sections
+  meet, one sitting a few millimetres proud so a small step and lip runs
+  across the surface, old sealant cracked and discoloured with a short
+  section missing, low raking light making the height difference visible,
+  thin film of water on the worn glossy surface.
+- `05-mineral-scaling.jpg`: a rough white-grey band of calcium scale a few
+  centimetres wide crusted along the waterline inside a light-blue flume,
+  chalky slightly raised texture with faint yellow staining at the edges,
+  smooth glossy gelcoat above the band, a trickle of water below it.
+- `11-fastener-corrosion.jpg`: a stainless steel hex bolt on a flume flange
+  joint, early brown tea-staining on the bolt head and washer, a thin rust
+  weep trail a few centimetres long running down the gelcoat below it,
+  droplets nearby, surrounding surface glossy with light scratches.
 
 ## NEW - 5 additions
 
