@@ -915,9 +915,10 @@ export default function TrainPage() {
                           You&apos;re about to become a certified waterslide operator
                         </h2>
                         <p className="text-sm text-stone-500 leading-relaxed mb-6 max-w-[52ch]">
-                          This course is built on Australian standards and real incidents. By the
-                          end, you&apos;ll know how the slide works as an engineered system, what
-                          fails, how to inspect it, and exactly what to do when something is wrong.
+                          This course is based on relevant standards, real incidents and operating
+                          manuals related to waterslides. By the end, you&apos;ll know how a
+                          waterslide works as an engineered system, what fails, how to inspect it
+                          and exactly what to do when something is wrong.
                         </p>
                       </div>,
                       <div key="r1" className="flex items-start gap-3.5 py-3 border-t border-stone-100">
@@ -926,7 +927,8 @@ export default function TrainPage() {
                         </div>
                         <div>
                           <p className="text-[13px] font-semibold text-stone-800">
-                            9 modules, 29 lessons - about {formatDuration(courseMins)} of reading
+                            9 modules, 29 lessons - about {Math.round(courseMins / 60)} hours of
+                            reading
                           </p>
                           <p className="text-[11.5px] text-stone-400 leading-snug mt-0.5">
                             From the WHS legal framework through to emergency response, with
