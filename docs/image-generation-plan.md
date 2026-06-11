@@ -133,6 +133,32 @@ Lands in: **4-4 Exit Control and Coordination**.
 > steps with handrail, "KEEP EXIT CLEAR" floor signage zone, aerated white
 > water at the flume mouth, viewed from the lifeguard's position.
 
+## 16-19. Surface severity series - 4:3 - Nano Banana Pro (edit chain)
+
+Replaces the abstract tiles in the SurfaceDefects diagram with a same-shot
+photo sequence. THE RULE: generate 16 (smooth) first, then produce 17-19 as
+EDITS of 16 - same camera, same lighting, same flume, only the surface
+worsens. Flick between them like a flipbook to QA; defect must read at
+thumbnail size.
+
+- `16-surface-smooth.jpg` - base: "Mid-distance photograph looking down the
+  open trough of a light-blue fibreglass waterslide flume section, even
+  outdoor daylight, a thin sheet of water flowing over flawless glossy
+  gelcoat, clean specular highlights, zero defects, camera angled 45 degrees
+  so the flume interior fills the frame."
+- `17-surface-roughening.jpg` - edit: gelcoat along the rider line dull and
+  matte, fine sandpaper roughness, chalky UV-fading streaks, gloss gone in
+  the worn band only.
+- `18-surface-peeling.jpg` - edit: blue gelcoat flaked and peeled along the
+  rider line, irregular white fibreglass laminate exposed, lifted flake
+  edges casting small shadows.
+- `19-surface-cracking.jpg` - edit: branching structural crack network, one
+  main fracture with hairline branches, grey darkening along crack lines
+  where water has penetrated.
+
+Negative for all four: people, hands, logos, text, warped flume geometry,
+cartoon, changed camera angle, changed lighting.
+
 ## What we will NOT generate (reviewed and removed)
 
 - **First-aid / injury scenes** (was considered for Module 8): AI renders of

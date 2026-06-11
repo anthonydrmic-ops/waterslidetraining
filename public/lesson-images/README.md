@@ -32,6 +32,10 @@ Generate the file first, drop it here, then wire the section into the lesson.
 | 13 | `13-storm-closure.jpg` | 16:9 | Module 3, lesson 2-4 (weather shutdown) |
 | 14 | `14-dispatch-signal.jpg` | 4:3 | Module 5, lesson 4-2 (dispatch timing) |
 | 15 | `15-splash-pool.jpg` | 4:3 | Module 5, lesson 4-4 (exit control) |
+| 16 | `16-surface-smooth.jpg` | 4:3 | SurfaceDefects diagram tile 1 (same-shot series, see plan doc) |
+| 17 | `17-surface-roughening.jpg` | 4:3 | SurfaceDefects diagram tile 2 (edit of 16) |
+| 18 | `18-surface-peeling.jpg` | 4:3 | SurfaceDefects diagram tile 3 (edit of 16) |
+| 19 | `19-surface-cracking.jpg` | 4:3 | SurfaceDefects diagram tile 4 (edit of 16) |
 
 ## How an image section looks in a lesson
 
