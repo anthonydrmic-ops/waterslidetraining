@@ -579,15 +579,35 @@ export default function LessonPage({
           <motion.div {...inViewReveal} className="mt-12">
                 <div className="card-shell">
                   <div className="card-core p-6 md:p-8">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-between gap-3 mb-2">
                       <h3 className="text-xl font-bold tracking-tight text-stone-900">
                         {isFinalAssessment ? "Final Assessment" : "Knowledge Check"}
                       </h3>
-                      {!quizSubmitted && (
+                      {!quizSubmitted ? (
                         <span className="text-xs font-mono text-stone-400 bg-stone-100 px-3 py-1.5 rounded-full">
                           {currentQuizIndex + 1} / {shuffledQuiz.length}
                         </span>
-                      )}
+                      ) : modulePassed ? (
+                        /* Post-pass score retake — compact, lives in the header
+                           row so it adds no scroll. Best score counts. */
+                        <button
+                          onClick={startRetake}
+                          title="Best score counts - your module result can only improve"
+                          className="group/retake inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300 active:scale-[0.97] shrink-0"
+                          style={{
+                            color: "var(--mod)",
+                            borderColor: "color-mix(in srgb, var(--mod) 30%, transparent)",
+                            backgroundColor: "color-mix(in srgb, var(--mod) 7%, transparent)",
+                          }}
+                        >
+                          <ArrowCounterClockwise
+                            size={13}
+                            weight="bold"
+                            className="transition-transform duration-500 group-hover/retake:-rotate-180"
+                          />
+                          Retake
+                        </button>
+                      ) : null}
                     </div>
                     {isFinalAssessment && !quizSubmitted && (
                       <p className="text-sm text-stone-400 mb-6 leading-relaxed">
@@ -716,40 +736,6 @@ export default function LessonPage({
                           </motion.div>
                         )}
 
-                        {/* Post-pass score retake — earn the badge first, then chase the score */}
-                        {modulePassed && (
-                          <button
-                            onClick={startRetake}
-                            className="group/retake mt-3 w-full px-5 py-3.5 rounded-2xl border bg-white text-left flex items-center gap-3 transition-all duration-300 hover:shadow-[0_4px_18px_rgba(0,0,0,0.05)] active:scale-[0.99]"
-                            style={{
-                              borderColor: "color-mix(in srgb, var(--mod) 28%, transparent)",
-                            }}
-                          >
-                            <div
-                              className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                              style={{ backgroundColor: "color-mix(in srgb, var(--mod) 12%, transparent)" }}
-                            >
-                              <ArrowCounterClockwise
-                                size={17}
-                                weight="bold"
-                                className="transition-transform duration-500 group-hover/retake:-rotate-180"
-                                style={{ color: "var(--mod)" }}
-                              />
-                            </div>
-                            <span className="flex-1">
-                              <span className="block text-sm font-semibold text-stone-800">
-                                Retake this Knowledge Check
-                              </span>
-                              <span className="block text-[11px] text-stone-400 mt-0.5">
-                                Best score counts - your module result can only improve
-                              </span>
-                            </span>
-                            <ArrowRight
-                              size={14}
-                              className="text-stone-300 group-hover/retake:translate-x-0.5 transition-transform duration-300 shrink-0"
-                            />
-                          </button>
-                        )}
 
                         {/* Show all questions with answers after submit */}
                         <div className="mt-8 space-y-6">
