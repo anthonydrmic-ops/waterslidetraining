@@ -17,7 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CertifiedSkeleton } from "@/components/TrainSkeletons";
-import { GuillocheBackdrop, FoilSeal, ModuleMedals } from "@/components/CertificateArtwork";
+import { GuillocheBackdrop, ModuleMedals } from "@/components/CertificateArtwork";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16, filter: "blur(6px)" },
@@ -48,7 +48,6 @@ export default function CertifiedPage() {
   const [downloadingPdf, setDownloadingPdf] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
   const [certId, setCertId] = useState<string | null>(null);
-  const [qrDataUrl, setQrDataUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const certRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -74,30 +73,6 @@ export default function CertifiedPage() {
       setShareUrl(storedCertId ? `${appUrl}/verify/${storedCertId}` : appUrl);
     });
   }, [router]);
-
-  // Generate the verification QR code (points at the public /verify URL) once the
-  // share URL is known. Loaded on demand to keep it out of the initial bundle.
-  useEffect(() => {
-    if (!shareUrl) return;
-    let cancelled = false;
-    import("qrcode")
-      .then((mod) =>
-        mod.toDataURL(shareUrl, {
-          margin: 1,
-          width: 240,
-          color: { dark: "#0B3A66", light: "#ffffff" },
-        })
-      )
-      .then((url) => {
-        if (!cancelled) setQrDataUrl(url);
-      })
-      .catch(() => {
-        /* QR is decorative-with-purpose; if it fails the cert still renders */
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [shareUrl]);
 
   const handleCopyCaption = useCallback(async () => {
     try {
@@ -338,38 +313,6 @@ export default function CertifiedPage() {
                           <p className="text-xs font-mono font-semibold text-stone-700">{certId}</p>
                         </div>
                       )}
-                    </div>
-
-                    {/* Signature · Foil seal · Verification QR */}
-                    <div className="flex items-end justify-between gap-4 mt-9">
-                      <div className="text-left">
-                        <p className="font-serif italic text-lg text-stone-700 leading-none">
-                          REST Group
-                        </p>
-                        <div className="w-32 border-t border-stone-300 mt-1.5 mb-1" />
-                        <p className="text-[9px] uppercase tracking-wider text-stone-400">
-                          Authorised Signatory
-                        </p>
-                      </div>
-
-                      <FoilSeal size={72} />
-
-                      <div className="flex flex-col items-center">
-                        {qrDataUrl ? (
-                          <img
-                            src={qrDataUrl}
-                            alt="Scan to verify this certificate"
-                            width={60}
-                            height={60}
-                            className="rounded-md border border-stone-100"
-                          />
-                        ) : (
-                          <div className="w-[60px] h-[60px] rounded-md bg-stone-50 border border-stone-100" />
-                        )}
-                        <p className="text-[8px] uppercase tracking-wider text-stone-400 mt-1">
-                          Scan to verify
-                        </p>
-                      </div>
                     </div>
 
                     <p className="text-[10px] text-stone-400 mt-8 leading-relaxed">

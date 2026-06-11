@@ -66,16 +66,22 @@ export function ModuleMedals({ size = 38 }: { size?: number }) {
             >
               <defs>
                 <linearGradient id={`medal-${m.id}`} x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor={m.color} />
-                  <stop offset="100%" stopColor={m.color} stopOpacity="0.7" />
+                  <stop offset="0%" stopColor={m.color} stopOpacity="0.85" />
+                  <stop offset="100%" stopColor={m.color} stopOpacity="0.6" />
                 </linearGradient>
               </defs>
               <polygon points={HEX_OUTER} fill={`url(#medal-${m.id})`} />
               <polygon points={HEX_INNER} fill="#ffffff" />
-              <polygon points={HEX_INNER} fill={m.color} opacity="0.08" />
+              <polygon points={HEX_INNER} fill={m.color} opacity="0.06" />
+              {/* Parchment veil — settles the colours into the certificate ground */}
+              <polygon points={HEX_OUTER} fill="#fbf8f1" opacity="0.14" />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <Icon size={Math.round(size * 0.42)} weight="fill" style={{ color: m.color }} />
+              <Icon
+                size={Math.round(size * 0.42)}
+                weight="fill"
+                style={{ color: m.color, opacity: 0.82 }}
+              />
             </div>
           </div>
         );

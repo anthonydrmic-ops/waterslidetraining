@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { GuillocheBackdrop, FoilSeal, ModuleMedals } from "@/components/CertificateArtwork";
+import { GuillocheBackdrop, ModuleMedals } from "@/components/CertificateArtwork";
 
 /**
  * Dev-only visual preview of the certificate with sample data, so the design
@@ -9,21 +8,6 @@ import { GuillocheBackdrop, FoilSeal, ModuleMedals } from "@/components/Certific
  * /train/certified exactly - keep the two in sync when restyling.
  */
 export default function CertificatePreviewPage() {
-  const [qrDataUrl, setQrDataUrl] = useState("");
-
-  useEffect(() => {
-    import("qrcode")
-      .then((mod) =>
-        mod.toDataURL("https://restgroup.com.au/verify/SS-PREVIEW-0000", {
-          margin: 1,
-          width: 240,
-          color: { dark: "#0B3A66", light: "#ffffff" },
-        })
-      )
-      .then(setQrDataUrl)
-      .catch(() => {});
-  }, []);
-
   const userName = "Jordan Rivers";
   const certDate = "11 June 2026";
   const certId = "SS-2026-4F8A2C";
@@ -117,37 +101,6 @@ export default function CertificatePreviewPage() {
                       Certificate ID
                     </p>
                     <p className="text-xs font-mono font-semibold text-stone-700">{certId}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-end justify-between gap-4 mt-9">
-                  <div className="text-left">
-                    <p className="font-serif italic text-lg text-stone-700 leading-none">
-                      REST Group
-                    </p>
-                    <div className="w-32 border-t border-stone-300 mt-1.5 mb-1" />
-                    <p className="text-[9px] uppercase tracking-wider text-stone-400">
-                      Authorised Signatory
-                    </p>
-                  </div>
-
-                  <FoilSeal size={72} />
-
-                  <div className="flex flex-col items-center">
-                    {qrDataUrl ? (
-                      <img
-                        src={qrDataUrl}
-                        alt="Scan to verify this certificate"
-                        width={60}
-                        height={60}
-                        className="rounded-md border border-stone-100"
-                      />
-                    ) : (
-                      <div className="w-[60px] h-[60px] rounded-md bg-stone-50 border border-stone-100" />
-                    )}
-                    <p className="text-[8px] uppercase tracking-wider text-stone-400 mt-1">
-                      Scan to verify
-                    </p>
                   </div>
                 </div>
 
