@@ -408,7 +408,7 @@ function TrainingPageInner() {
                 )}
                 <p className="text-[11px] text-stone-300 mt-4">
                   Need 50+ seats?{" "}
-                  <a href="mailto:training@restgroup.com.au" className="text-[var(--accent)] hover:underline">
+                  <a href="mailto:info@restgroup.com.au" className="text-[var(--accent)] hover:underline">
                     Contact us for enterprise pricing
                   </a>
                 </p>
