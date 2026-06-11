@@ -9,19 +9,34 @@ intertwined colourful flumes, deep blue sky). Save as
 pointed at it. Do NOT overwrite `01-hero.png` - that stays the lesson style
 anchor.
 
-> Ultra-vibrant low-angle action shot from the base of a multi-lane mat
-> racer waterslide at a modern Australian water park: two laughing riders on
-> inflatable tubes racing down parallel lanes in saturated pink, yellow,
-> teal and blue, sheets of white spray frozen mid-splash around them. Above
-> and behind, a dense canopy of intertwined fibreglass flumes in magenta,
-> lime green, orange and turquoise loops against a deep cobalt summer sky
-> with small white clouds, galvanised steel support towers, palm fronds at
-> the edges. Shot on a wide 16mm lens, crisp midday sunlight, glossy wet
-> fibreglass reflections, high colour saturation, sharp detail, theme-park
-> campaign photography.
+> Ultra-vibrant low-angle action shot from the splash run-out of a
+> multi-lane racing waterslide at a modern Australian water park. In the
+> foreground: two laughing riders, each on their own inflatable tube in
+> their own lane, racing down four straight parallel lanes in saturated
+> pink, yellow, teal and blue, white spray frozen mid-splash. The lanes
+> descend in one continuous straight line from a single launch tower
+> visible behind them. Around the tower, four or five separate fibreglass
+> flume tubes in magenta, lime green, orange and turquoise - each one a
+> single continuous tube that starts at the tower platform, spirals
+> downward in smooth helix curves, and ends at ground level; no tube merges
+> into another, dead-ends, or climbs back upward. Every elevated section is
+> held up by vertical galvanised steel columns that reach the ground. One
+> consistent perspective with a single horizon line, deep cobalt summer sky
+> with small white clouds, palm fronds at the frame edges. Sunlight from
+> one direction (high left), crisp midday light, glossy wet fibreglass
+> reflections, high colour saturation, sharp detail, theme-park campaign
+> photography, architecturally plausible structure throughout.
 
 Negative: distorted limbs, extra fingers, warped or melting flume geometry,
-brand logos, readable signage, motion blur on faces, fisheye horizon bend.
+impossible geometry, tangled or knotted flumes, tubes merging mid-air,
+floating unsupported track, slides ascending uphill, dead-end tubes,
+inconsistent shadows, brand logos, readable signage, motion blur on faces,
+fisheye horizon bend.
+
+Tip: use the original REAL photo reference as a structure/composition
+reference at ~50-60% strength (never a previous AI output with structural
+errors). Generate 4-6 seeds; accept only if every tube can be traced
+continuously from platform to ground.
 
 
 
