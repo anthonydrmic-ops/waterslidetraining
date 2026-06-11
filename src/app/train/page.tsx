@@ -277,111 +277,107 @@ export default function TrainPage() {
                       style={{ border: `2px solid ${mod.color}` }}
                     />
                   )}
-                  {/* Hover tooltip — badge name + module score, themed to the module.
-                      Opens BELOW the badge: the fixed nav glass sits above page
-                      content, so an upward tooltip would slide behind it on the
-                      top row. Below always has free space and never meets the bar. */}
-                  <div
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 z-30 pointer-events-none opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
-                    role="tooltip"
-                  >
-                    <div
-                      className="w-2 h-2 bg-white rotate-45 mx-auto -mb-[5px] relative z-10"
-                      style={{
-                        borderLeft: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
-                        borderTop: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
-                      }}
-                    />
-                    <div
-                      className="bg-white rounded-xl px-3.5 py-2.5 w-max max-w-[200px] text-center shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
-                      style={{
-                        border: `1px solid color-mix(in srgb, ${mod.color} 22%, transparent)`,
-                      }}
-                    >
-                      <p className="text-[10px] font-mono uppercase tracking-wider text-stone-400">
-                        Module {String(mod.number).padStart(2, "0")}
-                      </p>
-                      <p
-                        className="text-[12px] font-semibold tracking-tight mt-0.5"
-                        style={{ color: mod.color }}
-                      >
-                        {mod.badge.label}
-                      </p>
-                      {earned && badgeScore && badgeScore.total > 0 ? (
-                        <p className="text-[13px] font-mono font-bold text-stone-800 mt-1">
-                          {badgeScore.pct}%
-                          <span className="text-stone-400 font-medium text-[11px]">
-                            {" "}&middot; {badgeScore.score}/{badgeScore.total}
-                          </span>
-                        </p>
-                      ) : (
-                        <p className="text-[10px] text-stone-400 mt-1 flex items-center justify-center gap-1">
-                          <Lock size={9} weight="bold" />
-                          Not yet earned
-                        </p>
-                      )}
-                    </div>
-                  </div>
                   <div
                     className={`relative w-[68px] h-[68px] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
                       earned
-                        ? "cursor-pointer [transform-style:preserve-3d] group-hover:[transform:rotateY(360deg)]"
+                        ? "cursor-pointer [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
                         : ""
                     }`}
                   >
                     {earned ? (
-                      /* Earned: faceted hexagonal medal - a distinct shape, not just a recoloured square */
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          filter: `drop-shadow(0 4px 10px ${mod.color}40) drop-shadow(0 0 16px ${mod.color}33)`,
-                        }}
-                      >
-                        {/* Coloured rim hexagon */}
+                      /* Earned: faceted hexagonal medal. Hover flips it over to a
+                         colour-filled back face showing the module score. */
+                      <>
+                        {/* FRONT — icon face */}
                         <div
-                          className="absolute inset-0"
+                          className="absolute inset-0 [backface-visibility:hidden]"
                           style={{
-                            clipPath:
-                              "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
-                            background: `linear-gradient(145deg, ${mod.color}, ${mod.color}b0)`,
-                          }}
-                        />
-                        {/* Inner face */}
-                        <div
-                          className="absolute inset-[3px] flex items-center justify-center overflow-hidden"
-                          style={{
-                            clipPath:
-                              "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
-                            background: `linear-gradient(150deg, #ffffff 0%, ${mod.color}12 100%)`,
+                            filter: `drop-shadow(0 4px 10px ${mod.color}40) drop-shadow(0 0 16px ${mod.color}33)`,
                           }}
                         >
-                          {/* Top sheen */}
+                          {/* Coloured rim hexagon */}
                           <div
-                            className="absolute inset-x-0 top-0 h-1/2"
+                            className="absolute inset-0"
                             style={{
-                              background:
-                                "linear-gradient(180deg, rgba(255,255,255,0.7) 0%, transparent 100%)",
+                              clipPath:
+                                "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
+                              background: `linear-gradient(145deg, ${mod.color}, ${mod.color}b0)`,
                             }}
                           />
-                          {/* Hover shine sweep */}
+                          {/* Inner face */}
                           <div
-                            className="absolute -inset-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                            className="absolute inset-[3px] flex items-center justify-center overflow-hidden"
                             style={{
-                              background:
-                                "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%)",
+                              clipPath:
+                                "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
+                              background: `linear-gradient(150deg, #ffffff 0%, ${mod.color}12 100%)`,
                             }}
-                          />
-                          <Icon
-                            size={26}
-                            weight="fill"
-                            className="relative z-10"
-                            style={{
-                              color: mod.color,
-                              filter: `drop-shadow(0 1px 1px ${mod.color}55)`,
-                            }}
-                          />
+                          >
+                            {/* Top sheen */}
+                            <div
+                              className="absolute inset-x-0 top-0 h-1/2"
+                              style={{
+                                background:
+                                  "linear-gradient(180deg, rgba(255,255,255,0.7) 0%, transparent 100%)",
+                              }}
+                            />
+                            <Icon
+                              size={26}
+                              weight="fill"
+                              className="relative z-10"
+                              style={{
+                                color: mod.color,
+                                filter: `drop-shadow(0 1px 1px ${mod.color}55)`,
+                              }}
+                            />
+                          </div>
                         </div>
-                      </div>
+
+                        {/* BACK — score face, colour-filled so the text reads */}
+                        <div
+                          className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)]"
+                          style={{
+                            filter: `drop-shadow(0 4px 10px ${mod.color}40) drop-shadow(0 0 16px ${mod.color}33)`,
+                          }}
+                        >
+                          <div
+                            className="absolute inset-0"
+                            style={{
+                              clipPath:
+                                "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
+                              background: `linear-gradient(145deg, ${mod.color}, ${mod.color}b0)`,
+                            }}
+                          />
+                          <div
+                            className="absolute inset-[3px] flex flex-col items-center justify-center overflow-hidden"
+                            style={{
+                              clipPath:
+                                "polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)",
+                              background: `linear-gradient(150deg, ${mod.color} 0%, ${mod.color}d9 100%)`,
+                            }}
+                          >
+                            {/* Soft top light so it still reads as a facet */}
+                            <div
+                              className="absolute inset-x-0 top-0 h-1/2"
+                              style={{
+                                background:
+                                  "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 100%)",
+                              }}
+                            />
+                            <span className="relative z-10 text-[8px] font-mono tracking-widest text-white/75 leading-none">
+                              M{String(mod.number).padStart(2, "0")}
+                            </span>
+                            <span className="relative z-10 text-[16px] font-bold text-white leading-tight mt-0.5">
+                              {badgeScore ? `${badgeScore.pct}%` : "—"}
+                            </span>
+                            {badgeScore && badgeScore.total > 0 && (
+                              <span className="relative z-10 text-[8px] font-mono text-white/75 leading-none mt-0.5">
+                                {badgeScore.score}/{badgeScore.total}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </>
                     ) : (
                       /* Locked: plain muted rounded square with a lock */
                       <div
