@@ -79,7 +79,7 @@ rejected (see "What we will NOT generate").
 | # | File | Aspect | Tool | Subject | Used in |
 |---|------|--------|------|---------|---------|
 | 1 | `01-hero.png` | 16:9 | Nano Banana Pro | Facility wide shot - flume complex curving to catch pool | Lesson 1-1 opener + marketing page |
-| 2 | `02-crack-structural.jpg` | 1:1 | FLUX 1.1 Ultra raw | Through-wall structural crack macro, exposed fibreglass weave | 5-1 Structural Defects |
+| 2 | `02-crack-structural.jpg` | 1:1 | FLUX 1.1 Ultra raw | Tight 2mm dark crack line + spider branches, smartphone inspection-photo style (NOT a gaping fissure - see macro realism note) | 5-1 Structural Defects |
 | 3 | `03-gelcoat-delamination.jpg` | 1:1 | FLUX 1.1 Ultra raw | Gelcoat peeling/delamination macro, lifted edge with shadow | 5-2 Surface Defects |
 | 4 | `04-joint-misalignment.jpg` | 1:1 | FLUX 1.1 Ultra raw | Proud joint lip with sealant failure, raking light across the step | 5-3 Joint Failures |
 | 5 | `05-mineral-scaling.jpg` | 1:1 | FLUX 1.1 Ultra raw | White-grey calcium scaling band at waterline, rough crust texture | 6-2 Operational Impacts |
@@ -88,6 +88,31 @@ rejected (see "What we will NOT generate").
 | 8 | `08-water-testing.jpg` | 4:3 | Nano Banana Pro | Gloved hands holding DPD comparator vial, pink sample, pool behind | 6-1 Why Water Quality |
 | 9 | `09-enclosed-flume.jpg` | 16:9 | Nano Banana Pro | Inside an enclosed flume looking downhill, darkness past the bend | 7-1 Collision Scenario |
 | 10 | `10-slide-closed.jpg` | 4:3 | Nano Banana Pro | "SLIDE CLOSED" barrier and chain across the stair entry, empty tower | 8-1 Stop Protocols |
+
+## Macro realism note (defect images 2-5, 11, 16-19)
+
+FLUX exaggerates defects into CGI-looking canyons if the prompt implies an
+opening. Rules learned from generation: (1) frame every defect shot as
+"Inspection photograph taken on a smartphone during a waterslide maintenance
+check" - candid framing kills the fake studio sheen; (2) state the defect's
+real size explicitly ("about two millimetres wide", "a lip a few millimetres
+high"); (3) describe cracks as "a sharp dark line", never as gaping or
+exposing material; (4) add context wear (light scratches, water droplets,
+staining). Negative: torn paper, shattered ceramic, earthquake fissure,
+gaping hole, raised broken edges, 3D render, CGI, studio lighting, cartoon.
+
+Corrected prompt for `02-crack-structural.jpg`:
+
+> Inspection photograph taken on a smartphone during a waterslide
+> maintenance check: a tight structural crack about two millimetres wide
+> running diagonally across the white gelcoat of a fibreglass flume,
+> visible as a sharp dark line with tiny chips along its edges and faint
+> spider-web hairline branches spreading from it, slight grey staining
+> along the crack where water has penetrated, the gently curved glossy
+> flume surface showing light wear scratches and a few water droplets,
+> soft outdoor daylight. Realistic phone-camera look, slightly imperfect
+> framing, true-to-life scale, documentary record for a safety training
+> manual.
 
 ## NEW - 5 additions
 
