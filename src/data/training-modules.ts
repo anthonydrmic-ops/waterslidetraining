@@ -718,7 +718,7 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Real-World Example - Verrückt, Kansas (2016)",
+            heading: "Real-World Incident - Verrückt, Kansas (2016)",
             body: "Verrückt, then the world's tallest waterslide, killed 10-year-old Caleb Schwab when the raft he was riding went airborne and struck an overhead structure. Investigations found the ride had been designed using crude trial-and-error methods rather than proper engineering calculations, and an accelerometer test a week before opening had warned that rafts in a certain weight range could go airborne - the ride opened anyway with the design unchanged. It is the clearest modern example of why design must be verified, not assumed.",
             source: "Verrückt fatality, Schlitterbahn, Kansas City KS, August 2016 (Texas Monthly; TIME; NPR)",
           },
@@ -916,7 +916,7 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Real-World Example - Joint Entrapment, Mt Albert NZ (2025-26)",
+            heading: "Real-World Incident - Joint Entrapment, Mt Albert NZ (2025-26)",
             body: "Within weeks, two riders were seriously hurt on the same hydroslide at the Mt Albert Aquatic Centre in Auckland. A man's finger was degloved when his ring snagged on a bolt at the slide entrance, and days later a child was thrown against the slide's internal joiners, smashing his front teeth. WorkSafe NZ investigated and returned to the site after the second serious injury. The case shows how protruding fasteners, joint misalignment and gaps between sections - exactly what a daily walk-through is meant to catch - cause real, avoidable injuries.",
             source: "Mt Albert Aquatic Centre, Auckland NZ, 2025-2026 (NZ Herald; RNZ); WorkSafe NZ investigation",
           },
