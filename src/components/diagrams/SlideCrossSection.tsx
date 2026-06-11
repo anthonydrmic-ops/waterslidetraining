@@ -4,7 +4,15 @@ import { motion, useReducedMotion } from "framer-motion";
 
 const FLUME_D =
   "M100 100 C130 100, 150 120, 202 210 C240 280, 300 300, 352 305 C395 308, 440 318, 502 338 C540 348, 590 352, 640 355";
-const RETURN_D = "M722 418 L722 435 L80 435 L80 85";
+const RETURN_D = "M722 418 L722 455 L80 455 L80 85";
+
+// Flow arrows along the flume: position + rotation following the descent.
+const FLOW_ARROWS = [
+  { x: 140, y: 112, angle: 18 },
+  { x: 243, y: 250, angle: 48 },
+  { x: 400, y: 314, angle: 10 },
+  { x: 560, y: 350, angle: 6 },
+];
 
 export function SlideCrossSection() {
   const reduce = useReducedMotion();
@@ -14,7 +22,7 @@ export function SlideCrossSection() {
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Waterslide System - Component Overview
       </p>
-      <svg viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+      <svg viewBox="0 0 800 470" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
         <defs>
           <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#f0f9ff" />
@@ -34,10 +42,10 @@ export function SlideCrossSection() {
           </filter>
         </defs>
 
-        <rect width="800" height="450" rx="12" fill="url(#skyGrad)" />
+        <rect width="800" height="470" rx="12" fill="url(#skyGrad)" />
 
         {/* Ground */}
-        <rect x="0" y="370" width="800" height="80" fill="#f5f5f4" />
+        <rect x="0" y="370" width="800" height="100" fill="#f5f5f4" />
         <line x1="0" y1="370" x2="800" y2="370" stroke="#d6d3d1" strokeWidth="1" />
 
         {/* Support columns */}
@@ -96,11 +104,29 @@ export function SlideCrossSection() {
           }
         />
 
-        {/* Water flow arrows */}
-        <path d="M140 105 L158 112 L140 119" fill="#1F7A8C" opacity="0.4" />
-        <path d="M240 240 L258 248 L240 256" fill="#1F7A8C" opacity="0.4" />
-        <path d="M400 310 L418 316 L400 322" fill="#1F7A8C" opacity="0.4" />
-        <path d="M560 350 L578 354 L560 358" fill="#1F7A8C" opacity="0.4" />
+        {/* Water flow arrows — pulse in sequence down the slide, tracing the
+            direction of travel over and over */}
+        {FLOW_ARROWS.map((a, i) => (
+          <motion.path
+            key={i}
+            d="M-9 -8 L9 0 L-9 8 L-4 0 Z"
+            fill="#1F7A8C"
+            transform={`translate(${a.x} ${a.y}) rotate(${a.angle})`}
+            initial={false}
+            animate={reduce ? { opacity: 0.4 } : { opacity: [0.18, 0.85, 0.18] }}
+            transition={
+              reduce
+                ? undefined
+                : {
+                    duration: 2,
+                    times: [0, 0.25, 1],
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: i * 0.4,
+                  }
+            }
+          />
+        ))}
 
         {/* Joint markers */}
         <circle cx="202" cy="210" r="7" fill="white" stroke="#f05a28" strokeWidth="2.5" />
@@ -159,51 +185,55 @@ export function SlideCrossSection() {
           }
         />
 
-        {/* Labels - all sized for readability */}
+        {/* Labels — solid white plates so no line or object ever strikes
+            through the text, each tied to its component with a short leader */}
         {/* Launch Platform */}
         <line x1="100" y1="58" x2="100" y2="40" stroke="#78716c" strokeWidth="1" />
-        <text x="100" y="32" textAnchor="middle" fontSize="13" fontWeight="600" fill="#57534e" fontFamily="system-ui">
+        <rect x="42" y="18" width="116" height="22" rx="11" fill="#ffffff" stroke="#d6d3d1" strokeWidth="1" />
+        <text x="100" y="33" textAnchor="middle" fontSize="12" fontWeight="600" fill="#57534e" fontFamily="system-ui">
           Launch Platform
         </text>
 
-        {/* Flume label */}
-        <rect x="228" y="248" width="100" height="24" rx="12" fill="#1F7A8C" opacity="0.1" />
-        <text x="278" y="265" textAnchor="middle" fontSize="13" fontWeight="600" fill="#1F7A8C" fontFamily="system-ui">
+        {/* Flume label — parked in open sky, leader down to the flume */}
+        <line x1="430" y1="244" x2="430" y2="300" stroke="#1F7A8C" strokeWidth="1" strokeDasharray="3 3" opacity="0.5" />
+        <rect x="380" y="220" width="100" height="24" rx="12" fill="#ffffff" stroke="#1F7A8C" strokeOpacity="0.35" strokeWidth="1" />
+        <text x="430" y="237" textAnchor="middle" fontSize="13" fontWeight="600" fill="#1F7A8C" fontFamily="system-ui">
           Flume Body
         </text>
 
         {/* Joint label */}
-        <line x1="202" y1="195" x2="202" y2="174" stroke="#f05a28" strokeWidth="1" />
-        <rect x="172" y="156" width="60" height="22" rx="11" fill="#f05a28" opacity="0.1" />
-        <text x="202" y="171" textAnchor="middle" fontSize="12" fontWeight="600" fill="#f05a28" fontFamily="system-ui">
+        <line x1="202" y1="195" x2="202" y2="170" stroke="#f05a28" strokeWidth="1" />
+        <rect x="172" y="146" width="60" height="22" rx="11" fill="#ffffff" stroke="#f05a28" strokeOpacity="0.4" strokeWidth="1" />
+        <text x="202" y="161" textAnchor="middle" fontSize="12" fontWeight="600" fill="#f05a28" fontFamily="system-ui">
           Joint
         </text>
 
         {/* Support label */}
-        <line x1="170" y1="290" x2="192" y2="290" stroke="#78716c" strokeWidth="1" />
-        <rect x="100" y="280" width="72" height="22" rx="11" fill="#78716c" opacity="0.1" />
+        <line x1="174" y1="291" x2="192" y2="291" stroke="#78716c" strokeWidth="1" />
+        <rect x="100" y="280" width="72" height="22" rx="11" fill="#ffffff" stroke="#a8a29e" strokeOpacity="0.5" strokeWidth="1" />
         <text x="136" y="295" textAnchor="middle" fontSize="12" fontWeight="600" fill="#78716c" fontFamily="system-ui">
           Support
         </text>
 
-        {/* Catch pool label */}
-        <text x="690" y="348" textAnchor="middle" fontSize="13" fontWeight="600" fill="#1F7A8C" fontFamily="system-ui">
+        {/* Catch pool label — clear of the flume's end cap */}
+        <rect x="668" y="328" width="88" height="22" rx="11" fill="#ffffff" stroke="#1F7A8C" strokeOpacity="0.35" strokeWidth="1" />
+        <text x="712" y="343" textAnchor="middle" fontSize="12" fontWeight="600" fill="#1F7A8C" fontFamily="system-ui">
           Catch Pool
         </text>
 
-        {/* Pump label */}
-        <text x="722" y="432" textAnchor="middle" fontSize="11" fontWeight="500" fill="#a8a29e" fontFamily="system-ui">
+        {/* Pump label — sits between the pump house and the return run */}
+        <text x="722" y="434" textAnchor="middle" fontSize="11" fontWeight="500" fill="#78716c" fontFamily="system-ui">
           Pump System
         </text>
 
-        {/* Water return label */}
-        <rect x="330" y="422" width="110" height="22" rx="11" fill="#1F7A8C" opacity="0.08" />
-        <text x="385" y="437" textAnchor="middle" fontSize="11" fontWeight="500" fill="#1F7A8C" fontFamily="system-ui">
+        {/* Water return label — solid plate over the dashed return run */}
+        <rect x="330" y="444" width="110" height="22" rx="11" fill="#ffffff" stroke="#1F7A8C" strokeOpacity="0.3" strokeWidth="1" />
+        <text x="385" y="459" textAnchor="middle" fontSize="11" fontWeight="500" fill="#1F7A8C" fontFamily="system-ui">
           Water Return
         </text>
 
-        {/* Flow arrow on return pipe */}
-        <path d="M280 438 L268 432 L268 444 Z" fill="#1F7A8C" opacity="0.3" />
+        {/* Flow arrow on return pipe — pointing back toward the platform */}
+        <path d="M262 455 L274 449 L274 461 Z" fill="#1F7A8C" opacity="0.35" />
       </svg>
     </div>
   );
