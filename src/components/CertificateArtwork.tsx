@@ -1,14 +1,88 @@
 "use client";
 
+import {
+  ShieldCheck,
+  Lightning,
+  Eye,
+  Drop,
+  FirstAid,
+  Blueprint,
+  ListChecks,
+  Scales,
+  PersonSimpleSwim,
+} from "@phosphor-icons/react";
+import { modules } from "@/data/training-modules";
+
 /**
  * Certificate decoration, built entirely from inline SVG + solid rgba colours so
  * it rasterises reliably through html2canvas-pro when the PDF is generated.
- * Deliberately avoids conic-gradient / color-mix / oklch, which the rasteriser
- * cannot reproduce.
+ * Deliberately avoids conic-gradient / color-mix / oklch / clip-path, which the
+ * rasteriser cannot reproduce.
  */
 
 const NAVY = "#0B3A66";
 const GOLD = "#C9A13B";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MEDAL_ICONS: Record<string, React.ComponentType<any>> = {
+  blueprint: Blueprint,
+  clipboard: ListChecks,
+  waves: PersonSimpleSwim,
+  controls: Lightning,
+  magnifier: Eye,
+  droplet: Drop,
+  shield: ShieldCheck,
+  siren: FirstAid,
+  scales: Scales,
+};
+
+// Hexagon point sets for a 40x40 viewBox (outer rim + inset face).
+const HEX_OUTER = "20,1 36.5,10.5 36.5,29.5 20,39 3.5,29.5 3.5,10.5";
+const HEX_INNER = "20,4 33.9,12 33.9,28 20,36 6.1,28 6.1,12";
+
+/**
+ * The nine earned module medals, rendered as pure SVG hexagons (PDF-safe).
+ * Shown on the certificate as proof of the full competency set.
+ */
+export function ModuleMedals({ size = 38 }: { size?: number }) {
+  const mods = modules.filter((m) => m.id !== "assessment");
+  return (
+    <div className="flex justify-center gap-2 md:gap-2.5 flex-wrap">
+      {mods.map((m) => {
+        const Icon = MEDAL_ICONS[m.icon] || ShieldCheck;
+        return (
+          <div
+            key={m.id}
+            className="relative shrink-0"
+            style={{ width: size, height: size }}
+            title={m.badge.label}
+          >
+            <svg
+              width={size}
+              height={size}
+              viewBox="0 0 40 40"
+              className="absolute inset-0"
+              aria-hidden
+            >
+              <defs>
+                <linearGradient id={`medal-${m.id}`} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor={m.color} />
+                  <stop offset="100%" stopColor={m.color} stopOpacity="0.7" />
+                </linearGradient>
+              </defs>
+              <polygon points={HEX_OUTER} fill={`url(#medal-${m.id})`} />
+              <polygon points={HEX_INNER} fill="#ffffff" />
+              <polygon points={HEX_INNER} fill={m.color} opacity="0.08" />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Icon size={Math.round(size * 0.42)} weight="fill" style={{ color: m.color }} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 /** Full-cover backdrop: engine-turned rosette, double-line frame, corner motifs. */
 export function GuillocheBackdrop() {

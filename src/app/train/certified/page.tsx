@@ -17,7 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CertifiedSkeleton } from "@/components/TrainSkeletons";
-import { GuillocheBackdrop, FoilSeal } from "@/components/CertificateArtwork";
+import { GuillocheBackdrop, FoilSeal, ModuleMedals } from "@/components/CertificateArtwork";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16, filter: "blur(6px)" },
@@ -110,6 +110,12 @@ export default function CertifiedPage() {
   }, []);
 
   const userName = progress.userName || "Candidate";
+  // Final assessment result for the certificate's score field.
+  const finalScore = progress.quizScores["9-1"] ?? null;
+  const finalPct =
+    finalScore && finalScore.total > 0
+      ? Math.round((finalScore.score / finalScore.total) * 100)
+      : null;
   const certIssued = progress.certificationDate ? new Date(progress.certificationDate) : null;
   const certDate = certIssued
     ? certIssued.toLocaleDateString("en-AU", {
@@ -242,7 +248,8 @@ export default function CertifiedPage() {
                 {/* Certificate Preview */}
                 <div
                   ref={certRef}
-                  className="relative overflow-hidden rounded-[calc(1.25rem-2px)] bg-white p-8 md:p-12 text-center"
+                  className="relative overflow-hidden rounded-[calc(1.25rem-2px)] p-8 md:p-12 text-center"
+                  style={{ background: "linear-gradient(165deg, #ffffff 0%, #fbf8f1 100%)" }}
                 >
                   <GuillocheBackdrop />
 
@@ -255,34 +262,70 @@ export default function CertifiedPage() {
                   />
 
                   <div className="relative z-10">
-                    <div className="flex justify-center mb-6">
-                      <img src="/rest-group-logo.png" alt="REST Group" width={72} height={72} className="rounded-2xl" />
+                    <div className="flex justify-center mb-5">
+                      <img src="/rest-group-logo.png" alt="REST Group" width={64} height={64} className="rounded-2xl" />
                     </div>
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-stone-400 mb-2 font-medium">
+                    <p
+                      className="text-[10px] uppercase tracking-[0.34em] mb-2.5 font-semibold"
+                      style={{ color: "#C9A13B" }}
+                    >
                       Certificate of Competency
                     </p>
                     <h2 className="text-2xl md:text-3xl font-bold tracking-tighter text-stone-900 mb-1">
                       Slide<span className="text-[var(--cta)]">Sure</span>
                     </h2>
-                    <p className="text-sm text-stone-400 mb-8">
+                    <p className="text-sm text-stone-400 mb-7">
                       Waterslide Assurance &amp; Competency System
                     </p>
-                    <div className="border-t border-b border-stone-100 py-7 mb-7">
-                      <p className="text-[11px] text-stone-400 mb-1 uppercase tracking-wider">
+
+                    {/* Gold hairline rules around the recipient block */}
+                    <div
+                      className="py-7 mb-6"
+                      style={{
+                        borderTop: "1px solid rgba(201,161,59,0.35)",
+                        borderBottom: "1px solid rgba(201,161,59,0.35)",
+                      }}
+                    >
+                      <p className="text-[11px] text-stone-400 mb-2 uppercase tracking-[0.22em]">
                         This certifies that
                       </p>
-                      <p className="text-2xl font-bold tracking-tight text-stone-900">{userName}</p>
-                      <p className="text-sm text-stone-400 mt-3 max-w-[45ch] mx-auto leading-relaxed">
+                      <p className="font-serif text-3xl md:text-4xl text-stone-900 tracking-tight">
+                        {userName}
+                      </p>
+                      {/* Diamond divider */}
+                      <div className="flex items-center justify-center gap-2 mt-3.5 mb-3" aria-hidden>
+                        <span className="block w-10 border-t" style={{ borderColor: "rgba(201,161,59,0.5)" }} />
+                        <span className="block w-1.5 h-1.5 rotate-45" style={{ background: "#C9A13B" }} />
+                        <span className="block w-10 border-t" style={{ borderColor: "rgba(201,161,59,0.5)" }} />
+                      </div>
+                      <p className="text-sm text-stone-500 max-w-[48ch] mx-auto leading-relaxed">
                         has successfully completed the SlideSure Waterslide Assurance
                         &amp; Competency program and demonstrated competency in operational
                         safety, defect recognition, and incident prevention.
                       </p>
                     </div>
+
+                    {/* The nine competency medals earned along the way */}
+                    <div className="mb-7">
+                      <ModuleMedals size={38} />
+                      <p className="text-[9px] uppercase tracking-[0.22em] text-stone-400 mt-2.5">
+                        All nine competency modules passed
+                      </p>
+                    </div>
+
                     <div className="flex items-start justify-center gap-8 flex-wrap">
                       <div>
                         <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Date</p>
                         <p className="text-sm font-semibold text-stone-800">{certDate}</p>
                       </div>
+                      {finalPct != null && (
+                        <div>
+                          <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">
+                            Final Assessment
+                          </p>
+                          <p className="text-sm font-semibold text-stone-800">{finalPct}%</p>
+                        </div>
+                      )}
                       <div>
                         <p className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Status</p>
                         <p className="text-sm font-semibold text-emerald-600">Passed</p>
