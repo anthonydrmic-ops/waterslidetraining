@@ -177,6 +177,12 @@ export const modules: Module[] = [
             source: "AS 3533 Parts 1-4",
           },
           {
+            type: "diagram",
+            heading: "The Standards Hierarchy",
+            body: "How the law, the governing standard, international references and the risk framework fit together.",
+            diagramId: "standards-stack",
+          },
+          {
             type: "text",
             heading: "EN 1069 - Water Slides (European)",
             body: "EN 1069 is the European standard written specifically for water slides (EN 1069-1 covers safety requirements and test methods; EN 1069-2 covers instructions for use). It is widely referenced internationally and provides detailed, waterslide-specific guidance on design, construction and operation. Some Australian facilities and manufacturers reference EN 1069 for this detail, but AS 3533 remains the governing Australian standard - EN 1069 is supplementary, not a substitute.",
@@ -278,6 +284,12 @@ export const modules: Module[] = [
             type: "critical",
             body: "Being excluded from registration does NOT remove your safety duties. Even an unregistered gravity waterslide must still be maintained, inspected and tested as necessary, including a thorough inspection by a competent person at least once every 12 months. Inadequate design, installation, inspection, maintenance and training have caused serious waterslide injuries.",
             source: "Safe Work Australia, Guide for Amusement Devices; WorkSafe WA water slide guidance",
+          },
+          {
+            type: "diagram",
+            heading: "Excluded From Registration, Never From Duties",
+            body: "What the Schedule 5 exclusion does and does not change for a gravity waterslide.",
+            diagramId: "compliance-duties",
           },
           {
             type: "text",
@@ -534,6 +546,12 @@ export const modules: Module[] = [
             body: "Clear role definition prevents critical tasks from falling through the gaps. Industry standards explicitly define three tiers of responsibility - and your training must comply with all of them.",
           },
           {
+            type: "diagram",
+            heading: "Who Owns What",
+            body: "The three tiers of responsibility at a glance - every critical task has exactly one owner.",
+            diagramId: "roles-matrix",
+          },
+          {
             heading: "Owner / Operator",
             type: "text",
             body: "The Owner/Operator is responsible to operate and maintain the water ride in accordance with their Standard Operating Procedures (SOP) to ensure consistent and safe ride performance. This includes ensuring the staff that operate and maintain the ride are trained and are fulfilling their responsibilities.",
@@ -671,6 +689,14 @@ export const modules: Module[] = [
             heading: "Structural Failures",
             type: "text",
             body: "Structural failures involve the physical integrity of the flume and support system. Cracks are signs of structural damage that require immediate attention. Fiberglass must be applied on both sides of the part. If the damage is too severe, the part may need to be replaced. Large fractures in the fiberglass are less common but very serious - a great amount of force must have been applied to cause them.",
+          },
+          {
+            type: "image",
+            imageSrc: "/lesson-images/02-crack-structural.jpg",
+            alt: "A structural crack running across the white gelcoat of a fibreglass flume, exposing the laminate beneath",
+            aspect: "1:1",
+            heading: "What structural failure looks like",
+            body: "A through-wall crack in a fibreglass flume. Any crack like this is an immediate shutdown - you will learn the full defect framework in Module 6.",
           },
           {
             heading: "Surface Failures",
@@ -989,6 +1015,12 @@ export const modules: Module[] = [
             body: "Water flow is not just about making the slide work - it is a critical safety control. Incorrect flow creates dry spots where riders decelerate unpredictably, or excessive speed zones where control is lost.",
           },
           {
+            type: "diagram",
+            heading: "The Water Loop",
+            body: "Pump, riser, flume, catch pool and back again - the circulation you are confirming before anyone rides.",
+            diagramId: "slide-cross-section",
+          },
+          {
             heading: "Flow Rate Requirements",
             type: "text",
             body: "The correct flow rate and water levels must be achieved and maintained prior to allowing anyone to enter the start position. Flow rates are specified by the manufacturer for each individual ride and are documented in the Ride Operations Manual. These are not suggestions - they are engineered limits.",
@@ -1107,6 +1139,12 @@ export const modules: Module[] = [
           {
             type: "oem-reference",
             body: "There are four levels of inspection: Routine (daily), Periodic (monthly/quarterly/yearly), Thorough (conducted by a competent professional at set intervals) and Structural (triggered when damage is suspected).",
+          },
+          {
+            type: "diagram",
+            heading: "The Four Tiers",
+            body: "Each tier goes deeper and demands more qualification than the one above it.",
+            diagramId: "inspection-tiers",
           },
           {
             heading: "Routine Inspection (Daily)",
@@ -1267,6 +1305,12 @@ export const modules: Module[] = [
               "Communication system failure between operators",
               "Any condition where the exit zone cannot be confirmed clear",
             ],
+          },
+          {
+            type: "diagram",
+            heading: "The Decision, Visualised",
+            body: "Two paths, no grey zone - if the condition is on the list, the slide closes now.",
+            diagramId: "shutdown-decision",
           },
           {
             type: "oem-reference",
@@ -1517,6 +1561,14 @@ export const modules: Module[] = [
             body: "Gelcoat is the protective outer layer of the FRP. When it fails - through peeling, fading, cracking or wearing through - the structural fiberglass beneath is exposed to water, chemicals and UV. This accelerates degradation and creates rough surfaces that affect rider safety.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/03-gelcoat-delamination.jpg",
+            alt: "Gelcoat peeling away from a fibreglass flume surface, the lifted edge casting a shadow over exposed laminate",
+            aspect: "1:1",
+            heading: "Gelcoat failure up close",
+            body: "A lifted, peeling gelcoat edge. Everything beneath it is now exposed to water, chemicals and UV.",
+          },
+          {
             heading: "Stickers and Adhesives",
             type: "text",
             body: "Remove stickers with soap and warm water and a soft putty scraper. Residual adhesive creates sticky spots on the riding surface that can catch riders.",
@@ -1619,6 +1671,12 @@ export const modules: Module[] = [
             heading: "Speed Changes",
             type: "text",
             body: "Rough surfaces slow riders. Smooth, freshly waxed surfaces speed them up. Mineral deposits create variable friction zones where riders accelerate and decelerate unpredictably. This makes dispatch timing unreliable because the assumed travel time no longer holds.",
+          },
+          {
+            type: "diagram",
+            heading: "Three Surfaces, Three Outcomes",
+            body: "The same dispatch on three different surface conditions - watch how the arrival times diverge.",
+            diagramId: "surface-speed",
           },
           {
             heading: "Rider Collisions",
@@ -1909,6 +1967,12 @@ export const modules: Module[] = [
             body: "A typical adult travels a waterslide at 20-40 km/h. At those speeds, even a 2-second gap closure results in a significant impact. If a preceding rider slows by 30% due to surface conditions, a rider dispatched at 'standard' timing will close a 15-metre gap in seconds. This is why fixed timing alone is insufficient.",
           },
           {
+            type: "diagram",
+            heading: "Watch the Gap",
+            body: "The same light-then-heavy pairing on a standard interval versus a risk-based one.",
+            diagramId: "dispatch-collision",
+          },
+          {
             type: "critical",
             body: "When in doubt, increase the interval. A longer wait never caused a safety incident. A shorter wait has caused hundreds.",
           },
@@ -2025,6 +2089,12 @@ export const modules: Module[] = [
             ],
           },
           {
+            type: "diagram",
+            heading: "One Correct Position, Six Hard Stops",
+            body: "The position you set before dispatch, and the behaviours you intervene on every time.",
+            diagramId: "rider-rules",
+          },
+          {
             heading: "Communication Technique",
             type: "text",
             body: "Instructions must be clear, assertive and consistent. Use the same phrasing every time: 'Cross your arms over your chest. Lie back. Feet first.' Repetition builds compliance. If a rider refuses to comply after clear instruction, they do not ride. This is non-negotiable.",
@@ -2132,6 +2202,12 @@ export const modules: Module[] = [
             heading: "Top-Bottom Coordination",
             type: "text",
             body: "Dispatch operators at the top and exit operators at the bottom form a closed communication loop. The top cannot dispatch without bottom confirmation. The bottom cannot confirm until the exit zone is fully clear. If communication is lost - even momentarily - dispatch must stop until it is restored.",
+          },
+          {
+            type: "diagram",
+            heading: "The Loop in Motion",
+            body: "Dispatch, ride, clearance check, signal - then and only then, the next dispatch.",
+            diagramId: "exit-loop",
           },
           {
             heading: "Blind Spots and Delays",
@@ -2628,6 +2704,12 @@ export const modules: Module[] = [
             ],
           },
           {
+            type: "diagram",
+            heading: "The Framework at a Glance",
+            body: "The three steps, plus the shutdown-versus-monitor rules for the defects you will actually find.",
+            diagramId: "defect-response",
+          },
+          {
             heading: "Shutdown vs Monitor Decision",
             type: "checklist",
             body: "Use these rules to decide what to do with a defect:",
@@ -3012,6 +3094,12 @@ export const modules: Module[] = [
             ],
           },
           {
+            type: "diagram",
+            heading: "What You're Watching For",
+            body: "The seven visual indicators, and the single correct response to all of them.",
+            diagramId: "water-indicators",
+          },
+          {
             type: "oem-reference",
             body: "Water quality must also be retested following any pool shock treatment, confirming levels are back within acceptable limits before the ride is reopened.",
           },
@@ -3281,6 +3369,12 @@ export const modules: Module[] = [
             ],
           },
           {
+            type: "diagram",
+            heading: "The Ladder, Step by Step",
+            body: "Each rung is triggered by the rider's behaviour - you never skip ahead, and you never stay on a rung that has failed.",
+            diagramId: "scenario-noncompliant",
+          },
+          {
             type: "warning",
             body: "Queue pressure is real but irrelevant to safety decisions. Other guests waiting in line are safer with a delayed dispatch than with a non-compliant rider in the system.",
           },
@@ -3403,6 +3497,12 @@ export const modules: Module[] = [
             ],
           },
           {
+            type: "diagram",
+            heading: "The Protocol, In Order",
+            body: "Six steps where the sequence is the safety - especially the first two.",
+            diagramId: "scenario-blockage",
+          },
+          {
             type: "critical",
             body: "The instinct to 'send someone in to help' is extremely dangerous. A rescue rider entering a blocked slide creates a second impact. Rescue must be performed through access panels or by trained personnel following the site emergency plan.",
           },
@@ -3516,6 +3616,12 @@ export const modules: Module[] = [
               "If fatigue or distraction is affecting your performance, request rotation - don't push through",
               "Document any pressure to compromise safety controls",
             ],
+          },
+          {
+            type: "diagram",
+            heading: "Pressure vs Response",
+            body: "Every pressure in the scenario, paired with the response that holds the line.",
+            diagramId: "scenario-throughput",
           },
           {
             type: "warning",
@@ -3778,6 +3884,12 @@ export const modules: Module[] = [
             type: "text",
             body: "Use structured communication: State your name, location and the situation clearly. 'This is [name] at [slide name] top station. I have stopped dispatch because [reason]. The last rider dispatched at [time]. I need [specific response required].' Clear, structured messages prevent confusion and ensure the correct response is mobilised.",
           },
+          {
+            type: "diagram",
+            heading: "The Call and the Chain",
+            body: "The four-part message format, and who to mobilise in order of severity.",
+            diagramId: "comms-protocol",
+          },
         ],
         keyTakeaways: [
           "Escalation follows a specific hierarchy based on severity",
@@ -3891,6 +4003,12 @@ export const modules: Module[] = [
               "Names and contact details of witnesses",
               "Photographs of the scene, any damage and relevant conditions",
             ],
+          },
+          {
+            type: "diagram",
+            heading: "The Sequence That Protects Everyone",
+            body: "From preserving the scene to supporting the operator - in the order it must happen.",
+            diagramId: "post-incident-steps",
           },
           {
             heading: "Emotional and Psychological Considerations",

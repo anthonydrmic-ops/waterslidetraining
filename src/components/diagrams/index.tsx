@@ -10,6 +10,23 @@ import { IncidentChain } from "./IncidentChain";
 import { EmergencyResponse } from "./EmergencyResponse";
 import { AustraliaWHSMap } from "./AustraliaWHSMap";
 import { DispatchCollision } from "./DispatchCollision";
+import { StandardsStack } from "./StandardsStack";
+import { ComplianceDuties } from "./ComplianceDuties";
+import { RolesMatrix } from "./RolesMatrix";
+import { InspectionTiers } from "./InspectionTiers";
+import { ShutdownDecision } from "./ShutdownDecision";
+import { SurfaceSpeed } from "./SurfaceSpeed";
+import { RiderRules } from "./RiderRules";
+import { ExitLoop } from "./ExitLoop";
+import { DefectResponse } from "./DefectResponse";
+import { WaterIndicators } from "./WaterIndicators";
+import {
+  ScenarioNonCompliant,
+  ScenarioBlockage,
+  ScenarioThroughput,
+  PostIncidentSteps,
+} from "./ProtocolLadder";
+import { CommsProtocol } from "./CommsProtocol";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const diagramMap: Record<string, React.ComponentType<any>> = {
@@ -23,6 +40,21 @@ const diagramMap: Record<string, React.ComponentType<any>> = {
   "emergency-response": EmergencyResponse,
   "whs-jurisdiction-map": AustraliaWHSMap,
   "dispatch-collision": DispatchCollision,
+  "standards-stack": StandardsStack,
+  "compliance-duties": ComplianceDuties,
+  "roles-matrix": RolesMatrix,
+  "inspection-tiers": InspectionTiers,
+  "shutdown-decision": ShutdownDecision,
+  "surface-speed": SurfaceSpeed,
+  "rider-rules": RiderRules,
+  "exit-loop": ExitLoop,
+  "defect-response": DefectResponse,
+  "water-indicators": WaterIndicators,
+  "scenario-noncompliant": ScenarioNonCompliant,
+  "scenario-blockage": ScenarioBlockage,
+  "scenario-throughput": ScenarioThroughput,
+  "post-incident-steps": PostIncidentSteps,
+  "comms-protocol": CommsProtocol,
 };
 
 export function Diagram({ id }: { id: string }) {
