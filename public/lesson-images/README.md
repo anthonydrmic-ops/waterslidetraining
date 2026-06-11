@@ -20,6 +20,19 @@ instead, update the `imageSrc` in `src/data/training-modules.ts` to match.
 | 9 | `09-enclosed-flume.jpg` | 16:9 | Module 8, lesson 7-1 |
 | 10 | `10-slide-closed.jpg` | 4:3 | Module 9, lesson 8-1 |
 
+## Planned additions (not yet generated - see docs/image-generation-plan.md)
+
+These have NO placeholder files and are NOT referenced from any lesson yet.
+Generate the file first, drop it here, then wire the section into the lesson.
+
+| # | Filename | Aspect | Where it goes |
+|---|----------|--------|---------------|
+| 11 | `11-fastener-corrosion.jpg` | 1:1 | Module 3, lesson 2-1 (hardware checks) |
+| 12 | `12-pump-room.jpg` | 4:3 | Module 3, lesson 2-2 (system readiness) |
+| 13 | `13-storm-closure.jpg` | 16:9 | Module 3, lesson 2-4 (weather shutdown) |
+| 14 | `14-dispatch-signal.jpg` | 4:3 | Module 5, lesson 4-2 (dispatch timing) |
+| 15 | `15-splash-pool.jpg` | 4:3 | Module 5, lesson 4-4 (exit control) |
+
 ## How an image section looks in a lesson
 
 Add an entry to a lesson's `content` array in

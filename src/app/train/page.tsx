@@ -41,6 +41,20 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   scales: Scales,
 };
 
+// Lesson durations are stored as strings like "12 min" — parse and re-format
+// them so modules and the resume banner can show real time estimates.
+function parseMinutes(duration: string): number {
+  const n = parseInt(duration, 10);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function formatDuration(mins: number): string {
+  if (mins < 60) return `${mins} min`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m === 0 ? `${h} hr` : `${h} hr ${m} min`;
+}
+
 // The next lesson the user should do: the first unlocked, not-yet-completed
 // lesson in order. Drives the resume banner and the auto-expanded module.
 function findResumeTarget(completedLessons: string[]) {
@@ -120,6 +134,21 @@ export default function TrainPage() {
 
   const resumeTarget = mounted ? findResumeTarget(progress.completedLessons) : null;
   const hasStarted = completedCount > 0;
+
+  // Reading time left across every not-yet-completed lesson, for the resume banner.
+  const remainingMins = mounted
+    ? modules.reduce(
+        (acc, m) =>
+          acc +
+          m.lessons.reduce(
+            (a, l) =>
+              a +
+              (progress.completedLessons.includes(l.id) ? 0 : parseMinutes(l.duration)),
+            0
+          ),
+        0
+      )
+    : 0;
 
   const ResumeIcon = resumeTarget
     ? iconMap[resumeTarget.module.icon] || ShieldCheck
@@ -395,6 +424,11 @@ export default function TrainPage() {
                     </p>
                     <p className="text-xs text-stone-400 mt-0.5">
                       Lesson {resumeTarget.lessonNumber} of {resumeTarget.total} &middot; {resumeTarget.lesson.duration}
+                      {remainingMins > 0 && (
+                        <span className="hidden sm:inline">
+                          {" "}&middot; ~{formatDuration(remainingMins)} left in course
+                        </span>
+                      )}
                     </p>
                   </div>
                   <span className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-900 text-white text-sm font-medium group-hover:bg-stone-800 transition-colors duration-300 shrink-0">
@@ -500,6 +534,12 @@ export default function TrainPage() {
                           <div className="flex items-center gap-2 mb-1.5">
                             <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400">
                               Module {String(mod.number).padStart(2, "0")}
+                            </span>
+                            <span className="text-[10px] font-mono text-stone-300">
+                              &middot;{" "}
+                              {formatDuration(
+                                mod.lessons.reduce((a, l) => a + parseMinutes(l.duration), 0)
+                              )}
                             </span>
                             {isModuleComplete && (
                               <CheckCircle

@@ -40,7 +40,7 @@ export const defaultProgress: UserProgress = {
 // Tries API (Supabase via /api/progress) first, falls back to localStorage.
 // ---------------------------------------------------------------------------
 
-function useApi(): boolean {
+function apiAvailable(): boolean {
   if (typeof window === "undefined") return false;
   // API mode is active when env vars are set (Clerk + Supabase configured)
   return !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
@@ -49,7 +49,7 @@ function useApi(): boolean {
 async function load(): Promise<UserProgress> {
   if (typeof window === "undefined") return defaultProgress;
 
-  if (useApi()) {
+  if (apiAvailable()) {
     try {
       const res = await fetch("/api/progress");
       if (res.ok) {
@@ -74,7 +74,7 @@ async function persist(progress: UserProgress): Promise<void> {
   // Always write to localStorage as cache
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 
-  if (useApi()) {
+  if (apiAvailable()) {
     try {
       await fetch("/api/progress", {
         method: "PUT",

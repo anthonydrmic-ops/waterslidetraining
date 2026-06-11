@@ -13,7 +13,6 @@ import {
 import {
   ArrowLeft,
   ArrowRight,
-  ShieldCheck,
   CheckCircle,
   Warning,
   WarningOctagon,
@@ -44,10 +43,10 @@ import {
   resetModuleQuizzes,
 } from "@/lib/progress-store";
 import Link from "next/link";
-import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { Diagram } from "@/components/diagrams";
 import { TrainPageLoader } from "@/components/TrainSkeletons";
+import { ZoomableImage } from "@/components/ImageLightbox";
 
 // Deterministic, seeded shuffling so the server and client render the same
 // question/option order (avoids React hydration mismatches). Re-shuffles only
@@ -88,6 +87,16 @@ const fadeUp = {
     filter: "blur(0px)",
     transition: { duration: 0.6, ease: [0.32, 0.72, 0, 1] as const },
   },
+};
+
+// Scroll-linked reveal: long lessons shouldn't burn their entrance animation
+// below the fold at mount — each section fades up as it scrolls into view.
+// Explicit props (not variants) keep these out of the parent's stagger.
+const inViewReveal = {
+  initial: { opacity: 0, y: 16, filter: "blur(6px)" },
+  whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
+  viewport: { once: true, margin: "0px 0px -60px 0px" },
+  transition: { duration: 0.6, ease: [0.32, 0.72, 0, 1] as const },
 };
 
 export default function LessonPage({
@@ -316,6 +325,50 @@ export default function LessonPage({
     router,
   ]);
 
+  // Quiz keyboard shortcuts: 1-4 / A-D pick an option for the current question,
+  // Enter advances (or submits on the last question). Skipped once submitted,
+  // while typing, or when an interactive element has focus - so Enter never
+  // double-fires a focused button.
+  useEffect(() => {
+    if (!lesson.quiz || quizSubmitted) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = e.target as HTMLElement | null;
+      if (
+        el &&
+        (el.tagName === "INPUT" ||
+          el.tagName === "TEXTAREA" ||
+          el.tagName === "BUTTON" ||
+          el.tagName === "A" ||
+          el.isContentEditable)
+      ) {
+        return;
+      }
+      const q = shuffledQuiz[currentQuizIndex];
+      if (!q) return;
+
+      let optIndex = -1;
+      if (/^[1-9]$/.test(e.key)) optIndex = Number(e.key) - 1;
+      else if (/^[a-dA-D]$/.test(e.key))
+        optIndex = e.key.toLowerCase().charCodeAt(0) - 97;
+      if (optIndex >= 0 && optIndex < q.options.length) {
+        setQuizAnswers((prev) => ({ ...prev, [q.id]: optIndex }));
+        return;
+      }
+
+      if (e.key === "Enter") {
+        if (quizAnswers[q.id] == null) return;
+        if (currentQuizIndex < shuffledQuiz.length - 1) {
+          setCurrentQuizIndex((i) => i + 1);
+        } else if (Object.keys(quizAnswers).length === shuffledQuiz.length) {
+          handleQuizSubmit();
+        }
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lesson.quiz, quizSubmitted, shuffledQuiz, currentQuizIndex, quizAnswers, handleQuizSubmit]);
+
   const handleCertify = useCallback(async () => {
     if (!certName.trim()) return;
     // Call certify API to generate verification ID, then update local progress
@@ -439,10 +492,10 @@ export default function LessonPage({
             </div>
           </motion.div>
 
-          {/* Content sections */}
+          {/* Content sections — revealed as they scroll into view */}
           <div className="space-y-6">
             {lesson.content.map((section, i) => (
-              <motion.div key={i} variants={fadeUp}>
+              <motion.div key={i} {...inViewReveal}>
                 <SectionRenderer
                   section={section}
                   accent={mod.color}
@@ -454,7 +507,7 @@ export default function LessonPage({
 
           {/* Key Takeaways */}
           {lesson.keyTakeaways.length > 0 && (
-            <motion.div variants={fadeUp} className="mt-12">
+            <motion.div {...inViewReveal} className="mt-12">
               <div
                 className="card-shell"
                 style={{
@@ -489,7 +542,7 @@ export default function LessonPage({
           )}
 
           {/* Quiz - one question at a time */}
-          <motion.div variants={fadeUp} className="mt-12">
+          <motion.div {...inViewReveal} className="mt-12">
                 <div className="card-shell">
                   <div className="card-core p-6 md:p-8">
                     <div className="flex items-center justify-between mb-2">
@@ -581,6 +634,17 @@ export default function LessonPage({
                             </button>
                           )}
                         </div>
+
+                        {/* Keyboard hint (desktop only) */}
+                        <p className="hidden md:flex items-center justify-center gap-1.5 mt-5 text-[11px] text-stone-400">
+                          Tip: press
+                          <kbd className="px-1.5 py-0.5 rounded bg-stone-100 border border-stone-200 font-mono text-[10px] text-stone-500">1</kbd>
+                          to
+                          <kbd className="px-1.5 py-0.5 rounded bg-stone-100 border border-stone-200 font-mono text-[10px] text-stone-500">4</kbd>
+                          to answer and
+                          <kbd className="px-1.5 py-0.5 rounded bg-stone-100 border border-stone-200 font-mono text-[10px] text-stone-500">Enter</kbd>
+                          to continue
+                        </p>
                       </>
                     ) : (
                       <div className="mt-6">
@@ -942,17 +1006,12 @@ function SectionRenderer({
         {section.heading && (
           <SectionHeading accent={accent}>{section.heading}</SectionHeading>
         )}
-        <div
-          className={`relative w-full ${ratio} overflow-hidden rounded-2xl bg-stone-100 ring-1 ring-stone-200/60`}
-        >
-          <Image
-            src={section.imageSrc}
-            alt={section.alt ?? section.heading ?? ""}
-            fill
-            sizes="(max-width: 768px) 100vw, 720px"
-            className="object-cover"
-          />
-        </div>
+        <ZoomableImage
+          src={section.imageSrc}
+          alt={section.alt ?? section.heading ?? ""}
+          ratioClass={ratio}
+          caption={section.body}
+        />
         {section.body && (
           <figcaption className="text-xs text-stone-500 leading-relaxed mt-2">
             {section.body}

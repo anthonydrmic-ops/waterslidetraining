@@ -1,6 +1,46 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
+
+const EASE = [0.32, 0.72, 0, 1] as const;
+
+// Each chain link fades up in sequence — the hazard "travelling" left to right.
+const linkVariant = {
+  hidden: { opacity: 0, y: 10 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, delay: i * 0.16, ease: EASE },
+  }),
+};
+
+// Break-the-chain callouts pop in after the links, with a little spring.
+const breakVariant = {
+  hidden: { opacity: 0, scale: 0.6 },
+  show: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 320,
+      damping: 18,
+      delay: 0.9 + i * 0.16,
+    },
+  }),
+};
+
+const legendVariant = {
+  hidden: { opacity: 0, y: 8 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, delay: 1.6, ease: EASE },
+  },
+};
+
 export function IncidentChain() {
+  const reduceMotion = useReducedMotion();
+
   const links = [
     { label: "Hazard", desc: "Rough surface, worn joint, chemical imbalance", color: "#a8a29e" },
     { label: "No Detection", desc: "Missed in inspection, not reported", color: "#eab308" },
@@ -17,7 +57,12 @@ export function IncidentChain() {
   ];
 
   return (
-    <div className="w-full">
+    <motion.div
+      className="w-full"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.35 }}
+    >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Incident Chain - Every Link is a Chance to Intervene
       </p>
@@ -30,7 +75,7 @@ export function IncidentChain() {
           const y = 120;
 
           return (
-            <g key={i}>
+            <motion.g key={i} variants={linkVariant} custom={i}>
               <rect x={x} y={y} width="126" height="80" rx="12" fill="white" stroke={link.color} strokeWidth="2" />
               <rect x={x} y={y} width="126" height="80" rx="12" fill={link.color} opacity="0.04" />
 
@@ -59,7 +104,7 @@ export function IncidentChain() {
                   <circle cx={x + 133} cy={y + 40} r="3" fill={link.color} opacity="0.3" />
                 </g>
               )}
-            </g>
+            </motion.g>
           );
         })}
 
@@ -69,7 +114,12 @@ export function IncidentChain() {
           const y = 115;
 
           return (
-            <g key={`break-${i}`}>
+            <motion.g
+              key={`break-${i}`}
+              variants={breakVariant}
+              custom={i}
+              style={{ transformBox: "fill-box", transformOrigin: "center" }}
+            >
               <line x1={x} y1={y - 8} x2={x} y2={y - 42} stroke="#22c55e" strokeWidth="1.5" strokeDasharray="4 3" />
 
               <rect x={x - 55} y={y - 72} width="110" height="34" rx="8" fill="#f0fdf4" stroke="#bbf7d0" strokeWidth="1" />
@@ -83,28 +133,51 @@ export function IncidentChain() {
               {/* Cut point — a clean intervention node sitting on the chain */}
               <circle cx={x} cy={y - 4} r="9" fill="#16a34a" />
               <circle cx={x} cy={y - 4} r="9" fill="none" stroke="#16a34a" strokeOpacity="0.25" strokeWidth="4" />
+              {/* Perpetual soft ripple — "intervention is always available here" */}
+              {!reduceMotion && (
+                <motion.circle
+                  cx={x}
+                  cy={y - 4}
+                  r="9"
+                  fill="none"
+                  stroke="#16a34a"
+                  strokeWidth="2"
+                  style={{ transformBox: "fill-box", transformOrigin: "center" }}
+                  initial={{ scale: 1, opacity: 0 }}
+                  animate={{ scale: [1, 1.9], opacity: [0.45, 0] }}
+                  transition={{
+                    duration: 2.4,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: 2 + i * 0.6,
+                    repeatDelay: 1.2,
+                  }}
+                />
+              )}
               <path
                 d={`M${x - 3.4} ${y - 7.4} L${x + 3.4} ${y - 0.6} M${x + 3.4} ${y - 7.4} L${x - 3.4} ${y - 0.6}`}
                 stroke="#ffffff"
                 strokeWidth="1.7"
                 strokeLinecap="round"
               />
-            </g>
+            </motion.g>
           );
         })}
 
         {/* Bottom legend */}
-        <rect x="130" y="230" width="460" height="70" rx="12" fill="white" stroke="#e7e5e4" strokeWidth="1" />
-        <text x="360" y="254" textAnchor="middle" fontSize="13" fontWeight="600" fill="#44403c" fontFamily="system-ui">
-          Your Role: Break the Chain at Every Opportunity
-        </text>
-        <text x="360" y="274" textAnchor="middle" fontSize="11" fill="#a8a29e" fontFamily="system-ui">
-          Every inspection, observation, and decision is a chance to prevent an incident
-        </text>
-        <text x="360" y="292" textAnchor="middle" fontSize="10" fill="#22c55e" fontFamily="system-ui" fontWeight="500">
-          The earlier you break it, the better the outcome
-        </text>
+        <motion.g variants={legendVariant}>
+          <rect x="130" y="230" width="460" height="70" rx="12" fill="white" stroke="#e7e5e4" strokeWidth="1" />
+          <text x="360" y="254" textAnchor="middle" fontSize="13" fontWeight="600" fill="#44403c" fontFamily="system-ui">
+            Your Role: Break the Chain at Every Opportunity
+          </text>
+          <text x="360" y="274" textAnchor="middle" fontSize="11" fill="#a8a29e" fontFamily="system-ui">
+            Every inspection, observation, and decision is a chance to prevent an incident
+          </text>
+          <text x="360" y="292" textAnchor="middle" fontSize="10" fill="#22c55e" fontFamily="system-ui" fontWeight="500">
+            The earlier you break it, the better the outcome
+          </text>
+        </motion.g>
       </svg>
-    </div>
+    </motion.div>
   );
 }
