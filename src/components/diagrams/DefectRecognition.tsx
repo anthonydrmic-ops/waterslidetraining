@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import {
   Pulse,
   Lightning,
@@ -92,12 +93,17 @@ const DEFECTS: Defect[] = [
 ];
 
 export function DefectRecognition() {
+  // Explicit in-view trigger — see IncidentChain for why inherited whileInView
+  // is unreliable inside the lesson page's animation context.
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.2 });
+
   return (
     <motion.div
+      ref={ref}
       className="w-full"
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.2 }}
+      animate={inView ? "show" : "hidden"}
     >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-5 text-center">
         Defect Recognition Quick Reference

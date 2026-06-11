@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import {
   IdentificationCard,
   Eye,
@@ -58,14 +58,17 @@ const cardVariant = {
 
 export function DispatchFlow() {
   const reduce = useReducedMotion();
-  const [started, setStarted] = useState(false);
   const [active, setActive] = useState(-1);
+  // Explicit in-view trigger — see IncidentChain for why inherited whileInView
+  // is unreliable inside the lesson page's animation context.
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.4 });
 
   // Once in view, walk a soft highlight through the steps on a loop — the
   // dispatch sequence is a rhythm, not a list. A rest beat between cycles
   // keeps it calm. Skipped entirely under reduced motion.
   useEffect(() => {
-    if (reduce || !started) return;
+    if (reduce || !inView) return;
     // First tick lands after the entrance stagger settles — a deliberate beat.
     let i = -1;
     const id = setInterval(() => {
@@ -73,15 +76,14 @@ export function DispatchFlow() {
       setActive(i === STEPS.length ? -1 : i);
     }, 1400);
     return () => clearInterval(id);
-  }, [reduce, started]);
+  }, [reduce, inView]);
 
   return (
     <motion.div
+      ref={ref}
       className="w-full"
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.4 }}
-      onViewportEnter={() => setStarted(true)}
+      animate={inView ? "show" : "hidden"}
     >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-5 text-center">
         Dispatch Sequence - Operational Flow

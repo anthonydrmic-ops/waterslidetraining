@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -23,6 +24,11 @@ const arrowVariant = {
 };
 
 export function EmergencyResponse() {
+  // Explicit in-view trigger — see IncidentChain for why inherited whileInView
+  // is unreliable inside the lesson page's animation context.
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.3 });
+
   const levels = [
     {
       label: "Level 1 - Operator",
@@ -52,10 +58,10 @@ export function EmergencyResponse() {
 
   return (
     <motion.div
+      ref={ref}
       className="w-full"
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.3 }}
+      animate={inView ? "show" : "hidden"}
     >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Emergency Escalation Hierarchy

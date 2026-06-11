@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -31,6 +32,10 @@ const cardVariant = {
 
 export function InspectionZones() {
   const reduce = useReducedMotion();
+  // Explicit in-view trigger — see IncidentChain for why inherited whileInView
+  // is unreliable inside the lesson page's animation context.
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.25 });
 
   const zones = [
     { label: "Launch Area", color: "#ef4444", items: ["Platform condition", "Non-slip surface", "Handrails secure"], y: 20 },
@@ -42,10 +47,10 @@ export function InspectionZones() {
 
   return (
     <motion.div
+      ref={ref}
       className="w-full"
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.25 }}
+      animate={inView ? "show" : "hidden"}
     >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Pre-Opening Inspection Zones

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -40,6 +41,11 @@ const legendVariant = {
 
 export function IncidentChain() {
   const reduceMotion = useReducedMotion();
+  // Own the in-view trigger explicitly: lesson pages wrap sections in their own
+  // animation context, and an inherited whileInView can be pre-empted by the
+  // page firing "show" at mount (entrance plays off-screen, looks broken).
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.3 });
 
   const links = [
     { label: "Hazard", desc: "Rough surface, worn joint, chemical imbalance", color: "#a8a29e" },
@@ -58,10 +64,10 @@ export function IncidentChain() {
 
   return (
     <motion.div
+      ref={ref}
       className="w-full"
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.35 }}
+      animate={inView ? "show" : "hidden"}
     >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Incident Chain - Every Link is a Chance to Intervene

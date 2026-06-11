@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -24,6 +25,10 @@ const zoneVariant = {
 
 export function WaterChemistry() {
   const reduce = useReducedMotion();
+  // Explicit in-view trigger — see IncidentChain for why inherited whileInView
+  // is unreliable inside the lesson page's animation context.
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.25 });
 
   const params = [
     { label: "pH Level", low: "6.0", target: "7.2 - 7.8", high: "9.0", lowRisk: "Corrosive", highRisk: "Scaling", color: "#1F7A8C" },
@@ -34,10 +39,10 @@ export function WaterChemistry() {
 
   return (
     <motion.div
+      ref={ref}
       className="w-full"
       initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.25 }}
+      animate={inView ? "show" : "hidden"}
     >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Water Chemistry Balance - Key Parameters
