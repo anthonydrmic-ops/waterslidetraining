@@ -204,8 +204,8 @@ export const modules: Module[] = [
           {
             type: "case-study",
             heading: "Real-World Incident - Action Park's Cannonball Loop (1985)",
-            body: "Action Park in New Jersey built the Cannonball Loop, an enclosed waterslide with a full vertical loop, with little genuine engineering behind it. Test riders were paid to try it and came back with bloody noses, and some early riders were cut by teeth that had been knocked loose and lodged in the slide wall. A physician measured forces of up to nine Gs through the loop. State amusement-ride regulators shut it down barely a month after it opened. It is the clearest example of why a slide must be properly engineered and verified against recognised standards before anyone rides it - not built on guesswork and tested on the public.",
-            source: "Action Park Cannonball Loop, Vernon NJ, opened 1985 (History.com; Wikipedia)",
+            body: "Action Park in New Jersey built the Cannonball Loop, an enclosed waterslide with a full vertical loop, with little genuine engineering behind it. Employees were paid $100 to test it and came back with bloody noses, and some early riders were cut by teeth that had been knocked loose and lodged in the slide wall. A physician estimated forces of up to nine Gs through the loop. New Jersey's amusement-ride safety board shut it down barely a month after it opened. It is the clearest example of why a slide must be properly engineered and verified against recognised standards before anyone rides it - not built on guesswork and tested on the public.",
+            source: "Action Park Cannonball Loop, Vernon NJ, opened 1985 (History.com; Class Action Park, HBO 2020; A. Mulvihill, Action Park, 2020)",
           },
         ],
         keyTakeaways: [
