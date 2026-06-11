@@ -220,10 +220,6 @@ function TrainingPageInner() {
             <h1 className="text-3xl md:text-5xl font-bold tracking-tighter text-stone-900 mb-3">
               SlideSure - Waterslide Safety
             </h1>
-            <p className="text-stone-400 text-base md:text-lg max-w-[55ch] mx-auto leading-relaxed">
-              Standards-aligned training programs for aquatic recreation facilities.
-              Purchase licenses for your team and track completion in real-time.
-            </p>
           </motion.div>
 
           {/* Hero image */}
