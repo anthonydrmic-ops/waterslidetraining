@@ -30,6 +30,8 @@ import {
   getCompletionPercentage,
   isLessonUnlocked,
   getModuleCumulativeScore,
+  hasSeenWelcome,
+  markWelcomeSeen,
 } from "@/lib/progress-store";
 import { TrainPageLoader } from "@/components/TrainSkeletons";
 import Link from "next/link";
@@ -103,12 +105,10 @@ export default function TrainPage() {
   const [showWelcome, setShowWelcome] = useState(false);
 
   const dismissWelcome = useCallback(() => {
-    try {
-      localStorage.setItem("slidesure-welcome-seen", "true");
-    } catch {
-      /* localStorage unavailable - it'll show again next visit, no harm */
-    }
     setShowWelcome(false);
+    // Persisted into progress (backend-synced), so it never shows again on
+    // any device. Fire-and-forget - the UI doesn't need to wait.
+    void markWelcomeSeen();
   }, []);
 
   // Hold the loader for a brief minimum so it reads as a deliberate transition
@@ -142,16 +142,11 @@ export default function TrainPage() {
         setExpandedModule(rt.module.id);
       }
 
-      // First-ever visit (fresh purchase, nothing completed, never dismissed):
-      // welcome them with what the course is and how it works. Existing users
-      // mid-course never see it.
-      try {
-        const welcomed = localStorage.getItem("slidesure-welcome-seen");
-        if (!welcomed && p.completedLessons.length === 0 && !p.certified) {
-          setShowWelcome(true);
-        }
-      } catch {
-        /* localStorage unavailable - skip the welcome */
+      // First visit: every user sees the welcome exactly once. The seen flag
+      // lives in their backend-synced progress, so dismissing it anywhere
+      // dismisses it everywhere, permanently.
+      if (!hasSeenWelcome()) {
+        setShowWelcome(true);
       }
     });
     return () => clearTimeout(minTimer);

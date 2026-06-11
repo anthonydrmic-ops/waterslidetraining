@@ -175,6 +175,35 @@ export async function resetProgress(): Promise<UserProgress> {
 }
 
 // ---------------------------------------------------------------------------
+// First-visit welcome flag.
+// Stored as a sentinel entry INSIDE quizScores so it rides the existing
+// /api/progress round-trip into the quiz_scores JSONB column - no schema
+// change, synced across devices, and every lookup elsewhere is by lesson id
+// so the sentinel never collides. (Same trick as the stored quiz answers.)
+// ---------------------------------------------------------------------------
+
+const WELCOME_KEY = "__welcome-seen";
+
+/** True once this user has dismissed the first-visit welcome (any device). */
+export function hasSeenWelcome(): boolean {
+  return _cache.quizScores[WELCOME_KEY] != null;
+}
+
+export async function markWelcomeSeen(): Promise<UserProgress> {
+  if (hasSeenWelcome()) return _cache;
+  const progress = {
+    ..._cache,
+    quizScores: {
+      ..._cache.quizScores,
+      [WELCOME_KEY]: { score: 0, total: 0, date: new Date().toISOString() },
+    },
+  };
+  _cache = progress;
+  await persist(progress);
+  return progress;
+}
+
+// ---------------------------------------------------------------------------
 // Derived helpers — synchronous, read from cache
 // ---------------------------------------------------------------------------
 

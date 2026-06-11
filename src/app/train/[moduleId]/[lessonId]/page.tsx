@@ -44,10 +44,10 @@ import {
   resetModuleQuizzes,
 } from "@/lib/progress-store";
 import Link from "next/link";
+import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import { Diagram } from "@/components/diagrams";
 import { TrainPageLoader } from "@/components/TrainSkeletons";
-import { ZoomableImage } from "@/components/ImageLightbox";
 
 // Deterministic, seeded shuffling so the server and client render the same
 // question/option order (avoids React hydration mismatches). Re-shuffles only
@@ -1085,12 +1085,17 @@ function SectionRenderer({
         {section.heading && (
           <SectionHeading accent={accent}>{section.heading}</SectionHeading>
         )}
-        <ZoomableImage
-          src={section.imageSrc}
-          alt={section.alt ?? section.heading ?? ""}
-          ratioClass={ratio}
-          caption={section.body}
-        />
+        <div
+          className={`group/img relative w-full ${ratio} overflow-hidden rounded-2xl bg-stone-100 ring-1 ring-stone-200/60`}
+        >
+          <Image
+            src={section.imageSrc}
+            alt={section.alt ?? section.heading ?? ""}
+            fill
+            sizes="(max-width: 768px) 100vw, 720px"
+            className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover/img:scale-[1.025]"
+          />
+        </div>
         {section.body && (
           <figcaption className="text-xs text-stone-500 leading-relaxed mt-2">
             {section.body}
