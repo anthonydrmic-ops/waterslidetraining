@@ -480,7 +480,8 @@ export default function LessonPage({
               </Link>
               <div className="hidden sm:block">
                 <p className="text-[10px] font-mono uppercase tracking-wider text-stone-400">
-                  Module {String(mod.number).padStart(2, "0")}
+                  Module {String(mod.number).padStart(2, "0")} &middot; Lesson{" "}
+                  {currentLessonIndex + 1} of {mod.lessons.length}
                 </p>
                 <p className="text-[13px] font-semibold tracking-tight text-stone-700 truncate max-w-[200px] md:max-w-[300px]">
                   {lesson.title}
@@ -513,10 +514,6 @@ export default function LessonPage({
         >
           {/* Lesson header */}
           <motion.div variants={fadeUp} className="mb-10">
-            <div className="eyebrow bg-stone-100 border border-stone-200/60 text-stone-500 mb-5">
-              Module {String(mod.number).padStart(2, "0")} &middot; Lesson{" "}
-              {currentLessonIndex + 1} of {mod.lessons.length}
-            </div>
             <h1 className="text-2xl md:text-3xl font-bold tracking-tighter text-stone-900 mb-2">
               {lesson.title}
             </h1>

@@ -167,6 +167,12 @@ export const modules: Module[] = [
             body: "Waterslide safety in Australia draws on more than just Australian Standards. The primary reference is the Australian AS 3533 series, but because waterslides are a global product, Australian facilities and manufacturers also reference international standards - including the European EN 1069 and American ASTM standards - for waterslide-specific guidance. The standards below are the ones you are most likely to encounter.",
           },
           {
+            type: "diagram",
+            heading: "The Standards Hierarchy",
+            body: "How the law, the governing standard, international references and the risk framework fit together.",
+            diagramId: "standards-stack",
+          },
+          {
             type: "text",
             heading: "AS 3533 - Amusement Rides and Devices",
             body: "AS 3533 is the primary Australian standard governing amusement rides and devices, including waterslides. It covers design, manufacture, installation, operation, maintenance and inspection requirements. Compliance with AS 3533 is typically a legal requirement under state and territory amusement device regulations. The standard is divided into multiple parts covering different aspects of amusement device safety.",
@@ -175,12 +181,6 @@ export const modules: Module[] = [
             type: "oem-reference",
             body: "AS 3533.1 covers design and construction requirements. AS 3533.2 covers operation and maintenance. AS 3533.3 covers in-service inspection. AS 3533.4 covers major inspections and testing. Together, these parts establish a comprehensive safety framework for the entire lifecycle of amusement devices including waterslides.",
             source: "AS 3533 Parts 1-4",
-          },
-          {
-            type: "diagram",
-            heading: "The Standards Hierarchy",
-            body: "How the law, the governing standard, international references and the risk framework fit together.",
-            diagramId: "standards-stack",
           },
           {
             type: "text",
