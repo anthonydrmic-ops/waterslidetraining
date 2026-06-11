@@ -1,6 +1,22 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
+
+const EASE = [0.32, 0.72, 0, 1] as const;
+
+// Tiles land left to right, matching the severity progression the arrow draws.
+const tileVariant = {
+  hidden: { opacity: 0, y: 10 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, delay: i * 0.16, ease: EASE },
+  }),
+};
+
 export function SurfaceDefects() {
+  const reduce = useReducedMotion();
+
   const defects = [
     {
       label: "Smooth Surface",
@@ -66,27 +82,79 @@ export function SurfaceDefects() {
   ];
 
   return (
-    <div className="w-full">
+    <motion.div
+      className="w-full"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.35 }}
+    >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Surface Condition Severity Scale
       </p>
       <svg viewBox="0 0 700 220" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
         <rect width="700" height="220" rx="12" fill="#fafaf9" />
 
-        {/* Severity arrow */}
-        <line x1="40" y1="195" x2="660" y2="195" stroke="#e7e5e4" strokeWidth="2" />
-        <path d="M655 189 L668 195 L655 201" fill="#d6d3d1" />
-        <text x="350" y="213" textAnchor="middle" fontSize="10" fill="#a8a29e" fontFamily="system-ui" fontWeight="500" letterSpacing="0.1em">
+        {/* Severity arrow — draws left to right beneath the landing tiles */}
+        <motion.line
+          x1="40"
+          y1="195"
+          x2="660"
+          y2="195"
+          stroke="#e7e5e4"
+          strokeWidth="2"
+          variants={{
+            hidden: { pathLength: 0 },
+            show: { pathLength: 1, transition: { duration: 0.9, delay: 0.1, ease: EASE } },
+          }}
+        />
+        <motion.g
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1, transition: { duration: 0.3, delay: 0.9 } },
+          }}
+        >
+          <path d="M655 189 L668 195 L655 201" fill="#d6d3d1" />
+        </motion.g>
+        <motion.text
+          x="350"
+          y="213"
+          textAnchor="middle"
+          fontSize="10"
+          fill="#a8a29e"
+          fontFamily="system-ui"
+          fontWeight="500"
+          letterSpacing="0.1em"
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1, transition: { duration: 0.4, delay: 0.7 } },
+          }}
+        >
           INCREASING SEVERITY
-        </text>
+        </motion.text>
 
         {defects.map((defect, i) => {
           const x = 22 + i * 168;
+          const isShutDown = defect.status === "Shut Down";
           return (
-            <g key={i}>
+            <motion.g key={i} variants={tileVariant} custom={i}>
               {defect.visual(x, 10)}
-              {/* Status pill */}
-              <rect x={x} y={90} width="140" height="24" rx="12" fill={defect.color} opacity="0.12" />
+              {/* Status pill — the Shut Down pill breathes gently so the most
+                  serious state keeps drawing the eye. */}
+              {isShutDown && !reduce ? (
+                <motion.rect
+                  x={x}
+                  y={90}
+                  width="140"
+                  height="24"
+                  rx="12"
+                  fill={defect.color}
+                  initial={{ opacity: 0.12 }}
+                  animate={{ opacity: [0.12, 0.24, 0.12] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+                />
+              ) : (
+                <rect x={x} y={90} width="140" height="24" rx="12" fill={defect.color} opacity="0.12" />
+              )}
               <text x={x + 70} y={106} textAnchor="middle" fontSize="11" fontWeight="600" fill={defect.color} fontFamily="system-ui">
                 {defect.status}
               </text>
@@ -98,10 +166,10 @@ export function SurfaceDefects() {
               <text x={x + 70} y={150} textAnchor="middle" fontSize="10" fill="#a8a29e" fontFamily="system-ui">
                 {defect.desc}
               </text>
-            </g>
+            </motion.g>
           );
         })}
       </svg>
-    </div>
+    </motion.div>
   );
 }

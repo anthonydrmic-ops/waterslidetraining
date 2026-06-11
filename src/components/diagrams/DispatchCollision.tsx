@@ -79,23 +79,24 @@ function Rider({
 
 function Track({ variant }: { variant: "problem" | "solution" }) {
   const reduce = useReducedMotion();
-  const aProg = useMotionValue(variant === "problem" ? 0.46 : 0.5);
-  const bProg = useMotionValue(variant === "problem" ? 0.46 : 0.3);
+  // Static (reduced-motion) snapshots: problem = the collision moment; solution
+  // = light rider nearly landed while the heavy rider is still held at the top.
+  const aProg = useMotionValue(variant === "problem" ? 0.46 : 0.85);
+  const bProg = useMotionValue(variant === "problem" ? 0.46 : 0);
   const aOpacity = useMotionValue(1);
 
   useEffect(() => {
     if (reduce) return;
     const isProblem = variant === "problem";
     // Light rider (both tracks): decelerates through the rough / enclosed mid.
-    // On the solution track it reaches the pool EARLY (t=0.8 of the loop) and
-    // then climbs out (fade) — the pool must be empty before the next arrival,
-    // and the two riders must never reach the bottom together.
+    // On the solution track its whole run happens in the first ~55% of the
+    // loop, then it climbs out of the pool (fade) and the pool sits empty.
     const ctrlA = animate(
       aProg,
       isProblem ? [0, 0.4, 0.5, 1] : [0, 0.4, 0.5, 1, 1],
       {
         duration: LOOP,
-        times: isProblem ? [0, 0.45, 0.62, 1] : [0, 0.45, 0.62, 0.8, 1],
+        times: isProblem ? [0, 0.45, 0.62, 1] : [0, 0.25, 0.34, 0.55, 1],
         repeat: Infinity,
         ease: "linear",
       }
@@ -104,14 +105,15 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
       ? null
       : animate(aOpacity, [1, 1, 0, 0], {
           duration: LOOP,
-          times: [0, 0.82, 0.92, 1],
+          times: [0, 0.58, 0.68, 1],
           repeat: Infinity,
           ease: "linear",
         });
-    // Heavy rider: waits at the top, then constant speed. A short wait (problem)
-    // lets it catch the light rider in the blind mid-section; a longer wait
-    // (solution) keeps a safe gap and lands in an already-cleared pool.
-    const bTimes = isProblem ? [0, 0.16, 1] : [0, 0.34, 1];
+    // Heavy rider. Problem: dispatched on the standard interval, so it catches
+    // the light rider in the blind mid-section. Solution: HELD at the platform
+    // until the light rider is visibly about to land (t=0.5), so the two are
+    // never on the slide together for more than the final landing moment.
+    const bTimes = isProblem ? [0, 0.16, 1] : [0, 0.5, 1];
     const ctrlB = animate(bProg, [0, 0, 1], {
       duration: LOOP,
       times: bTimes,
@@ -245,7 +247,7 @@ export function DispatchCollision() {
           </div>
           <Track variant="solution" />
           <p className="text-[11px] text-stone-500 leading-snug mt-1.5">
-            A longer interval holds a safe separation the whole way down - the light rider has already exited the catch pool before the heavy rider arrives.
+            The heavy rider is held at the platform until the light rider is about to land. They are never on the slide together, and the catch pool is already empty when the heavy rider arrives.
           </p>
         </div>
       </div>

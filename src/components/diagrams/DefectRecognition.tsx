@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   Pulse,
   Lightning,
@@ -12,6 +13,15 @@ import {
   Warning,
   type Icon,
 } from "@phosphor-icons/react";
+
+const cardVariant = {
+  hidden: { opacity: 0, y: 14 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, delay: i * 0.08, ease: [0.32, 0.72, 0, 1] as const },
+  }),
+};
 
 type Severity = "Monitor" | "Shut Down" | "Action Required";
 
@@ -83,7 +93,12 @@ const DEFECTS: Defect[] = [
 
 export function DefectRecognition() {
   return (
-    <div className="w-full">
+    <motion.div
+      className="w-full"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.2 }}
+    >
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-5 text-center">
         Defect Recognition Quick Reference
       </p>
@@ -94,9 +109,11 @@ export function DefectRecognition() {
           const Icon = d.icon;
           const SevIcon = sev.icon;
           return (
-            <div
+            <motion.div
               key={i}
-              className="rounded-2xl border bg-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(0,0,0,0.06)]"
+              variants={cardVariant}
+              custom={i}
+              className="rounded-2xl border bg-white overflow-hidden transition-shadow duration-300 hover:shadow-[0_6px_20px_rgba(0,0,0,0.06)]"
               style={{ borderColor: `${sev.color}33` }}
             >
               {/* Header strip */}
@@ -147,10 +164,10 @@ export function DefectRecognition() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 }
