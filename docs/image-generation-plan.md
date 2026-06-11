@@ -9,29 +9,21 @@ intertwined colourful flumes, deep blue sky). Save as
 pointed at it. Do NOT overwrite `01-hero.png` - that stays the lesson style
 anchor.
 
-> Ultra-vibrant low-angle action shot from the splash run-out of a
-> multi-lane racing waterslide at a modern Australian water park. In the
-> foreground: two laughing riders, each on their own inflatable tube in
-> their own lane, racing down four straight parallel lanes in saturated
-> pink, yellow, teal and blue, white spray frozen mid-splash. The lanes
-> descend in one continuous straight line from a single launch tower
-> visible behind them. Around the tower, four or five separate fibreglass
-> flume tubes in magenta, lime green, orange and turquoise - each one a
-> single continuous tube that starts at the tower platform, spirals
-> downward in smooth helix curves, and ends at ground level; no tube merges
-> into another, dead-ends, or climbs back upward. Every elevated section is
-> held up by vertical galvanised steel columns that reach the ground. One
-> consistent perspective with a single horizon line, deep cobalt summer sky
-> with small white clouds, palm fronds at the frame edges. Sunlight from
-> one direction (high left), crisp midday light, glossy wet fibreglass
-> reflections, high colour saturation, sharp detail, theme-park campaign
-> photography, architecturally plausible structure throughout.
+Compact prompt (~700 chars - generator fields truncate around 1,000):
 
-Negative: distorted limbs, extra fingers, warped or melting flume geometry,
-impossible geometry, tangled or knotted flumes, tubes merging mid-air,
-floating unsupported track, slides ascending uphill, dead-end tubes,
-inconsistent shadows, brand logos, readable signage, motion blur on faces,
-fisheye horizon bend.
+> Vibrant low-angle action shot at a modern Australian water park: two
+> laughing riders on inflatable tubes racing down four straight parallel
+> lanes in pink, yellow, teal and blue, white spray frozen mid-splash. The
+> lanes run straight down from one launch tower behind them. Around the
+> tower, four separate fibreglass flumes in magenta, lime, orange and
+> turquoise, each a single continuous tube spiralling smoothly from
+> platform to ground - no merging, no dead ends, never uphill - all
+> supported by steel columns reaching the ground. One horizon, sun high
+> left, cobalt sky, palm fronds at the edges, glossy wet fibreglass, sharp
+> theme-park campaign photography, structurally plausible.
+
+Negative (short): warped or tangled flumes, floating track, dead-end or
+uphill tubes, distorted limbs, extra fingers, logos, text, motion blur.
 
 Tip: use the original REAL photo reference as a structure/composition
 reference at ~50-60% strength (never a previous AI output with structural
