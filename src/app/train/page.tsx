@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ShieldCheck,
@@ -21,6 +21,7 @@ import {
   ArrowCounterClockwise,
   Scales,
   PersonSimpleSwim,
+  BookOpen,
 } from "@phosphor-icons/react";
 import { modules, getTotalLessons } from "@/data/training-modules";
 import {
@@ -99,6 +100,16 @@ export default function TrainPage() {
   const [expandedModule, setExpandedModule] = useState<string | null>(null);
   const [showAssessmentPrompt, setShowAssessmentPrompt] = useState(false);
   const [newlyEarned, setNewlyEarned] = useState<string[]>([]);
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  const dismissWelcome = useCallback(() => {
+    try {
+      localStorage.setItem("slidesure-welcome-seen", "true");
+    } catch {
+      /* localStorage unavailable - it'll show again next visit, no harm */
+    }
+    setShowWelcome(false);
+  }, []);
 
   // Hold the loader for a brief minimum so it reads as a deliberate transition
   // rather than a flicker, even when progress resolves instantly from cache.
@@ -130,6 +141,18 @@ export default function TrainPage() {
       if (rt && rt.module.id !== "assessment") {
         setExpandedModule(rt.module.id);
       }
+
+      // First-ever visit (fresh purchase, nothing completed, never dismissed):
+      // welcome them with what the course is and how it works. Existing users
+      // mid-course never see it.
+      try {
+        const welcomed = localStorage.getItem("slidesure-welcome-seen");
+        if (!welcomed && p.completedLessons.length === 0 && !p.certified) {
+          setShowWelcome(true);
+        }
+      } catch {
+        /* localStorage unavailable - skip the welcome */
+      }
     });
     return () => clearTimeout(minTimer);
   }, []);
@@ -140,6 +163,12 @@ export default function TrainPage() {
 
   const resumeTarget = mounted ? findResumeTarget(progress.completedLessons) : null;
   const hasStarted = completedCount > 0;
+
+  // Whole-course reading time, quoted in the first-visit welcome.
+  const courseMins = modules.reduce(
+    (acc, m) => acc + m.lessons.reduce((a, l) => a + parseMinutes(l.duration), 0),
+    0
+  );
 
   // Reading time left across every not-yet-completed lesson, for the resume banner.
   const remainingMins = mounted
@@ -844,6 +873,152 @@ export default function TrainPage() {
           })}
         </motion.div>
       </div>
+
+      {/* First-visit welcome — intent, structure and expectations, once only */}
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, delay: 0.25 }}
+            className="fixed inset-0 z-[70] flex items-start md:items-center justify-center p-4 md:p-6 overflow-y-auto"
+          >
+            <div className="absolute inset-0 bg-stone-900/40 backdrop-blur-sm" onClick={dismissWelcome} />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              transition={{ duration: 0.5, delay: 0.3, ease: [0.32, 0.72, 0, 1] }}
+              className="relative w-full max-w-lg my-4 md:my-8"
+            >
+              <div
+                className="card-shell"
+                style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(11,58,102,0.08)" }}
+              >
+                <div className="card-core p-7 md:p-9">
+                  <motion.div
+                    initial="hidden"
+                    animate="show"
+                    variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.5 } } }}
+                  >
+                    {[
+                      <div key="head">
+                        <div className="flex items-center gap-3 mb-5">
+                          <img
+                            src="/rest-group-logo.png"
+                            alt="REST Group"
+                            width={36}
+                            height={36}
+                            className="rounded-xl"
+                          />
+                          <div className="eyebrow bg-stone-100 border border-stone-200/60 text-stone-500">
+                            Welcome to SlideSure
+                          </div>
+                        </div>
+                        <h2 className="text-2xl md:text-[28px] font-bold tracking-tighter text-stone-900 mb-2 leading-tight">
+                          You&apos;re about to become a certified waterslide operator
+                        </h2>
+                        <p className="text-sm text-stone-500 leading-relaxed mb-6 max-w-[52ch]">
+                          This course is built on Australian standards and real incidents. By the
+                          end, you&apos;ll know how the slide works as an engineered system, what
+                          fails, how to inspect it, and exactly what to do when something is wrong.
+                        </p>
+                      </div>,
+                      <div key="r1" className="flex items-start gap-3.5 py-3 border-t border-stone-100">
+                        <div className="w-9 h-9 rounded-xl bg-[var(--accent)]/8 flex items-center justify-center shrink-0">
+                          <BookOpen size={18} weight="duotone" className="text-[var(--accent)]" />
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-semibold text-stone-800">
+                            9 modules, 29 lessons - about {formatDuration(courseMins)} of reading
+                          </p>
+                          <p className="text-[11.5px] text-stone-400 leading-snug mt-0.5">
+                            From the WHS legal framework through to emergency response, with
+                            animated diagrams and real incident case studies throughout
+                          </p>
+                        </div>
+                      </div>,
+                      <div key="r2" className="flex items-start gap-3.5 py-3 border-t border-stone-100">
+                        <div className="w-9 h-9 rounded-xl bg-[var(--teal)]/10 flex items-center justify-center shrink-0">
+                          <ListChecks size={18} weight="duotone" className="text-[var(--teal)]" />
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-semibold text-stone-800">
+                            A Knowledge Check after every lesson
+                          </p>
+                          <p className="text-[11.5px] text-stone-400 leading-snug mt-0.5">
+                            Score 80% or higher across a module to pass it and earn its badge -
+                            you can review and retake if a module doesn&apos;t go your way
+                          </p>
+                        </div>
+                      </div>,
+                      <div key="r3" className="flex items-start gap-3.5 py-3 border-t border-stone-100">
+                        <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+                          <Certificate size={18} weight="duotone" className="text-emerald-600" />
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-semibold text-stone-800">
+                            Finish with a verified certificate
+                          </p>
+                          <p className="text-[11.5px] text-stone-400 leading-snug mt-0.5">
+                            Pass the 20-question final assessment to earn a downloadable,
+                            shareable certificate with its own verification page
+                          </p>
+                        </div>
+                      </div>,
+                      <div key="r4" className="flex items-start gap-3.5 py-3 border-t border-stone-100 mb-6">
+                        <div className="w-9 h-9 rounded-xl bg-stone-100 flex items-center justify-center shrink-0">
+                          <Clock size={18} weight="duotone" className="text-stone-500" />
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-semibold text-stone-800">
+                            Self-paced, saved automatically
+                          </p>
+                          <p className="text-[11.5px] text-stone-400 leading-snug mt-0.5">
+                            Lessons unlock in order. Leave whenever you like - you&apos;ll resume
+                            exactly where you stopped
+                          </p>
+                        </div>
+                      </div>,
+                      <div key="cta" className="space-y-2.5">
+                        <Link
+                          href={`/train/${modules[0].id}/${modules[0].lessons[0].id}`}
+                          onClick={dismissWelcome}
+                          className="group w-full inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-[var(--cta)] text-white font-medium transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[var(--cta-dark)] active:scale-[0.97] shadow-[0_4px_16px_rgba(240,90,40,0.25)]"
+                        >
+                          Start Module 1
+                          <ArrowRight
+                            size={16}
+                            weight="bold"
+                            className="group-hover:translate-x-0.5 transition-transform duration-300"
+                          />
+                        </Link>
+                        <button
+                          onClick={dismissWelcome}
+                          className="w-full py-3.5 rounded-full bg-stone-100 text-stone-500 text-sm font-medium hover:bg-stone-200 active:scale-[0.97] transition-all duration-300"
+                        >
+                          I&apos;ll explore at my own pace
+                        </button>
+                      </div>,
+                    ].map((node, i) => (
+                      <motion.div
+                        key={i}
+                        variants={{
+                          hidden: { opacity: 0, y: 10 },
+                          show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.32, 0.72, 0, 1] } },
+                        }}
+                      >
+                        {node}
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Assessment confirmation popup */}
       <AnimatePresence>
