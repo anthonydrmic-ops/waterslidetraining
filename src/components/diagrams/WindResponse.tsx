@@ -29,8 +29,8 @@ const STAGES = [
   },
   {
     tone: "#dc2626",
-    label: "Lightning or storm front",
-    detail: "Clear pools and towers immediately. This overrides everything else.",
+    label: "Lightning or storm front (the flash to bang rule)",
+    detail: "Clear pools and towers immediately - a flash-to-bang count of 30 seconds or less means the storm is inside 10 km. This overrides everything else.",
   },
 ];
 
@@ -351,8 +351,8 @@ export function WindResponse() {
         />
       )}
 
-      <p className="relative text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
-        Staged Wind Response
+      <p className="relative text-[11px] uppercase tracking-widest text-[#1F7A8C] font-bold mb-4 text-center">
+        Staged Weather Response
       </p>
 
       {/* The five stages */}

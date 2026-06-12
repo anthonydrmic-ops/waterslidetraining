@@ -1416,9 +1416,28 @@ export const modules: Module[] = [
             ],
           },
           {
+            heading: "Flash to Bang - How Close Is the Storm?",
+            type: "text",
+            body: "You can measure how far away lightning is with nothing but a count. Light reaches you instantly; thunder travels at about 340 metres per second. So the gap between seeing the flash and hearing the bang tells you the distance: count the seconds and divide by three for kilometres (or by five for miles). A 15-second count puts the strike about 5 km from your tower; a 30-second count is roughly 10 km.",
+          },
+          {
+            type: "numbered",
+            body: "Applying it on the platform:",
+            items: [
+              "See the flash - start counting seconds until you hear the thunder",
+              "Divide the count by 3 for distance in kilometres (by 5 for miles)",
+              "30 seconds or less (about 10 km) - clear pools and towers immediately",
+              "Reopen no sooner than 30 minutes after the LAST clap of thunder - each new flash restarts the clock",
+            ],
+          },
+          {
+            type: "warning",
+            body: "Flash to bang is a closing tool, not an opening one. Lightning can strike 10 to 15 km ahead of the storm that produces it - if you can hear thunder at all, the tower is already within range. A rising count never justifies reopening early; only the 30-minute all-clear does. (Method and thresholds per US National Weather Service lightning safety guidance.)",
+          },
+          {
             type: "diagram",
             heading: "The Staged Response",
-            body: "Wind response escalates in stages - and the manufacturer's number is the line that ends the discussion.",
+            body: "The weather response escalates in stages - and the manufacturer's number is the line that ends the discussion.",
             diagramId: "wind-response",
           },
           {
