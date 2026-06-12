@@ -537,6 +537,33 @@ html {
   }
 }
 
+/* Inspection walker — gentle walk bob + talking dots in the speech bubble. */
+.walk-bob {
+  animation: walk-bob 0.55s ease-in-out infinite;
+}
+@keyframes walk-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.3px);
+  }
+}
+.talk-dot {
+  animation: talk-dot 1.05s ease-in-out infinite;
+}
+@keyframes talk-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
 /* Incident-chain current — a charge tracing each card's border (split both
    ways from the left-centre, merging at the right), hopping the connector to
    the next card, sparking off the end, then looping. All segments share one
