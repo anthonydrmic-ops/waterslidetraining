@@ -89,6 +89,78 @@ rejected (see "What we will NOT generate").
 | 9 | `09-enclosed-flume.jpg` | 16:9 | Nano Banana Pro | Inside an enclosed flume looking downhill, darkness past the bend | 7-1 Collision Scenario |
 | 10 | `10-slide-closed.jpg` | 4:3 | Nano Banana Pro | "SLIDE CLOSED" barrier and chain across the stair entry, empty tower | 8-1 Stop Protocols |
 
+## Full prompts - scene shots (1, 6-10)
+
+Image 1 first; lock it; attach it as the i2i reference for 6-8 and 10 with
+"Same facility as this photo". (9 is an interior - no reference needed.)
+Defect macros 2-5 and 11 use the prompts in the macro realism note below.
+
+**1 - `01-hero.png` - 16:9 - the style anchor:**
+
+> Wide establishing photograph of a modern outdoor Australian aquatic
+> leisure centre in calm mid-morning light: white fibreglass body-slide
+> flumes with a royal-blue interior stripe curving down from a galvanised
+> steel tower to a clear catch pool, clean wet pool deck, eucalyptus-green
+> landscaping behind, no people, no crowds. Photorealistic, shot on a 35mm
+> prime, natural daylight, neutral colour grade, editorial documentary
+> style for a safety training manual, sharp detail, no logos or signage.
+
+**6 - `06-preopening-inspection.jpg` - 4:3 - attach image 1:**
+
+> Same facility as this photo. A facility staff member in a navy polo
+> shirt and yellow hi-vis vest walking inside the dry white flume at dawn
+> before opening, holding a clipboard, looking down inspecting the
+> surface, the water turned off, empty park and soft early light behind.
+> Photorealistic, 35mm, natural daylight, neutral colour grade, editorial
+> documentary style for a safety training manual, face not toward camera,
+> no logos.
+
+**7 - `07-dispatch-position.jpg` - 4:3 - attach image 1:**
+
+> Same facility as this photo. The top dispatch platform of the slide
+> tower: an attendant in a navy polo and hi-vis vest standing at the
+> operator position beside the flume entry, and a rider seated in the
+> flume mouth feet-first with arms crossed over their chest, shallow water
+> flowing past them, a small red dispatch indicator light on a post,
+> handrails around the platform, bright daylight. Photorealistic, 35mm,
+> neutral colour grade, editorial documentary style for a safety training
+> manual, no faces toward camera, no logos.
+
+**8 - `08-water-testing.jpg` - 4:3 - attach image 1:**
+
+> Same facility as this photo. Close view of gloved hands holding a
+> plastic DPD water-test comparator block with a vial of pink-tinted water
+> sample against the daylight, the catch pool and white flumes softly out
+> of focus in the background, bright clean morning light. Photorealistic,
+> 35mm, shallow depth of field on the comparator, neutral colour grade,
+> editorial documentary style for a safety training manual, no logos or
+> readable text on the kit.
+
+**9 - `09-enclosed-flume.jpg` - 16:9 - no reference needed:**
+
+> Interior of an enclosed fibreglass waterslide tube photographed looking
+> downhill from inside: a thin sheet of water flowing over the glossy
+> curved surface, daylight glowing softly through the translucent blue
+> tube wall, the light fading to complete darkness past the bend ahead
+> where nothing is visible. Photorealistic, slightly wide lens, neutral
+> colour grade, editorial documentary style for a safety training manual,
+> empty, no people.
+
+**10 - `10-slide-closed.jpg` - 4:3 - attach image 1:**
+
+> Same facility as this photo. A yellow barrier and chain closing off the
+> bottom of the slide tower staircase, a rectangular sign on the chain
+> reading SLIDE CLOSED in plain black capital letters, the queue area
+> empty, the white flumes above standing dry and idle, flat overcast
+> light. Photorealistic, 35mm, neutral colour grade, editorial documentary
+> style for a safety training manual, no people, no other text or logos
+> anywhere.
+
+(Image 10 is the one deliberate text exception - keep the sign wording to
+exactly SLIDE CLOSED; short all-caps text is the only kind generators
+render reliably. If it garbles, iterate: "fix the sign text to read SLIDE
+CLOSED".)
+
 ## Macro realism note (defect images 2-5, 11, 16-19)
 
 FLUX exaggerates defects into CGI-looking canyons if the prompt implies an
