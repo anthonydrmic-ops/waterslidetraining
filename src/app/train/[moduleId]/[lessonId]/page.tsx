@@ -1080,24 +1080,31 @@ function SectionRenderer({
         : section.aspect === "1:1"
         ? "aspect-square"
         : "aspect-[4/3]";
+    const small = section.size === "small";
     return (
       <figure className="w-full max-w-full">
         {section.heading && (
           <SectionHeading accent={accent}>{section.heading}</SectionHeading>
         )}
         <div
-          className={`group/img relative w-full ${ratio} overflow-hidden rounded-2xl bg-stone-100 ring-1 ring-stone-200/60`}
+          className={`group/img relative w-full ${ratio} overflow-hidden rounded-2xl bg-stone-100 ring-1 ring-stone-200/60 ${
+            small ? "max-w-[320px] mx-auto" : ""
+          }`}
         >
           <Image
             src={section.imageSrc}
             alt={section.alt ?? section.heading ?? ""}
             fill
-            sizes="(max-width: 768px) 100vw, 720px"
+            sizes={small ? "320px" : "(max-width: 768px) 100vw, 720px"}
             className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover/img:scale-[1.025]"
           />
         </div>
         {section.body && (
-          <figcaption className="text-xs text-stone-500 leading-relaxed mt-2">
+          <figcaption
+            className={`text-xs text-stone-500 leading-relaxed mt-2 ${
+              small ? "max-w-[400px] mx-auto text-center" : ""
+            }`}
+          >
             {section.body}
           </figcaption>
         )}

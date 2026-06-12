@@ -105,12 +105,27 @@ export function WindResponse() {
       y: Math.random(),
       mul: 0.7 + Math.random() * 0.6,
     }));
+    // Cloud bank — soft puffs across the top that thicken and drift with the wind
+    const clouds = Array.from({ length: 7 }, (_, i) => ({
+      x: (i / 7) + Math.random() * 0.12,
+      y: 4 + Math.random() * 28,
+      r: 38 + Math.random() * 46,
+      mul: 0.5 + Math.random() * 0.8,
+      a: 0.5 + Math.random() * 0.5,
+    }));
+    let cloudDrift = 0;
 
     const cur = { count: 0, speed: 55, dark: 0, rain: 0 };
     let gustT = Math.random() * 50;
     let flash = 0;
     let nextBolt = 0;
-    let bolt: { pts: [number, number][]; ttl: number } | null = null;
+    let bolt: {
+      pts: [number, number][];
+      branches: [number, number][][];
+      ttl: number;
+      maxTtl: number;
+      restruck: boolean;
+    } | null = null;
     let last = performance.now();
 
     const makeBolt = () => {
@@ -118,12 +133,28 @@ export function WindResponse() {
       let x = W * (0.15 + Math.random() * 0.7);
       let y = -4;
       pts.push([x, y]);
-      while (y < H * (0.45 + Math.random() * 0.3)) {
-        y += H * (0.05 + Math.random() * 0.06);
-        x += (Math.random() - 0.5) * 36;
+      while (y < H * (0.5 + Math.random() * 0.3)) {
+        y += H * (0.045 + Math.random() * 0.05);
+        x += (Math.random() - 0.5) * 34;
         pts.push([x, y]);
       }
-      return { pts, ttl: 0.22 };
+      // Forks — short branches peeling off the trunk partway down
+      const branches: [number, number][][] = [];
+      const nb = 1 + Math.floor(Math.random() * 2);
+      for (let b = 0; b < nb; b++) {
+        const start = 1 + Math.floor(Math.random() * Math.max(1, pts.length - 3));
+        let [bx, by] = pts[start];
+        const dir = Math.random() < 0.5 ? -1 : 1;
+        const bpts: [number, number][] = [[bx, by]];
+        const segs = 2 + Math.floor(Math.random() * 3);
+        for (let s = 0; s < segs; s++) {
+          bx += dir * (8 + Math.random() * 18);
+          by += H * (0.03 + Math.random() * 0.04);
+          bpts.push([bx, by]);
+        }
+        branches.push(bpts);
+      }
+      return { pts, branches, ttl: 0.34, maxTtl: 0.34, restruck: false };
     };
 
     const tick = (now: number) => {
@@ -149,6 +180,22 @@ export function WindResponse() {
       if (cur.dark > 0.005) {
         ctx.fillStyle = `rgba(15, 23, 42, ${cur.dark})`;
         ctx.fillRect(0, 0, W, H);
+      }
+
+      // Cloud bank — gathers as the weather builds, drifts with the wind
+      if (cur.dark > 0.008) {
+        cloudDrift += cur.speed * 0.05 * dt;
+        for (const c of clouds) {
+          const px = ((c.x * (W + 240) + cloudDrift * c.mul) % (W + 240)) - 120;
+          const ca = Math.min(0.4, cur.dark * 2.6) * c.a;
+          const g = ctx.createRadialGradient(px, c.y, 0, px, c.y, c.r);
+          g.addColorStop(0, `rgba(30, 41, 59, ${ca})`);
+          g.addColorStop(1, "rgba(30, 41, 59, 0)");
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.ellipse(px, c.y, c.r * 1.7, c.r * 0.55, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       // Wind streaks
@@ -177,12 +224,13 @@ export function WindResponse() {
         ctx.stroke();
       }
 
-      // Rain — driven hard sideways by the wind
+      // Rain — driven hard sideways by the wind. Two weights: a heavier
+      // foreground sheet over a finer background drizzle, for depth.
       if (cur.rain > 0.02) {
         const rn = Math.min(MAX_RAIN, Math.round(cur.rain * MAX_RAIN));
         const rv = 520 + cur.speed * 0.4;
-        ctx.strokeStyle = `rgba(148, 175, 200, ${0.16 + cur.rain * 0.14})`;
-        ctx.lineWidth = 1;
+        const lightStyle = `rgba(148, 175, 200, ${0.12 + cur.rain * 0.11})`;
+        const heavyStyle = `rgba(170, 196, 220, ${0.2 + cur.rain * 0.16})`;
         for (let i = 0; i < rn; i++) {
           const p = rain[i];
           p.y += (rv * dt * p.mul) / H;
@@ -192,10 +240,14 @@ export function WindResponse() {
             p.x = Math.random() * W - W * 0.15;
           }
           if (p.x > W + 20) p.x -= W * 1.2;
+          const heavy = i % 3 === 0;
+          ctx.strokeStyle = heavy ? heavyStyle : lightStyle;
+          ctx.lineWidth = heavy ? 1.4 : 0.85;
+          const len = heavy ? 19 : 13;
           const ry = p.y * H;
           ctx.beginPath();
           ctx.moveTo(p.x, ry);
-          ctx.lineTo(p.x - 7 * gust, ry - 15);
+          ctx.lineTo(p.x - (len * 0.45) * gust, ry - len);
           ctx.stroke();
         }
       }
@@ -208,32 +260,67 @@ export function WindResponse() {
           nextBolt = now / 1000 + 1.8 + Math.random() * 2.4;
         }
       }
+      if (bolt) {
+        bolt.ttl -= dt;
+        // Re-strike: real strikes flicker — the channel re-illuminates once
+        if (!bolt.restruck && bolt.ttl < bolt.maxTtl * 0.4 && Math.random() < 0.12) {
+          bolt.restruck = true;
+          bolt.ttl = bolt.maxTtl * 0.85;
+          flash = Math.max(flash, 0.7);
+        }
+        if (bolt.ttl <= 0) bolt = null;
+      }
       if (flash > 0.01) {
-        ctx.fillStyle = `rgba(241, 245, 249, ${flash * 0.28})`;
+        // Whole-sky flash plus a hot burst radiating from the strike point
+        ctx.fillStyle = `rgba(205, 225, 255, ${flash * 0.28})`;
         ctx.fillRect(0, 0, W, H);
+        if (bolt) {
+          const fx = bolt.pts[0][0];
+          const g = ctx.createRadialGradient(fx, H * 0.1, 0, fx, H * 0.1, H * 0.95);
+          g.addColorStop(0, `rgba(225, 238, 255, ${flash * 0.4})`);
+          g.addColorStop(1, "rgba(225, 238, 255, 0)");
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, W, H);
+        }
         flash *= Math.exp(-dt * 9);
       }
       if (bolt) {
-        bolt.ttl -= dt;
-        if (bolt.ttl <= 0) {
-          bolt = null;
-        } else {
-          const ba = Math.min(1, bolt.ttl / 0.12);
-          ctx.save();
-          ctx.shadowColor = "rgba(226, 240, 255, 0.9)";
-          ctx.shadowBlur = 16;
-          ctx.strokeStyle = `rgba(235, 245, 255, ${0.9 * ba})`;
-          ctx.lineWidth = 2.2;
-          ctx.lineJoin = "round";
+        // Per-frame flicker keeps the channel alive rather than just fading
+        const flick = 0.65 + 0.35 * Math.random();
+        const ba = Math.min(1, (bolt.ttl / bolt.maxTtl) * 1.7) * flick;
+        const trunk = bolt.pts;
+        const branches = bolt.branches;
+        const drawPath = (p: [number, number][]) => {
           ctx.beginPath();
-          bolt.pts.forEach(([bx, by], j) => (j === 0 ? ctx.moveTo(bx, by) : ctx.lineTo(bx, by)));
+          p.forEach(([bx, by], j) => (j === 0 ? ctx.moveTo(bx, by) : ctx.lineTo(bx, by)));
           ctx.stroke();
-          ctx.shadowBlur = 0;
-          ctx.strokeStyle = `rgba(165, 200, 255, ${0.35 * ba})`;
-          ctx.lineWidth = 5;
-          ctx.stroke();
-          ctx.restore();
-        }
+        };
+        ctx.save();
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        // Wide soft glow
+        ctx.shadowColor = "rgba(150, 190, 255, 0.95)";
+        ctx.shadowBlur = 28;
+        ctx.strokeStyle = `rgba(140, 180, 255, ${0.35 * ba})`;
+        ctx.lineWidth = 7;
+        drawPath(trunk);
+        ctx.lineWidth = 4.5;
+        branches.forEach(drawPath);
+        // Bright channel
+        ctx.shadowBlur = 18;
+        ctx.strokeStyle = `rgba(200, 224, 255, ${0.9 * ba})`;
+        ctx.lineWidth = 2.6;
+        drawPath(trunk);
+        ctx.lineWidth = 1.6;
+        branches.forEach(drawPath);
+        // White-hot core
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.95 * ba})`;
+        ctx.lineWidth = 1.3;
+        drawPath(trunk);
+        ctx.lineWidth = 0.7;
+        branches.forEach(drawPath);
+        ctx.restore();
       }
 
       raf = requestAnimationFrame(tick);

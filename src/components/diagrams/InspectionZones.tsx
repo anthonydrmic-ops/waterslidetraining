@@ -19,15 +19,61 @@ const ZONES = [
   { label: "Catch Pool", color: "#1F7A8C", items: ["Water depth correct", "Drain covers secure", "Water clarity OK"], y: 340 },
 ];
 
-// Where the inspector stands for each zone — points sitting on the slide
-// silhouette beside each checkpoint.
+// Pseudo-3D helix flume: a corkscrew descending around a centre column,
+// sampled once at module scope. Front and back runs are split so the back of
+// each loop renders muted behind the column and the front overlaps it — that
+// overlap is what sells the depth. Geometry is tuned so the front of each
+// loop crosses exactly at the five zone heights.
+const HELIX = (() => {
+  const CX = 85;
+  const RX = 30;
+  const Y_TOP = 40;
+  const DROP = 320;
+  const TURNS = 4;
+  const RY = 8; // vertical squash of each loop — the "viewed from above" tilt
+  const N = 240;
+  const front: string[] = [];
+  const back: string[] = [];
+  let d = "";
+  let wasFront: boolean | null = null;
+  let px = 0;
+  let py = 0;
+  for (let i = 0; i <= N; i++) {
+    const t = i / N;
+    const th = t * TURNS * Math.PI * 2;
+    const x = +(CX + RX * Math.sin(th)).toFixed(1);
+    const y = +(Y_TOP + DROP * t + RY * Math.cos(th)).toFixed(1);
+    const isFront = Math.cos(th) >= 0;
+    if (wasFront === null) {
+      d = `M ${x} ${y}`;
+    } else if (isFront !== wasFront) {
+      (wasFront ? front : back).push(d);
+      d = `M ${px} ${py} L ${x} ${y}`;
+    } else {
+      d += ` L ${x} ${y}`;
+    }
+    wasFront = isFront;
+    px = x;
+    py = y;
+  }
+  if (d && wasFront !== null) (wasFront ? front : back).push(d);
+  return { front, back };
+})();
+
+// Where the inspector stands for each zone — the front crossing of each helix
+// loop, so he visibly climbs the flume itself. Indexed like ZONES; the round
+// visits them bottom-up.
 const STOPS: [number, number][] = [
-  [80, 48],
-  [109, 128],
-  [108, 208],
-  [93, 288],
-  [89, 368],
+  [85, 42],
+  [85, 122],
+  [85, 202],
+  [85, 282],
+  [85, 362],
 ];
+
+// Inspections run from the catch pool UP - climbing a dry flume is
+// controlled, coming down one never is.
+const ORDER = [4, 3, 2, 1, 0];
 
 const WALK_MS = 950;
 const TALK_MS = 2300;
@@ -117,9 +163,9 @@ export function InspectionZones() {
   const [talking, setTalking] = useState(false);
   const [approving, setApproving] = useState(false);
 
-  // The inspection round: drop in at the launch platform, walk the line,
-  // pause at each zone to run its checks (card highlights, bubble talks),
-  // then move on. Fade out at the pool and start the round again.
+  // The inspection round: start at the catch pool, climb the line zone by
+  // zone, pause at each to run its checks (card highlights, bubble talks).
+  // Sign off at the launch platform, fade out, start the round again.
   useEffect(() => {
     if (reduce || !inView) return;
     let alive = true;
@@ -132,24 +178,25 @@ export function InspectionZones() {
     (async () => {
       await wait(700);
       while (alive) {
-        wx.set(STOPS[0][0]);
-        wy.set(STOPS[0][1]);
+        wx.set(STOPS[ORDER[0]][0]);
+        wy.set(STOPS[ORDER[0]][1]);
         animate(wo, 1, { duration: 0.35 });
-        for (let i = 0; i < STOPS.length; i++) {
-          if (i > 0) {
+        for (let k = 0; k < ORDER.length; k++) {
+          const zi = ORDER[k];
+          if (k > 0) {
             setTalking(false);
             setActiveZone(-1);
-            animate(wx, STOPS[i][0], { duration: WALK_MS / 1000, ease: "easeInOut" });
-            animate(wy, STOPS[i][1], { duration: WALK_MS / 1000, ease: "easeInOut" });
+            animate(wx, STOPS[zi][0], { duration: WALK_MS / 1000, ease: "easeInOut" });
+            animate(wy, STOPS[zi][1], { duration: WALK_MS / 1000, ease: "easeInOut" });
             await wait(WALK_MS);
             if (!alive) return;
           }
-          setActiveZone(i);
+          setActiveZone(zi);
           setTalking(true);
           await wait(TALK_MS);
           if (!alive) return;
         }
-        // Sign-off: checks done — thumbs up, big green tick
+        // Sign-off at the top: checks done — thumbs up, big green tick
         setTalking(false);
         setApproving(true);
         await wait(1600);
@@ -184,22 +231,55 @@ export function InspectionZones() {
       <svg viewBox="0 0 700 420" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
         <rect width="700" height="420" rx="12" fill="#fafaf9" />
 
-        {/* Slide silhouette */}
-        <path
-          d="M70 40 C90 40, 100 60, 105 100 C115 180, 108 220, 100 260 C92 300, 88 330, 90 360 L90 400"
-          stroke="#e7e5e4"
-          strokeWidth="18"
-          strokeLinecap="round"
-          fill="none"
-        />
+        {/* The spiral flume — back halves first (muted, behind the column) */}
+        {HELIX.back.map((d, i) => (
+          <g key={i}>
+            <path d={d} stroke="#e2e8f0" strokeWidth="13" strokeLinecap="round" fill="none" />
+            <path d={d} stroke="#f1f5f9" strokeWidth="8" strokeLinecap="round" fill="none" />
+          </g>
+        ))}
+
+        {/* Centre support column */}
+        <rect x="81.5" y="30" width="7" height="352" rx="3.5" fill="#d6d3d1" />
+        <rect x="81.5" y="30" width="3" height="352" rx="1.5" fill="#e7e5e4" />
+
+        {/* Catch pool */}
+        <ellipse cx="85" cy="382" rx="46" ry="11" fill="#bfdbfe" stroke="#93c5fd" strokeWidth="1" />
+        {!reduce && <ellipse className="shimmer-fade" cx="85" cy="382" rx="34" ry="7" fill="#ffffff" />}
+
+        {/* Front halves — full colour, water marching down the lane */}
+        {HELIX.front.map((d, i) => (
+          <g key={i}>
+            <path d={d} stroke="#93c5fd" strokeWidth="15" strokeLinecap="round" fill="none" />
+            <path d={d} stroke="#dbeafe" strokeWidth="10" strokeLinecap="round" fill="none" />
+            {!reduce && (
+              <path
+                d={d}
+                className="flow-dash"
+                stroke="#60a5fa"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="10 16"
+                fill="none"
+                opacity="0.8"
+              />
+            )}
+          </g>
+        ))}
+
+        {/* Launch platform */}
+        <rect x="60" y="24" width="50" height="9" rx="3" fill="#e7e5e4" />
+        <line x1="64" y1="24" x2="64" y2="13" stroke="#d6d3d1" strokeWidth="2" />
+        <line x1="106" y1="24" x2="106" y2="13" stroke="#d6d3d1" strokeWidth="2" />
+        <line x1="63" y1="12" x2="107" y2="12" stroke="#d6d3d1" strokeWidth="2.5" strokeLinecap="round" />
 
         {ZONES.map((zone, i) => {
           const isActive = activeZone === i;
           return (
             <g key={i}>
-              <motion.g variants={cardVariant} custom={i}>
+              <motion.g variants={cardVariant} custom={ZONES.length - 1 - i}>
                 {/* Connector */}
-                <line x1="112" y1={zone.y + 30} x2="148" y2={zone.y + 30} stroke={zone.color} strokeWidth="1.5" strokeDasharray="4 3" opacity="0.5" />
+                <line x1="124" y1={zone.y + 30} x2="148" y2={zone.y + 30} stroke={zone.color} strokeWidth="1.5" strokeDasharray="4 3" opacity="0.5" />
 
                 {/* Zone card */}
                 <rect x="148" y={zone.y} width="530" height="62" rx="10" fill="white" stroke={zone.color} strokeWidth="1" opacity="0.25" />
@@ -224,7 +304,7 @@ export function InspectionZones() {
                 {/* Zone number */}
                 <rect x="160" y={zone.y + 13} width="36" height="36" rx="8" fill={zone.color} opacity="0.12" />
                 <text x="178" y={zone.y + 37} textAnchor="middle" fontSize="16" fontWeight="700" fill={zone.color} fontFamily="system-ui">
-                  {i + 1}
+                  {ZONES.length - i}
                 </text>
 
                 {/* Zone label */}
@@ -248,7 +328,7 @@ export function InspectionZones() {
 
         {/* The inspector walking the line */}
         {reduce ? (
-          <g transform={`translate(${STOPS[0][0]} ${STOPS[0][1]})`}>
+          <g transform={`translate(${STOPS[ORDER[0]][0]} ${STOPS[ORDER[0]][1]})`}>
             <Inspector talking={false} approving={false} />
           </g>
         ) : (
@@ -257,6 +337,16 @@ export function InspectionZones() {
           </motion.g>
         )}
       </svg>
+      <motion.p
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { duration: 0.5, delay: 0.95 } },
+        }}
+        className="text-[11px] text-stone-400 text-center mt-3 leading-snug"
+      >
+        Always walk the line from the catch pool up, never down - and only in closed-toe shoes
+        with grip soles. Smooth gelcoat offers no hold to bare feet or thongs.
+      </motion.p>
     </motion.div>
   );
 }

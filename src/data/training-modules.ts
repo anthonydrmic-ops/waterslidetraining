@@ -28,6 +28,9 @@ export interface LessonSection {
   imageSrc?: string;
   alt?: string;
   aspect?: "16:9" | "4:3" | "1:1";
+  // "small" renders the image as a centred inset rather than full column
+  // width - for detail shots (a single bolt) that shouldn't dominate the page.
+  size?: "small";
 }
 
 export interface Module {
@@ -874,6 +877,7 @@ export const modules: Module[] = [
             imageSrc: "/lesson-images/11-fastener-corrosion.jpg",
             alt: "A flange bolt on a white fibreglass flume with brown tea staining and a rust weep trail running down the gelcoat below it",
             aspect: "1:1",
+            size: "small",
             heading: "What fastener corrosion looks like",
             body: "Tea staining and a rust weep trail below a flange bolt - exactly what the daily hardware glance is looking for. Report it; corrosion advances fast in a wet chlorinated environment.",
           },
@@ -1084,8 +1088,7 @@ export const modules: Module[] = [
           },
           {
             type: "oem-reference",
-            body: "Flow meters should be installed at strategic points to monitor real-time flow rates, with a routine schedule to check and record readings so the system stays within the design parameters set by the manufacturer.",
-            source: "Industry water-park maintenance guidance (WhiteWater West maintenance guide; manufacturer flow requirements)",
+            body: "Fit flow meters where they tell you the most - at the pump discharge and on each slide's supply line - and make reading and logging them part of the daily routine. The point is simple: prove, every operating day, that water is moving inside the flow window the slide was engineered for.",
           },
         ],
         keyTakeaways: [
