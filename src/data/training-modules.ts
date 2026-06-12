@@ -3473,19 +3473,19 @@ export const modules: Module[] = [
     lessons: [
       {
         id: "7-1",
-        title: "Collision Scenario - Late Dispatch",
+        title: "Collision Scenario - Late Pool Exit",
         duration: "12 min",
         content: [
           {
             type: "text",
-            body: "This is the most common waterslide incident pattern. Understanding the chain of events that leads to collision allows you to break the chain at multiple points.",
+            body: "This is one of the most common waterslide incident patterns - a rider still in the splash pool when the next rider arrives. Understanding the chain of events that leads to collision allows you to break the chain at multiple points.",
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/09-enclosed-flume-v2.jpg",
-            alt: "Looking down the inside of a dark enclosed tube waterslide, the tunnel curving away into darkness so what is ahead cannot be seen",
-            aspect: "16:9",
-            body: "Inside an enclosed tube slide the curve hides what is ahead, so mid-ride visibility is zero.",
+            imageSrc: "/lesson-images/15-splash-pool.jpg",
+            alt: "A waterslide catch pool seen from the run-out, water churning at the flume mouth, exit steps with a handrail at the far corner",
+            aspect: "4:3",
+            body: "The splash pool landing zone - the few metres in front of the flume mouth where every rider arrives at speed. Anyone still here when the next rider lands is directly in the path.",
           },
           {
             type: "diagram",
@@ -3496,23 +3496,23 @@ export const modules: Module[] = [
           {
             heading: "The Scenario",
             type: "text",
-            body: "A child (light weight, slow rider) is dispatched. Standard 15-second interval is applied. An adult (heavier, faster rider) is dispatched next. The child hits a section with minor mineral buildup and decelerates. The adult, traveling faster, closes the gap. Impact occurs in the mid-section of an enclosed flume where neither operator has visibility.",
+            body: "A rider lands in the splash pool and stops to look for their group instead of moving straight to the exit steps. The exit operator does not confirm the pool is clear before signalling the top. The next rider is dispatched, rides down and lands directly onto the first rider in the landing zone. The impact happens in open water at the bottom of the run, where a body in the landing zone is exactly where the next rider arrives at speed.",
           },
           {
             type: "diagram",
-            heading: "Watch the Gap Close",
-            body: "The same light-then-heavy pairing on a standard interval versus a risk-based interval. The only difference is the dispatch timing.",
-            diagramId: "dispatch-collision",
+            heading: "Clear the Pool Before the Next Rider",
+            body: "The same two riders when the splash pool is not cleared in time versus when the first rider exits and the pool is confirmed empty. The only difference is whether the landing zone is clear before the next dispatch.",
+            diagramId: "pool-exit-collision",
           },
           {
             heading: "What Went Wrong",
             type: "checklist",
             body: "Multiple failures contributed:",
             items: [
-              "Dispatch interval was not adjusted for the weight difference between riders",
-              "Surface condition (mineral buildup) was not factored into timing",
-              "Standard interval was applied rather than risk-based assessment",
-              "Enclosed slide configuration meant mid-ride visibility was zero",
+              "The first rider stopped in the splash pool instead of moving straight to the exit",
+              "The exit operator did not confirm the landing zone was clear before signalling dispatch",
+              "The next rider was dispatched into an occupied pool",
+              "The collision happened in the landing zone - exactly where a descending rider arrives at speed",
             ],
           },
           {
@@ -3520,64 +3520,64 @@ export const modules: Module[] = [
             type: "checklist",
             body: "Break the chain at any of these points:",
             items: [
-              "Increase dispatch interval when a light rider is followed by a heavy rider",
-              "Factor surface condition into every dispatch decision",
-              "Never rely on fixed intervals alone - assess real-time conditions",
-              "When visibility is limited, default to longer intervals",
-              "Report surface condition changes that affect rider speed",
+              "The exit operator confirms the pool and landing zone are completely clear before every dispatch",
+              "Direct riders to leave the pool immediately and regroup on the deck, never in the water",
+              "No clearance signal means no dispatch - 'almost clear' is not clear",
+              "Watch the landing zone in front of the flume mouth, not just the pool edges",
+              "Stop dispatch the moment a rider lingers, stumbles or turns back at the exit",
             ],
           },
         ],
         keyTakeaways: [
-          "Collision from rider speed differential is the most common slide incident",
-          "Multiple factors combine: weight difference + surface condition + fixed timing",
-          "The chain can be broken at multiple points through active risk assessment",
-          "Enclosed slides require more conservative timing due to zero mid-ride visibility",
+          "The splash pool landing zone is the highest-consequence point for a collision",
+          "A rider who does not exit promptly turns the landing zone into a hazard",
+          "Dispatch depends on a confirmed-clear pool, every single time",
+          "'Almost clear' is not clear - the exit operator's confirmation is a hard gate",
         ],
         quiz: [
           {
             id: "q7-1-1",
             question:
-              "In the late dispatch collision scenario, a child is followed by an adult at a standard 15-second interval. What was the primary failure?",
+              "In the pool-exit collision scenario, a rider lingers in the splash pool and the next rider is dispatched. What was the primary failure?",
             options: [
-              "The child should not have been allowed to ride",
-              "The dispatch interval was not adjusted for the weight difference between riders",
-              "The adult was dispatched too slowly",
-              "The slide should have been closed due to the age difference",
+              "The first rider should not have been allowed to ride",
+              "The pool and landing zone were not confirmed clear before the next rider was dispatched",
+              "The next rider was dispatched too slowly",
+              "The slide should have been closed for the day",
             ],
             correctIndex: 1,
             explanation:
-              "The primary failure was applying a standard fixed interval without adjusting for the weight difference. The lighter child travels slower, the heavier adult travels faster, and with mineral buildup causing further deceleration, the gap closes rapidly.",
+              "The primary failure was dispatching the next rider without the exit operator confirming the pool was clear. With the first rider still in the landing zone, the descending rider had nowhere to land but on top of them.",
             type: "scenario",
           },
           {
             id: "q7-1-2",
             question:
-              "Why do enclosed slides require more conservative dispatch timing?",
+              "Why is the splash pool landing zone - the few metres in front of the flume mouth - the critical point for a collision?",
             options: [
-              "They are usually steeper",
-              "Operators have zero mid-ride visibility so cannot see developing problems",
-              "Water flow is less reliable in enclosed slides",
-              "Riders go faster in enclosed slides",
+              "It is the deepest part of the pool",
+              "It is where a descending rider arrives at speed, so anyone still there is directly in the path",
+              "Riders always swim more slowly there",
+              "It is the only part of the pool the operator can see",
             ],
             correctIndex: 1,
             explanation:
-              "Enclosed slide configurations prevent direct visual confirmation of the full flume. Neither operator can see what is happening mid-ride, so problems like a slowed or stopped rider are invisible until the exit. More conservative timing compensates for this lack of visibility.",
+              "Every rider exits the flume into the same landing zone at speed. A rider who has not moved clear of it is directly in the arrival path of the next rider, who cannot stop or steer around them.",
             type: "knowledge",
           },
           {
             id: "q7-1-3",
             question:
-              "Mineral buildup on the flume surface contributed to the collision scenario in this lesson. How does it affect the risk calculation?",
+              "A rider stops in the pool to look for their group instead of heading to the exit steps. Why is this a dispatch hazard?",
             options: [
-              "It only matters in open slides where it is visible",
-              "It has no meaningful effect on rider speed",
-              "It causes deceleration in lighter, slower riders, narrowing the gap with heavier riders behind them",
-              "It affects all riders equally so the interval does not need adjusting",
+              "It only matters during busy periods",
+              "It has no effect as long as the next rider is lighter",
+              "A rider lingering in the landing zone is an obstruction the next rider cannot avoid",
+              "It affects deep pools but not shallow ones",
             ],
             correctIndex: 2,
             explanation:
-              "Mineral buildup causes uneven deceleration - lighter riders travelling slower are more affected, which narrows the gap to heavier riders dispatched behind them. Surface condition must be factored into every dispatch decision, not just noted and ignored.",
+              "A lingering rider turns the landing zone into an obstruction. The next rider arrives fast and committed, with no way to avoid them. Riders must be directed to leave the water and regroup on the deck.",
             type: "knowledge",
           },
           {
@@ -3592,22 +3592,22 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "The chain model means multiple failures combine to cause an incident: weight difference, surface condition, fixed timing and zero visibility all contributed. Breaking the chain at any single point - adjusting interval for weight, factoring surface condition or using conservative timing for enclosed slides - can prevent the outcome.",
+              "The chain model means multiple failures combine to cause an incident: the rider lingering, no clearance confirmation and the dispatch into an occupied pool all contributed. Breaking the chain at any single point - directing the rider out, confirming the pool clear, or holding the dispatch - can prevent the outcome.",
             type: "knowledge",
           },
           {
             id: "q7-1-5",
             question:
-              "An operator applies the standard 15-second dispatch interval without considering rider weight or current surface condition. Which category of failure does this represent?",
+              "An exit operator signals dispatch clearance without actually confirming the landing zone is empty. Which category of failure does this represent?",
             options: [
-              "Equipment failure - the slide timer is faulty",
-              "Procedural failure - using a fixed rule instead of a risk-based assessment",
-              "Communication failure - operators did not coordinate",
-              "Structural failure - the flume is not designed for varied rider weights",
+              "Equipment failure - the dispatch signal is faulty",
+              "Procedural failure - skipping the confirmed pool-clear check before dispatch",
+              "Structural failure - the catch pool is too small",
+              "Weather failure - conditions reduced visibility",
             ],
             correctIndex: 1,
             explanation:
-              "Applying a fixed interval without assessing real-time conditions (rider weight difference, surface condition) is a procedural failure. The lesson is explicit: never rely on fixed intervals alone - assess real-time conditions for every dispatch.",
+              "Signalling clearance without confirming the pool is empty is a procedural failure. The clearance check is a hard gate - 'almost clear' is not clear, and dispatch must wait until the landing zone is confirmed empty every single time.",
             type: "defect",
           },
         ],

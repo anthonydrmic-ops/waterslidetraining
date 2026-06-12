@@ -10,6 +10,7 @@ import { IncidentChain } from "./IncidentChain";
 import { EmergencyResponse } from "./EmergencyResponse";
 import { AustraliaWHSMap } from "./AustraliaWHSMap";
 import { DispatchCollision } from "./DispatchCollision";
+import { PoolExitCollision } from "./PoolExitCollision";
 import { StandardsStack } from "./StandardsStack";
 import { ComplianceDuties } from "./ComplianceDuties";
 import { RolesMatrix } from "./RolesMatrix";
@@ -43,6 +44,7 @@ const diagramMap: Record<string, React.ComponentType<any>> = {
   "emergency-response": EmergencyResponse,
   "whs-jurisdiction-map": AustraliaWHSMap,
   "dispatch-collision": DispatchCollision,
+  "pool-exit-collision": PoolExitCollision,
   "standards-stack": StandardsStack,
   "compliance-duties": ComplianceDuties,
   "roles-matrix": RolesMatrix,
