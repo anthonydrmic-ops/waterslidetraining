@@ -841,10 +841,10 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/06-preopening-inspection.jpg",
-            alt: "A uniformed aquatic-centre lifeguard kneeling at the top of a waterslide before opening, running a gloved hand along the dry flume surface",
+            imageSrc: "/lesson-images/06-preopening-inspection-v2.jpg",
+            alt: "A staff member in a hi-vis vest walking inside a dry waterslide flume at dawn with a clipboard, inspecting the surface before opening",
             aspect: "4:3",
-            body: "An operator checking the dry flume surface by hand before the slide opens for the day.",
+            body: "Walking the dry flume at dawn - the inspection happens before the water supply is turned on.",
           },
           {
             type: "oem-reference",
