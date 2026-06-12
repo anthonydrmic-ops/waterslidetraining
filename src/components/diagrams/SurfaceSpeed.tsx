@@ -8,12 +8,12 @@ import {
   useMotionValue,
   useReducedMotion,
 } from "framer-motion";
+import { RiderGlyph } from "./RiderGlyph";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
 // All three riders launch together every cycle; the surface decides when each
-// arrives. Same dispatch, three different outcomes.
-const CYCLE = 6; // seconds
+// arrives. Same dispatch, three constant speeds, three different outcomes.
 const START_X = 100;
 const END_X = 590;
 
@@ -22,27 +22,28 @@ const LANES = [
     label: "Smooth - as designed",
     outcome: "Arrives on time",
     color: "#22c55e",
-    // travel 3.0s, steady
-    keyframes: [START_X, END_X, END_X],
-    times: [0, 3 / CYCLE, 1],
+    target: END_X,
+    travel: 3.0, // seconds, one constant speed
   },
   {
     label: "Scaled / rough",
     outcome: "Late - the gap behind closes",
     color: "#eab308",
-    // sticks mid-flume, crawls, arrives late at 5.2s
-    keyframes: [START_X, 300, 345, END_X, END_X],
-    times: [0, 1.6 / CYCLE, 3.4 / CYCLE, 5.2 / CYCLE, 1],
+    target: END_X,
+    travel: 4.6, // slower constant speed - arrives late
   },
   {
     label: "Freshly polished / waxed",
     outcome: "Early - overshoots the exit",
     color: "#f97316",
-    // fast: arrives at 2.1s
-    keyframes: [START_X, END_X + 22, END_X + 22],
-    times: [0, 2.1 / CYCLE, 1],
+    target: END_X + 24, // carries past the exit line
+    travel: 2.2, // faster constant speed - arrives early
   },
 ];
+
+const SLOWEST_MS = 4600;
+const HOLD_MS = 900; // all landed - let the divergence read
+const FADE_MS = 400; // fade out together, reset, fade back in
 
 const rowVariant = {
   hidden: { opacity: 0, y: 10 },
@@ -59,24 +60,45 @@ export function SurfaceSpeed() {
   const inView = useInView(ref, { once: true, amount: 0.35 });
 
   // Rider positions driven imperatively (the animation path that reliably
-  // runs in the field) - all three launch together each cycle and diverge.
+  // runs in the field). Each cycle: fade in at the start line, all three
+  // launch together at their own constant speeds, hold once the slowest has
+  // landed so the divergence reads, then fade out together and replay - no
+  // teleporting back to the start.
   const rider0 = useMotionValue(START_X);
   const rider1 = useMotionValue(START_X);
   const rider2 = useMotionValue(START_X);
   const riders = [rider0, rider1, rider2];
+  const fade = useMotionValue(0);
 
   useEffect(() => {
     if (reduce || !inView) return;
-    const ctrls = LANES.map((lane, i) =>
-      animate(riders[i], lane.keyframes, {
-        duration: CYCLE,
-        times: lane.times,
-        repeat: Infinity,
-        ease: "linear",
-        delay: 0.8,
-      })
-    );
-    return () => ctrls.forEach((c) => c.stop());
+    let alive = true;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const wait = (ms: number) =>
+      new Promise<void>((res) => {
+        timers.push(setTimeout(res, ms));
+      });
+
+    (async () => {
+      await wait(600); // let the lanes' entrance settle first
+      while (alive) {
+        riders.forEach((r) => r.set(START_X));
+        animate(fade, 1, { duration: 0.25 });
+        LANES.forEach((lane, i) =>
+          animate(riders[i], lane.target, { duration: lane.travel, ease: "linear" })
+        );
+        await wait(SLOWEST_MS + HOLD_MS);
+        if (!alive) return;
+        animate(fade, 0, { duration: FADE_MS / 1000 });
+        await wait(FADE_MS + 150);
+      }
+    })();
+
+    return () => {
+      alive = false;
+      timers.forEach(clearTimeout);
+      [...riders, fade].forEach((v) => v.stop());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce, inView]);
 
@@ -115,13 +137,17 @@ export function SurfaceSpeed() {
                 {lane.outcome}
               </text>
 
-              {/* Rider */}
+              {/* Rider — a little person in the taught position, feet first */}
               {reduce ? (
                 // Static snapshot: mid-cycle divergence
-                <circle cx={[460, 320, 560][i]} cy={y} r="9" fill={lane.color} stroke="#ffffff" strokeWidth="2.5" />
+                <g transform={`translate(${[460, 320, 560][i]} ${y - 2})`}>
+                  <RiderGlyph color={lane.color} />
+                </g>
               ) : (
-                <motion.g style={{ x: riders[i] }}>
-                  <circle cx={0} cy={y} r="9" fill={lane.color} stroke="#ffffff" strokeWidth="2.5" />
+                <motion.g style={{ x: riders[i], opacity: fade }}>
+                  <g transform={`translate(0 ${y - 2})`}>
+                    <RiderGlyph color={lane.color} />
+                  </g>
                 </motion.g>
               )}
             </motion.g>

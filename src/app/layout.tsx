@@ -17,6 +17,9 @@ export const metadata: Metadata = {
   title: "SlideSure — Waterslide Assurance & Competency System",
   description:
     "Scenario-driven waterslide operational training. Standards-based competency certification for operators, inspectors, and maintenance teams. A REST Group product.",
+  icons: {
+    icon: "/rest-assets/favicon.svg",
+  },
 };
 
 export default function RootLayout({

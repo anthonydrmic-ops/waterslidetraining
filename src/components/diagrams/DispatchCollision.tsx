@@ -8,6 +8,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { useEffect, useState } from "react";
+import { RiderGlyph } from "./RiderGlyph";
 
 // One shared slide geometry, expressed as two cubic Bézier segments so the
 // riders can be positioned in JS exactly on the drawn path (no DOM measuring).
@@ -87,6 +88,14 @@ function pointAt(s: number): { x: number; y: number } {
   return pointAtParam(paramForArc(s));
 }
 
+// Local slope of the path, so rider figures lie along the slide.
+function angleAt(s: number): number {
+  const eps = 0.012;
+  const a = pointAt(Math.min(Math.max(s, 0), 1 - eps));
+  const b = pointAt(Math.min(Math.max(s, 0) + eps, 1));
+  return (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+}
+
 // Problem track choreography: light rider drops at ONE constant speed; just
 // before light reaches halfway the heavy rider launches, also at one constant
 // (faster) speed, and catches them just before the bottom - stopping just
@@ -118,11 +127,25 @@ function Rider({
   opacity?: ReturnType<typeof useMotionValue<number>>;
 }) {
   const x = useTransform(progress, (p) => pointAt(p).x);
-  const y = useTransform(progress, (p) => pointAt(p).y);
+  const y = useTransform(progress, (p) => pointAt(p).y - 6);
+  const rotate = useTransform(progress, (p) => angleAt(p));
   return (
     <motion.g style={{ x, y, opacity }}>
-      <circle r="11" fill={color} stroke="#ffffff" strokeWidth="2.5" filter="url(#riderShadow)" />
-      <text textAnchor="middle" dy="3.6" fontSize="11" fontWeight="700" fill="#ffffff" fontFamily="system-ui">
+      {/* The figure tilts with the local slope; the label stays upright */}
+      <motion.g style={{ rotate }}>
+        <RiderGlyph color={color} />
+      </motion.g>
+      <text
+        y={-16}
+        textAnchor="middle"
+        fontSize="10"
+        fontWeight="700"
+        fill={color}
+        stroke="#ffffff"
+        strokeWidth="3"
+        paintOrder="stroke"
+        fontFamily="system-ui"
+      >
         {letter}
       </text>
     </motion.g>
