@@ -348,25 +348,45 @@ cartoon, changed camera angle, changed lighting.
 Support the wind / flow meter / weight limit content added 2026-06-12. Use
 the i2i facility reference where the facility is visible.
 
-- `20-anemometer.jpg` (-> lesson 2-4 wind section): "Inspection photograph
-  taken on a smartphone: a small cup anemometer and wind sensor mounted on
-  the handrail of a waterslide tower's top platform, spinning slightly
-  blurred, white flumes and pool deck far below, clear sky behind.
-  Realistic phone-camera look, documentary record for a safety training
-  manual."
-- `21-flow-meter.jpg` (-> lesson 2-2 flow meter section): "Inspection
-  photograph taken on a smartphone in an aquatic-centre plant room: an
-  inline magnetic flow meter with a small digital display mounted on blue
-  PVC supply pipework, valve handles nearby, the display showing a clear
-  numeric reading, fluorescent light. Realistic phone-camera look,
-  documentary record for a safety training manual. No readable brand
-  names."
-- `22-rider-scales.jpg` (-> lesson 4-1 weight section): "Photograph at the
-  dispatch platform of a raft waterslide: a flat platform scale set into
-  the deck beside the raft loading position, a simple digital weight
-  display on a post beside it, wet concrete, handrails, flume entry softly
-  out of focus behind, no people. Editorial documentary style for a safety
-  training manual, natural daylight, no logos."
+### 20. `20-anemometer.jpg` (-> lesson 2-4 wind section)
+
+> Photorealistic inspection photograph taken on a smartphone from the top
+> dispatch platform of an outdoor waterslide tower. Clamped to the
+> galvanised handrail in the foreground: a small white cup anemometer on a
+> short mast, its three cups motion-blurred mid-spin, a thin cable running
+> down to a weatherproof display box strapped to the rail with a simple
+> digital readout. The background drops away far below: blue and white
+> fibreglass flumes curling down to a turquoise pool deck and shade sails,
+> all softly out of focus. Bright clear morning sky. True-to-life
+> phone-camera colour, slight wide angle, natural shadows, documentary
+> record for a safety training manual. No people, no readable text, no
+> logos, no watermark.
+
+### 21. `21-flow-meter.jpg` (-> lesson 2-2 flow meter section)
+
+> Photorealistic inspection photograph taken on a smartphone inside an
+> aquatic-centre plant room. Centre frame: an inline electromagnetic flow
+> meter fitted into horizontal blue PVC supply pipework at waist height,
+> stainless flanges either side, a small digital display on top showing a
+> clear numeric flow reading. Around it: a red-handled isolation valve, a
+> round pressure gauge, neatly cable-tied conduit, and a sand filter tank
+> blurred in the background, clean sealed concrete floor. Cool fluorescent
+> lighting, slight handheld tilt, realistic reflections on the glossy
+> pipe. Documentary record for a safety training manual. No people, no
+> readable brand names, no text overlays, no watermark.
+
+### 22. `22-rider-scales.jpg` (-> lesson 4-1 weight section)
+
+> Photorealistic photograph at the open-air dispatch platform of a raft
+> waterslide. Set flush into the wet concrete deck beside the raft loading
+> position: a flat stainless platform scale with a ribbed anti-slip
+> surface, water beaded on it. Beside it on a short post: a simple sealed
+> digital weight display showing a clear three-digit reading in
+> kilograms. Behind, softly out of focus: the wide flume entry with
+> shallow water flowing in, a yellow raft waiting at the edge, galvanised
+> handrails and a queue gate. Late-morning sun, wet sheen on the deck,
+> long soft shadows. Editorial documentary style for a safety training
+> manual, natural daylight, no people, no logos, no watermark.
 
 ## 23-26. Second-wave additions (requested 2026-06-12)
 
