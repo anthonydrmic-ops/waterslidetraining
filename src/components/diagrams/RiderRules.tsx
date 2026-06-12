@@ -120,19 +120,23 @@ export function RiderRules() {
                 style={reduce ? { transform: "translateY(42px)" } : undefined}
               >
                 <g transform="translate(45 26)">
-                  {/* Legs together, feet toward travel - swaying from the hip */}
+                  {/* Two legs, feet toward travel - swaying from the hip */}
                   <g className={reduce ? undefined : "rider-legs"}>
-                    <rect x="-3.5" y="7" width="7" height="16" rx="3.5" fill="#059669" />
+                    <rect x="-4.2" y="6.5" width="3.6" height="16.5" rx="1.8" fill="#059669" stroke="#065f46" strokeWidth="1.4" />
+                    <rect x="0.6" y="6.5" width="3.6" height="16.5" rx="1.8" fill="#059669" stroke="#065f46" strokeWidth="1.4" />
                   </g>
                   {/* Torso / shoulders */}
-                  <rect x="-7" y="-8" width="14" height="15" rx="6" fill="#059669" />
-                  {/* Arms crossed over the chest - shifting with the water */}
+                  <rect x="-7" y="-8" width="14" height="15" rx="6" fill="#059669" stroke="#065f46" strokeWidth="1.4" />
+                  {/* Forearms crossed over the chest - real limbs, outlined */}
                   <g className={reduce ? undefined : "rider-arms"}>
-                    <path d="M -4.5 -4 L 4.5 1 M 4.5 -4 L -4.5 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                    <path d="M -6.5 -5.5 Q -2 -2.5 3.5 -1.5" stroke="#065f46" strokeWidth="4.8" fill="none" strokeLinecap="round" />
+                    <path d="M 6.5 -5.5 Q 2 -2.5 -3.5 -1.5" stroke="#065f46" strokeWidth="4.8" fill="none" strokeLinecap="round" />
+                    <path d="M -6.5 -5.5 Q -2 -2.5 3.5 -1.5" stroke="#10b981" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+                    <path d="M 6.5 -5.5 Q 2 -2.5 -3.5 -1.5" stroke="#10b981" strokeWidth="2.4" fill="none" strokeLinecap="round" />
                   </g>
                   {/* Head - a gentle bob */}
                   <g className={reduce ? undefined : "rider-head"}>
-                    <circle cx="0" cy="-13" r="4.5" fill="#059669" />
+                    <circle cx="0" cy="-13" r="4.5" fill="#059669" stroke="#065f46" strokeWidth="1.4" />
                   </g>
                 </g>
               </g>
