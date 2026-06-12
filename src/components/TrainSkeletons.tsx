@@ -1,13 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ArrowLeft } from "@phosphor-icons/react";
 
 /**
  * Full-screen branded loader. Held in place until a page's data has fully
  * resolved, so dynamic content (resume banner, badges, scores) animates in once
  * rather than popping in piecemeal after the page has already painted.
+ *
+ * Deliberately has NO entrance animation and uses CSS keyframes for the sweep
+ * and pulse: the loader often spans a route change (lesson -> module result),
+ * where it unmounts and remounts. A steady-state render makes that remount
+ * pixel-identical - no blink, no stutter.
  */
 export function TrainPageLoader({ label = "Preparing your training" }: { label?: string }) {
   return (
@@ -22,12 +26,7 @@ export function TrainPageLoader({ label = "Preparing your training" }: { label?:
             "radial-gradient(55% 45% at 50% 42%, rgba(31,122,140,0.07), transparent 70%)",
         }}
       />
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-        className="relative flex flex-col items-center"
-      >
+      <div className="relative flex flex-col items-center">
         {/* Logo inside a softly-shadowed tile */}
         <div className="w-16 h-16 mb-8 rounded-2xl bg-white shadow-[0_10px_30px_rgba(11,58,102,0.10)] flex items-center justify-center">
           <img
@@ -41,25 +40,19 @@ export function TrainPageLoader({ label = "Preparing your training" }: { label?:
 
         {/* Slim indeterminate progress sweep */}
         <div className="w-48 h-[3px] rounded-full bg-stone-200/60 overflow-hidden">
-          <motion.div
-            className="h-full w-1/3 rounded-full"
+          <div
+            className="loader-sweep h-full w-1/3 rounded-full"
             style={{
               background:
                 "linear-gradient(90deg, transparent, var(--teal), var(--cta), transparent)",
             }}
-            animate={{ x: ["-150%", "330%"] }}
-            transition={{ duration: 1.25, repeat: Infinity, ease: [0.45, 0, 0.55, 1] }}
           />
         </div>
 
-        <motion.p
-          className="mt-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400"
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-        >
+        <p className="loader-pulse mt-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-stone-400">
           {label}
-        </motion.p>
-      </motion.div>
+        </p>
+      </div>
     </div>
   );
 }
