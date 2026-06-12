@@ -9,9 +9,25 @@ import {
   useReducedMotion,
   useTransform,
 } from "framer-motion";
-import { RiderGlyph } from "./RiderGlyph";
-
 const EASE = [0.32, 0.72, 0, 1] as const;
+
+/** Top-down rider on a tube — reads cleanly at the helix's small scale. */
+function TubeRider({ color }: { color: string }) {
+  return (
+    <g aria-hidden>
+      {/* White underlay for contrast on the lane */}
+      <circle r="9" fill="#ffffff" />
+      {/* The tube */}
+      <circle r="6.2" fill="none" stroke="#f59e0b" strokeWidth="3.4" />
+      <circle r="6.2" fill="none" stroke="#fbbf24" strokeWidth="1.6" />
+      {/* Hands gripping the tube */}
+      <circle cx="-4.4" cy="-4.4" r="1.3" fill="#e7b98a" />
+      <circle cx="4.4" cy="-4.4" r="1.3" fill="#e7b98a" />
+      {/* Head */}
+      <circle r="2.7" fill={color} />
+    </g>
+  );
+}
 
 // ---- Right side: the closed communication loop ----
 const CX = 470;
@@ -262,8 +278,8 @@ export function ExitLoop() {
             <motion.g
               style={{ x: rx, y: ry, opacity: ro, visibility: behind ? "visible" : "hidden" }}
             >
-              <g transform={`scale(${face}, 1) scale(0.7)`} opacity="0.6">
-                <RiderGlyph color="#1F7A8C" />
+              <g transform="scale(0.62)" opacity="0.6">
+                <TubeRider color="#1F7A8C" />
               </g>
             </motion.g>
           )}
@@ -336,16 +352,16 @@ export function ExitLoop() {
           {/* The rider, near side */}
           {reduce ? (
             <g transform={`translate(${HELIX.point(0).x} ${HELIX.point(0).y - 4})`}>
-              <g transform="scale(0.7)">
-                <RiderGlyph color="#1F7A8C" />
+              <g transform="scale(0.75)">
+                <TubeRider color="#1F7A8C" />
               </g>
             </g>
           ) : (
             <motion.g
               style={{ x: rx, y: ry, opacity: ro, visibility: behind ? "hidden" : "visible" }}
             >
-              <g transform={`scale(${face}, 1) scale(0.7)`}>
-                <RiderGlyph color="#1F7A8C" />
+              <g transform="scale(0.75)">
+                <TubeRider color="#1F7A8C" />
               </g>
             </motion.g>
           )}

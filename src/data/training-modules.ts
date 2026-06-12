@@ -2433,6 +2433,14 @@ export const modules: Module[] = [
             body: "The catch pool must be completely clear - no rider in the water, no rider climbing out, no rider standing at the edge - before the exit operator signals dispatch clearance to the top. 'Almost clear' is not clear.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/15-splash-pool.jpg",
+            alt: "A waterslide catch pool seen from the run-out, water churning at the flume mouth, 1.5M depth markings on the coping and exit steps with a handrail at the far corner",
+            aspect: "4:3",
+            heading: "The exit operator's view",
+            body: "Run-out into the catch pool: aerated white water at the flume mouth, depth markings on the coping, exit steps with a handrail. Everything between the flume mouth and those steps must be empty before the clearance signal goes up.",
+          },
+          {
             heading: "Top-Bottom Coordination",
             type: "text",
             body: "Dispatch operators at the top and exit operators at the bottom form a closed communication loop. The top cannot dispatch without bottom confirmation. The bottom cannot confirm until the exit zone is fully clear. If communication is lost - even momentarily - dispatch must stop until it is restored.",
