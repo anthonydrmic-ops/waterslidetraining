@@ -1912,10 +1912,10 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/07-dispatch-position.jpg",
-            alt: "An aquatic-centre operator standing at the dispatch point at the top of a waterslide tower with one arm raised in a wait signal, a rider seated and ready",
+            imageSrc: "/lesson-images/07-dispatch-position-v2.jpg",
+            alt: "A hi-vis attendant at the dispatch console on the top platform while a rider sits waiting in the flume mouth, the dispatch indicator showing red",
             aspect: "4:3",
-            body: "An operator holds a rider at the dispatch point until the slide and exit are confirmed clear.",
+            body: "The rider holds at the flume mouth until the operator confirms the slide and exit are clear - the indicator stays red until then.",
           },
           {
             type: "numbered",
