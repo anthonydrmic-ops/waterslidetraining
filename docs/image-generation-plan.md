@@ -368,6 +368,73 @@ the i2i facility reference where the facility is visible.
   out of focus behind, no people. Editorial documentary style for a safety
   training manual, natural daylight, no logos."
 
+## 23-26. Second-wave additions (requested 2026-06-12)
+
+23 replaces a stock photo we cannot use; 24-26 are pair/variant shots so
+defect sections can show two different-looking examples side by side.
+
+### 23. `23-flume-polishing.jpg` - 16:9 - Nano Banana Pro
+Original recreation of the stock "worker polishing inside a flume" concept
+(do NOT feed the stock image as a reference - text prompt only).
+
+> Photorealistic documentary photograph taken from inside a large enclosed
+> light-blue fibreglass waterslide tube, looking along the tunnel toward
+> the bright circular opening. A maintenance technician in a white hooded
+> disposable coverall, half-face respirator and black work gloves kneels
+> on the dry flume floor near the opening, pressing a handheld orbital
+> polisher with a round white wool buffing pad against the inside wall at
+> a seam line, power cord trailing beside him. Soft daylight floods in
+> through the opening, throwing long reflections down the glossy curved
+> interior; outside, a blurred water park with palm trees and a slide
+> tower is overexposed in the background. Natural light, realistic
+> reflections on the gelcoat, slight wide-angle perspective, editorial
+> safety-training photography. No text, no watermarks, no logos.
+
+### 24. `24-chip-gouge.jpg` - 1:1 - FLUX 1.1 Ultra raw
+Pairs beside the gelcoat-peeling photo in the Surface Defects lesson - a
+DIFFERENT defect (chips and gouges section).
+
+> Raw candid inspection photograph, shot on a phone, of the inside surface
+> of a light-blue fibreglass waterslide flume. A cluster of small
+> sharp-edged chips in the gelcoat, each only a few millimetres across,
+> exposing dull white laminate beneath, and one deeper gouge about four
+> centimetres long with a pale scratched drag trail, a hairline running
+> off its end. A few water droplets cling near the damage. Soft outdoor
+> daylight, slightly off-angle handheld framing, shallow depth of field,
+> true-to-life colour, mundane and unstaged. No text, no watermarks.
+
+### 25. `25-gelcoat-peeling-alt.jpg` - 1:1 - FLUX 1.1 Ultra raw
+Regeneration of the gelcoat-peeling subject that must look CLEARLY
+different from `03-gelcoat-delamination-v2.jpg` (that one is light blue,
+straight-on, cool light - this one is white, oblique, warm light).
+
+> Raw candid inspection photograph, shot on a phone, of a WHITE fibreglass
+> waterslide flume surface in warm late-afternoon sunlight. A large
+> irregular patch of gelcoat has flaked and curled away, the lifted flake
+> edges casting small hard shadows, exposing yellowed fibreglass weave
+> beneath. Photographed from a low oblique angle along the flume so the
+> damage stretches away from the camera, a thin film of water pooled at
+> the lower edge catching the sun. Handheld framing, realistic grain,
+> true-to-life colour, mundane and unstaged. No text, no watermarks.
+
+### 26. `26-joint-failure-alt.jpg` - 1:1 - FLUX 1.1 Ultra raw
+Pairs beside `04-joint-misalignment-v2.jpg` (orange, exterior, dry) in the
+joint failure lesson - this one is interior, light blue, wet, so the pair
+reads as two different real slides.
+
+> Raw candid inspection photograph, shot on a phone, INSIDE a light-blue
+> fibreglass waterslide flume at a transverse joint where two sections
+> meet. The downstream edge sits a few millimetres proud, making a visible
+> step across the lane, and the sealant line along the seam is grey,
+> cracked and crumbling out in places, with a short brown stain weeping
+> from one gap. A shallow sheet of water crosses the joint and catches the
+> light at the lip. Soft shaded daylight inside the flume, handheld
+> framing, shallow depth of field, true-to-life colour, mundane and
+> unstaged. No text, no watermarks.
+
+When 24/25/26 are delivered, the lesson pages get a side-by-side pair
+layout for these sections (two small images in one row).
+
 ## What we will NOT generate (reviewed and removed)
 
 - **First-aid / injury scenes** (was considered for Module 8): AI renders of

@@ -146,7 +146,7 @@ export function SurfaceSpeed() {
               ) : (
                 <motion.g style={{ x: riders[i], opacity: fade }}>
                   <g transform={`translate(0 ${y - 2})`}>
-                    <RiderGlyph color={lane.color} />
+                    <RiderGlyph color={lane.color} animated />
                   </g>
                 </motion.g>
               )}

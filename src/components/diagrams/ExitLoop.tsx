@@ -9,25 +9,9 @@ import {
   useReducedMotion,
   useTransform,
 } from "framer-motion";
-const EASE = [0.32, 0.72, 0, 1] as const;
+import { RiderGlyph } from "./RiderGlyph";
 
-/** Top-down rider on a tube — reads cleanly at the helix's small scale. */
-function TubeRider({ color }: { color: string }) {
-  return (
-    <g aria-hidden>
-      {/* White underlay for contrast on the lane */}
-      <circle r="9" fill="#ffffff" />
-      {/* The tube */}
-      <circle r="6.2" fill="none" stroke="#f59e0b" strokeWidth="3.4" />
-      <circle r="6.2" fill="none" stroke="#fbbf24" strokeWidth="1.6" />
-      {/* Hands gripping the tube */}
-      <circle cx="-4.4" cy="-4.4" r="1.3" fill="#e7b98a" />
-      <circle cx="4.4" cy="-4.4" r="1.3" fill="#e7b98a" />
-      {/* Head */}
-      <circle r="2.7" fill={color} />
-    </g>
-  );
-}
+const EASE = [0.32, 0.72, 0, 1] as const;
 
 // ---- Right side: the closed communication loop ----
 const CX = 470;
@@ -161,7 +145,9 @@ export function ExitLoop() {
   const rx = useMotionValue(HELIX.point(0).x);
   const ry = useMotionValue(HELIX.point(0).y - 4);
   const ro = useMotionValue(0);
+  const rot = useMotionValue(0);
   const [behind, setBehind] = useState(false);
+  const [flip, setFlip] = useState(false);
 
   useEffect(() => {
     if (reduce || !inView) return;
@@ -173,12 +159,25 @@ export function ExitLoop() {
       });
 
     // Rider position derives from the helix parameter - behind the column on
-    // the far side.
+    // the far side, tilted to the local slope of the lane and mirrored when
+    // travelling right-to-left, so the figure genuinely rides the flume.
     const place = (t: number) => {
       const p = HELIX.point(t);
       rx.set(p.x);
-      ry.set(p.y - 4);
+      ry.set(p.y - 5);
       setBehind(p.back);
+      const q = HELIX.point(Math.min(1, t + 0.004));
+      let a = (Math.atan2(q.y - p.y, q.x - p.x) * 180) / Math.PI;
+      let mirrored = false;
+      if (a > 90) {
+        a -= 180;
+        mirrored = true;
+      } else if (a < -90) {
+        a += 180;
+        mirrored = true;
+      }
+      rot.set(Math.max(-50, Math.min(50, a)));
+      setFlip(mirrored);
     };
     const unsub = rv.on("change", place);
 
@@ -227,7 +226,7 @@ export function ExitLoop() {
       alive = false;
       timers.forEach(clearTimeout);
       unsub();
-      [angle, rv, rx, ry, ro].forEach((v) => v.stop());
+      [angle, rv, rx, ry, ro, rot].forEach((v) => v.stop());
       setPhase(-1);
     };
   }, [reduce, inView, angle, rv, rx, ry, ro]);
@@ -269,9 +268,11 @@ export function ExitLoop() {
             <motion.g
               style={{ x: rx, y: ry, opacity: ro, visibility: behind ? "visible" : "hidden" }}
             >
-              <g transform="scale(0.62)" opacity="0.6">
-                <TubeRider color="#1F7A8C" />
-              </g>
+              <motion.g style={{ rotate: rot }}>
+                <g transform={`${flip ? "scale(-1, 1) " : ""}scale(0.66)`} opacity="0.6">
+                  <RiderGlyph color="#1F7A8C" />
+                </g>
+              </motion.g>
             </motion.g>
           )}
 
@@ -342,18 +343,20 @@ export function ExitLoop() {
 
           {/* The rider, near side */}
           {reduce ? (
-            <g transform={`translate(${HELIX.point(0).x} ${HELIX.point(0).y - 4})`}>
-              <g transform="scale(0.75)">
-                <TubeRider color="#1F7A8C" />
+            <g transform={`translate(${HELIX.point(0).x} ${HELIX.point(0).y - 5})`}>
+              <g transform="scale(0.78)">
+                <RiderGlyph color="#1F7A8C" />
               </g>
             </g>
           ) : (
             <motion.g
               style={{ x: rx, y: ry, opacity: ro, visibility: behind ? "hidden" : "visible" }}
             >
-              <g transform="scale(0.75)">
-                <TubeRider color="#1F7A8C" />
-              </g>
+              <motion.g style={{ rotate: rot }}>
+                <g transform={`${flip ? "scale(-1, 1) " : ""}scale(0.78)`}>
+                  <RiderGlyph color="#1F7A8C" animated />
+                </g>
+              </motion.g>
             </motion.g>
           )}
         </motion.g>

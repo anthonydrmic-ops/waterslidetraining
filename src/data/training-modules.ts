@@ -2813,6 +2813,7 @@ export const modules: Module[] = [
             imageSrc: "/lesson-images/04-joint-misalignment-v2.jpg",
             alt: "Close-up along the inside of a waterslide flume at a panel joint where two sections meet slightly misaligned, creating a raised lip",
             aspect: "1:1",
+            size: "small",
             body: "A small raised lip where two flume sections meet slightly misaligned at a joint.",
           },
           {

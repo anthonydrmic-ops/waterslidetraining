@@ -134,7 +134,7 @@ function Rider({
     <motion.g style={{ x, y, opacity }}>
       {/* The figure tilts with the local slope; the label stays upright */}
       <motion.g style={{ rotate }}>
-        <RiderGlyph color={color} />
+        <RiderGlyph color={color} animated />
       </motion.g>
       <text
         y={-16}
