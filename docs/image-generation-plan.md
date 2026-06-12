@@ -288,7 +288,36 @@ Lands in: **4-4 Exit Control and Coordination**.
 > steps with handrail, "KEEP EXIT CLEAR" floor signage zone, aerated white
 > water at the flume mouth, viewed from the lifeguard's position.
 
-## 16-19. Surface severity series - 4:3 - Nano Banana Pro (edit chain)
+## 16-19. Surface severity series - SUPERSEDED by single 2x2 board
+
+New approach (2026-06-12): generate ONE 2x2 board with all four states -
+same flume/camera/light guaranteed in a single image - then slice the four
+panels into the SurfaceDefects diagram tiles (same pipeline as
+defect-cards). Attach the diagram screenshot as an order reference. Board
+prompt:
+
+> A 2x2 grid of four photorealistic close-up photographs of the same
+> light-blue fibreglass waterslide flume surface - same camera distance,
+> same angle, same soft outdoor daylight in every panel - separated by
+> clean white gutters. Top left: flawless glossy gelcoat with a thin sheet
+> of water flowing over it, perfect smooth shine. Top right: the same
+> surface gone dull and matte, with fine sandpaper-like roughness and
+> faint chalky UV-fading streaks, the gloss gone. Bottom left: patches of
+> gelcoat flaked and peeling away, exposing dull white fibreglass laminate
+> beneath, lifted flake edges catching the light. Bottom right: a tight
+> network of branching cracks - one main fracture about two millimetres
+> wide with hairline branches spreading from it and grey staining along
+> the lines. The same flume in all four panels; only the surface condition
+> changes, severity increasing panel by panel. Realistic phone-camera
+> documentary look, true-to-life scale, no text, no labels, no captions,
+> no logos.
+
+CRITICAL: no text/labels in the panels (the diagram supplies its own
+pills) - reference images with labels tempt the model into garbled text.
+
+Original edit-chain approach (kept for reference):
+
+### (old) 16-19 - 4:3 - Nano Banana Pro (edit chain)
 
 Replaces the abstract tiles in the SurfaceDefects diagram with a same-shot
 photo sequence. THE RULE: generate 16 (smooth) first, then produce 17-19 as
