@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { Prohibit, ClipboardText, MagnifyingGlass } from "@phosphor-icons/react";
+import { Prohibit, ClipboardText, MagnifyingGlass, X } from "@phosphor-icons/react";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -123,12 +123,12 @@ export function ShutdownDecision() {
         </motion.span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1 items-stretch">
         {/* YES — immediate shutdown */}
         <motion.div
           variants={fadeUp}
           custom={0.5}
-          className="rounded-2xl border border-red-200/70 bg-white overflow-hidden"
+          className="rounded-2xl border border-red-200/70 bg-white overflow-hidden h-full flex flex-col"
         >
           <div className="px-4 py-3 bg-red-50/80 border-b border-red-100 flex items-center gap-3">
             <div className="relative w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
@@ -150,17 +150,19 @@ export function ShutdownDecision() {
               </p>
             </div>
           </div>
-          <div className="p-4 flex flex-wrap gap-1.5">
+          <div className="p-4 flex-1 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 content-start">
             {TRIGGERS.map((t, i) => (
-              <motion.span
+              <motion.div
                 key={i}
                 variants={chipVariant}
                 custom={i}
-                className="inline-flex items-center gap-1.5 text-[11px] font-medium pl-2 pr-2.5 py-1.5 rounded-lg bg-red-50/70 border border-red-100 text-red-900/80"
+                className="flex items-start gap-2.5"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
-                {t}
-              </motion.span>
+                <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center shrink-0 mt-px">
+                  <X size={10} weight="bold" className="text-red-600" />
+                </span>
+                <p className="text-[12px] text-red-900/80 leading-snug">{t}</p>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -169,7 +171,7 @@ export function ShutdownDecision() {
         <motion.div
           variants={fadeUp}
           custom={0.6}
-          className="rounded-2xl border border-emerald-200/70 bg-white overflow-hidden"
+          className="rounded-2xl border border-emerald-200/70 bg-white overflow-hidden h-full flex flex-col"
         >
           <div className="px-4 py-3 bg-emerald-50/70 border-b border-emerald-100 flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
@@ -184,7 +186,7 @@ export function ShutdownDecision() {
               </p>
             </div>
           </div>
-          <div className="p-4 space-y-2.5">
+          <div className="p-4 flex-1 flex flex-col justify-start gap-2.5">
             {STEPS.map((step, i) => (
               <motion.div key={i} variants={stepVariant} custom={i} className="flex items-start gap-2.5">
                 <span
