@@ -42,28 +42,47 @@ const cardVariant = {
 };
 
 /** The inspector: hi-vis vest, clipboard in hand, ready to talk checks. */
-function Inspector({ talking }: { talking: boolean }) {
+function Inspector({ talking, approving }: { talking: boolean; approving: boolean }) {
   return (
     <g>
-      {/* Speech bubble — only while talking */}
-      {talking && (
-        <g>
-          <rect x="6" y="-26" width="26" height="13" rx="6.5" fill="#ffffff" stroke="#d6d3d1" strokeWidth="1" />
-          <path d="M 11 -13.5 L 9 -9.5 L 15 -13.2 Z" fill="#ffffff" stroke="#d6d3d1" strokeWidth="0.8" />
-          {[12.5, 19, 25.5].map((dx, i) => (
-            <circle
-              key={dx}
-              className="talk-dot"
-              style={{ animationDelay: `${i * 0.16}s` }}
-              cx={dx}
-              cy="-19.5"
-              r="1.8"
-              fill="#78716c"
+      {/* Speech bubble — dots while talking, a green tick on sign-off */}
+      {(talking || approving) && (
+        <g className="bubble-pop" key={approving ? "tick" : "talk"}>
+          <rect x="6" y="-26" width="26" height="13" rx="6.5" fill="#ffffff" stroke={approving ? "#86efac" : "#d6d3d1"} strokeWidth="1" />
+          <path d="M 11 -13.5 L 9 -9.5 L 15 -13.2 Z" fill="#ffffff" stroke={approving ? "#86efac" : "#d6d3d1"} strokeWidth="0.8" />
+          {approving ? (
+            <path
+              d="M 14 -19.5 l 3.2 3.2 l 6.4 -6.6"
+              stroke="#16a34a"
+              strokeWidth="2.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
             />
-          ))}
+          ) : (
+            [12.5, 19, 25.5].map((dx, i) => (
+              <circle
+                key={dx}
+                className="talk-dot"
+                style={{ animationDelay: `${i * 0.16}s` }}
+                cx={dx}
+                cy="-19.5"
+                r="1.8"
+                fill="#78716c"
+              />
+            ))
+          )}
         </g>
       )}
       <g className="walk-bob">
+        {/* Free arm — raised in a thumbs-up on sign-off */}
+        {approving && (
+          <g>
+            <line x1="-2.6" y1="-4.5" x2="-6.2" y2="-10" stroke="#0B3A66" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="-6.6" cy="-11" r="1.8" fill="#e7b98a" stroke="#0B3A66" strokeWidth="0.9" />
+            <line x1="-6.6" y1="-12.6" x2="-6.6" y2="-14.6" stroke="#e7b98a" strokeWidth="1.7" strokeLinecap="round" />
+          </g>
+        )}
         {/* Legs */}
         <line x1="-1.5" y1="1.5" x2="-2.5" y2="8" stroke="#0B3A66" strokeWidth="2.2" strokeLinecap="round" />
         <line x1="1.5" y1="1.5" x2="2.5" y2="8" stroke="#0B3A66" strokeWidth="2.2" strokeLinecap="round" />
@@ -96,6 +115,7 @@ export function InspectionZones() {
   const wo = useMotionValue(0);
   const [activeZone, setActiveZone] = useState(-1);
   const [talking, setTalking] = useState(false);
+  const [approving, setApproving] = useState(false);
 
   // The inspection round: drop in at the launch platform, walk the line,
   // pause at each zone to run its checks (card highlights, bubble talks),
@@ -129,7 +149,12 @@ export function InspectionZones() {
           await wait(TALK_MS);
           if (!alive) return;
         }
+        // Sign-off: checks done — thumbs up, big green tick
         setTalking(false);
+        setApproving(true);
+        await wait(1600);
+        if (!alive) return;
+        setApproving(false);
         setActiveZone(-1);
         animate(wo, 0, { duration: 0.4 });
         await wait(650);
@@ -141,6 +166,7 @@ export function InspectionZones() {
       timers.forEach(clearTimeout);
       [wx, wy, wo].forEach((v) => v.stop());
       setTalking(false);
+      setApproving(false);
       setActiveZone(-1);
     };
   }, [reduce, inView, wx, wy, wo]);
@@ -223,11 +249,11 @@ export function InspectionZones() {
         {/* The inspector walking the line */}
         {reduce ? (
           <g transform={`translate(${STOPS[0][0]} ${STOPS[0][1]})`}>
-            <Inspector talking={false} />
+            <Inspector talking={false} approving={false} />
           </g>
         ) : (
           <motion.g style={{ x: wx, y: wy, opacity: wo }}>
-            <Inspector talking={talking} />
+            <Inspector talking={talking} approving={approving} />
           </motion.g>
         )}
       </svg>
