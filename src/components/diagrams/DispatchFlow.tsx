@@ -149,7 +149,7 @@ export function DispatchFlow() {
                     size={16}
                     weight="bold"
                     className={`rotate-90 sm:rotate-0 transition-colors duration-500 ${
-                      isActive ? "text-stone-400" : "text-stone-300"
+                      isActive ? "text-[#1F7A8C]" : "text-stone-300"
                     }`}
                   />
                 )}
