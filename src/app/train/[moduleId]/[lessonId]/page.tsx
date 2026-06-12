@@ -1088,7 +1088,7 @@ function SectionRenderer({
         )}
         <div
           className={`group/img relative w-full ${ratio} overflow-hidden rounded-2xl bg-stone-100 ring-1 ring-stone-200/60 ${
-            small ? "max-w-[320px] mx-auto" : ""
+            small ? "max-w-[320px]" : ""
           }`}
         >
           <Image
@@ -1102,7 +1102,7 @@ function SectionRenderer({
         {section.body && (
           <figcaption
             className={`text-xs text-stone-500 leading-relaxed mt-2 ${
-              small ? "max-w-[400px] mx-auto text-center" : ""
+              small ? "max-w-[400px]" : ""
             }`}
           >
             {section.body}
