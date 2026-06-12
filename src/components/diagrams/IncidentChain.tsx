@@ -103,16 +103,22 @@ export function IncidentChain() {
                 </p>
               </foreignObject>
 
-              {/* Chain connector */}
+              {/* Chain connector — two interlocked links bridging the gap */}
               {i < links.length - 1 && (
                 <g>
-                  <line x1={x + 128} y1={y + 40} x2={x + 138} y2={y + 40} stroke={link.color} strokeWidth="3" />
-                  <circle cx={x + 133} cy={y + 40} r="3" fill={link.color} opacity="0.3" />
+                  <ellipse cx={x + 130.5} cy={y + 40} rx="4.6" ry="3.2" fill="none" stroke={link.color} strokeWidth="1.8" />
+                  <ellipse cx={x + 136.5} cy={y + 40} rx="4.6" ry="3.2" fill="none" stroke={links[i + 1].color} strokeWidth="1.8" />
                 </g>
               )}
             </motion.g>
           );
         })}
+
+        {/* Hazard pulse — propagating down the chain, the thing every green
+            node exists to interrupt */}
+        {!reduceMotion && (
+          <circle className="chain-pulse" cx="46" cy="160" r="4.5" fill="#dc2626" />
+        )}
 
         {/* Break points */}
         {breaks.map((label, i) => {
@@ -164,7 +170,7 @@ export function IncidentChain() {
 
         {/* Bottom legend */}
         <motion.g variants={legendVariant}>
-          <rect x="130" y="230" width="460" height="70" rx="12" fill="white" stroke="#e7e5e4" strokeWidth="1" />
+          <rect x="130" y="230" width="460" height="70" rx="14" fill="#f0fdf4" stroke="#bbf7d0" strokeWidth="1" />
           <text x="360" y="254" textAnchor="middle" fontSize="13" fontWeight="600" fill="#44403c" fontFamily="system-ui">
             Your Role: Break the Chain at Every Opportunity
           </text>

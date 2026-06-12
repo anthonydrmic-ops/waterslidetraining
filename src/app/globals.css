@@ -537,6 +537,32 @@ html {
   }
 }
 
+/* Incident-chain hazard pulse — a red dot propagating down the chain. */
+.chain-pulse {
+  transform-box: fill-box;
+  animation: chain-pulse 5s linear infinite;
+}
+@keyframes chain-pulse {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.85;
+  }
+  88% {
+    opacity: 0.85;
+  }
+  96% {
+    transform: translateX(560px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(560px);
+    opacity: 0;
+  }
+}
+
 .slow-spin {
   animation: slow-spin 6s linear infinite;
 }
