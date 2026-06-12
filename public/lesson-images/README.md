@@ -36,6 +36,9 @@ Generate the file first, drop it here, then wire the section into the lesson.
 | 17 | `17-surface-roughening.jpg` | 4:3 | SurfaceDefects diagram tile 2 (edit of 16) |
 | 18 | `18-surface-peeling.jpg` | 4:3 | SurfaceDefects diagram tile 3 (edit of 16) |
 | 19 | `19-surface-cracking.jpg` | 4:3 | SurfaceDefects diagram tile 4 (edit of 16) |
+| 20 | `20-anemometer.jpg` | 4:3 | Module 3, lesson 2-4 (wind monitoring) |
+| 21 | `21-flow-meter.jpg` | 4:3 | Module 3, lesson 2-2 (flow meters) |
+| 22 | `22-rider-scales.jpg` | 4:3 | Module 5, lesson 4-1 (weight limits / scales) |
 
 ## How an image section looks in a lesson
 

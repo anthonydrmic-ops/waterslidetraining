@@ -125,6 +125,37 @@ const LADDERS: Record<string, LadderData> = {
       },
     ],
   },
+  "wind-response": {
+    title: "Staged Wind Response",
+    footer: "Your slide's wind limit lives in its operations manual - know the number before the wind arrives.",
+    steps: [
+      {
+        tone: "info",
+        label: "Monitor continuously",
+        detail: "An anemometer at the highest dispatch platform - wind at the tower is stronger than wind on the deck.",
+      },
+      {
+        tone: "warn",
+        label: "Winds rising toward the limit",
+        detail: "Brief operators and watch ride behaviour - expect slower, less predictable riders on open flumes.",
+      },
+      {
+        tone: "warn",
+        label: "Gusts near the limit",
+        detail: "Restrict the exposed rides first - tall open flumes and light riders are affected most. Gusts move riders, not averages.",
+      },
+      {
+        tone: "danger",
+        label: "Sustained wind above the manufacturer's limit",
+        detail: "Close the affected slides. The figure in the operations manual governs - not judgement on the day.",
+      },
+      {
+        tone: "danger",
+        label: "Lightning or storm front",
+        detail: "Clear pools and towers immediately. This overrides everything else.",
+      },
+    ],
+  },
   "post-incident-steps": {
     title: "After the Incident - In This Order",
     footer: "Facts only, recorded immediately - never speculation, interpretation or blame.",
@@ -257,4 +288,7 @@ export function ScenarioThroughput() {
 }
 export function PostIncidentSteps() {
   return <Ladder data={LADDERS["post-incident-steps"]} />;
+}
+export function WindResponse() {
+  return <Ladder data={LADDERS["wind-response"]} />;
 }

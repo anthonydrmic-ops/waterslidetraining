@@ -200,6 +200,31 @@ thumbnail size.
 Negative for all four: people, hands, logos, text, warped flume geometry,
 cartoon, changed camera angle, changed lighting.
 
+## 20-22. Equipment shots for the new safety content - 4:3 - Nano Banana 2
+
+Support the wind / flow meter / weight limit content added 2026-06-12. Use
+the i2i facility reference where the facility is visible.
+
+- `20-anemometer.jpg` (-> lesson 2-4 wind section): "Inspection photograph
+  taken on a smartphone: a small cup anemometer and wind sensor mounted on
+  the handrail of a waterslide tower's top platform, spinning slightly
+  blurred, white flumes and pool deck far below, clear sky behind.
+  Realistic phone-camera look, documentary record for a safety training
+  manual."
+- `21-flow-meter.jpg` (-> lesson 2-2 flow meter section): "Inspection
+  photograph taken on a smartphone in an aquatic-centre plant room: an
+  inline magnetic flow meter with a small digital display mounted on blue
+  PVC supply pipework, valve handles nearby, the display showing a clear
+  numeric reading, fluorescent light. Realistic phone-camera look,
+  documentary record for a safety training manual. No readable brand
+  names."
+- `22-rider-scales.jpg` (-> lesson 4-1 weight section): "Photograph at the
+  dispatch platform of a raft waterslide: a flat platform scale set into
+  the deck beside the raft loading position, a simple digital weight
+  display on a post beside it, wet concrete, handrails, flume entry softly
+  out of focus behind, no people. Editorial documentary style for a safety
+  training manual, natural daylight, no logos."
+
 ## What we will NOT generate (reviewed and removed)
 
 - **First-aid / injury scenes** (was considered for Module 8): AI renders of

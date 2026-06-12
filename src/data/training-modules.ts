@@ -1042,12 +1042,42 @@ export const modules: Module[] = [
             type: "critical",
             body: "Operating a slide with incorrect water flow is one of the most dangerous operational errors. Dry spots cause riders to stick, decelerate and become vulnerable to collision from following riders. This is a non-negotiable operational control.",
           },
+          {
+            heading: "Flow Meters - Reading the System's Pulse",
+            type: "text",
+            body: "Splash patterns and sound tell you something is wrong - a flow meter tells you exactly what. Permanent slides are typically fitted with a flow meter on the supply line to each flume (common types are paddlewheel, magnetic and clamp-on ultrasonic). The reading is compared against the manufacturer's specified flow range at every opening, and the number is logged. Logging matters: a slow downward drift across days reveals developing problems - a clogging intake, a wearing pump impeller, a partially closed valve - before they become visible to riders.",
+          },
+          {
+            type: "diagram",
+            heading: "Reading the Meter",
+            body: "The flow reading lives or dies against one reference: the OEM range in the Ride Operations Manual.",
+            diagramId: "flow-meter-check",
+          },
+          {
+            type: "checklist",
+            heading: "Working With Flow Meters",
+            body: "Build these habits into every operating day:",
+            items: [
+              "Know where the meter for each flume is - usually on the supply line near the pump or at the base of the riser",
+              "Read it at opening AFTER the system has stabilised, then at intervals through the day",
+              "Compare every reading against the OEM flow range in the Ride Operations Manual",
+              "Log every reading - trends across days are an early-warning system",
+              "A reading outside the range means the slide does not open (or stops operating) until corrected",
+              "If the meter itself fails, flow is unverified - follow your facility's procedure before operating",
+            ],
+          },
+          {
+            type: "oem-reference",
+            body: "Flow meters should be installed at strategic points to monitor real-time flow rates, with a routine schedule to check and record readings so the system stays within the design parameters set by the manufacturer.",
+            source: "Industry water-park maintenance guidance (WhiteWater West maintenance guide; manufacturer flow requirements)",
+          },
         ],
         keyTakeaways: [
           "Flow rates are engineered limits, not suggestions",
           "Water must be running correctly before any rider enters",
           "Blocked nozzles create dry spots that directly cause incidents",
           "Sprinkler systems require systematic flushing and checking",
+          "Flow meters turn flow from a guess into a logged, verifiable number - read, compare, log",
         ],
         quiz: [
           {
@@ -1123,6 +1153,36 @@ export const modules: Module[] = [
             correctIndex: 2,
             explanation:
               "Even with correct water flow, environmental conditions like heat can create temporary dry spots between riders. This is a known operational risk - operators must monitor surface conditions throughout the day, not just at opening.",
+            type: "scenario",
+          },
+          {
+            id: "q2-2-6",
+            question:
+              "At opening, the flume's flow meter reads slightly below the OEM minimum, but the water flowing down the slide looks completely normal. What do you do?",
+            options: [
+              "Open as scheduled - the visual check is what matters",
+              "Open but recheck the meter at midday",
+              "Do not open the slide - report the reading; flow outside the OEM range is a no-go regardless of how the water looks",
+              "Increase the pump speed yourself until the meter reads in range",
+            ],
+            correctIndex: 2,
+            explanation:
+              "The meter exists precisely because looks deceive - flow can be visibly 'normal' while below the engineered minimum. A reading outside the OEM range means the slide does not open until the cause is found and corrected. Operators report; they do not adjust pump settings themselves.",
+            type: "scenario",
+          },
+          {
+            id: "q2-2-7",
+            question:
+              "Your logged flow readings have dropped slightly each day for a week, but every reading is still within the OEM range. What does this trend mean?",
+            options: [
+              "Nothing - all readings are in range, so there is no issue",
+              "It is an early warning of a developing problem (such as a clogging intake or wearing impeller) and should be reported now",
+              "The meter is probably failing and should be ignored",
+              "Normal seasonal variation that corrects itself",
+            ],
+            correctIndex: 1,
+            explanation:
+              "This is exactly why readings are logged rather than just checked. A consistent downward drift reveals a developing fault - a clogging intake, wearing pump impeller or partially closing valve - while there is still time to fix it before flow leaves the safe range. Report the trend; don't wait for the first out-of-range day.",
             type: "scenario",
           },
         ],
@@ -1313,6 +1373,33 @@ export const modules: Module[] = [
             diagramId: "shutdown-decision",
           },
           {
+            heading: "Wind - the Trigger You Monitor, Not Guess",
+            type: "text",
+            body: "Wind is a shutdown trigger with a number attached. On open flumes, wind pushes and slows riders mid-slide - light riders most of all - which destroys the travel-time assumptions your dispatch intervals rest on. Wind also blows debris into flumes and catch pools, and makes work and communication on a high tower unsafe. Because the effect depends on the slide's height, shape and exposure, the closure threshold is specific to each ride: it is set by the manufacturer and the site risk assessment, and it lives in the Ride Operations Manual. Facilities monitor with an anemometer mounted at the highest dispatch platform - wind at the tower is always stronger than wind felt on the pool deck.",
+          },
+          {
+            type: "checklist",
+            heading: "Wind and Weather Triggers",
+            body: "Act on these without negotiation:",
+            items: [
+              "Sustained wind above the limit in the operations manual - close the affected slides",
+              "Strong gusts, even when the average is below the limit - gusts move riders, not averages",
+              "Restrict exposed rides first: tall open flumes and light riders are affected most",
+              "Any lightning or approaching storm front - clear pools and towers immediately",
+              "Debris blowing into flumes or pools - stop, clear and inspect before resuming",
+            ],
+          },
+          {
+            type: "diagram",
+            heading: "The Staged Response",
+            body: "Wind response escalates in stages - and the manufacturer's number is the line that ends the discussion.",
+            diagramId: "wind-response",
+          },
+          {
+            type: "warning",
+            body: "Wind limits are slide-specific. A wind speed that is perfectly safe for a low enclosed flume can be dangerous on a tall open slide. Never borrow a threshold from another ride - the figure in YOUR slide's operations manual governs.",
+          },
+          {
             type: "oem-reference",
             body: "It is critical that a flume with any deficiency must not be operated until the issue is corrected. Fractures to any slide component have the potential to severely compromise the structural integrity of the section and must be repaired without delay.",
           },
@@ -1324,6 +1411,7 @@ export const modules: Module[] = [
         keyTakeaways: [
           "Specific conditions require immediate, non-negotiable shutdown",
           "Cracks, punctures, joint failure and incorrect flow are always shutdown triggers",
+          "Wind has a slide-specific limit in the operations manual - monitor it with an anemometer at tower height; lightning clears pools and towers immediately",
           "The cost of closure is always less than the cost of an incident",
           "External pressure to remain open is never a valid safety override",
         ],
@@ -1401,6 +1489,21 @@ export const modules: Module[] = [
             correctIndex: 1,
             explanation:
               "Dispatch requires confirmed exit clearance every single time. Queue pressure is explicitly not a valid reason to override this control. 'Almost clear' is not clear - visual or communicated confirmation of exit clearance is required before every dispatch.",
+            type: "scenario",
+          },
+          {
+            id: "q2-4-6",
+            question:
+              "The anemometer shows average wind below your tall open slide's limit, but strong gusts keep spiking close to it. The low enclosed slide nearby is unaffected. What is the correct response?",
+            options: [
+              "Keep everything open - the average wind speed is what counts",
+              "Close the whole facility immediately",
+              "Restrict or close the tall open slide first - gusts move riders, not averages - while the enclosed slide may keep operating within its own limit",
+              "Move light riders to the tall slide since they enjoy it most",
+            ],
+            correctIndex: 2,
+            explanation:
+              "Gusts affect riders, not the day's average. Exposed rides - tall open flumes, and light riders on them - are restricted first. Wind limits are slide-specific: the enclosed flume can keep operating within its own published limit while the exposed slide closes. Each ride's operations manual figure governs.",
             type: "scenario",
           },
         ],
@@ -1835,6 +1938,35 @@ export const modules: Module[] = [
             ],
           },
           {
+            heading: "Weight Limits and Scales",
+            type: "text",
+            body: "The manufacturer sets a minimum AND a maximum weight for every slide, and both matter. A rider under the minimum may not carry enough momentum to clear the flume - a stall risk that is most dangerous in enclosed sections. A rider over the maximum carries more speed than the slide was engineered for, risking overshoot on curves and at the run-out. Multi-rider rafts add a third number: a combined weight window that the whole raft must land inside. The only reliable way to confirm a combined raft weight is calibrated scales at dispatch - estimating a group's total weight by eye fails exactly when it matters most.",
+          },
+          {
+            type: "oem-reference",
+            body: "On the Verruckt raft slide in Kansas City, riders were required to weigh in together on a scale at the tower: the three-person raft had to total between 400 and 550 pounds (roughly 180 to 250 kilograms) before it could be dispatched.",
+            source: "Verruckt operating requirements, Schlitterbahn Kansas City (KSHB)",
+          },
+          {
+            type: "diagram",
+            heading: "The Weight Window",
+            body: "Under the minimum and over the maximum are both unsafe - and rafts must land inside a combined window verified on scales.",
+            diagramId: "weight-window",
+          },
+          {
+            type: "checklist",
+            heading: "Operating With Weight Limits",
+            body: "What this looks like in practice:",
+            items: [
+              "Know the per-rider minimum and maximum for your slide - they are in the operations manual and on the entry signage",
+              "Raft slides: confirm the COMBINED weight on calibrated scales at dispatch - never by estimate",
+              "Handle weigh-ins discreetly and respectfully - position scales away from the queue's view where possible",
+              "A raft below the minimum is refused just like one above the maximum",
+              "Scales are calibrated as part of periodic inspection - a drifting scale is a failed control",
+              "If the scales are out of service on a ride that requires them, that ride does not operate",
+            ],
+          },
+          {
             heading: "Slide Readiness",
             type: "checklist",
             body: "Confirm before each dispatch:",
@@ -1859,6 +1991,8 @@ export const modules: Module[] = [
         keyTakeaways: [
           "Pre-dispatch is your last control point before the rider is in the system",
           "Three confirmations every time: rider eligible, slide ready, exit clear",
+          "OEM weight limits have a minimum AND a maximum - under is a stall risk, over is an overspeed risk",
+          "Raft combined weights are verified on calibrated scales, never estimated",
           "Never dispatch on assumed timing - require confirmed clearance",
         ],
         quiz: [
@@ -1936,6 +2070,36 @@ export const modules: Module[] = [
             explanation:
               "Pre-dispatch is the last point where you can prevent an incident. Once a rider is in the system and moving, your control is extremely limited. This is why every eligibility and readiness check must be completed before dispatch - not assumed or skipped under queue pressure.",
             type: "knowledge",
+          },
+          {
+            id: "q4-1-6",
+            question:
+              "A group of three wants to ride a raft slide with a combined weight window of 180-250 kg. On the scales they total 174 kg. They point out they are UNDER the maximum and insist on riding. What do you do?",
+            options: [
+              "Dispatch them - only the maximum limit is a safety issue",
+              "Dispatch them but use a longer interval",
+              "Refuse - a raft below the combined minimum may stall mid-flume, which is as unsafe as exceeding the maximum",
+              "Let two of them ride and have the third walk down",
+            ],
+            correctIndex: 2,
+            explanation:
+              "The weight window has a floor as well as a ceiling. A raft under the combined minimum may not carry enough momentum to clear the flume - a stall in an enclosed section puts them directly in the path of the next dispatch. Under-minimum is refused exactly like over-maximum. (A two-person configuration is only an option if the manual lists one with its own window.)",
+            type: "scenario",
+          },
+          {
+            id: "q4-1-7",
+            question:
+              "The scales at a raft slide's dispatch are out of service, but your most experienced operator says they can judge group weights by eye. What is the correct decision?",
+            options: [
+              "Trust the experienced operator's estimate for the rest of the day",
+              "Operate, but only for groups that are obviously well within the window",
+              "The ride does not operate until the scales are back in service - combined weights are verified, never estimated",
+              "Ask each group to state their weights and add them up",
+            ],
+            correctIndex: 2,
+            explanation:
+              "Visual estimation of a group's combined weight fails exactly in the marginal cases where the window matters. If a ride requires scales as a dispatch control and the scales are unavailable, that control cannot be performed - so the ride does not operate. Self-reported weights are estimates with extra steps.",
+            type: "scenario",
           },
         ],
       },

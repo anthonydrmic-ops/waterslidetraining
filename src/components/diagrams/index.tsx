@@ -25,8 +25,11 @@ import {
   ScenarioBlockage,
   ScenarioThroughput,
   PostIncidentSteps,
+  WindResponse,
 } from "./ProtocolLadder";
 import { CommsProtocol } from "./CommsProtocol";
+import { FlowMeterCheck } from "./FlowMeterCheck";
+import { WeightWindow } from "./WeightWindow";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const diagramMap: Record<string, React.ComponentType<any>> = {
@@ -55,6 +58,9 @@ const diagramMap: Record<string, React.ComponentType<any>> = {
   "scenario-throughput": ScenarioThroughput,
   "post-incident-steps": PostIncidentSteps,
   "comms-protocol": CommsProtocol,
+  "wind-response": WindResponse,
+  "flow-meter-check": FlowMeterCheck,
+  "weight-window": WeightWindow,
 };
 
 export function Diagram({ id }: { id: string }) {
