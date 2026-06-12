@@ -116,24 +116,21 @@ export function WeightWindow() {
               {reduce ? (
                 <circle cx={markerHome} cy={y + 15} r="6.5" fill={bar.color} stroke="#ffffff" strokeWidth="2.5" />
               ) : (
-                <motion.circle
-                  cy={y + 15}
-                  r="6.5"
-                  fill={bar.color}
-                  stroke="#ffffff"
-                  strokeWidth="2.5"
+                <motion.g
                   variants={{
-                    hidden: { cx: barX + barW * 0.9, opacity: 0 },
+                    hidden: { x: barX + barW * 0.9 - markerHome, opacity: 0 },
                     show: {
-                      cx: markerHome,
+                      x: 0,
                       opacity: 1,
                       transition: {
-                        cx: { type: "spring", stiffness: 50, damping: 13, delay: 0.55 + i * 0.18 },
+                        x: { type: "spring", stiffness: 50, damping: 13, delay: 0.55 + i * 0.18 },
                         opacity: { duration: 0.3, delay: 0.55 + i * 0.18 },
                       },
                     },
                   }}
-                />
+                >
+                  <circle cx={markerHome} cy={y + 15} r="6.5" fill={bar.color} stroke="#ffffff" strokeWidth="2.5" />
+                </motion.g>
               )}
             </motion.g>
           );

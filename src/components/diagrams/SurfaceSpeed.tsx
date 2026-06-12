@@ -1,7 +1,13 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import {
+  motion,
+  animate,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+} from "framer-motion";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -52,6 +58,28 @@ export function SurfaceSpeed() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.35 });
 
+  // Rider positions driven imperatively (the animation path that reliably
+  // runs in the field) - all three launch together each cycle and diverge.
+  const rider0 = useMotionValue(START_X);
+  const rider1 = useMotionValue(START_X);
+  const rider2 = useMotionValue(START_X);
+  const riders = [rider0, rider1, rider2];
+
+  useEffect(() => {
+    if (reduce || !inView) return;
+    const ctrls = LANES.map((lane, i) =>
+      animate(riders[i], lane.keyframes, {
+        duration: CYCLE,
+        times: lane.times,
+        repeat: Infinity,
+        ease: "linear",
+        delay: 0.8,
+      })
+    );
+    return () => ctrls.forEach((c) => c.stop());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reduce, inView]);
+
   return (
     <motion.div
       ref={ref}
@@ -92,22 +120,9 @@ export function SurfaceSpeed() {
                 // Static snapshot: mid-cycle divergence
                 <circle cx={[460, 320, 560][i]} cy={y} r="9" fill={lane.color} stroke="#ffffff" strokeWidth="2.5" />
               ) : (
-                <motion.circle
-                  cy={y}
-                  r="9"
-                  fill={lane.color}
-                  stroke="#ffffff"
-                  strokeWidth="2.5"
-                  initial={{ cx: START_X }}
-                  animate={{ cx: lane.keyframes }}
-                  transition={{
-                    duration: CYCLE,
-                    times: lane.times,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: 0.8,
-                  }}
-                />
+                <motion.g style={{ x: riders[i] }}>
+                  <circle cx={0} cy={y} r="9" fill={lane.color} stroke="#ffffff" strokeWidth="2.5" />
+                </motion.g>
               )}
             </motion.g>
           );

@@ -100,19 +100,14 @@ export function WaterChemistry() {
               {reduce ? (
                 <circle cx={markerHome} cy={markerY} r="6.5" fill={param.color} stroke="#ffffff" strokeWidth="2.5" />
               ) : (
-                <motion.circle
-                  cy={markerY}
-                  r="6.5"
-                  fill={param.color}
-                  stroke="#ffffff"
-                  strokeWidth="2.5"
+                <motion.g
                   variants={{
-                    hidden: { cx: barX + barW * 0.12, opacity: 0 },
+                    hidden: { x: barX + barW * 0.12 - markerHome, opacity: 0 },
                     show: {
-                      cx: markerHome,
+                      x: 0,
                       opacity: 1,
                       transition: {
-                        cx: {
+                        x: {
                           type: "spring",
                           stiffness: 50,
                           damping: 13,
@@ -122,7 +117,9 @@ export function WaterChemistry() {
                       },
                     },
                   }}
-                />
+                >
+                  <circle cx={markerHome} cy={markerY} r="6.5" fill={param.color} stroke="#ffffff" strokeWidth="2.5" />
+                </motion.g>
               )}
 
               {/* Low value */}

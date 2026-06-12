@@ -133,12 +133,10 @@ export function ShutdownDecision() {
           <div className="px-4 py-3 bg-red-50/80 border-b border-red-100 flex items-center gap-3">
             <div className="relative w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
               {!reduce && (
-                <motion.span
+                <span
                   aria-hidden
-                  className="absolute inset-0 rounded-xl border-2 border-red-400"
-                  initial={{ opacity: 0, scale: 1 }}
-                  animate={{ opacity: [0.5, 0], scale: [1, 1.45] }}
-                  transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut", delay: 1.6 }}
+                  className="ping-ring absolute inset-0 rounded-xl border-2 border-red-400"
+                  style={{ animationDelay: "1.6s" }}
                 />
               )}
               <Prohibit size={18} weight="fill" className="text-red-600" />

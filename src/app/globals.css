@@ -215,6 +215,75 @@ html {
     stroke-dashoffset: -16;
   }
 }
+/* ---------------------------------------------------------------------------
+   Shared perpetual-motion utilities for diagrams. CSS keyframes (not framer)
+   so they run everywhere; all are silenced by the reduced-motion block.
+   - .ping-ring: expanding fading ring on an HTML span (inherit border-radius)
+   - .svg-ping:  the same for SVG circles (fill-box transform origin)
+   - .breathe:   slow opacity swell for highlight fills
+   - .shimmer-fade: gentle opacity shimmer for water surfaces
+--------------------------------------------------------------------------- */
+.ping-ring {
+  animation: ping-ring 2.2s ease-out infinite;
+}
+@keyframes ping-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+.svg-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: svg-ping 2.6s ease-out infinite;
+}
+@keyframes svg-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  75% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+.breathe {
+  animation: breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.12;
+  }
+  50% {
+    opacity: 0.24;
+  }
+}
+.shimmer-fade {
+  animation: shimmer-fade 2.4s ease-in-out infinite;
+}
+@keyframes shimmer-fade {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 /* Inspection-tiers probe — a dot stepping down the severity rail, dwelling at
    each tier and deepening in colour. */
 .tier-probe {

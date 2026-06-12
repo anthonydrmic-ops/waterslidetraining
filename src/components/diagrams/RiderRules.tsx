@@ -61,12 +61,10 @@ export function RiderRules() {
         >
           <div className="relative w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center mb-3">
             {!reduce && (
-              <motion.span
+              <span
                 aria-hidden
-                className="absolute inset-0 rounded-2xl border-2 border-emerald-400"
-                initial={{ opacity: 0, scale: 1 }}
-                animate={{ opacity: [0.45, 0], scale: [1, 1.4] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: 1 }}
+                className="ping-ring absolute inset-0 rounded-2xl border-2 border-emerald-400"
+                style={{ animationDelay: "1s" }}
               />
             )}
             <PersonSimpleSwim size={28} weight="duotone" className="text-emerald-600" />

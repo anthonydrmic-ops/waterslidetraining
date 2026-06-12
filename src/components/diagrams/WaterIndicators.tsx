@@ -68,12 +68,10 @@ export function WaterIndicators() {
         <ArrowRight size={16} weight="bold" className="text-[#1F7A8C] shrink-0" />
         <div className="relative w-9 h-9 rounded-xl bg-[#1F7A8C]/12 flex items-center justify-center shrink-0">
           {!reduce && (
-            <motion.span
+            <span
               aria-hidden
-              className="absolute inset-0 rounded-xl border-2 border-[#1F7A8C]"
-              initial={{ opacity: 0, scale: 1 }}
-              animate={{ opacity: [0.4, 0], scale: [1, 1.4] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: 1.6 }}
+              className="ping-ring absolute inset-0 rounded-xl border-2 border-[#1F7A8C]"
+              style={{ animationDelay: "1.6s" }}
             />
           )}
           <Megaphone size={18} weight="duotone" className="text-[#1F7A8C]" />

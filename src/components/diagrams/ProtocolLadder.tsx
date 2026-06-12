@@ -232,18 +232,10 @@ function Ladder({ data }: { data: LadderData }) {
                   style={{ borderColor: color, color }}
                 >
                   {step.tone === "danger" && !reduce && (
-                    <motion.span
+                    <span
                       aria-hidden
-                      className="absolute inset-0 rounded-full border-2"
-                      style={{ borderColor: color }}
-                      initial={{ opacity: 0, scale: 1 }}
-                      animate={{ opacity: [0.4, 0], scale: [1, 1.55] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeOut",
-                        delay: 1.4 + i * 0.4,
-                      }}
+                      className="ping-ring absolute inset-0 rounded-full border-2"
+                      style={{ borderColor: color, animationDelay: `${1.4 + i * 0.4}s` }}
                     />
                   )}
                   {i + 1}

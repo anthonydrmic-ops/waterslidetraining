@@ -141,23 +141,15 @@ export function IncidentChain() {
               <circle cx={x} cy={y - 4} r="9" fill="none" stroke="#16a34a" strokeOpacity="0.25" strokeWidth="4" />
               {/* Perpetual soft ripple — "intervention is always available here" */}
               {!reduceMotion && (
-                <motion.circle
+                <circle
+                  className="svg-ping"
+                  style={{ animationDelay: `${2 + i * 0.6}s` }}
                   cx={x}
                   cy={y - 4}
                   r="9"
                   fill="none"
                   stroke="#16a34a"
                   strokeWidth="2"
-                  style={{ transformBox: "fill-box", transformOrigin: "center" }}
-                  initial={{ scale: 1, opacity: 0 }}
-                  animate={{ scale: [1, 1.9], opacity: [0.45, 0] }}
-                  transition={{
-                    duration: 2.4,
-                    repeat: Infinity,
-                    ease: "easeOut",
-                    delay: 2 + i * 0.6,
-                    repeatDelay: 1.2,
-                  }}
                 />
               )}
               <path

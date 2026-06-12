@@ -82,23 +82,15 @@ export function InspectionZones() {
             {/* Perpetual sonar ping running down the checkpoints in order —
                 the inspection sweep, repeating. Off under reduced motion. */}
             {!reduce && (
-              <motion.circle
+              <circle
+                className="svg-ping"
+                style={{ animationDelay: `${1.6 + i * 0.5}s` }}
                 cx="95"
                 cy={zone.y + 30}
                 r="9"
                 fill="none"
                 stroke={zone.color}
                 strokeWidth="2"
-                style={{ transformBox: "fill-box", transformOrigin: "center" }}
-                initial={{ scale: 1, opacity: 0 }}
-                animate={{ scale: [1, 2], opacity: [0.4, 0] }}
-                transition={{
-                  duration: 1.6,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                  delay: 1.6 + i * 0.5,
-                  repeatDelay: 2.6,
-                }}
               />
             )}
 

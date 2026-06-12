@@ -146,16 +146,15 @@ export function SurfaceDefects() {
               {/* Status pill — the Shut Down pill breathes gently so the most
                   serious state keeps drawing the eye. */}
               {isShutDown && !reduce ? (
-                <motion.rect
+                <rect
+                  className="breathe"
+                  style={{ animationDelay: "1.2s" }}
                   x={x}
                   y={90}
                   width="140"
                   height="24"
                   rx="12"
                   fill={defect.color}
-                  initial={{ opacity: 0.12 }}
-                  animate={{ opacity: [0.12, 0.24, 0.12] }}
-                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
                 />
               ) : (
                 <rect x={x} y={90} width="140" height="24" rx="12" fill={defect.color} opacity="0.12" />

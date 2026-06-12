@@ -148,18 +148,13 @@ export function SlideCrossSection() {
 
         {/* Catch pool */}
         <rect x="620" y="355" width="140" height="28" rx="6" fill="url(#waterGrad)" stroke="#1F7A8C" strokeWidth="1.5" opacity="0.8" />
-        <motion.path
+        <path
+          className={reduce ? undefined : "shimmer-fade"}
           d="M635 364 Q650 360 665 364 Q680 368 695 364 Q710 360 725 364 Q740 368 748 364"
           stroke="#1F7A8C"
           strokeWidth="1"
           fill="none"
-          initial={false}
-          animate={reduce ? { opacity: 0.4 } : { opacity: [0.25, 0.5, 0.25] }}
-          transition={
-            reduce
-              ? undefined
-              : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
-          }
+          opacity={reduce ? 0.4 : undefined}
         />
 
         {/* Pump house */}
