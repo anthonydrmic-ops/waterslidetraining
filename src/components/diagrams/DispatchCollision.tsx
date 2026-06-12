@@ -47,14 +47,14 @@ function pointAt(t: number): { x: number; y: number } {
   };
 }
 
-// Problem track choreography: light rider drops; at light's halfway point the
-// heavy rider launches; they collide 4/5 of the way down - heavy stopping just
-// behind light, never merging - then everything freezes while the danger badge
-// holds, and the loop replays.
-const CRASH_T = 0.8; // where the collision happens
+// Problem track choreography: light rider drops at ONE constant speed; just
+// before light reaches halfway the heavy rider launches, also at one constant
+// (faster) speed, and catches them just before the bottom - stopping just
+// behind, never merging. Freeze on impact, danger badge, hold, replay.
+const CRASH_T = 0.88; // where the collision happens (just before the bottom)
 const CRASH_GAP = 0.034; // heavy stops this far behind (touching, not merged)
-const LIGHT_RUN_MS = 3200; // light rider's time to reach the crash point
-const HEAVY_LAUNCH_MS = 1400; // heavy launches when light is at halfway
+const LIGHT_RUN_MS = 3400; // light rider's constant-speed run to the crash point
+const HEAVY_LAUNCH_MS = 1620; // heavy launches as light nears halfway (~0.42)
 const CRASH_HOLD_MS = 1900; // freeze with the danger badge up
 const RESET_BEAT_MS = 450; // empty-slide beat before the replay
 
@@ -116,15 +116,13 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
           aProg.set(0);
           bProg.set(0);
           setCrashed(false);
-          // Light rider: steady start, decelerating back half (the surface
-          // slows them) - reaches the crash point at LIGHT_RUN_MS.
-          animate(aProg, [0, 0.5, CRASH_T], {
+          // Light rider: one fixed speed, top to crash point.
+          animate(aProg, CRASH_T, {
             duration: LIGHT_RUN_MS / 1000,
-            times: [0, 0.42, 1],
             ease: "linear",
           });
-          // Heavy rider: launches once light is halfway, covers the distance
-          // faster, arrives at the same moment - just behind.
+          // Heavy rider: launches as light nears halfway, then one fixed
+          // (faster) speed - arriving at the same moment, just behind.
           await wait(HEAVY_LAUNCH_MS);
           if (!alive) return;
           animate(bProg, CRASH_T - CRASH_GAP, {
@@ -150,24 +148,25 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
       };
     }
 
-    // Solution track: light rider takes the whole first 62% of the loop (a
-    // touch slower), heavy rider is HELD until light is about to land, then
-    // covers the slide clearly faster - landing in an already-empty pool.
-    const ctrlA = animate(aProg, [0, 0.4, 0.5, 1, 1], {
+    // Solution track: light rider rides the whole slide at ONE constant speed
+    // and exits the pool; the heavy rider is HELD until light is just before
+    // the bottom, then covers the slide at one clearly faster constant speed -
+    // landing in an already-empty pool.
+    const ctrlA = animate(aProg, [0, 1, 1], {
       duration: LOOP,
-      times: [0, 0.28, 0.4, 0.62, 1],
+      times: [0, 0.6, 1],
       repeat: Infinity,
       ease: "linear",
     });
     const ctrlAOp = animate(aOpacity, [1, 1, 0, 0], {
       duration: LOOP,
-      times: [0, 0.64, 0.74, 1],
+      times: [0, 0.66, 0.76, 1],
       repeat: Infinity,
       ease: "linear",
     });
-    const ctrlB = animate(bProg, [0, 0, 1], {
+    const ctrlB = animate(bProg, [0, 0, 1, 1], {
       duration: LOOP,
-      times: [0, 0.55, 1],
+      times: [0, 0.55, 0.91, 1],
       repeat: Infinity,
       ease: "linear",
     });
