@@ -537,29 +537,69 @@ html {
   }
 }
 
-/* Incident-chain hazard pulse — a red dot propagating down the chain. */
-.chain-pulse {
-  transform-box: fill-box;
-  animation: chain-pulse 5s linear infinite;
+/* Incident-chain current — a charge tracing each card's border (split both
+   ways from the left-centre, merging at the right), hopping the connector to
+   the next card, sparking off the end, then looping. All segments share one
+   5.6s master cycle; paths are pathLength-normalised to 100 so a single
+   keyframe set drives every card; per-segment phase set via animation-delay. */
+.chain-card-current,
+.chain-link-current {
+  stroke-dasharray: 26 100;
+  stroke-dashoffset: 26;
+  animation: chain-card-sweep 5.6s linear infinite;
 }
-@keyframes chain-pulse {
+@keyframes chain-card-sweep {
   0% {
-    transform: translateX(0);
-    opacity: 0;
+    stroke-dashoffset: 26;
   }
-  6% {
-    opacity: 0.85;
-  }
-  88% {
-    opacity: 0.85;
-  }
-  96% {
-    transform: translateX(560px);
-    opacity: 0;
+  13.4% {
+    stroke-dashoffset: -100;
   }
   100% {
-    transform: translateX(560px);
+    stroke-dashoffset: -100;
+  }
+}
+.chain-link-current {
+  animation-name: chain-link-sweep;
+}
+@keyframes chain-link-sweep {
+  0% {
+    stroke-dashoffset: 26;
+  }
+  2.4% {
+    stroke-dashoffset: -100;
+  }
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+.chain-spark {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: chain-spark 5.6s linear infinite;
+}
+@keyframes chain-spark {
+  0%,
+  76% {
     opacity: 0;
+    transform: scale(0.4);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  86% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  92% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
   }
 }
 

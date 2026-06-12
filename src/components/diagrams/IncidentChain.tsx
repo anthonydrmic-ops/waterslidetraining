@@ -110,14 +110,65 @@ export function IncidentChain() {
                   <ellipse cx={x + 136.5} cy={y + 40} rx="4.6" ry="3.2" fill="none" stroke={links[i + 1].color} strokeWidth="1.8" />
                 </g>
               )}
+
+              {/* Border current — splits both ways from the left-centre,
+                  merges at the right, hops to the next card */}
+              {!reduceMotion && (
+                <>
+                  <path
+                    d={`M ${x} ${y + 40} L ${x} ${y + 12} Q ${x} ${y} ${x + 12} ${y} L ${x + 114} ${y} Q ${x + 126} ${y} ${x + 126} ${y + 12} L ${x + 126} ${y + 40}`}
+                    pathLength={100}
+                    className="chain-card-current"
+                    style={{ animationDelay: `${i * 0.87}s` }}
+                    stroke={link.color}
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                  <path
+                    d={`M ${x} ${y + 40} L ${x} ${y + 68} Q ${x} ${y + 80} ${x + 12} ${y + 80} L ${x + 114} ${y + 80} Q ${x + 126} ${y + 80} ${x + 126} ${y + 68} L ${x + 126} ${y + 40}`}
+                    pathLength={100}
+                    className="chain-card-current"
+                    style={{ animationDelay: `${i * 0.87}s` }}
+                    stroke={link.color}
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                  {i < links.length - 1 && (
+                    <path
+                      d={`M ${x + 126} ${y + 40} L ${x + 140} ${y + 40}`}
+                      pathLength={100}
+                      className="chain-link-current"
+                      style={{ animationDelay: `${i * 0.87 + 0.75}s` }}
+                      stroke={links[i + 1].color}
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      fill="none"
+                    />
+                  )}
+                </>
+              )}
             </motion.g>
           );
         })}
 
-        {/* Hazard pulse — propagating down the chain, the thing every green
-            node exists to interrupt */}
+        {/* Spark — the current discharging off the end of the chain */}
         {!reduceMotion && (
-          <circle className="chain-pulse" cx="46" cy="160" r="4.5" fill="#dc2626" />
+          <g className="chain-spark">
+            {[20, 70, 110, 160, 250, 290, 340].map((a) => (
+              <line
+                key={a}
+                x1={702 + 6 * Math.cos((a * Math.PI) / 180)}
+                y1={160 + 6 * Math.sin((a * Math.PI) / 180)}
+                x2={702 + 15 * Math.cos((a * Math.PI) / 180)}
+                y2={160 + 15 * Math.sin((a * Math.PI) / 180)}
+                stroke="#dc2626"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+              />
+            ))}
+          </g>
         )}
 
         {/* Break points */}

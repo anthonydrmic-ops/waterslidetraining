@@ -1394,6 +1394,13 @@ export const modules: Module[] = [
             body: "Wind is a shutdown trigger with a number attached. On open flumes, wind pushes and slows riders mid-slide - light riders most of all - which destroys the travel-time assumptions your dispatch intervals rest on. Wind also blows debris into flumes and catch pools, and makes work and communication on a high tower unsafe. Because the effect depends on the slide's height, shape and exposure, the closure threshold is specific to each ride: it is set by the manufacturer and the site risk assessment, and it lives in the Ride Operations Manual. Facilities monitor with an anemometer mounted at the highest dispatch platform - wind at the tower is always stronger than wind felt on the pool deck.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/13-storm-closure.jpg",
+            alt: "A waterslide tower and empty pool deck under a dark approaching storm front, palms bending in the wind",
+            aspect: "16:9",
+            body: "A storm front approaching the tower - by the time it looks like this, the slides should already be closed and the pools cleared.",
+          },
+          {
             type: "checklist",
             heading: "Wind and Weather Triggers",
             body: "Act on these without negotiation:",
