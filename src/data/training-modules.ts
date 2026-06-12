@@ -692,7 +692,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/02-crack-structural.jpg?v=2",
+            imageSrc: "/lesson-images/02-crack-structural-v2.jpg",
             alt: "A structural crack running across the white gelcoat of a fibreglass flume, exposing the laminate beneath",
             aspect: "1:1",
             heading: "What structural failure looks like",
@@ -1673,7 +1673,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/03-gelcoat-delamination.jpg?v=2",
+            imageSrc: "/lesson-images/03-gelcoat-delamination-v2.jpg",
             alt: "Gelcoat peeling away from a fibreglass flume surface, the lifted edge casting a shadow over exposed laminate",
             aspect: "1:1",
             heading: "Gelcoat failure up close",
@@ -2499,7 +2499,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/02-crack-structural.jpg?v=2",
+            imageSrc: "/lesson-images/02-crack-structural-v2.jpg",
             alt: "Extreme close-up of a hairline-to-through crack across the white gelcoat of a fibreglass waterslide flume",
             aspect: "1:1",
             body: "A through-wall crack in the gelcoat exposes the fibreglass beneath - a structural defect needing immediate shutdown.",
@@ -2625,7 +2625,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/03-gelcoat-delamination.jpg?v=2",
+            imageSrc: "/lesson-images/03-gelcoat-delamination-v2.jpg",
             alt: "Macro photograph of glossy white gelcoat flaking and lifting to expose the matte fibreglass layer beneath",
             aspect: "1:1",
             body: "Glossy gelcoat lifting and flaking away from the matte fibreglass layer beneath.",
@@ -2746,7 +2746,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/04-joint-misalignment.jpg?v=2",
+            imageSrc: "/lesson-images/04-joint-misalignment-v2.jpg",
             alt: "Close-up along the inside of a waterslide flume at a panel joint where two sections meet slightly misaligned, creating a raised lip",
             aspect: "1:1",
             body: "A small raised lip where two flume sections meet slightly misaligned at a joint.",
@@ -3137,7 +3137,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/05-mineral-scaling.jpg?v=2",
+            imageSrc: "/lesson-images/05-mineral-scaling-v2.jpg",
             alt: "Macro photograph of chalky white-grey mineral scale and calcium buildup crusting a blue fibreglass waterslide surface",
             aspect: "1:1",
             body: "Chalky white mineral scale crusting the flume surface - a sign of high-LSI water.",
