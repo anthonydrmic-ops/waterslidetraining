@@ -28,61 +28,28 @@ export function SurfaceDefects() {
       status: "Normal",
       color: "#22c55e",
       desc: "Gelcoat intact, consistent friction",
-      visual: (x: number, y: number) => (
-        <g>
-          <rect x={x} y={y} width="140" height="70" rx="8" fill="#f0fdf4" stroke="#bbf7d0" strokeWidth="1" />
-          <line x1={x + 14} y1={y + 22} x2={x + 126} y2={y + 22} stroke="#86efac" strokeWidth="2.5" />
-          <line x1={x + 14} y1={y + 35} x2={x + 126} y2={y + 35} stroke="#86efac" strokeWidth="2.5" />
-          <line x1={x + 14} y1={y + 48} x2={x + 126} y2={y + 48} stroke="#86efac" strokeWidth="2.5" />
-        </g>
-      ),
+      photo: "/lesson-images/severity/smooth.jpg",
     },
     {
       label: "Roughening",
       status: "Monitor",
       color: "#eab308",
       desc: "UV degradation, more friction",
-      visual: (x: number, y: number) => (
-        <g>
-          <rect x={x} y={y} width="140" height="70" rx="8" fill="#fefce8" stroke="#fde68a" strokeWidth="1" />
-          <path d={`M${x + 14} ${y + 22} Q${x + 40} ${y + 16} ${x + 70} ${y + 22} Q${x + 100} ${y + 28} ${x + 126} ${y + 22}`} stroke="#facc15" strokeWidth="2.5" fill="none" />
-          <path d={`M${x + 14} ${y + 36} Q${x + 45} ${y + 30} ${x + 70} ${y + 36} Q${x + 95} ${y + 42} ${x + 126} ${y + 36}`} stroke="#facc15" strokeWidth="2.5" fill="none" />
-          <path d={`M${x + 14} ${y + 50} Q${x + 35} ${y + 44} ${x + 60} ${y + 50} Q${x + 90} ${y + 56} ${x + 126} ${y + 50}`} stroke="#facc15" strokeWidth="2.5" fill="none" />
-        </g>
-      ),
+      photo: "/lesson-images/severity/roughening.jpg",
     },
     {
       label: "Gelcoat Peeling",
       status: "Action Req.",
       color: "#f97316",
       desc: "Exposed fibreglass, abrasion risk",
-      visual: (x: number, y: number) => (
-        <g>
-          <rect x={x} y={y} width="140" height="70" rx="8" fill="#fff7ed" stroke="#fed7aa" strokeWidth="1" />
-          <rect x={x + 14} y={y + 14} width="45" height="35" rx="3" fill="#fdba74" opacity="0.3" />
-          <path d={`M${x + 14} ${y + 14} Q${x + 28} ${y + 22} ${x + 40} ${y + 14} L${x + 59} ${y + 14} L${x + 52} ${y + 28} Q${x + 38} ${y + 22} ${x + 28} ${y + 28} Q${x + 18} ${y + 34} ${x + 14} ${y + 28} Z`} fill="#fb923c" opacity="0.4" />
-          <line x1={x + 70} y1={y + 22} x2={x + 126} y2={y + 22} stroke="#fdba74" strokeWidth="2.5" />
-          <line x1={x + 70} y1={y + 36} x2={x + 118} y2={y + 36} stroke="#fdba74" strokeWidth="2.5" />
-          <line x1={x + 70} y1={y + 50} x2={x + 126} y2={y + 50} stroke="#fdba74" strokeWidth="2.5" />
-        </g>
-      ),
+      photo: "/lesson-images/severity/peeling.jpg",
     },
     {
       label: "Cracking",
       status: "Shut Down",
       color: "#ef4444",
       desc: "Structural risk, close immediately",
-      visual: (x: number, y: number) => (
-        <g>
-          <rect x={x} y={y} width="140" height="70" rx="8" fill="#fef2f2" stroke="#fecaca" strokeWidth="1" />
-          <line x1={x + 35} y1={y + 10} x2={x + 50} y2={y + 28} stroke="#ef4444" strokeWidth="2.5" />
-          <line x1={x + 50} y1={y + 28} x2={x + 44} y2={y + 42} stroke="#ef4444" strokeWidth="2.5" />
-          <line x1={x + 44} y1={y + 42} x2={x + 55} y2={y + 60} stroke="#ef4444" strokeWidth="2.5" />
-          <line x1={x + 50} y1={y + 28} x2={x + 62} y2={y + 34} stroke="#ef4444" strokeWidth="2" />
-          <line x1={x + 80} y1={y + 16} x2={x + 100} y2={y + 54} stroke="#ef4444" strokeWidth="2.5" />
-          <line x1={x + 100} y1={y + 54} x2={x + 108} y2={y + 58} stroke="#ef4444" strokeWidth="2" />
-        </g>
-      ),
+      photo: "/lesson-images/severity/cracking.jpg",
     },
   ];
 
@@ -142,7 +109,20 @@ export function SurfaceDefects() {
           const isShutDown = defect.status === "Shut Down";
           return (
             <motion.g key={i} variants={tileVariant} custom={i}>
-              {defect.visual(x, 10)}
+              {/* Real reference photo, severity framed in the state's colour */}
+              <clipPath id={`sev-clip-${i}`}>
+                <rect x={x} y={10} width="140" height="70" rx="8" />
+              </clipPath>
+              <image
+                href={defect.photo}
+                x={x}
+                y={10}
+                width="140"
+                height="70"
+                preserveAspectRatio="xMidYMid slice"
+                clipPath={`url(#sev-clip-${i})`}
+              />
+              <rect x={x} y={10} width="140" height="70" rx="8" fill="none" stroke={defect.color} strokeWidth="1.5" opacity="0.55" />
               {/* Status pill — the Shut Down pill breathes gently so the most
                   serious state keeps drawing the eye. */}
               {isShutDown && !reduce ? (
