@@ -229,7 +229,7 @@ export function ExitLoop() {
       [angle, rv, rx, ry, ro, rot].forEach((v) => v.stop());
       setPhase(-1);
     };
-  }, [reduce, inView, angle, rv, rx, ry, ro]);
+  }, [reduce, inView, angle, rv, rx, ry, ro, rot]);
 
   return (
     <motion.div
