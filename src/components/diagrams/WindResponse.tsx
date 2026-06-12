@@ -10,7 +10,7 @@ const STAGES = [
   {
     tone: "#1F7A8C",
     label: "Monitor continuously",
-    detail: "An anemometer at the highest dispatch platform - wind at the tower is stronger than wind on the deck.",
+    detail: "An anemometer at the highest dispatch platform - wind at the tower is stronger than wind on the deck. No anemometer? Estimate with the Beaufort scale and treat the estimate conservatively.",
   },
   {
     tone: "#d97706",

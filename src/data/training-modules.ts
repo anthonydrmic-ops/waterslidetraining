@@ -1397,6 +1397,23 @@ export const modules: Module[] = [
             body: "Wind is a shutdown trigger with a number attached. On open flumes, wind pushes and slows riders mid-slide - light riders most of all - which destroys the travel-time assumptions your dispatch intervals rest on. Wind also blows debris into flumes and catch pools, and makes work and communication on a high tower unsafe. Because the effect depends on the slide's height, shape and exposure, the closure threshold is specific to each ride: it is set by the manufacturer and the site risk assessment, and it lives in the Ride Operations Manual. Facilities monitor with an anemometer mounted at the highest dispatch platform - wind at the tower is always stronger than wind felt on the pool deck.",
           },
           {
+            heading: "No Anemometer? Use the Beaufort Scale",
+            type: "text",
+            body: "If your facility has no anemometer (or it fails mid-shift), you are not reduced to guessing. The Beaufort scale - devised by Royal Navy officer Francis Beaufort in 1805 and still used in official marine forecasts today - estimates wind speed from what the wind is visibly doing around you. You read the trees, the flags and the water instead of an instrument. It is less precise than a measurement, so treat a Beaufort estimate conservatively: if the observed effects put you near your slide's limit, act as if you are at it.",
+          },
+          {
+            type: "checklist",
+            heading: "Beaufort Bands an Operator Should Know",
+            body: "Judge from effects at tower height, not on the sheltered deck:",
+            items: [
+              "Force 3, gentle breeze (12-19 km/h) - leaves and small twigs in constant motion, light flags extend",
+              "Force 4, moderate breeze (20-28 km/h) - dust and loose paper lift, small branches move",
+              "Force 5, fresh breeze (29-38 km/h) - small leafy trees sway, crested wavelets form on pools",
+              "Force 6, strong breeze (39-49 km/h) - large branches move, whistling in wires, umbrellas hard to use; many tall open slides reach their limit in this band",
+              "Force 7, near gale (50-61 km/h) - whole trees in motion, effort needed to walk against the wind; exposed rides should already be closed",
+            ],
+          },
+          {
             type: "image",
             imageSrc: "/lesson-images/13-storm-closure.jpg",
             alt: "A waterslide tower and empty pool deck under a dark approaching storm front, palms bending in the wind",
