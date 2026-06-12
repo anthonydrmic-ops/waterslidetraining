@@ -1071,6 +1071,14 @@ export const modules: Module[] = [
             body: "Splash patterns and sound tell you something is wrong - a flow meter tells you exactly what. Permanent slides are typically fitted with a flow meter on the supply line to each flume (common types are paddlewheel, magnetic and clamp-on ultrasonic). The reading is compared against the manufacturer's specified flow range at every opening, and the number is logged. Logging matters: a slow downward drift across days reveals developing problems - a clogging intake, a wearing pump impeller, a partially closed valve - before they become visible to riders.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/21-flow-meter.jpg",
+            alt: "An electromagnetic flow meter with a digital readout fitted into blue supply pipework in an aquatic-centre plant room, a red isolation valve and pressure gauge nearby and a sand filter tank behind",
+            aspect: "4:3",
+            heading: "An electromagnetic flow meter in the plant room",
+            body: "An inline magnetic flow meter on the supply line, its display giving a live flow reading. Beside it: an isolation valve and a pressure gauge, with the sand filter behind. This is the number you read and log against the OEM range every opening.",
+          },
+          {
             type: "diagram",
             heading: "Reading the Meter",
             body: "The flow reading lives or dies against one reference: the OEM range in the Ride Operations Manual.",
