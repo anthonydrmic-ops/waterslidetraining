@@ -146,7 +146,7 @@ export function DefectRecognition() {
               </div>
 
               {/* The defect itself — real reference photo */}
-              <div className="h-28 overflow-hidden">
+              <div className="h-36 overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={d.photo}

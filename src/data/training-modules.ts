@@ -2560,13 +2560,6 @@ export const modules: Module[] = [
             body: "Structural defects compromise the physical integrity of the slide. They are the most serious category of defect and often require immediate shutdown and professional repair.",
           },
           {
-            type: "image",
-            imageSrc: "/lesson-images/02-crack-structural-v2.jpg",
-            alt: "Extreme close-up of a hairline-to-through crack across the white gelcoat of a fibreglass waterslide flume",
-            aspect: "1:1",
-            body: "A through-wall crack in the gelcoat exposes the fibreglass beneath - a structural defect needing immediate shutdown.",
-          },
-          {
             type: "diagram",
             heading: "Defect Recognition Quick Reference",
             body: "A quick-reference guide to identifying structural, surface and joint defects and their required response level.",
