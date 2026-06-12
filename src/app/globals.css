@@ -349,6 +349,23 @@ html {
   }
 }
 
+/* Cycle progress — a thin bar filling once per showcase rotation (duration
+   set inline; remounted per item so it restarts). */
+.cycle-progress {
+  width: 0;
+  animation-name: cycle-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes cycle-progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 .slow-spin {
   animation: slow-spin 6s linear infinite;
 }
