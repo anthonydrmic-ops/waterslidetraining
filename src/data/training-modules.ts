@@ -3914,7 +3914,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/10-slide-closed.jpg",
+            imageSrc: "/lesson-images/10-slide-closed-v2.jpg",
             alt: "The entrance to a waterslide blocked by a plain safety barrier and folding stand at the top of the tower, the flume empty and dry",
             aspect: "4:3",
             body: "A slide entrance closed off with a safety barrier during a shutdown.",
