@@ -349,6 +349,32 @@ html {
   }
 }
 
+/* Top-down rider loop — a figure sliding down a mini flume lane, fading at
+   the run-out and re-entering at the top. */
+.slide-rider {
+  animation: slide-rider 3.2s linear infinite;
+}
+@keyframes slide-rider {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  92% {
+    transform: translateY(84px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(84px);
+    opacity: 0;
+  }
+}
+
 /* Cycle progress — a thin bar filling once per showcase rotation (duration
    set inline; remounted per item so it restarts). */
 .cycle-progress {

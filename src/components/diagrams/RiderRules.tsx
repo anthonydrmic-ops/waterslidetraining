@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import {
-  PersonSimpleSwim,
   PersonSimple,
   ArrowDown,
   LinkSimple,
@@ -87,15 +86,51 @@ export function RiderRules() {
           }}
           className="md:col-span-2 rounded-2xl border border-emerald-200/70 bg-emerald-50/40 p-5 flex flex-col items-center justify-center text-center"
         >
-          <div className="relative w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center mb-3">
-            {!reduce && (
-              <span
-                aria-hidden
-                className="ping-ring absolute inset-0 rounded-2xl border-2 border-emerald-400"
-                style={{ animationDelay: "1s" }}
+          {/* Top-down mini flume: water flowing, a rider in the taught
+              position sliding down on a loop - the rule, demonstrated */}
+          <div className="relative w-[86px] h-[134px] mb-3" aria-hidden>
+            <svg viewBox="0 0 90 140" className="w-full h-full">
+              {/* Flume channel, top-down */}
+              <rect x="25" y="4" width="40" height="132" rx="20" fill="#e0f2fe" stroke="#a7f3d0" strokeWidth="2" />
+              {/* Water flow */}
+              <path
+                className={reduce ? undefined : "flow-dash-return"}
+                d="M36 12 V 128"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="3 13"
+                opacity="0.5"
+                fill="none"
               />
-            )}
-            <PersonSimpleSwim size={28} weight="duotone" className="text-emerald-600" />
+              <path
+                className={reduce ? undefined : "flow-dash-return"}
+                d="M54 12 V 128"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="3 13"
+                opacity="0.5"
+                fill="none"
+                style={reduce ? undefined : { animationDelay: "0.4s" }}
+              />
+              {/* Rider, top-down: head up-screen, arms crossed, feet first */}
+              <g
+                className={reduce ? undefined : "slide-rider"}
+                style={reduce ? { transform: "translateY(42px)" } : undefined}
+              >
+                <g transform="translate(45 26)">
+                  {/* Legs together, feet toward travel */}
+                  <rect x="-3.5" y="7" width="7" height="16" rx="3.5" fill="#059669" />
+                  {/* Torso / shoulders */}
+                  <rect x="-7" y="-8" width="14" height="15" rx="6" fill="#059669" />
+                  {/* Arms crossed over the chest */}
+                  <path d="M -4.5 -4 L 4.5 1 M 4.5 -4 L -4.5 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                  {/* Head */}
+                  <circle cx="0" cy="-13" r="4.5" fill="#059669" />
+                </g>
+              </g>
+            </svg>
           </div>
           <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 mb-1 flex items-center gap-1">
             <CheckCircle size={12} weight="fill" /> Body slide position
