@@ -227,10 +227,27 @@ Lands in: **2-1 Daily Pre-Opening** (hardware checks) and reusable in 5-1.
 ### 12. `12-pump-room.jpg` - 4:3 - Nano Banana Pro (i2i from hero)
 Lands in: **2-2 Water Flow and System Readiness** and reusable in 6-3.
 
-> Interior of a clean aquatic-centre plant room: blue circulation pumps,
-> large green sand filter vessels, pressure gauges, labelled PVC pipework and
-> a chemical dosing station with safety placards, fluorescent overhead light
-> mixed with daylight from a doorway, nobody in frame.
+SAFETY-CORRECT LAYOUT REQUIRED: chlorine products and acid must read as
+clearly segregated (AS 3833 / Safe Work Australia: minimum 3m separation,
+separate bunds at 110% volume - mixed, they produce chlorine gas). The
+prompt places them on opposite walls with the pumps between them.
+
+> Interior of a clean, well-organised aquatic-centre plant room: blue
+> circulation pumps and large green sand filter vessels with pressure
+> gauges in the centre of the room, labelled PVC pipework overhead. On the
+> far left wall, a bunded chemical bay holding white drums of chlorine
+> dosing solution standing inside a yellow spill-containment bund with
+> hazard placards on the wall above. On the far right wall, several metres
+> away on the opposite side of the room, a completely separate bunded bay
+> with acid containers and its own different placards. The two chemical
+> bays clearly distant from each other with the pumps between them.
+> Ventilation grilles, clean sealed floor, fluorescent light mixed with
+> daylight from a doorway, nobody in frame. Photorealistic, 35mm, neutral
+> colour grade, editorial documentary style for a safety training manual,
+> no readable brand names.
+
+Caption when wired in: teach the segregation (chlorine and acid on
+opposite sides, own bunds - mixed they make chlorine gas).
 
 ### 13. `13-storm-closure.jpg` - 16:9 - Nano Banana Pro (i2i from hero)
 Lands in: **2-4 When to Shut the Slide** (weather triggers).
