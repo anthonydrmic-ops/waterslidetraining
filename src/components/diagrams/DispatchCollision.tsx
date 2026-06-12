@@ -31,8 +31,8 @@ function cube(p0: number, p1: number, p2: number, p3: number, u: number) {
   return m * m * m * p0 + 3 * m * m * u * p1 + 3 * m * u * u * p2 + u * u * u * p3;
 }
 
-// t in [0,1] along the whole slide -> point on the path.
-function pointAt(t: number): { x: number; y: number } {
+// t in [0,1] along the whole slide -> point on the path (curve parameter).
+function pointAtParam(t: number): { x: number; y: number } {
   if (t <= 0.5) {
     const u = t / 0.5;
     return {
@@ -45,6 +45,46 @@ function pointAt(t: number): { x: number; y: number } {
     x: cube(SEG2[0][0], SEG2[1][0], SEG2[2][0], SEG2[3][0], u),
     y: cube(SEG2[0][1], SEG2[1][1], SEG2[2][1], SEG2[3][1], u),
   };
+}
+
+// Arc-length reparameterisation: the bezier parameter does NOT advance at
+// uniform distance, so a "linear" parameter animation visibly speeds up and
+// slows down along the curve. This lookup maps an arc fraction (true fraction
+// of distance travelled) to the parameter, so constant progress = constant
+// on-screen speed.
+const ARC_SAMPLES = 200;
+const ARC_TABLE: number[] = (() => {
+  const cum: number[] = [0];
+  let len = 0;
+  let prev = pointAtParam(0);
+  for (let i = 1; i <= ARC_SAMPLES; i++) {
+    const p = pointAtParam(i / ARC_SAMPLES);
+    len += Math.hypot(p.x - prev.x, p.y - prev.y);
+    cum.push(len);
+    prev = p;
+  }
+  return cum.map((c) => c / len);
+})();
+
+function paramForArc(s: number): number {
+  if (s <= 0) return 0;
+  if (s >= 1) return 1;
+  let lo = 0;
+  let hi = ARC_SAMPLES;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (ARC_TABLE[mid] < s) lo = mid + 1;
+    else hi = mid;
+  }
+  const s0 = ARC_TABLE[lo - 1];
+  const s1 = ARC_TABLE[lo];
+  const f = (s - s0) / (s1 - s0);
+  return (lo - 1 + f) / ARC_SAMPLES;
+}
+
+// Progress values everywhere below are ARC fractions (true distance).
+function pointAt(s: number): { x: number; y: number } {
+  return pointAtParam(paramForArc(s));
 }
 
 // Problem track choreography: light rider drops at ONE constant speed; just
