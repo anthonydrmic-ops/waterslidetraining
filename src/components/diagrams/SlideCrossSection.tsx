@@ -86,21 +86,23 @@ export function SlideCrossSection() {
           opacity="0.08"
         />
 
-        {/* Flowing water - droplets travelling down the flume */}
+        {/* Flowing water - droplets travelling down the flume in a constant
+            loop. Dash period is 26, and each cycle shifts exactly one period,
+            so the loop is seamless. */}
         <motion.path
           d={FLUME_D}
           stroke="#1F7A8C"
-          strokeWidth="8"
+          strokeWidth="10"
           strokeLinecap="round"
           fill="none"
-          opacity="0.55"
-          strokeDasharray="2 24"
+          opacity="0.75"
+          strokeDasharray="4 22"
           initial={false}
           animate={reduce ? undefined : { strokeDashoffset: [0, -26] }}
           transition={
             reduce
               ? undefined
-              : { duration: 0.85, repeat: Infinity, ease: "linear" }
+              : { duration: 1.1, repeat: Infinity, ease: "linear" }
           }
         />
 
@@ -171,17 +173,17 @@ export function SlideCrossSection() {
         <motion.path
           d={RETURN_D}
           stroke="#1F7A8C"
-          strokeWidth="2.5"
+          strokeWidth="3"
           strokeLinecap="round"
           fill="none"
-          opacity="0.55"
-          strokeDasharray="2 14"
+          opacity="0.65"
+          strokeDasharray="3 13"
           initial={false}
           animate={reduce ? undefined : { strokeDashoffset: [0, -16] }}
           transition={
             reduce
               ? undefined
-              : { duration: 0.7, repeat: Infinity, ease: "linear" }
+              : { duration: 0.8, repeat: Infinity, ease: "linear" }
           }
         />
 
@@ -221,9 +223,13 @@ export function SlideCrossSection() {
           Catch Pool
         </text>
 
-        {/* Pump label — sits between the pump house and the return run */}
-        <text x="722" y="434" textAnchor="middle" fontSize="11" fontWeight="500" fill="#78716c" fontFamily="system-ui">
-          Pump System
+        {/* Pump label — split either side of the vertical return pipe so the
+            line passes cleanly between the two words */}
+        <text x="714" y="434" textAnchor="end" fontSize="11" fontWeight="500" fill="#78716c" fontFamily="system-ui">
+          Pump
+        </text>
+        <text x="730" y="434" textAnchor="start" fontSize="11" fontWeight="500" fill="#78716c" fontFamily="system-ui">
+          System
         </text>
 
         {/* Water return label — solid plate over the dashed return run */}
