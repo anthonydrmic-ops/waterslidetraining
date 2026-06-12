@@ -3384,7 +3384,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/09-enclosed-flume.jpg",
+            imageSrc: "/lesson-images/09-enclosed-flume-v2.jpg",
             alt: "Looking down the inside of a dark enclosed tube waterslide, the tunnel curving away into darkness so what is ahead cannot be seen",
             aspect: "16:9",
             body: "Inside an enclosed tube slide the curve hides what is ahead, so mid-ride visibility is zero.",
