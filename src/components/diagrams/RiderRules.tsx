@@ -91,26 +91,26 @@ export function RiderRules() {
           <div className="relative w-[86px] h-[134px] mb-3" aria-hidden>
             <svg viewBox="0 0 90 140" className="w-full h-full">
               {/* Flume channel, top-down */}
-              <rect x="25" y="4" width="40" height="132" rx="20" fill="#e0f2fe" stroke="#a7f3d0" strokeWidth="2" />
-              {/* Water flow */}
+              <rect x="25" y="4" width="40" height="132" rx="20" fill="#dbeafe" stroke="#93c5fd" strokeWidth="2" />
+              {/* Water flow — darker blue, reading clearly as moving water */}
               <path
                 className={reduce ? undefined : "flow-dash-return"}
                 d="M36 12 V 128"
-                stroke="#38bdf8"
-                strokeWidth="2"
+                stroke="#0369a1"
+                strokeWidth="2.5"
                 strokeLinecap="round"
-                strokeDasharray="3 13"
-                opacity="0.5"
+                strokeDasharray="5 11"
+                opacity="0.7"
                 fill="none"
               />
               <path
                 className={reduce ? undefined : "flow-dash-return"}
                 d="M54 12 V 128"
-                stroke="#38bdf8"
-                strokeWidth="2"
+                stroke="#0369a1"
+                strokeWidth="2.5"
                 strokeLinecap="round"
-                strokeDasharray="3 13"
-                opacity="0.5"
+                strokeDasharray="5 11"
+                opacity="0.7"
                 fill="none"
                 style={reduce ? undefined : { animationDelay: "0.4s" }}
               />
@@ -120,14 +120,20 @@ export function RiderRules() {
                 style={reduce ? { transform: "translateY(42px)" } : undefined}
               >
                 <g transform="translate(45 26)">
-                  {/* Legs together, feet toward travel */}
-                  <rect x="-3.5" y="7" width="7" height="16" rx="3.5" fill="#059669" />
+                  {/* Legs together, feet toward travel - swaying from the hip */}
+                  <g className={reduce ? undefined : "rider-legs"}>
+                    <rect x="-3.5" y="7" width="7" height="16" rx="3.5" fill="#059669" />
+                  </g>
                   {/* Torso / shoulders */}
                   <rect x="-7" y="-8" width="14" height="15" rx="6" fill="#059669" />
-                  {/* Arms crossed over the chest */}
-                  <path d="M -4.5 -4 L 4.5 1 M 4.5 -4 L -4.5 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
-                  {/* Head */}
-                  <circle cx="0" cy="-13" r="4.5" fill="#059669" />
+                  {/* Arms crossed over the chest - shifting with the water */}
+                  <g className={reduce ? undefined : "rider-arms"}>
+                    <path d="M -4.5 -4 L 4.5 1 M 4.5 -4 L -4.5 1" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                  </g>
+                  {/* Head - a gentle bob */}
+                  <g className={reduce ? undefined : "rider-head"}>
+                    <circle cx="0" cy="-13" r="4.5" fill="#059669" />
+                  </g>
                 </g>
               </g>
             </svg>

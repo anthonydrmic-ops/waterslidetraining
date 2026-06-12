@@ -350,9 +350,48 @@ html {
 }
 
 /* Top-down rider loop — a figure sliding down a mini flume lane, fading at
-   the run-out and re-entering at the top. */
+   the run-out and re-entering at the top. Sub-parts carry subtle secondary
+   motion: legs sway from the hip, head bobs, arms shift with the water. */
 .slide-rider {
   animation: slide-rider 3.2s linear infinite;
+}
+.rider-legs {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: rider-legs 1.3s ease-in-out infinite;
+}
+@keyframes rider-legs {
+  0%,
+  100% {
+    transform: rotate(3deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+}
+.rider-head {
+  animation: rider-head 1.7s ease-in-out infinite;
+}
+@keyframes rider-head {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(1.3px);
+  }
+}
+.rider-arms {
+  animation: rider-arms 1.5s ease-in-out infinite;
+}
+@keyframes rider-arms {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0.6px, 0.9px);
+  }
 }
 @keyframes slide-rider {
   0% {
