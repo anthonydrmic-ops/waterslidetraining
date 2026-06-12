@@ -25,6 +25,7 @@ import {
   Certificate,
   Clock,
   ArrowCounterClockwise,
+  House,
 } from "@phosphor-icons/react";
 import {
   modules,
@@ -472,12 +473,25 @@ export default function LessonPage({
         <div className="max-w-3xl mx-auto">
           <div className="nav-glass rounded-full px-4 py-2.5 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Link
-                href="/train"
-                className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center hover:bg-stone-200 active:scale-[0.95] transition-all duration-300"
-              >
-                <ArrowLeft size={14} weight="bold" className="text-stone-500" />
-              </Link>
+              <div className="flex items-center gap-1.5">
+                {/* Back = previous lesson in THIS module; hidden on lesson 1 */}
+                {currentLessonIndex > 0 && (
+                  <Link
+                    href={`/train/${moduleId}/${mod.lessons[currentLessonIndex - 1].id}`}
+                    title="Previous lesson"
+                    className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center hover:bg-stone-200 active:scale-[0.95] transition-all duration-300"
+                  >
+                    <ArrowLeft size={14} weight="bold" className="text-stone-500" />
+                  </Link>
+                )}
+                <Link
+                  href="/train"
+                  title="Training home"
+                  className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center hover:bg-stone-200 active:scale-[0.95] transition-all duration-300"
+                >
+                  <House size={14} weight="bold" className="text-stone-500" />
+                </Link>
+              </div>
               <div className="hidden sm:block">
                 <p className="text-[10px] font-mono uppercase tracking-wider text-stone-400">
                   Module {String(mod.number).padStart(2, "0")} &middot; Lesson{" "}
@@ -1073,6 +1087,41 @@ function SectionRenderer({
   accent: string;
   isLede?: boolean;
 }) {
+  if (section.type === "image-pair" && section.pair) {
+    return (
+      <figure className="w-full max-w-full">
+        {section.heading && (
+          <SectionHeading accent={accent}>{section.heading}</SectionHeading>
+        )}
+        <div className="grid grid-cols-2 gap-3">
+          {section.pair.map((img, i) => (
+            <div key={i}>
+              <div className="group/img relative w-full aspect-square overflow-hidden rounded-2xl bg-stone-100 ring-1 ring-stone-200/60">
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 360px"
+                  className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover/img:scale-[1.025]"
+                />
+              </div>
+              {img.caption && (
+                <p className="text-xs text-stone-500 leading-relaxed mt-2">
+                  {img.caption}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+        {section.body && (
+          <figcaption className="text-xs text-stone-500 leading-relaxed mt-2">
+            {section.body}
+          </figcaption>
+        )}
+      </figure>
+    );
+  }
+
   if (section.type === "image" && section.imageSrc) {
     const ratio =
       section.aspect === "16:9"

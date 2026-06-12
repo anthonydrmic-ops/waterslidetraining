@@ -19,7 +19,7 @@ export interface Lesson {
 export interface LessonSection {
   heading?: string;
   body: string;
-  type: "text" | "warning" | "critical" | "checklist" | "numbered" | "oem-reference" | "diagram" | "case-study" | "image";
+  type: "text" | "warning" | "critical" | "checklist" | "numbered" | "oem-reference" | "diagram" | "case-study" | "image" | "image-pair";
   items?: string[];
   source?: string;
   diagramId?: string;
@@ -31,6 +31,9 @@ export interface LessonSection {
   // "small" renders the image as a centred inset rather than full column
   // width - for detail shots (a single bolt) that shouldn't dominate the page.
   size?: "small";
+  // Image-pair sections: two square photos side by side, captioned
+  // individually - for showing two examples of the same defect class.
+  pair?: { src: string; alt: string; caption?: string }[];
 }
 
 export interface Module {
@@ -2687,12 +2690,20 @@ export const modules: Module[] = [
             body: "Surface defects affect the riding surface quality and rider safety. While less immediately dangerous than structural defects, they can escalate quickly and contribute to incidents through altered rider dynamics.",
           },
           {
-            type: "image",
-            imageSrc: "/lesson-images/03-gelcoat-delamination-v2.jpg",
-            alt: "Macro photograph of glossy white gelcoat flaking and lifting to expose the matte fibreglass layer beneath",
-            aspect: "1:1",
-            size: "small",
-            body: "Glossy gelcoat lifting and flaking away from the matte fibreglass layer beneath.",
+            type: "image-pair",
+            body: "",
+            pair: [
+              {
+                src: "/lesson-images/27-mineral-buildup.jpg",
+                alt: "A chalky white mineral film mottling the gelcoat of a green fibreglass flume run-out",
+                caption: "Mineral buildup - a chalky film spreading where water sits and evaporates, roughening the surface.",
+              },
+              {
+                src: "/lesson-images/28-gelcoat-fade.jpg",
+                alt: "A blue fibreglass flume with chalky, faded gelcoat along the rim above the still-saturated lower surface",
+                caption: "Faded gelcoat - the UV-chalked rim has lost colour and gloss against the protected surface below.",
+              },
+            ],
           },
           {
             heading: "Chips and Gouges",
@@ -2809,12 +2820,20 @@ export const modules: Module[] = [
             body: "Joints between flume sections are engineered connection points that must accommodate thermal movement while maintaining a smooth, continuous riding surface. Joint failure is one of the most common and dangerous maintenance issues.",
           },
           {
-            type: "image",
-            imageSrc: "/lesson-images/04-joint-misalignment-v2.jpg",
-            alt: "Close-up along the inside of a waterslide flume at a panel joint where two sections meet slightly misaligned, creating a raised lip",
-            aspect: "1:1",
-            size: "small",
-            body: "A small raised lip where two flume sections meet slightly misaligned at a joint.",
+            type: "image-pair",
+            body: "",
+            pair: [
+              {
+                src: "/lesson-images/29-sealant-lanes.jpg",
+                alt: "Twin green and yellow racing lanes with sealed joint seams crossing both lanes at regular intervals",
+                caption: "Joint seams crossing twin racing lanes - sealant lines whitening and wearing at the edges.",
+              },
+              {
+                src: "/lesson-images/30-sealant-tube.jpg",
+                alt: "Inside a yellow enclosed waterslide tube at a transverse panel joint, sealant lines visible across the barrel",
+                caption: "A transverse joint inside an enclosed tube - deterioration here is found by feel as much as sight.",
+              },
+            ],
           },
           {
             heading: "Sealant Deterioration",
