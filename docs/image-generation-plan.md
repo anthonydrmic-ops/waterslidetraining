@@ -260,11 +260,25 @@ Lands in: **2-4 When to Shut the Slide** (weather triggers).
 ### 14. `14-dispatch-signal.jpg` - 4:3 - Nano Banana Pro (i2i from hero)
 Lands in: **4-2 Dispatch Timing** and reusable in 8-2 Communication.
 
-> Waterslide attendant in uniform polo and hi-vis at the top dispatch
-> platform, one hand raised in a clear open-palm STOP signal, the other
-> holding a two-way radio, traffic-light dispatch indicator showing red
-> beside them, rider seated in the flume entry waiting, shot from slightly
-> behind the rider so the attendant and signal are the focus.
+(Staging matters: the flume mouth must begin at platform floor level and
+the rider must be IN a tube floating IN the flume mouth - earlier attempts
+parked the rider outside the entry.)
+
+> The top dispatch platform of a waterslide tower. In the centre of the
+> platform, the open mouth of a single blue fibreglass flume begins at
+> floor level, with shallow water flowing over its surface and into the
+> channel. A rider sits in an inflatable tube floating in the flume mouth
+> itself - fully inside the channel, hands on the tube handles, feet
+> forward, waiting for the signal. Beside the flume entry stands a
+> waterslide attendant in a navy polo and yellow hi-vis vest: one hand
+> raised toward the rider in a clear open-palm stop signal, the other
+> holding a small two-way radio at their chest. A pole beside the
+> attendant carries a dispatch indicator light showing red. Camera
+> slightly behind and to one side of the rider, so the raised hand and the
+> red light are the focus. Galvanised handrails around the platform edge,
+> bright daylight. Photorealistic, 35mm, neutral colour grade, editorial
+> documentary style for a safety training manual, no faces toward camera,
+> no logos.
 
 ### 15. `15-splash-pool.jpg` - 4:3 - Nano Banana Pro (i2i from hero)
 Lands in: **4-4 Exit Control and Coordination**.
