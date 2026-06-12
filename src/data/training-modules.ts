@@ -1,4 +1,4 @@
-export interface QuizQuestion {
+﻿export interface QuizQuestion {
   id: string;
   question: string;
   options: string[];
@@ -692,7 +692,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/02-crack-structural.jpg",
+            imageSrc: "/lesson-images/02-crack-structural.jpg?v=2",
             alt: "A structural crack running across the white gelcoat of a fibreglass flume, exposing the laminate beneath",
             aspect: "1:1",
             heading: "What structural failure looks like",
@@ -718,9 +718,9 @@ export const modules: Module[] = [
           },
           {
             type: "case-study",
-            heading: "Real-World Incident - Verrückt, Kansas (2016)",
-            body: "Verrückt, then the world's tallest waterslide, killed 10-year-old Caleb Schwab when the raft he was riding went airborne and struck an overhead structure. Investigations found the ride had been designed using crude trial-and-error methods rather than proper engineering calculations, and an accelerometer test a week before opening had warned that rafts in a certain weight range could go airborne - the ride opened anyway with the design unchanged. It is the clearest modern example of why design must be verified, not assumed.",
-            source: "Verrückt fatality, Schlitterbahn, Kansas City KS, August 2016 (Texas Monthly; TIME; NPR)",
+            heading: "Real-World Incident - VerrÃ¼ckt, Kansas (2016)",
+            body: "VerrÃ¼ckt, then the world's tallest waterslide, killed 10-year-old Caleb Schwab when the raft he was riding went airborne and struck an overhead structure. Investigations found the ride had been designed using crude trial-and-error methods rather than proper engineering calculations, and an accelerometer test a week before opening had warned that rafts in a certain weight range could go airborne - the ride opened anyway with the design unchanged. It is the clearest modern example of why design must be verified, not assumed.",
+            source: "VerrÃ¼ckt fatality, Schlitterbahn, Kansas City KS, August 2016 (Texas Monthly; TIME; NPR)",
           },
           {
             type: "case-study",
@@ -1673,7 +1673,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/03-gelcoat-delamination.jpg",
+            imageSrc: "/lesson-images/03-gelcoat-delamination.jpg?v=2",
             alt: "Gelcoat peeling away from a fibreglass flume surface, the lifted edge casting a shadow over exposed laminate",
             aspect: "1:1",
             heading: "Gelcoat failure up close",
@@ -2499,7 +2499,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/02-crack-structural.jpg",
+            imageSrc: "/lesson-images/02-crack-structural.jpg?v=2",
             alt: "Extreme close-up of a hairline-to-through crack across the white gelcoat of a fibreglass waterslide flume",
             aspect: "1:1",
             body: "A through-wall crack in the gelcoat exposes the fibreglass beneath - a structural defect needing immediate shutdown.",
@@ -2625,7 +2625,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/03-gelcoat-delamination.jpg",
+            imageSrc: "/lesson-images/03-gelcoat-delamination.jpg?v=2",
             alt: "Macro photograph of glossy white gelcoat flaking and lifting to expose the matte fibreglass layer beneath",
             aspect: "1:1",
             body: "Glossy gelcoat lifting and flaking away from the matte fibreglass layer beneath.",
@@ -2746,7 +2746,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/04-joint-misalignment.jpg",
+            imageSrc: "/lesson-images/04-joint-misalignment.jpg?v=2",
             alt: "Close-up along the inside of a waterslide flume at a panel joint where two sections meet slightly misaligned, creating a raised lip",
             aspect: "1:1",
             body: "A small raised lip where two flume sections meet slightly misaligned at a joint.",
@@ -3137,7 +3137,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/05-mineral-scaling.jpg",
+            imageSrc: "/lesson-images/05-mineral-scaling.jpg?v=2",
             alt: "Macro photograph of chalky white-grey mineral scale and calcium buildup crusting a blue fibreglass waterslide surface",
             aspect: "1:1",
             body: "Chalky white mineral scale crusting the flume surface - a sign of high-LSI water.",
