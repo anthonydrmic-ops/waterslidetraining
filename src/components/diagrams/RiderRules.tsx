@@ -127,12 +127,14 @@ export function RiderRules() {
                   </g>
                   {/* Torso / shoulders */}
                   <rect x="-7" y="-8" width="14" height="15" rx="6" fill="#059669" stroke="#065f46" strokeWidth="1.4" />
-                  {/* Forearms crossed over the chest - real limbs, outlined */}
+                  {/* Forearms crossed over the chest - stacked, as seen from
+                      above. Same body green, dark outline, lower arm first so
+                      the upper arm reads as resting on top of it. */}
                   <g className={reduce ? undefined : "rider-arms"}>
-                    <path d="M -6.5 -5.5 Q -2 -2.5 3.5 -1.5" stroke="#065f46" strokeWidth="4.8" fill="none" strokeLinecap="round" />
-                    <path d="M 6.5 -5.5 Q 2 -2.5 -3.5 -1.5" stroke="#065f46" strokeWidth="4.8" fill="none" strokeLinecap="round" />
-                    <path d="M -6.5 -5.5 Q -2 -2.5 3.5 -1.5" stroke="#10b981" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-                    <path d="M 6.5 -5.5 Q 2 -2.5 -3.5 -1.5" stroke="#10b981" strokeWidth="2.4" fill="none" strokeLinecap="round" />
+                    <path d="M -6 -4.5 Q 0 -1.4 4.5 -1" stroke="#065f46" strokeWidth="5" fill="none" strokeLinecap="round" />
+                    <path d="M -6 -4.5 Q 0 -1.4 4.5 -1" stroke="#059669" strokeWidth="2.8" fill="none" strokeLinecap="round" />
+                    <path d="M 6 -5.5 Q 0 -3.8 -4.5 -3.6" stroke="#065f46" strokeWidth="5" fill="none" strokeLinecap="round" />
+                    <path d="M 6 -5.5 Q 0 -3.8 -4.5 -3.6" stroke="#059669" strokeWidth="2.8" fill="none" strokeLinecap="round" />
                   </g>
                   {/* Head - a gentle bob */}
                   <g className={reduce ? undefined : "rider-head"}>
