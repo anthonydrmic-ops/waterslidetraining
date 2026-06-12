@@ -16,39 +16,135 @@ import {
 const EASE = [0.32, 0.72, 0, 1] as const;
 const CYCLE_MS = 3400;
 
+// Hand-drawn violation scenes in the same outlined-figure style as the
+// correct-position rider, each with a subtle idle motion acting out its
+// hazard. (The reduced-motion media block silences all of them.)
+const RED = "#ef4444";
+const RED_DARK = "#991b1b";
+const RED_SOFT = "#fca5a5";
+
+const ART: Record<string, React.ReactNode> = {
+  standing: (
+    <>
+      <path d="M 8 37 H 36" stroke={RED_SOFT} strokeWidth="2" strokeLinecap="round" />
+      <g className="viol-wobble">
+        <line x1="22" y1="16" x2="22" y2="26" stroke={RED_DARK} strokeWidth="2.6" strokeLinecap="round" />
+        <line x1="22" y1="19" x2="16.5" y2="23.5" stroke={RED_DARK} strokeWidth="2.4" strokeLinecap="round" />
+        <line x1="22" y1="19" x2="27.5" y2="23.5" stroke={RED_DARK} strokeWidth="2.4" strokeLinecap="round" />
+        <line x1="22" y1="26" x2="18.5" y2="35" stroke={RED_DARK} strokeWidth="2.6" strokeLinecap="round" />
+        <line x1="22" y1="26" x2="25.5" y2="35" stroke={RED_DARK} strokeWidth="2.6" strokeLinecap="round" />
+        <circle cx="22" cy="11.5" r="3.8" fill={RED} stroke={RED_DARK} strokeWidth="1.4" />
+      </g>
+    </>
+  ),
+  headfirst: (
+    <g className="viol-drift">
+      {/* travel is downward: head leads, arms reach past it */}
+      <rect x="19" y="6.5" width="2.7" height="9" rx="1.35" fill={RED} stroke={RED_DARK} strokeWidth="1.2" />
+      <rect x="22.3" y="6.5" width="2.7" height="9" rx="1.35" fill={RED} stroke={RED_DARK} strokeWidth="1.2" />
+      <rect x="16.5" y="14.5" width="11" height="12" rx="5" fill={RED} stroke={RED_DARK} strokeWidth="1.4" />
+      <line x1="18" y1="25" x2="15.5" y2="33.5" stroke={RED_DARK} strokeWidth="2.4" strokeLinecap="round" />
+      <line x1="26" y1="25" x2="28.5" y2="33.5" stroke={RED_DARK} strokeWidth="2.4" strokeLinecap="round" />
+      <circle cx="22" cy="31" r="3.9" fill={RED} stroke={RED_DARK} strokeWidth="1.4" />
+    </g>
+  ),
+  linking: (
+    <g className="viol-sway">
+      <circle cx="13.5" cy="13" r="3.3" fill={RED} stroke={RED_DARK} strokeWidth="1.3" />
+      <rect x="9" y="16" width="9" height="10.5" rx="4.2" fill={RED} stroke={RED_DARK} strokeWidth="1.3" />
+      <rect x="10.6" y="27" width="2.5" height="7.5" rx="1.25" fill={RED} stroke={RED_DARK} strokeWidth="1.1" />
+      <rect x="14" y="27" width="2.5" height="7.5" rx="1.25" fill={RED} stroke={RED_DARK} strokeWidth="1.1" />
+      <circle cx="30.5" cy="13" r="3.3" fill={RED} stroke={RED_DARK} strokeWidth="1.3" />
+      <rect x="26" y="16" width="9" height="10.5" rx="4.2" fill={RED} stroke={RED_DARK} strokeWidth="1.3" />
+      <rect x="27.6" y="27" width="2.5" height="7.5" rx="1.25" fill={RED} stroke={RED_DARK} strokeWidth="1.1" />
+      <rect x="31" y="27" width="2.5" height="7.5" rx="1.25" fill={RED} stroke={RED_DARK} strokeWidth="1.1" />
+      {/* the link */}
+      <line x1="17.5" y1="20.5" x2="26.5" y2="20.5" stroke={RED_DARK} strokeWidth="4.4" strokeLinecap="round" />
+      <line x1="17.5" y1="20.5" x2="26.5" y2="20.5" stroke={RED} strokeWidth="2.2" strokeLinecap="round" />
+    </g>
+  ),
+  spinning: (
+    <>
+      <path d="M 36.5 15 A 16 16 0 0 1 36.5 29" stroke={RED_SOFT} strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M 7.5 29 A 16 16 0 0 1 7.5 15" stroke={RED_SOFT} strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M 36.5 29 l -2.6 -3 M 36.5 29 l 3.2 -1.6" stroke={RED_SOFT} strokeWidth="2" strokeLinecap="round" fill="none" />
+      <path d="M 7.5 15 l 2.6 3 M 7.5 15 l -3.2 1.6" stroke={RED_SOFT} strokeWidth="2" strokeLinecap="round" fill="none" />
+      <g className="viol-spin">
+        <circle cx="22" cy="12.5" r="3.5" fill={RED} stroke={RED_DARK} strokeWidth="1.3" />
+        <rect x="17" y="15.5" width="10" height="11" rx="4.5" fill={RED} stroke={RED_DARK} strokeWidth="1.3" />
+        <rect x="18.8" y="27" width="2.6" height="8" rx="1.3" fill={RED} stroke={RED_DARK} strokeWidth="1.1" />
+        <rect x="22.6" y="27" width="2.6" height="8" rx="1.3" fill={RED} stroke={RED_DARK} strokeWidth="1.1" />
+      </g>
+    </>
+  ),
+  lap: (
+    <>
+      <circle cx="22" cy="9.5" r="3.8" fill={RED} stroke={RED_DARK} strokeWidth="1.4" />
+      <rect x="15" y="13" width="14" height="14" rx="6" fill={RED} stroke={RED_DARK} strokeWidth="1.4" />
+      <rect x="17" y="27.5" width="3" height="9" rx="1.5" fill={RED} stroke={RED_DARK} strokeWidth="1.2" />
+      <rect x="24" y="27.5" width="3" height="9" rx="1.5" fill={RED} stroke={RED_DARK} strokeWidth="1.2" />
+      {/* the child, riding on the lap */}
+      <g className="viol-bob">
+        <circle cx="22" cy="21.5" r="2.8" fill={RED_SOFT} stroke={RED_DARK} strokeWidth="1.2" />
+        <rect x="18.7" y="24" width="6.6" height="7.5" rx="3" fill={RED_SOFT} stroke={RED_DARK} strokeWidth="1.2" />
+      </g>
+    </>
+  ),
+  objects: (
+    <>
+      <circle cx="17" cy="11.5" r="3.5" fill={RED} stroke={RED_DARK} strokeWidth="1.3" />
+      <rect x="12" y="14.5" width="10" height="11" rx="4.5" fill={RED} stroke={RED_DARK} strokeWidth="1.3" />
+      <rect x="13.8" y="26" width="2.6" height="8.5" rx="1.3" fill={RED} stroke={RED_DARK} strokeWidth="1.1" />
+      <rect x="17.6" y="26" width="2.6" height="8.5" rx="1.3" fill={RED} stroke={RED_DARK} strokeWidth="1.1" />
+      {/* the loose item, tumbling away */}
+      <g className="viol-tumble">
+        <rect x="28" y="13" width="6.5" height="10.5" rx="1.8" fill={RED_SOFT} stroke={RED_DARK} strokeWidth="1.3" />
+        <line x1="29.6" y1="15.5" x2="32.9" y2="15.5" stroke={RED_DARK} strokeWidth="1.1" strokeLinecap="round" />
+      </g>
+      <path d="M 27 27.5 l 3.5 3 M 31.5 26 l 2.5 2.2" stroke={RED_SOFT} strokeWidth="1.8" strokeLinecap="round" />
+    </>
+  ),
+};
+
 const PROHIBITED = [
   {
     icon: PersonSimple,
+    art: "standing",
     label: "Standing up",
     why: "Instant loss of control - falls and head strikes inside a moving flume.",
     action: "Stop them before dispatch. They sit back down, or they don't ride.",
   },
   {
     icon: ArrowDown,
+    art: "headfirst",
     label: "Head-first",
     why: "Spinal loading on impact - the position behind the most serious slide injuries.",
     action: "Reposition feet-first before release. No exceptions on body slides.",
   },
   {
     icon: LinkSimple,
+    art: "linking",
     label: "Linking riders",
     why: "Creates one heavy, unpredictable mass that travels faster and exits wrong.",
     action: "Separate them at the platform - one rider per dispatch, every time.",
   },
   {
     icon: ArrowsClockwise,
+    art: "spinning",
     label: "Deliberate spinning",
     why: "Uncontrolled orientation - riders arrive at bends and the run-out sideways or backwards.",
     action: "Brief them out of it before dispatch; repeat offenders lose the ride.",
   },
   {
     icon: Baby,
+    art: "lap",
     label: "Child on lap",
     why: "Children come loose mid-ride. Only permitted where the manual explicitly allows it.",
     action: "Check the ride's manual rules - otherwise the child rides alone or not at all.",
   },
   {
     icon: Package,
+    art: "objects",
     label: "Objects in the flume",
     why: "Loose items become projectiles for the rider behind and obstructions in the flume.",
     action: "Everything loose stays at the top - glasses, jewellery, cameras, pockets emptied.",
@@ -70,7 +166,6 @@ export function RiderRules() {
   }, [reduce, inView, bump]);
 
   const current = PROHIBITED[idx];
-  const CurrentIcon = current.icon;
 
   return (
     <motion.div
@@ -184,20 +279,19 @@ export function RiderRules() {
           {reduce ? (
             /* Reduced motion: no auto-cycling content — show the full list */
             <div className="p-4 space-y-2.5">
-              {PROHIBITED.map((p, i) => {
-                const Icon = p.icon;
-                return (
-                  <div key={i} className="flex items-start gap-2.5">
-                    <div className="relative w-7 h-7 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-                      <Icon size={15} weight="duotone" className="text-red-400" />
-                    </div>
-                    <div>
-                      <p className="text-[12px] font-semibold text-stone-700 leading-tight">{p.label}</p>
-                      <p className="text-[10.5px] text-stone-400 leading-snug">{p.why}</p>
-                    </div>
+              {PROHIBITED.map((p, i) => (
+                <div key={i} className="flex items-start gap-2.5">
+                  <div className="relative w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
+                    <svg viewBox="0 0 44 44" className="w-7 h-7" aria-hidden>
+                      {ART[p.art]}
+                    </svg>
                   </div>
-                );
-              })}
+                  <div>
+                    <p className="text-[12px] font-semibold text-stone-700 leading-tight">{p.label}</p>
+                    <p className="text-[10.5px] text-stone-400 leading-snug">{p.why}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : (
             <>
@@ -211,8 +305,10 @@ export function RiderRules() {
                     transition={{ duration: 0.3, ease: EASE }}
                     className="flex items-center gap-4"
                   >
-                    <div className="relative w-16 h-16 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center shrink-0">
-                      <CurrentIcon size={32} weight="duotone" className="text-red-400" />
+                    <div className="relative w-[72px] h-[72px] rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center shrink-0">
+                      <svg viewBox="0 0 44 44" className="w-[58px] h-[58px]" aria-hidden>
+                        {ART[current.art]}
+                      </svg>
                       <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
                         <X size={11} weight="bold" className="text-white" />
                       </span>

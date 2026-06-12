@@ -442,6 +442,84 @@ html {
   }
 }
 
+/* Violation pictogram idle motions — each scene quietly acts out its hazard. */
+.viol-wobble {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: viol-wobble 1.5s ease-in-out infinite;
+}
+@keyframes viol-wobble {
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+.viol-drift {
+  animation: viol-drift 1.5s ease-in-out infinite;
+}
+@keyframes viol-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(2.5px);
+  }
+}
+.viol-sway {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: viol-sway 1.9s ease-in-out infinite;
+}
+@keyframes viol-sway {
+  0%,
+  100% {
+    transform: rotate(-3.5deg);
+  }
+  50% {
+    transform: rotate(3.5deg);
+  }
+}
+.viol-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: viol-spin 5s linear infinite;
+}
+@keyframes viol-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.viol-bob {
+  animation: viol-bob 1.3s ease-in-out infinite;
+}
+@keyframes viol-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+.viol-tumble {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: viol-tumble 2.2s ease-in-out infinite;
+}
+@keyframes viol-tumble {
+  0%,
+  100% {
+    transform: rotate(-16deg) translateY(0);
+  }
+  50% {
+    transform: rotate(14deg) translateY(2px);
+  }
+}
+
 /* Cycle progress — a thin bar filling once per showcase rotation (duration
    set inline; remounted per item so it restarts). */
 .cycle-progress {
