@@ -122,10 +122,10 @@ export function ExitLoop() {
             show: { opacity: 1, transition: { duration: 0.5, delay: 0.8 } },
           }}
         >
-          <text x={CX} y={CY - 6} textAnchor="middle" fontSize="12" fontWeight="700" fill="#44403c" fontFamily="system-ui">
+          <text x={CX} y={CY - 7} textAnchor="middle" fontSize="13.5" fontWeight="700" fill="#44403c" fontFamily="system-ui">
             No confirmation,
           </text>
-          <text x={CX} y={CY + 12} textAnchor="middle" fontSize="12" fontWeight="700" fill="#dc2626" fontFamily="system-ui">
+          <text x={CX} y={CY + 13} textAnchor="middle" fontSize="14" fontWeight="800" fill="#dc2626" fontFamily="system-ui">
             no dispatch
           </text>
         </motion.g>
@@ -135,9 +135,9 @@ export function ExitLoop() {
           const p = pos(node.angle);
           const isLeft = node.angle === 180;
           const isRight = node.angle === 0;
-          const labelX = isLeft ? p.x - 22 : isRight ? p.x + 22 : p.x;
+          const labelX = isLeft ? p.x - 28 : isRight ? p.x + 28 : p.x;
           const anchor = isLeft ? "end" : isRight ? "start" : "middle";
-          const labelY = node.angle === -90 ? p.y - 30 : node.angle === 90 ? p.y + 36 : p.y - 2;
+          const labelY = node.angle === -90 ? p.y - 38 : node.angle === 90 ? p.y + 40 : p.y - 4;
           return (
             <motion.g
               key={i}
@@ -145,12 +145,14 @@ export function ExitLoop() {
               custom={i}
               style={{ transformBox: "fill-box", transformOrigin: "center" }}
             >
-              <circle cx={p.x} cy={p.y} r="13" fill="white" stroke={node.color} strokeWidth="2.5" />
-              <circle cx={p.x} cy={p.y} r="5" fill={node.color} />
-              <text x={labelX} y={labelY} textAnchor={anchor} fontSize="12" fontWeight="700" fill="#44403c" fontFamily="system-ui">
+              {/* Soft halo so each station owns its space */}
+              <circle cx={p.x} cy={p.y} r="21" fill={node.color} opacity="0.08" />
+              <circle cx={p.x} cy={p.y} r="14" fill="white" stroke={node.color} strokeWidth="2.5" />
+              <circle cx={p.x} cy={p.y} r="5.5" fill={node.color} />
+              <text x={labelX} y={labelY} textAnchor={anchor} fontSize="13" fontWeight="700" fill="#44403c" fontFamily="system-ui">
                 {node.title}
               </text>
-              <text x={labelX} y={labelY + 15} textAnchor={anchor} fontSize="9.5" fill="#a8a29e" fontFamily="system-ui">
+              <text x={labelX} y={labelY + 16} textAnchor={anchor} fontSize="10.5" fill="#78716c" fontFamily="system-ui">
                 {node.sub}
               </text>
             </motion.g>
@@ -160,7 +162,8 @@ export function ExitLoop() {
         {/* Travelling token */}
         {!reduce && (
           <motion.g style={{ x: tx, y: ty }}>
-            <circle r="7" fill="#0B3A66" stroke="#ffffff" strokeWidth="2" />
+            <circle r="8" fill="#0B3A66" stroke="#ffffff" strokeWidth="2.5" />
+            <circle r="3" fill="#ffffff" opacity="0.85" />
           </motion.g>
         )}
       </svg>
