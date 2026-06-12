@@ -3005,7 +3005,7 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/08-water-testing.jpg",
+            imageSrc: "/lesson-images/08-water-testing-v2.jpg",
             alt: "Gloved hands operating a handheld digital pool water photometer, with a capped vial of pink-tinted sample seated in its chamber",
             aspect: "4:3",
             body: "A poolside test on a digital photometer - the DPD reagent tints the sample pink and the meter reads the chlorine level as a number.",
