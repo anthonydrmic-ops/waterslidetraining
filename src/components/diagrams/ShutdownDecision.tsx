@@ -145,8 +145,8 @@ export function ShutdownDecision() {
               <p className="text-[13px] font-bold text-red-700 leading-tight">
                 Shut down immediately
               </p>
-              <p className="text-[10px] text-red-400 font-medium uppercase tracking-wide mt-0.5">
-                No exceptions &middot; no &quot;monitoring it for a while&quot;
+              <p className="text-[10px] text-red-400 font-medium uppercase tracking-wide mt-0.5 whitespace-nowrap">
+                No exceptions &middot; no &quot;wait and see&quot;
               </p>
             </div>
           </div>
