@@ -773,7 +773,7 @@ export default function LessonPage({
           </motion.div>
           {/* Up next — a peek at the following lesson so momentum carries over */}
           {showUpNext && nextLessonInfo && nextLink && (
-            <motion.div variants={fadeUp} className="mt-14">
+            <motion.div {...inViewReveal} className="mt-14">
               <Link href={nextLink} className="group block">
                 <div
                   className="card-shell"
@@ -818,7 +818,7 @@ export default function LessonPage({
 
           {/* Navigation */}
           <motion.div
-            variants={fadeUp}
+            {...inViewReveal}
             className={`${showUpNext ? "mt-4" : "mt-14"} flex items-center justify-between gap-4`}
           >
             {prevLink ? (

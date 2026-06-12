@@ -5,9 +5,10 @@ import {
   useMotionValue,
   useTransform,
   animate,
+  useInView,
   useReducedMotion,
 } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RiderGlyph } from "./RiderGlyph";
 
 // One shared slide geometry, expressed as two cubic Bézier segments so the
@@ -152,7 +153,7 @@ function Rider({
   );
 }
 
-function Track({ variant }: { variant: "problem" | "solution" }) {
+function Track({ variant, active }: { variant: "problem" | "solution"; active: boolean }) {
   const reduce = useReducedMotion();
   const isProblem = variant === "problem";
   // Static (reduced-motion) snapshots: problem = the collision moment; solution
@@ -163,7 +164,9 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
   const [crashed, setCrashed] = useState(false);
 
   useEffect(() => {
-    if (reduce) return;
+    // Hold the choreography until the learner has scrolled to the diagram,
+    // so the story always plays from the start in front of them.
+    if (reduce || !active) return;
 
     if (isProblem) {
       // Directed sequence with a freeze-frame on impact, looped manually.
@@ -238,7 +241,7 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
       ctrlAOp.stop();
       ctrlB.stop();
     };
-  }, [isProblem, reduce, aProg, bProg, aOpacity]);
+  }, [isProblem, reduce, active, aProg, bProg, aOpacity]);
 
   const showDanger = isProblem && (crashed || !!reduce);
 
@@ -330,8 +333,10 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
 }
 
 export function DispatchCollision() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.25 });
   return (
-    <div className="w-full">
+    <div ref={ref} className="w-full">
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-1 text-center">
         Dispatch Timing - Why the Interval Matters
       </p>
@@ -357,7 +362,7 @@ export function DispatchCollision() {
             </span>
             <p className="text-[12px] font-semibold text-stone-700">Not adjusted for weight or surface</p>
           </div>
-          <Track variant="problem" />
+          <Track variant="problem" active={inView} />
           <p className="text-[11px] text-stone-500 leading-snug mt-1.5">
             Dispatched on a fixed interval, the faster heavy rider runs the slower light rider down and hits them at speed near the bottom of the run.
           </p>
@@ -371,7 +376,7 @@ export function DispatchCollision() {
             </span>
             <p className="text-[12px] font-semibold text-stone-700">Longer gap for a light-then-heavy pairing</p>
           </div>
-          <Track variant="solution" />
+          <Track variant="solution" active={inView} />
           <p className="text-[11px] text-stone-500 leading-snug mt-1.5">
             The heavy rider is held at the platform until the light rider is about to land. They are never on the slide together, and the catch pool is already empty when the heavy rider arrives.
           </p>
