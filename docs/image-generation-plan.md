@@ -127,14 +127,20 @@ Defect macros 2-5 and 11 use the prompts in the macro realism note below.
 > manual, no faces toward camera, no logos.
 
 **8 - `08-water-testing.jpg` - 4:3 - attach image 1:**
+(Modern digital photometer - the Lovibond-style handheld - not the
+old-school visual comparator block. No brand.)
 
-> Same facility as this photo. Close view of gloved hands holding a
-> plastic DPD water-test comparator block with a vial of pink-tinted water
-> sample against the daylight, the catch pool and white flumes softly out
-> of focus in the background, bright clean morning light. Photorealistic,
-> 35mm, shallow depth of field on the comparator, neutral colour grade,
-> editorial documentary style for a safety training manual, no logos or
-> readable text on the kit.
+> Same facility as this photo. Close view of gloved hands operating a
+> compact handheld digital pool water photometer - a small white and blue
+> waterproof meter with a backlit LCD screen and a few rubber buttons,
+> with a round sample chamber on its top holding a small capped glass vial
+> of water tinted faint pink by a dissolved reagent tablet. One hand
+> steadies the meter, the other seats the vial in the chamber. The catch
+> pool and white flumes softly out of focus behind, bright clean morning
+> light. Photorealistic, 35mm, shallow depth of field on the meter,
+> neutral colour grade, editorial documentary style for a safety training
+> manual, no logos, no readable text - the screen shows only a plain
+> number.
 
 **9 - `09-enclosed-flume.jpg` - 16:9 - no reference needed:**
 
