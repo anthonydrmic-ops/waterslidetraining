@@ -3225,11 +3225,20 @@ export const modules: Module[] = [
             body: "Poor water quality manifests as visible and measurable changes to the slide system. Operators who understand these signs can identify water quality issues through routine observation - before they cause incidents.",
           },
           {
-            type: "image",
-            imageSrc: "/lesson-images/05-mineral-scaling-v2.jpg",
-            alt: "Macro photograph of chalky white-grey mineral scale and calcium buildup crusting a blue fibreglass waterslide surface",
-            aspect: "1:1",
-            body: "Chalky white mineral scale crusting the flume surface - a sign of high-LSI water.",
+            type: "image-pair",
+            body: "",
+            pair: [
+              {
+                src: "/lesson-images/32-surface-scaling.jpg",
+                alt: "Chalky white-grey scaling and dull streaking spreading across the surface of a purple fibreglass flume",
+                caption: "Scaling - chalky white mineral deposits and dull streaking on the flume surface, a sign of high-LSI water.",
+              },
+              {
+                src: "/lesson-images/31-frame-corrosion.jpg",
+                alt: "Rust staining and corrosion at the bolted steel joints of a painted waterslide support tower",
+                caption: "Corrosion - rust weeping from the bolted steel joints of the support frame, driven by aggressive low-LSI water and spray.",
+              },
+            ],
           },
           {
             heading: "Scaling",
