@@ -32,6 +32,14 @@ const HELIX = (() => {
   const TURNS = 4;
   const RY = 8; // vertical squash of each loop — the "viewed from above" tilt
   const N = 240;
+  const point = (t: number) => {
+    const th = t * TURNS * Math.PI * 2;
+    return {
+      x: CX + RX * Math.sin(th),
+      y: Y_TOP + DROP * t + RY * Math.cos(th),
+      back: Math.cos(th) < 0,
+    };
+  };
   const front: string[] = [];
   const back: string[] = [];
   let d = "";
@@ -57,25 +65,19 @@ const HELIX = (() => {
     py = y;
   }
   if (d && wasFront !== null) (wasFront ? front : back).push(d);
-  return { front, back };
+  return { front, back, point };
 })();
 
-// Where the inspector stands for each zone — the front crossing of each helix
-// loop, so he visibly climbs the flume itself. Indexed like ZONES; the round
-// visits them bottom-up.
-const STOPS: [number, number][] = [
-  [85, 42],
-  [85, 122],
-  [85, 202],
-  [85, 282],
-  [85, 362],
-];
+// Helix parameter where the inspector stands for each zone — the front
+// crossing of each loop. Indexed like ZONES. Between stops he walks the
+// flume itself, looping once around the column.
+const T_STOPS = [0, 0.25, 0.5, 0.75, 1];
 
 // Inspections run from the catch pool UP - climbing a dry flume is
 // controlled, coming down one never is.
 const ORDER = [4, 3, 2, 1, 0];
 
-const WALK_MS = 950;
+const WALK_MS = 1900;
 const TALK_MS = 2300;
 
 const cardVariant = {
@@ -156,16 +158,20 @@ export function InspectionZones() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.25 });
 
-  const wx = useMotionValue(STOPS[0][0]);
-  const wy = useMotionValue(STOPS[0][1]);
+  const wx = useMotionValue(HELIX.point(T_STOPS[ORDER[0]]).x);
+  const wy = useMotionValue(HELIX.point(T_STOPS[ORDER[0]]).y - 6);
   const wo = useMotionValue(0);
+  const tv = useMotionValue(T_STOPS[ORDER[0]]);
   const [activeZone, setActiveZone] = useState(-1);
   const [talking, setTalking] = useState(false);
   const [approving, setApproving] = useState(false);
+  const [behind, setBehind] = useState(false);
+  const [face, setFace] = useState(1);
 
-  // The inspection round: start at the catch pool, climb the line zone by
-  // zone, pause at each to run its checks (card highlights, bubble talks).
-  // Sign off at the launch platform, fade out, start the round again.
+  // The inspection round: start at the catch pool, climb the flume itself -
+  // looping once around the column between zones - pause at each to run its
+  // checks (card highlights, bubble talks). Sign off at the launch platform,
+  // fade out, start the round again.
   useEffect(() => {
     if (reduce || !inView) return;
     let alive = true;
@@ -175,21 +181,40 @@ export function InspectionZones() {
         timers.push(setTimeout(res, ms));
       });
 
+    // Position derives from the helix parameter: walking animates `tv`, and
+    // this subscription keeps him on the flume, swaps him behind the column
+    // on the far side, and turns him to face the way he's moving.
+    const place = (t: number) => {
+      const p = HELIX.point(t);
+      wx.set(p.x);
+      wy.set(p.y - 6);
+      setBehind(p.back);
+    };
+    let lastX = HELIX.point(tv.get()).x;
+    const unsub = tv.on("change", (t) => {
+      const p = HELIX.point(t);
+      if (p.x > lastX + 0.5) setFace(1);
+      else if (p.x < lastX - 0.5) setFace(-1);
+      lastX = p.x;
+      place(t);
+    });
+
     (async () => {
       await wait(700);
       while (alive) {
-        wx.set(STOPS[ORDER[0]][0]);
-        wy.set(STOPS[ORDER[0]][1]);
+        tv.set(T_STOPS[ORDER[0]]);
+        place(T_STOPS[ORDER[0]]);
+        setFace(1);
         animate(wo, 1, { duration: 0.35 });
         for (let k = 0; k < ORDER.length; k++) {
           const zi = ORDER[k];
           if (k > 0) {
             setTalking(false);
             setActiveZone(-1);
-            animate(wx, STOPS[zi][0], { duration: WALK_MS / 1000, ease: "easeInOut" });
-            animate(wy, STOPS[zi][1], { duration: WALK_MS / 1000, ease: "easeInOut" });
+            animate(tv, T_STOPS[zi], { duration: WALK_MS / 1000, ease: "easeInOut" });
             await wait(WALK_MS);
             if (!alive) return;
+            setFace(1); // turn to the zone card to run its checks
           }
           setActiveZone(zi);
           setTalking(true);
@@ -211,12 +236,13 @@ export function InspectionZones() {
     return () => {
       alive = false;
       timers.forEach(clearTimeout);
-      [wx, wy, wo].forEach((v) => v.stop());
+      unsub();
+      [tv, wx, wy, wo].forEach((v) => v.stop());
       setTalking(false);
       setApproving(false);
       setActiveZone(-1);
     };
-  }, [reduce, inView, wx, wy, wo]);
+  }, [reduce, inView, wx, wy, wo, tv]);
 
   return (
     <motion.div
@@ -231,11 +257,12 @@ export function InspectionZones() {
       <svg viewBox="0 0 700 420" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
         <rect width="700" height="420" rx="12" fill="#fafaf9" />
 
-        {/* The spiral flume — back halves first (muted, behind the column) */}
+        {/* The spiral flume, dry for inspection — back halves first (muted,
+            behind the column) */}
         {HELIX.back.map((d, i) => (
           <g key={i}>
-            <path d={d} stroke="#e2e8f0" strokeWidth="13" strokeLinecap="round" fill="none" />
-            <path d={d} stroke="#f1f5f9" strokeWidth="8" strokeLinecap="round" fill="none" />
+            <path d={d} stroke="#e7e5e4" strokeWidth="13" strokeLinecap="round" fill="none" />
+            <path d={d} stroke="#f5f5f4" strokeWidth="8" strokeLinecap="round" fill="none" />
           </g>
         ))}
 
@@ -243,27 +270,27 @@ export function InspectionZones() {
         <rect x="81.5" y="30" width="7" height="352" rx="3.5" fill="#d6d3d1" />
         <rect x="81.5" y="30" width="3" height="352" rx="1.5" fill="#e7e5e4" />
 
+        {/* The inspector while he's on the far side of the column — drawn
+            under the front loops so the flume occludes him correctly */}
+        {!reduce && (
+          <motion.g
+            style={{ x: wx, y: wy, opacity: wo, visibility: behind ? "visible" : "hidden" }}
+          >
+            <g transform={`scale(${face}, 1) scale(0.82)`} opacity="0.65">
+              <Inspector talking={false} approving={false} />
+            </g>
+          </motion.g>
+        )}
+
         {/* Catch pool */}
         <ellipse cx="85" cy="382" rx="46" ry="11" fill="#bfdbfe" stroke="#93c5fd" strokeWidth="1" />
         {!reduce && <ellipse className="shimmer-fade" cx="85" cy="382" rx="34" ry="7" fill="#ffffff" />}
 
-        {/* Front halves — full colour, water marching down the lane */}
+        {/* Front halves — dry gelcoat, slide off for the walk */}
         {HELIX.front.map((d, i) => (
           <g key={i}>
-            <path d={d} stroke="#93c5fd" strokeWidth="15" strokeLinecap="round" fill="none" />
-            <path d={d} stroke="#dbeafe" strokeWidth="10" strokeLinecap="round" fill="none" />
-            {!reduce && (
-              <path
-                d={d}
-                className="flow-dash"
-                stroke="#60a5fa"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeDasharray="10 16"
-                fill="none"
-                opacity="0.8"
-              />
-            )}
+            <path d={d} stroke="#d6d3d1" strokeWidth="15" strokeLinecap="round" fill="none" />
+            <path d={d} stroke="#ffffff" strokeWidth="10" strokeLinecap="round" fill="none" />
           </g>
         ))}
 
@@ -326,14 +353,22 @@ export function InspectionZones() {
           );
         })}
 
-        {/* The inspector walking the line */}
+        {/* The inspector walking the line (near side of the column) */}
         {reduce ? (
-          <g transform={`translate(${STOPS[ORDER[0]][0]} ${STOPS[ORDER[0]][1]})`}>
+          <g
+            transform={`translate(${HELIX.point(T_STOPS[ORDER[0]]).x} ${
+              HELIX.point(T_STOPS[ORDER[0]]).y - 6
+            })`}
+          >
             <Inspector talking={false} approving={false} />
           </g>
         ) : (
-          <motion.g style={{ x: wx, y: wy, opacity: wo }}>
-            <Inspector talking={talking} approving={approving} />
+          <motion.g
+            style={{ x: wx, y: wy, opacity: wo, visibility: behind ? "hidden" : "visible" }}
+          >
+            <g transform={`scale(${face}, 1)`}>
+              <Inspector talking={talking} approving={approving} />
+            </g>
           </motion.g>
         )}
       </svg>

@@ -1730,6 +1730,7 @@ export const modules: Module[] = [
             imageSrc: "/lesson-images/03-gelcoat-delamination-v2.jpg",
             alt: "Gelcoat peeling away from a fibreglass flume surface, the lifted edge casting a shadow over exposed laminate",
             aspect: "1:1",
+            size: "small",
             heading: "Gelcoat failure up close",
             body: "A lifted, peeling gelcoat edge. Everything beneath it is now exposed to water, chemicals and UV.",
           },
@@ -2689,6 +2690,7 @@ export const modules: Module[] = [
             imageSrc: "/lesson-images/03-gelcoat-delamination-v2.jpg",
             alt: "Macro photograph of glossy white gelcoat flaking and lifting to expose the matte fibreglass layer beneath",
             aspect: "1:1",
+            size: "small",
             body: "Glossy gelcoat lifting and flaking away from the matte fibreglass layer beneath.",
           },
           {

@@ -39,7 +39,7 @@ export function SurfaceDefects() {
     },
     {
       label: "Gelcoat Peeling",
-      status: "Action Req.",
+      status: "Action Required",
       color: "#f97316",
       desc: "Exposed fibreglass, abrasion risk",
       photo: "/lesson-images/severity/peeling.jpg",
@@ -63,15 +63,72 @@ export function SurfaceDefects() {
       <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
         Surface Condition Severity Scale
       </p>
-      <svg viewBox="0 0 700 220" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-        <rect width="700" height="220" rx="12" fill="#fafaf9" />
+      <svg viewBox="0 0 700 572" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+        <rect width="700" height="572" rx="12" fill="#fafaf9" />
 
-        {/* Severity arrow — draws left to right beneath the landing tiles */}
+        {/* 2x2 grid, severity climbing in reading order */}
+        {defects.map((defect, i) => {
+          const x = 22 + (i % 2) * 338;
+          const y = 14 + Math.floor(i / 2) * 262;
+          const isShutDown = defect.status === "Shut Down";
+          return (
+            <motion.g key={i} variants={tileVariant} custom={i}>
+              {/* Real reference photo, severity framed in the state's colour */}
+              <clipPath id={`sev-clip-${i}`}>
+                <rect x={x} y={y} width="320" height="170" rx="10" />
+              </clipPath>
+              <image
+                href={defect.photo}
+                x={x}
+                y={y}
+                width="320"
+                height="170"
+                preserveAspectRatio="xMidYMid slice"
+                clipPath={`url(#sev-clip-${i})`}
+              />
+              <rect x={x} y={y} width="320" height="170" rx="10" fill="none" stroke={defect.color} strokeWidth="1.5" opacity="0.55" />
+              {/* Severity step number on the photo */}
+              <rect x={x + 10} y={y + 10} width="26" height="26" rx="8" fill={defect.color} />
+              <text x={x + 23} y={y + 28} textAnchor="middle" fontSize="14" fontWeight="700" fill="#ffffff" fontFamily="system-ui">
+                {i + 1}
+              </text>
+              {/* Status pill — the Shut Down pill breathes gently so the most
+                  serious state keeps drawing the eye. */}
+              {isShutDown && !reduce ? (
+                <rect
+                  className="breathe"
+                  style={{ animationDelay: "1.2s" }}
+                  x={x + 85}
+                  y={y + 180}
+                  width="150"
+                  height="26"
+                  rx="13"
+                  fill={defect.color}
+                />
+              ) : (
+                <rect x={x + 85} y={y + 180} width="150" height="26" rx="13" fill={defect.color} opacity="0.12" />
+              )}
+              <text x={x + 160} y={y + 197} textAnchor="middle" fontSize="12" fontWeight="600" fill={defect.color} fontFamily="system-ui">
+                {defect.status}
+              </text>
+              {/* Label */}
+              <text x={x + 160} y={y + 227} textAnchor="middle" fontSize="15" fontWeight="700" fill="#44403c" fontFamily="system-ui">
+                {defect.label}
+              </text>
+              {/* Description */}
+              <text x={x + 160} y={y + 246} textAnchor="middle" fontSize="11" fill="#a8a29e" fontFamily="system-ui">
+                {defect.desc}
+              </text>
+            </motion.g>
+          );
+        })}
+
+        {/* Severity arrow — draws left to right beneath the grid */}
         <motion.line
           x1="40"
-          y1="195"
-          x2="660"
-          y2="195"
+          y1="540"
+          x2="652"
+          y2="540"
           stroke="#e7e5e4"
           strokeWidth="2"
           variants={{
@@ -85,11 +142,11 @@ export function SurfaceDefects() {
             show: { opacity: 1, transition: { duration: 0.3, delay: 0.9 } },
           }}
         >
-          <path d="M655 189 L668 195 L655 201" fill="#d6d3d1" />
+          <path d="M647 534 L660 540 L647 546" fill="#d6d3d1" />
         </motion.g>
         <motion.text
           x="350"
-          y="213"
+          y="560"
           textAnchor="middle"
           fontSize="10"
           fill="#a8a29e"
@@ -101,58 +158,8 @@ export function SurfaceDefects() {
             show: { opacity: 1, transition: { duration: 0.4, delay: 0.7 } },
           }}
         >
-          INCREASING SEVERITY
+          1 TO 4 - INCREASING SEVERITY
         </motion.text>
-
-        {defects.map((defect, i) => {
-          const x = 22 + i * 168;
-          const isShutDown = defect.status === "Shut Down";
-          return (
-            <motion.g key={i} variants={tileVariant} custom={i}>
-              {/* Real reference photo, severity framed in the state's colour */}
-              <clipPath id={`sev-clip-${i}`}>
-                <rect x={x} y={10} width="140" height="70" rx="8" />
-              </clipPath>
-              <image
-                href={defect.photo}
-                x={x}
-                y={10}
-                width="140"
-                height="70"
-                preserveAspectRatio="xMidYMid slice"
-                clipPath={`url(#sev-clip-${i})`}
-              />
-              <rect x={x} y={10} width="140" height="70" rx="8" fill="none" stroke={defect.color} strokeWidth="1.5" opacity="0.55" />
-              {/* Status pill — the Shut Down pill breathes gently so the most
-                  serious state keeps drawing the eye. */}
-              {isShutDown && !reduce ? (
-                <rect
-                  className="breathe"
-                  style={{ animationDelay: "1.2s" }}
-                  x={x}
-                  y={90}
-                  width="140"
-                  height="24"
-                  rx="12"
-                  fill={defect.color}
-                />
-              ) : (
-                <rect x={x} y={90} width="140" height="24" rx="12" fill={defect.color} opacity="0.12" />
-              )}
-              <text x={x + 70} y={106} textAnchor="middle" fontSize="11" fontWeight="600" fill={defect.color} fontFamily="system-ui">
-                {defect.status}
-              </text>
-              {/* Label */}
-              <text x={x + 70} y={132} textAnchor="middle" fontSize="13" fontWeight="700" fill="#44403c" fontFamily="system-ui">
-                {defect.label}
-              </text>
-              {/* Description */}
-              <text x={x + 70} y={150} textAnchor="middle" fontSize="10" fill="#a8a29e" fontFamily="system-ui">
-                {defect.desc}
-              </text>
-            </motion.g>
-          );
-        })}
       </svg>
     </motion.div>
   );
