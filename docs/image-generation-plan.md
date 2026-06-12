@@ -122,10 +122,15 @@ documentary record for a safety training manual." Defect cores:
   across the surface, old sealant cracked and discoloured with a short
   section missing, low raking light making the height difference visible,
   thin film of water on the worn glossy surface.
-- `05-mineral-scaling.jpg`: a rough white-grey band of calcium scale a few
-  centimetres wide crusted along the waterline inside a light-blue flume,
-  chalky slightly raised texture with faint yellow staining at the edges,
-  smooth glossy gelcoat above the band, a trickle of water below it.
+- `05-mineral-scaling.jpg`: a band of hard-water calcium scale along the
+  waterline inside a light-blue flume - a thin, patchy, off-white crust
+  like heavy limescale on a kettle or shower screen, gritty like fine
+  sandpaper, brightest where thickest and semi-transparent at its thin
+  edges, faint grey-tan dirt trapped in the deposit, a speckled spray of
+  dried droplet marks above the main band, glossy blue gelcoat showing
+  through where thin, a trickle of water below. Extra negatives: snow,
+  frost, frosting, foam, barnacles, thick raised crust. (Key realism
+  anchor: limescale on a kettle - thin film, never a thick growth.)
 - `11-fastener-corrosion.jpg`: a stainless steel hex bolt on a flume flange
   joint, early brown tea-staining on the bolt head and washer, a thin rust
   weep trail a few centimetres long running down the gelcoat below it,
