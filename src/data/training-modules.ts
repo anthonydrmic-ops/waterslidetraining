@@ -870,6 +870,14 @@ export const modules: Module[] = [
             ],
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/11-fastener-corrosion.jpg",
+            alt: "A flange bolt on a white fibreglass flume with brown tea staining and a rust weep trail running down the gelcoat below it",
+            aspect: "1:1",
+            heading: "What fastener corrosion looks like",
+            body: "Tea staining and a rust weep trail below a flange bolt - exactly what the daily hardware glance is looking for. Report it; corrosion advances fast in a wet chlorinated environment.",
+          },
+          {
             heading: "Structure Inspection",
             type: "checklist",
             body: "Check all structural elements:",

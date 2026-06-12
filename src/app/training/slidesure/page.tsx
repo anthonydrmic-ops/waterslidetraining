@@ -226,7 +226,7 @@ function TrainingPageInner() {
           <motion.div variants={fadeUp} className="mb-14">
             <div className="relative w-full aspect-video rounded-3xl overflow-hidden ring-1 ring-stone-200/60 shadow-[0_20px_50px_rgba(11,58,102,0.12)]">
               <Image
-                src="/lesson-images/00-marketing-hero.jpg"
+                src="/lesson-images/00-marketing-hero-v2.jpg"
                 alt="Two riders on tubes racing down a multi-lane waterslide, colourful intertwined flumes towering behind them against a blue sky"
                 fill
                 preload={true}
