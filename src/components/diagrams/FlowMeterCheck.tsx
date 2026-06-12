@@ -129,10 +129,10 @@ export function FlowMeterCheck() {
           <text x="120" y="277" textAnchor="middle" fontSize="9.5" fill="#a8a29e" fontFamily="system-ui">
             Dry spots · riders stall
           </text>
-          <text x={CX} y="48" textAnchor="middle" fontSize="11" fontWeight="700" fill="#16a34a" fontFamily="system-ui" letterSpacing="0.08em">
+          <text x={CX} y="22" textAnchor="middle" fontSize="11" fontWeight="700" fill="#16a34a" fontFamily="system-ui" letterSpacing="0.08em">
             OEM RANGE
           </text>
-          <text x={CX} y="63" textAnchor="middle" fontSize="9.5" fill="#a8a29e" fontFamily="system-ui">
+          <text x={CX} y="37" textAnchor="middle" fontSize="9.5" fill="#a8a29e" fontFamily="system-ui">
             From the Ride Operations Manual
           </text>
           <text x="580" y="262" textAnchor="middle" fontSize="11" fontWeight="600" fill="#ef4444" fontFamily="system-ui">
