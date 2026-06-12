@@ -312,6 +312,55 @@ html {
   }
 }
 
+/* Water-indicator scan wave — a highlight sweeps down the rainbow stack, each
+   block nudging right and glowing in turn (per-block --glow + staggered delay).
+   CSS keyframes so it runs in production; silenced by reduced-motion. */
+.scan-block {
+  animation: scan-block 4.9s ease-in-out infinite;
+}
+@keyframes scan-block {
+  0%,
+  16%,
+  100% {
+    transform: translateX(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  }
+  6% {
+    transform: translateX(7px);
+    box-shadow: 0 8px 26px var(--glow, rgba(0, 0, 0, 0.12));
+  }
+}
+.scan-bar {
+  animation: scan-bar 4.9s ease-in-out infinite;
+}
+@keyframes scan-bar {
+  0%,
+  16%,
+  100% {
+    opacity: 0.4;
+    transform: scaleY(0.55);
+  }
+  6% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+.scan-dot {
+  animation: scan-dot 4.9s ease-in-out infinite;
+}
+@keyframes scan-dot {
+  0%,
+  16%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--glow, transparent);
+  }
+  6% {
+    transform: scale(1.45);
+    box-shadow: 0 0 10px 1px var(--glow, transparent);
+  }
+}
+
 /* Inspection-tiers probe — a dot stepping down the severity rail, dwelling at
    each tier and deepening in colour. */
 .tier-probe {
