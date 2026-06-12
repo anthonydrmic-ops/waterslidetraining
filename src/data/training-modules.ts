@@ -1051,6 +1051,14 @@ export const modules: Module[] = [
             body: "Operating a slide with incorrect water flow is one of the most dangerous operational errors. Dry spots cause riders to stick, decelerate and become vulnerable to collision from following riders. This is a non-negotiable operational control.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/12-pump-room.jpg",
+            alt: "A clean aquatic-centre plant room with circulation pumps and a sand filter in the centre, chlorine drums bunded on the left wall and acid containers bunded separately on the right wall",
+            aspect: "4:3",
+            heading: "The plant room behind the slide",
+            body: "Pumps and filtration in the centre - and note the chemical storage: chlorine on one wall, acid on the opposite wall, each in its own spill bund. Stored together, those two can mix into chlorine gas.",
+          },
+          {
             heading: "Flow Meters - Reading the System's Pulse",
             type: "text",
             body: "Splash patterns and sound tell you something is wrong - a flow meter tells you exactly what. Permanent slides are typically fitted with a flow meter on the supply line to each flume (common types are paddlewheel, magnetic and clamp-on ultrasonic). The reading is compared against the manufacturer's specified flow range at every opening, and the number is logged. Logging matters: a slow downward drift across days reveals developing problems - a clogging intake, a wearing pump impeller, a partially closed valve - before they become visible to riders.",
