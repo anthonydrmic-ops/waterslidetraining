@@ -135,16 +135,24 @@ export function DispatchFlow() {
                 </div>
               </motion.div>
 
-              {/* Connector — always rendered (hidden on the last step) so every
-                  card reserves the same space and stays identically sized. */}
+              {/* Connector — caret between steps; after the last step, a slowly
+                  rotating loop arrow pointing the cycle back to step 1. */}
               <div className="flex items-center justify-center px-1 sm:py-1 sm:px-0">
-                <CaretRight
-                  size={16}
-                  weight="bold"
-                  className={`rotate-90 sm:rotate-0 transition-colors duration-500 ${
-                    i === STEPS.length - 1 ? "invisible" : ""
-                  } ${isActive ? "text-stone-400" : "text-stone-300"}`}
-                />
+                {i === STEPS.length - 1 ? (
+                  <ArrowsClockwise
+                    size={16}
+                    weight="bold"
+                    className={`text-[#1F7A8C] ${reduce ? "" : "slow-spin"}`}
+                  />
+                ) : (
+                  <CaretRight
+                    size={16}
+                    weight="bold"
+                    className={`rotate-90 sm:rotate-0 transition-colors duration-500 ${
+                      isActive ? "text-stone-400" : "text-stone-300"
+                    }`}
+                  />
+                )}
               </div>
             </div>
           );

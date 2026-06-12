@@ -349,6 +349,15 @@ html {
   }
 }
 
+.slow-spin {
+  animation: slow-spin 6s linear infinite;
+}
+@keyframes slow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .flow-arrow {
   opacity: 0.3;
   animation: flow-arrow-pulse 1.9s ease-out infinite;
