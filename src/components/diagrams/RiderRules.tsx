@@ -21,31 +21,37 @@ const PROHIBITED = [
     icon: PersonSimple,
     label: "Standing up",
     why: "Instant loss of control - falls and head strikes inside a moving flume.",
+    action: "Stop them before dispatch. They sit back down, or they don't ride.",
   },
   {
     icon: ArrowDown,
     label: "Head-first",
     why: "Spinal loading on impact - the position behind the most serious slide injuries.",
+    action: "Reposition feet-first before release. No exceptions on body slides.",
   },
   {
     icon: LinkSimple,
     label: "Linking riders",
     why: "Creates one heavy, unpredictable mass that travels faster and exits wrong.",
+    action: "Separate them at the platform - one rider per dispatch, every time.",
   },
   {
     icon: ArrowsClockwise,
     label: "Deliberate spinning",
     why: "Uncontrolled orientation - riders arrive at bends and the run-out sideways or backwards.",
+    action: "Brief them out of it before dispatch; repeat offenders lose the ride.",
   },
   {
     icon: Baby,
     label: "Child on lap",
     why: "Children come loose mid-ride. Only permitted where the manual explicitly allows it.",
+    action: "Check the ride's manual rules - otherwise the child rides alone or not at all.",
   },
   {
     icon: Package,
     label: "Objects in the flume",
     why: "Loose items become projectiles for the rider behind and obstructions in the flume.",
+    action: "Everything loose stays at the top - glasses, jewellery, cameras, pockets emptied.",
   },
 ];
 
@@ -195,7 +201,7 @@ export function RiderRules() {
             </div>
           ) : (
             <>
-              <div className="relative flex-1 p-5">
+              <div className="relative flex-1 p-5 flex flex-col justify-center">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={idx}
@@ -203,20 +209,26 @@ export function RiderRules() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3, ease: EASE }}
-                    className="flex items-start gap-4"
+                    className="flex items-center gap-4"
                   >
-                    <div className="relative w-14 h-14 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center shrink-0">
-                      <CurrentIcon size={28} weight="duotone" className="text-red-400" />
+                    <div className="relative w-16 h-16 rounded-2xl bg-red-50 border border-red-100 flex items-center justify-center shrink-0">
+                      <CurrentIcon size={32} weight="duotone" className="text-red-400" />
                       <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
                         <X size={11} weight="bold" className="text-white" />
                       </span>
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[15px] font-bold text-stone-800 leading-tight">
+                      <p className="text-[17px] font-bold text-stone-800 leading-tight">
                         {current.label}
                       </p>
-                      <p className="text-[12px] text-stone-500 leading-relaxed mt-1.5">
+                      <p className="text-[12.5px] text-stone-500 leading-relaxed mt-1.5">
                         {current.why}
+                      </p>
+                      <p className="text-[12px] leading-snug mt-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-red-500 mr-1.5">
+                          Your move
+                        </span>
+                        <span className="text-stone-700 font-medium">{current.action}</span>
                       </p>
                     </div>
                   </motion.div>
