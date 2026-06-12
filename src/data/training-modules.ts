@@ -2149,6 +2149,13 @@ export const modules: Module[] = [
             ],
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/14-dispatch-signal.jpg",
+            alt: "A rider in a tube waiting in the flume mouth while a hi-vis attendant with a radio holds the dispatch light on red",
+            aspect: "4:3",
+            body: "Held at red - the rider waits in the flume mouth until the operator confirms the interval and clearance.",
+          },
+          {
             heading: "The Collision Physics",
             type: "text",
             body: "A typical adult travels a waterslide at 20-40 km/h. At those speeds, even a 2-second gap closure results in a significant impact. If a preceding rider slows by 30% due to surface conditions, a rider dispatched at 'standard' timing will close a 15-metre gap in seconds. This is why fixed timing alone is insufficient.",
