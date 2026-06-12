@@ -5,57 +5,48 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
-// Chain geometry — links overlap so they interlock; the energy pulse and the
-// cut nodes derive their positions from the same numbers.
-const CY = 122;
-const LW = 130;
-const LH = 74;
-const STEP = 96;
-const X0 = 92;
+// Chain geometry — links overlap so they interlock; the light pulse and the
+// cut nodes derive their positions from the same numbers. The whole run is
+// centred in the 720-wide canvas with even margins.
+const CY = 132;
+const LW = 150;
+const LH = 94;
+const TUBE = 15;
+const STEP = 116;
+const X0 = 128;
 const cxOf = (i: number) => X0 + i * STEP;
 
 // A single 3D metal chain link: stacked strokes give the rounded-tube look —
-// a coloured body with an inner top highlight and an inner bottom shadow.
-function Ring({
-  cx,
-  color,
-  clipId,
-}: {
-  cx: number;
-  color: string;
-  clipId?: string;
-}) {
+// a coloured body with an inner top highlight and an inner bottom shadow. The
+// interior is left open so the light pulse can shine through it.
+function Ring({ cx, color, clipId }: { cx: number; color: string; clipId?: string }) {
   const x = cx - LW / 2;
   const y = CY - LH / 2;
   const body = (
     <>
-      {/* Coloured tube body */}
-      <rect x={x} y={y} width={LW} height={LH} rx={LH / 2} fill="none" stroke={color} strokeWidth={13} />
-      {/* Inner bottom shadow */}
+      <rect x={x} y={y} width={LW} height={LH} rx={LH / 2} fill="none" stroke={color} strokeWidth={TUBE} />
       <rect
-        x={x + 5}
-        y={y + 7}
-        width={LW - 10}
-        height={LH - 10}
-        rx={(LH - 10) / 2}
+        x={x + 6}
+        y={y + 8}
+        width={LW - 12}
+        height={LH - 12}
+        rx={(LH - 12) / 2}
         fill="none"
         stroke="#000000"
         strokeOpacity={0.17}
-        strokeWidth={3}
+        strokeWidth={3.4}
       />
-      {/* Inner top highlight — the specular line that sells the round metal */}
       <rect
-        x={x + 5}
+        x={x + 6}
         y={y + 3}
-        width={LW - 10}
-        height={LH - 10}
-        rx={(LH - 10) / 2}
+        width={LW - 12}
+        height={LH - 12}
+        rx={(LH - 12) / 2}
         fill="none"
         stroke="#ffffff"
         strokeOpacity={0.55}
-        strokeWidth={3}
+        strokeWidth={3.4}
       />
-      {/* Outer rim light */}
       <rect
         x={x - 1}
         y={y - 1}
@@ -113,8 +104,8 @@ export function IncidentChain() {
 
   const breaks = ["Inspection catches it", "Operator reports it", "Dispatch stopped", "Emergency response"];
 
-  const flowStart = cxOf(0) - LW / 2 - 2;
-  const flowEnd = cxOf(links.length - 1) + LW / 2 + 6;
+  const flowStart = cxOf(0) - LW / 2 - 4;
+  const flowEnd = cxOf(links.length - 1) + LW / 2 + 8;
   const flowSpan = flowEnd - flowStart;
 
   return (
@@ -124,27 +115,48 @@ export function IncidentChain() {
       initial="hidden"
       animate={inView ? "show" : "hidden"}
     >
-      <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
+      <p className="text-[11px] uppercase tracking-widest text-stone-400 font-semibold mb-3 text-center">
         Incident Chain - Every Link is a Chance to Intervene
       </p>
-      <svg viewBox="0 0 720 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-        <rect width="720" height="320" rx="12" fill="#fafaf9" />
+      <svg viewBox="0 0 720 336" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+        <rect width="720" height="336" rx="12" fill="#fafaf9" />
 
         <defs>
-          {/* Threading clips: a band at each joint, lower half, where the under
-              link's near bar is redrawn over the next link to interlock them. */}
           {links.slice(0, -1).map((_, i) => {
             const cx = cxOf(i);
             return (
               <clipPath key={i} id={`thread-${i}`}>
-                <rect x={cx + 31} y={CY + 2} width={34} height={46} />
+                <rect x={cx + LW / 2 - (LW - STEP)} y={CY + 2} width={LW - STEP} height={56} />
               </clipPath>
             );
           })}
+          <radialGradient id="pulse-glow">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="35%" stopColor="#fde68a" />
+            <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
+          </radialGradient>
         </defs>
 
         {/* Soft cast shadow under the whole chain */}
-        <ellipse cx={(cxOf(0) + cxOf(links.length - 1)) / 2} cy={CY + LH / 2 + 10} rx={290} ry={10} fill="#000000" opacity={0.05} />
+        <ellipse cx={(cxOf(0) + cxOf(links.length - 1)) / 2} cy={CY + LH / 2 + 12} rx={320} ry={11} fill="#000000" opacity={0.05} />
+
+        {/* The light running THROUGH the chain — drawn under the links so the
+            metal occludes it and it shines out through each open hole */}
+        {!reduceMotion && (
+          <>
+            {/* faint conduit it rides along */}
+            <line x1={flowStart} y1={CY} x2={flowEnd} y2={CY} stroke="#fcd34d" strokeOpacity="0.18" strokeWidth="3" strokeLinecap="round" />
+            <g transform={`translate(${flowStart} ${CY})`}>
+              <g className="chain-flow" style={{ ["--span" as string]: `${flowSpan}px` } as React.CSSProperties}>
+                <g className="chain-flow-core" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
+                  <circle r={26} fill="url(#pulse-glow)" opacity={0.55} />
+                  <circle r={13} fill="#fef3c7" opacity={0.85} />
+                  <circle r={6} fill="#ffffff" />
+                </g>
+              </g>
+            </g>
+          </>
+        )}
 
         {/* The links — drawn left to right so each interlocks over the last */}
         {links.map((link, i) => {
@@ -157,12 +169,6 @@ export function IncidentChain() {
               style={{ transformBox: "fill-box", transformOrigin: "center" }}
             >
               <Ring cx={cx} color={link.color} />
-              {/* Number, centred in the hole on a small disc */}
-              <circle cx={cx} cy={CY} r={13} fill="#ffffff" />
-              <circle cx={cx} cy={CY} r={13} fill={link.color} opacity={0.14} />
-              <text x={cx} y={CY + 5} textAnchor="middle" fontSize={14} fontWeight={700} fill={link.color} fontFamily="system-ui">
-                {i + 1}
-              </text>
             </motion.g>
           );
         })}
@@ -179,31 +185,18 @@ export function IncidentChain() {
           ))}
         </motion.g>
 
-        {/* The energy pulse running through the chain */}
-        {!reduceMotion && (
-          <g transform={`translate(${flowStart} ${CY})`}>
-            <g className="chain-flow" style={{ ["--span" as string]: `${flowSpan}px` } as React.CSSProperties}>
-              <g className="chain-flow-core" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-                <circle r={15} fill="#fbbf24" opacity={0.3} />
-                <circle r={9} fill="#fde68a" opacity={0.7} />
-                <circle r={4.5} fill="#ffffff" />
-              </g>
-            </g>
-          </g>
-        )}
-
         {/* Discharge spark off the end of the chain */}
         {!reduceMotion && (
           <g className="chain-spark" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
             {[20, 70, 110, 160, 250, 290, 340].map((a) => (
               <line
                 key={a}
-                x1={flowEnd + 6 * Math.cos((a * Math.PI) / 180)}
-                y1={CY + 6 * Math.sin((a * Math.PI) / 180)}
-                x2={flowEnd + 16 * Math.cos((a * Math.PI) / 180)}
-                y2={CY + 16 * Math.sin((a * Math.PI) / 180)}
+                x1={flowEnd + 7 * Math.cos((a * Math.PI) / 180)}
+                y1={CY + 7 * Math.sin((a * Math.PI) / 180)}
+                x2={flowEnd + 18 * Math.cos((a * Math.PI) / 180)}
+                y2={CY + 18 * Math.sin((a * Math.PI) / 180)}
                 stroke="#dc2626"
-                strokeWidth={2.4}
+                strokeWidth={2.6}
                 strokeLinecap="round"
               />
             ))}
@@ -212,7 +205,7 @@ export function IncidentChain() {
 
         {/* Break points — bolt-cutter nodes sitting on each joint */}
         {breaks.map((label, i) => {
-          const x = cxOf(i) + 48;
+          const x = cxOf(i) + STEP / 2;
           const nodeY = CY;
           return (
             <motion.g
@@ -221,35 +214,35 @@ export function IncidentChain() {
               custom={i}
               style={{ transformBox: "fill-box", transformOrigin: "center" }}
             >
-              <line x1={x} y1={nodeY - 22} x2={x} y2={42} stroke="#22c55e" strokeWidth={1.5} strokeDasharray="4 3" />
+              <line x1={x} y1={nodeY - 26} x2={x} y2={48} stroke="#22c55e" strokeWidth={1.5} strokeDasharray="4 3" />
 
-              <rect x={x - 55} y={8} width={110} height={34} rx={8} fill="#f0fdf4" stroke="#bbf7d0" strokeWidth={1} />
-              <text x={x} y={20} textAnchor="middle" fontSize={8} fontWeight={600} fill="#16a34a" fontFamily="system-ui" letterSpacing="0.05em">
+              <rect x={x - 60} y={8} width={120} height={38} rx={9} fill="#f0fdf4" stroke="#bbf7d0" strokeWidth={1} />
+              <text x={x} y={22} textAnchor="middle" fontSize={9} fontWeight={700} fill="#16a34a" fontFamily="system-ui" letterSpacing="0.06em">
                 BREAK THE CHAIN
               </text>
-              <text x={x} y={33} textAnchor="middle" fontSize={9} fill="#16a34a" fontFamily="system-ui">
+              <text x={x} y={37} textAnchor="middle" fontSize={10.5} fill="#16a34a" fontFamily="system-ui">
                 {label}
               </text>
 
               {/* Cut node on the chain */}
-              <circle cx={x} cy={nodeY} r={9} fill="#16a34a" />
-              <circle cx={x} cy={nodeY} r={9} fill="none" stroke="#16a34a" strokeOpacity={0.25} strokeWidth={4} />
+              <circle cx={x} cy={nodeY} r={10} fill="#16a34a" />
+              <circle cx={x} cy={nodeY} r={10} fill="none" stroke="#16a34a" strokeOpacity={0.25} strokeWidth={4} />
               {!reduceMotion && (
                 <circle
                   className="svg-ping"
                   style={{ animationDelay: `${2 + i * 0.6}s` }}
                   cx={x}
                   cy={nodeY}
-                  r={9}
+                  r={10}
                   fill="none"
                   stroke="#16a34a"
                   strokeWidth={2}
                 />
               )}
               <path
-                d={`M${x - 3.4} ${nodeY - 3.4} L${x + 3.4} ${nodeY + 3.4} M${x + 3.4} ${nodeY - 3.4} L${x - 3.4} ${nodeY + 3.4}`}
+                d={`M${x - 3.8} ${nodeY - 3.8} L${x + 3.8} ${nodeY + 3.8} M${x + 3.8} ${nodeY - 3.8} L${x - 3.8} ${nodeY + 3.8}`}
                 stroke="#ffffff"
-                strokeWidth={1.7}
+                strokeWidth={1.9}
                 strokeLinecap="round"
               />
             </motion.g>
@@ -267,11 +260,14 @@ export function IncidentChain() {
                 show: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.5 + i * 0.1, ease: EASE } },
               }}
             >
-              <text x={cx} y={CY + 56} textAnchor="middle" fontSize={12} fontWeight={700} fill="#44403c" fontFamily="system-ui">
-                {link.label}
+              <text x={cx} y={CY + 70} textAnchor="middle" fontSize={14} fontWeight={700} fill="#44403c" fontFamily="system-ui">
+                <tspan fill={link.color} fontWeight={800}>
+                  {i + 1}
+                </tspan>
+                {`  ${link.label}`}
               </text>
-              <foreignObject x={cx - 64} y={CY + 62} width={128} height={40}>
-                <p style={{ fontSize: 9.5, color: "#a8a29e", lineHeight: 1.35, margin: 0, textAlign: "center", fontFamily: "system-ui" }}>
+              <foreignObject x={cx - 70} y={CY + 78} width={140} height={42}>
+                <p style={{ fontSize: 11, color: "#78716c", lineHeight: 1.35, margin: 0, textAlign: "center", fontFamily: "system-ui" }}>
                   {link.desc}
                 </p>
               </foreignObject>
@@ -281,14 +277,14 @@ export function IncidentChain() {
 
         {/* Bottom legend */}
         <motion.g variants={legendVariant}>
-          <rect x="130" y="244" width="460" height="68" rx="14" fill="#f0fdf4" stroke="#bbf7d0" strokeWidth="1" />
-          <text x="360" y="267" textAnchor="middle" fontSize="13" fontWeight="600" fill="#44403c" fontFamily="system-ui">
+          <rect x="120" y="266" width="480" height="62" rx="14" fill="#f0fdf4" stroke="#bbf7d0" strokeWidth="1" />
+          <text x="360" y="289" textAnchor="middle" fontSize="14" fontWeight="700" fill="#44403c" fontFamily="system-ui">
             Your Role: Break the Chain at Every Opportunity
           </text>
-          <text x="360" y="286" textAnchor="middle" fontSize="11" fill="#a8a29e" fontFamily="system-ui">
-            Every inspection, observation, and decision is a chance to prevent an incident
+          <text x="360" y="307" textAnchor="middle" fontSize="11" fill="#78716c" fontFamily="system-ui">
+            Every inspection, observation and decision is a chance to prevent an incident
           </text>
-          <text x="360" y="303" textAnchor="middle" fontSize="10" fill="#22c55e" fontFamily="system-ui" fontWeight="500">
+          <text x="360" y="322" textAnchor="middle" fontSize="10.5" fill="#16a34a" fontFamily="system-ui" fontWeight="600">
             The earlier you break it, the better the outcome
           </text>
         </motion.g>
