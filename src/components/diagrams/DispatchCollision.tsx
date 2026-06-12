@@ -7,7 +7,7 @@ import {
   animate,
   useReducedMotion,
 } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // One shared slide geometry, expressed as two cubic Bézier segments so the
 // riders can be positioned in JS exactly on the drawn path (no DOM measuring).
@@ -47,8 +47,20 @@ function pointAt(t: number): { x: number; y: number } {
   };
 }
 
-const LOOP = 4.6; // seconds per loop
-const COLLISION_PT = pointAt(0.46); // mid, inside the enclosed section
+// Problem track choreography: light rider drops; at light's halfway point the
+// heavy rider launches; they collide 4/5 of the way down - heavy stopping just
+// behind light, never merging - then everything freezes while the danger badge
+// holds, and the loop replays.
+const CRASH_T = 0.8; // where the collision happens
+const CRASH_GAP = 0.034; // heavy stops this far behind (touching, not merged)
+const LIGHT_RUN_MS = 3200; // light rider's time to reach the crash point
+const HEAVY_LAUNCH_MS = 1400; // heavy launches when light is at halfway
+const CRASH_HOLD_MS = 1900; // freeze with the danger badge up
+const RESET_BEAT_MS = 450; // empty-slide beat before the replay
+
+const CRASH_PT = pointAt(CRASH_T);
+
+const LOOP = 4.6; // seconds per solution-track loop
 
 const TEAL = "#1F7A8C";
 const ORANGE = "#F05A28";
@@ -79,55 +91,94 @@ function Rider({
 
 function Track({ variant }: { variant: "problem" | "solution" }) {
   const reduce = useReducedMotion();
+  const isProblem = variant === "problem";
   // Static (reduced-motion) snapshots: problem = the collision moment; solution
   // = light rider nearly landed while the heavy rider is still held at the top.
-  const aProg = useMotionValue(variant === "problem" ? 0.46 : 0.85);
-  const bProg = useMotionValue(variant === "problem" ? 0.46 : 0);
+  const aProg = useMotionValue(isProblem ? CRASH_T : 0.85);
+  const bProg = useMotionValue(isProblem ? CRASH_T - CRASH_GAP : 0);
   const aOpacity = useMotionValue(1);
+  const [crashed, setCrashed] = useState(false);
 
   useEffect(() => {
     if (reduce) return;
-    const isProblem = variant === "problem";
-    // Light rider (both tracks): decelerates through the rough / enclosed mid.
-    // On the solution track its whole run happens in the first ~55% of the
-    // loop, then it climbs out of the pool (fade) and the pool sits empty.
-    const ctrlA = animate(
-      aProg,
-      isProblem ? [0, 0.4, 0.5, 1] : [0, 0.4, 0.5, 1, 1],
-      {
-        duration: LOOP,
-        times: isProblem ? [0, 0.45, 0.62, 1] : [0, 0.25, 0.34, 0.55, 1],
-        repeat: Infinity,
-        ease: "linear",
-      }
-    );
-    const ctrlAOp = isProblem
-      ? null
-      : animate(aOpacity, [1, 1, 0, 0], {
-          duration: LOOP,
-          times: [0, 0.58, 0.68, 1],
-          repeat: Infinity,
-          ease: "linear",
+
+    if (isProblem) {
+      // Directed sequence with a freeze-frame on impact, looped manually.
+      let alive = true;
+      const timers: ReturnType<typeof setTimeout>[] = [];
+      const wait = (ms: number) =>
+        new Promise<void>((res) => {
+          timers.push(setTimeout(res, ms));
         });
-    // Heavy rider. Problem: dispatched on the standard interval, so it catches
-    // the light rider in the blind mid-section. Solution: HELD at the platform
-    // until the light rider is visibly about to land (t=0.5), so the two are
-    // never on the slide together for more than the final landing moment.
-    const bTimes = isProblem ? [0, 0.16, 1] : [0, 0.5, 1];
+
+      (async () => {
+        while (alive) {
+          aProg.set(0);
+          bProg.set(0);
+          setCrashed(false);
+          // Light rider: steady start, decelerating back half (the surface
+          // slows them) - reaches the crash point at LIGHT_RUN_MS.
+          animate(aProg, [0, 0.5, CRASH_T], {
+            duration: LIGHT_RUN_MS / 1000,
+            times: [0, 0.42, 1],
+            ease: "linear",
+          });
+          // Heavy rider: launches once light is halfway, covers the distance
+          // faster, arrives at the same moment - just behind.
+          await wait(HEAVY_LAUNCH_MS);
+          if (!alive) return;
+          animate(bProg, CRASH_T - CRASH_GAP, {
+            duration: (LIGHT_RUN_MS - HEAVY_LAUNCH_MS) / 1000,
+            ease: "linear",
+          });
+          await wait(LIGHT_RUN_MS - HEAVY_LAUNCH_MS);
+          if (!alive) return;
+          // Impact: freeze everything, danger up, hold, then replay.
+          setCrashed(true);
+          await wait(CRASH_HOLD_MS);
+          if (!alive) return;
+          setCrashed(false);
+          await wait(RESET_BEAT_MS);
+        }
+      })();
+
+      return () => {
+        alive = false;
+        timers.forEach(clearTimeout);
+        aProg.stop();
+        bProg.stop();
+      };
+    }
+
+    // Solution track: light rider takes the whole first 62% of the loop (a
+    // touch slower), heavy rider is HELD until light is about to land, then
+    // covers the slide clearly faster - landing in an already-empty pool.
+    const ctrlA = animate(aProg, [0, 0.4, 0.5, 1, 1], {
+      duration: LOOP,
+      times: [0, 0.28, 0.4, 0.62, 1],
+      repeat: Infinity,
+      ease: "linear",
+    });
+    const ctrlAOp = animate(aOpacity, [1, 1, 0, 0], {
+      duration: LOOP,
+      times: [0, 0.64, 0.74, 1],
+      repeat: Infinity,
+      ease: "linear",
+    });
     const ctrlB = animate(bProg, [0, 0, 1], {
       duration: LOOP,
-      times: bTimes,
+      times: [0, 0.55, 1],
       repeat: Infinity,
       ease: "linear",
     });
     return () => {
       ctrlA.stop();
-      ctrlAOp?.stop();
+      ctrlAOp.stop();
       ctrlB.stop();
     };
-  }, [variant, reduce, aProg, bProg, aOpacity]);
+  }, [isProblem, reduce, aProg, bProg, aOpacity]);
 
-  const isProblem = variant === "problem";
+  const showDanger = isProblem && (crashed || !!reduce);
 
   return (
     <svg viewBox="0 0 720 360" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
@@ -157,6 +208,8 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
       <circle cx="60" cy="60" r="6" fill={NAVY} opacity="0.5" />
       <ellipse cx="668" cy="312" rx="30" ry="11" fill={TEAL} opacity="0.18" />
 
+      {/* aOpacity only ever animates on the solution track (pool exit fade);
+          on the problem track it stays at 1, so passing it is always safe */}
       <Rider progress={aProg} color={TEAL} letter="L" opacity={aOpacity} />
       <Rider progress={bProg} color={ORANGE} letter="H" />
 
@@ -164,11 +217,15 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
       {isProblem ? (
         <motion.g
           initial={false}
-          animate={reduce ? { opacity: 1, scale: 1 } : { opacity: [0, 0, 1, 1, 0], scale: [0.6, 0.6, 1.12, 1, 0.95] }}
-          transition={reduce ? undefined : { duration: LOOP, times: [0, 0.5, 0.57, 0.66, 0.74], repeat: Infinity, ease: "easeOut" }}
-          style={{ x: COLLISION_PT.x, y: COLLISION_PT.y }}
+          animate={
+            showDanger
+              ? { opacity: 1, scale: 1 }
+              : { opacity: 0, scale: 0.5 }
+          }
+          transition={{ type: "spring", stiffness: 320, damping: 17 }}
+          style={{ x: CRASH_PT.x, y: CRASH_PT.y }}
         >
-          {/* impact spark — drawn relative to origin so scale pivots on the point */}
+          {/* Impact spark — drawn relative to origin so scale pivots on the point */}
           {[0, 60, 120, 180, 240, 300].map((a) => (
             <line
               key={a}
@@ -181,8 +238,15 @@ function Track({ variant }: { variant: "problem" | "solution" }) {
               strokeLinecap="round"
             />
           ))}
-          <rect x={-52} y={-50} width="104" height="24" rx="12" fill="#dc2626" />
-          <text x={0} y={-34} textAnchor="middle" fontSize="11" fontWeight="700" fill="#ffffff" fontFamily="system-ui">
+          {/* Danger sign */}
+          <g transform="translate(0 -58)">
+            <path d="M0 -16 L17 12 L-17 12 Z" fill="#dc2626" stroke="#ffffff" strokeWidth="2" strokeLinejoin="round" />
+            <text x="0" y="9" textAnchor="middle" fontSize="15" fontWeight="800" fill="#ffffff" fontFamily="system-ui">
+              !
+            </text>
+          </g>
+          <rect x={-52} y={-38} width="104" height="22" rx="11" fill="#dc2626" />
+          <text x={0} y={-23} textAnchor="middle" fontSize="11" fontWeight="700" fill="#ffffff" fontFamily="system-ui">
             COLLISION
           </text>
         </motion.g>
@@ -233,7 +297,7 @@ export function DispatchCollision() {
           </div>
           <Track variant="problem" />
           <p className="text-[11px] text-stone-500 leading-snug mt-1.5">
-            The heavy rider closes the gap and catches the slower light rider inside the blind enclosed section - where neither operator can see it happen.
+            Dispatched on a fixed interval, the faster heavy rider runs the slower light rider down and hits them at speed near the bottom of the run.
           </p>
         </div>
 
