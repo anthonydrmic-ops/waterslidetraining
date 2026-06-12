@@ -127,14 +127,18 @@ export function RiderRules() {
                   </g>
                   {/* Torso / shoulders */}
                   <rect x="-7" y="-8" width="14" height="15" rx="6" fill="#059669" stroke="#065f46" strokeWidth="1.4" />
-                  {/* Forearms crossed over the chest - stacked, as seen from
-                      above. Same body green, dark outline, lower arm first so
-                      the upper arm reads as resting on top of it. */}
+                  {/* Forearms crossed over the chest - two mirror-image bands
+                      stacked evenly, each hand resting at the opposite elbow.
+                      Lower arm drawn first so the upper rests on top. */}
                   <g className={reduce ? undefined : "rider-arms"}>
-                    <path d="M -6 -4.5 Q 0 -1.4 4.5 -1" stroke="#065f46" strokeWidth="5" fill="none" strokeLinecap="round" />
-                    <path d="M -6 -4.5 Q 0 -1.4 4.5 -1" stroke="#059669" strokeWidth="2.8" fill="none" strokeLinecap="round" />
-                    <path d="M 6 -5.5 Q 0 -3.8 -4.5 -3.6" stroke="#065f46" strokeWidth="5" fill="none" strokeLinecap="round" />
-                    <path d="M 6 -5.5 Q 0 -3.8 -4.5 -3.6" stroke="#059669" strokeWidth="2.8" fill="none" strokeLinecap="round" />
+                    {/* Lower forearm: left shoulder -> right side */}
+                    <path d="M -6.2 -4 Q 0 -1.6 5 -1.5" stroke="#065f46" strokeWidth="5" fill="none" strokeLinecap="round" />
+                    <path d="M -6.2 -4 Q 0 -1.6 5 -1.5" stroke="#059669" strokeWidth="2.8" fill="none" strokeLinecap="round" />
+                    <circle cx="5" cy="-1.5" r="2.1" fill="#059669" stroke="#065f46" strokeWidth="1.2" />
+                    {/* Upper forearm: right shoulder -> left side (mirror) */}
+                    <path d="M 6.2 -5.4 Q 0 -3.4 -5 -3.3" stroke="#065f46" strokeWidth="5" fill="none" strokeLinecap="round" />
+                    <path d="M 6.2 -5.4 Q 0 -3.4 -5 -3.3" stroke="#059669" strokeWidth="2.8" fill="none" strokeLinecap="round" />
+                    <circle cx="-5" cy="-3.3" r="2.1" fill="#059669" stroke="#065f46" strokeWidth="1.2" />
                   </g>
                   {/* Head - a gentle bob */}
                   <g className={reduce ? undefined : "rider-head"}>
