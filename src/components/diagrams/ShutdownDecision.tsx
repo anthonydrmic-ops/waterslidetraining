@@ -130,7 +130,7 @@ export function ShutdownDecision() {
           custom={0.5}
           className="rounded-2xl border border-red-200/70 bg-white overflow-hidden h-full flex flex-col"
         >
-          <div className="px-4 py-3 bg-red-50/80 border-b border-red-100 flex items-center gap-3">
+          <div className="px-4 py-3 bg-red-50/80 border-b border-red-100 flex items-center justify-center gap-3">
             <div className="relative w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
               {!reduce && (
                 <span
@@ -173,7 +173,7 @@ export function ShutdownDecision() {
           custom={0.6}
           className="rounded-2xl border border-emerald-200/70 bg-white overflow-hidden h-full flex flex-col"
         >
-          <div className="px-4 py-3 bg-emerald-50/70 border-b border-emerald-100 flex items-center gap-3">
+          <div className="px-4 py-3 bg-emerald-50/70 border-b border-emerald-100 flex items-center justify-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center shrink-0">
               <ClipboardText size={18} weight="duotone" className="text-emerald-600" />
             </div>
