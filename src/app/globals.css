@@ -195,6 +195,28 @@ html {
 }
 
 /* ---------------------------------------------------------------------------
+   Diagram water flow — dashes marching along an SVG path. Plain CSS keyframes
+   (not framer) so they run everywhere; each cycle shifts exactly one dash
+   period, making the loop seamless. Disabled by the reduced-motion block.
+--------------------------------------------------------------------------- */
+.flow-dash {
+  animation: flow-dash 1.1s linear infinite;
+}
+.flow-dash-return {
+  animation: flow-dash-return 0.8s linear infinite;
+}
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+@keyframes flow-dash-return {
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Wrong-answer feedback — a brief horizontal shake on an incorrectly chosen
    quiz option once the answer is submitted. Tactile, reinforces the miss.
 --------------------------------------------------------------------------- */

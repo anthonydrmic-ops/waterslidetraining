@@ -1,7 +1,13 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import {
+  motion,
+  animate,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+} from "framer-motion";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -35,6 +41,44 @@ export function FlowMeterCheck() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.35 });
+
+  // Needle rotation (degrees past START). Rises into the OEM band on scroll,
+  // then jitters randomly inside a small bounded window forever - like a real
+  // analogue gauge reading live flow. No fixed rhythm: each flick picks a
+  // random target, duration and pause.
+  const needle = useMotionValue(0);
+
+  useEffect(() => {
+    const HOME = NEEDLE_HOME - START;
+    if (reduce) {
+      needle.set(HOME);
+      return;
+    }
+    if (!inView) return;
+
+    let alive = true;
+    let timer: ReturnType<typeof setTimeout>;
+    const JITTER = 7; // degrees either side of home the needle may wander
+
+    const flick = () => {
+      if (!alive) return;
+      const target = HOME + (Math.random() * 2 - 1) * JITTER;
+      const duration = 0.3 + Math.random() * 0.5;
+      animate(needle, target, { duration, ease: "easeInOut" });
+      timer = setTimeout(flick, duration * 1000 + Math.random() * 400);
+    };
+
+    // The initial rise: a springy sweep up from zero into the band, then the
+    // random wander begins once it has settled.
+    animate(needle, HOME, { type: "spring", stiffness: 38, damping: 9, delay: 0.4 });
+    timer = setTimeout(flick, 2100);
+
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+      needle.stop();
+    };
+  }, [reduce, inView, needle]);
 
   return (
     <motion.div
@@ -88,22 +132,12 @@ export function FlowMeterCheck() {
           </text>
         </motion.g>
 
-        {/* Needle — sweeps up from the bottom of the dial and settles mid-band */}
+        {/* Needle — sweeps up into the band, then wanders randomly within it */}
         <motion.g
-          style={{ transformBox: "view-box", transformOrigin: `${CX}px ${CY}px` }}
-          variants={{
-            hidden: { rotate: 0 },
-            show: reduce
-              ? { rotate: NEEDLE_HOME - START }
-              : {
-                  rotate: NEEDLE_HOME - START,
-                  transition: {
-                    type: "spring",
-                    stiffness: 38,
-                    damping: 9,
-                    delay: 0.5,
-                  },
-                },
+          style={{
+            rotate: needle,
+            transformBox: "view-box",
+            transformOrigin: `${CX}px ${CY}px`,
           }}
         >
           {(() => {

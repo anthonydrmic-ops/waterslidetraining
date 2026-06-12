@@ -87,9 +87,9 @@ export function SlideCrossSection() {
         />
 
         {/* Flowing water - droplets travelling down the flume in a constant
-            loop. Dash period is 26, and each cycle shifts exactly one period,
-            so the loop is seamless. */}
-        <motion.path
+            seamless loop (CSS keyframes - dash period 26, one period per cycle) */}
+        <path
+          className={reduce ? undefined : "flow-dash"}
           d={FLUME_D}
           stroke="#1F7A8C"
           strokeWidth="10"
@@ -97,13 +97,6 @@ export function SlideCrossSection() {
           fill="none"
           opacity="0.75"
           strokeDasharray="4 22"
-          initial={false}
-          animate={reduce ? undefined : { strokeDashoffset: [0, -26] }}
-          transition={
-            reduce
-              ? undefined
-              : { duration: 1.1, repeat: Infinity, ease: "linear" }
-          }
         />
 
         {/* Water flow arrows — pulse in sequence down the slide, tracing the
@@ -170,7 +163,8 @@ export function SlideCrossSection() {
           fill="none"
         />
         {/* Flowing water - pumped back up the return loop to the launch platform */}
-        <motion.path
+        <path
+          className={reduce ? undefined : "flow-dash-return"}
           d={RETURN_D}
           stroke="#1F7A8C"
           strokeWidth="3"
@@ -178,13 +172,6 @@ export function SlideCrossSection() {
           fill="none"
           opacity="0.65"
           strokeDasharray="3 13"
-          initial={false}
-          animate={reduce ? undefined : { strokeDashoffset: [0, -16] }}
-          transition={
-            reduce
-              ? undefined
-              : { duration: 0.8, repeat: Infinity, ease: "linear" }
-          }
         />
 
         {/* Labels — solid white plates so no line or object ever strikes
