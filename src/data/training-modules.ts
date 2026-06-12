@@ -3117,7 +3117,12 @@ export const modules: Module[] = [
           {
             type: "case-study",
             heading: "Scenario - Water Quality Failure",
-            body: "An aquatic facility experiences multiple visitor illness cases linked to inadequate water treatment in interactive water features. Insufficient chlorination and inadequate monitoring during high-bather-load periods allowed pathogens to reach unsafe levels. Automated chemical monitoring, frequent manual checks during peak periods and proper staff training on water chemistry protocols are the controls that prevent this. For real reporting and requirements in Australia, follow your state health department's public aquatic facility guidelines rather than overseas codes.",
+            body: "An aquatic facility experiences multiple visitor illness cases linked to a water-quality failure in interactive water features. Not every pathogen is stopped by chlorine alone - cryptosporidium, the most common cause of pool-linked illness, forms oocysts that survive for days even in pools held at the correct free-chlorine level. It enters with a faecal accident and spreads when monitoring is thin during high-bather-load periods. The controls that prevent this are layered: automated chemical monitoring, frequent manual checks at peak times, effective filtration and a strict faecal-incident response that closes and hyperchlorinates the water. For real reporting and requirements in Australia, follow your state health department's public aquatic facility guidelines rather than overseas codes.",
+          },
+          {
+            type: "warning",
+            heading: "Real-World Incident - Cryptosporidium in Australian Aquatic Facilities",
+            body: "Between 2013 and 2017, Victoria recorded 70 cryptosporidiosis outbreaks associated with aquatic facilities, totalling 421 confirmed cases, with water parks and interactive water features identified as especially high-risk. Crypto's chlorine resistance is exactly why it keeps recurring: a pool can be reading correct chlorine and still transmit it. The lesson for operators is that disinfection alone is not a guarantee - faecal-incident protocols, filtration and prompt closure are what actually break the chain. (Source: Victorian Department of Health case-control study, published in Communicable Diseases Intelligence.)",
           },
           {
             type: "text",
