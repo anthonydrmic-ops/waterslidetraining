@@ -281,6 +281,3 @@ export function ScenarioThroughput() {
 export function PostIncidentSteps() {
   return <Ladder data={LADDERS["post-incident-steps"]} />;
 }
-export function WindResponse() {
-  return <Ladder data={LADDERS["wind-response"]} />;
-}

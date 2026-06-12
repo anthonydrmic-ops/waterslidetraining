@@ -537,6 +537,45 @@ html {
   }
 }
 
+/* Wind-response weather layer — streaks crossing the panel; speed, count and
+   darkness scale with the active stage; lightning at the top stage. */
+.wind-streak {
+  position: absolute;
+  left: -160px;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  animation: wind-streak linear infinite;
+}
+@keyframes wind-streak {
+  to {
+    transform: translateX(1250px);
+  }
+}
+.storm-flash {
+  animation: storm-flash 3.4s linear infinite;
+  opacity: 0;
+}
+@keyframes storm-flash {
+  0%,
+  80% {
+    opacity: 0;
+  }
+  83% {
+    opacity: 0.65;
+  }
+  85% {
+    opacity: 0.12;
+  }
+  88% {
+    opacity: 0.45;
+  }
+  92%,
+  100% {
+    opacity: 0;
+  }
+}
+
 /* Inspection walker — gentle walk bob + talking dots in the speech bubble. */
 .walk-bob {
   animation: walk-bob 0.55s ease-in-out infinite;

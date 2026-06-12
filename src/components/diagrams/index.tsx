@@ -25,8 +25,8 @@ import {
   ScenarioBlockage,
   ScenarioThroughput,
   PostIncidentSteps,
-  WindResponse,
 } from "./ProtocolLadder";
+import { WindResponse } from "./WindResponse";
 import { CommsProtocol } from "./CommsProtocol";
 import { FlowMeterCheck } from "./FlowMeterCheck";
 import { WeightWindow } from "./WeightWindow";
