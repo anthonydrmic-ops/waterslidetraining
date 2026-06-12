@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
@@ -34,6 +34,7 @@ const SEV_STYLE: Record<Severity, { color: string; bg: string; icon: Icon }> = {
 
 interface Defect {
   icon: Icon;
+  photo: string;
   label: string;
   severity: Severity;
   desc: string;
@@ -44,6 +45,7 @@ interface Defect {
 const DEFECTS: Defect[] = [
   {
     icon: Pulse,
+    photo: "/lesson-images/defect-cards/hairline.jpg",
     label: "Hairline Crack",
     severity: "Monitor",
     desc: "Surface only, no structural risk yet",
@@ -52,6 +54,7 @@ const DEFECTS: Defect[] = [
   },
   {
     icon: Lightning,
+    photo: "/lesson-images/defect-cards/structural.jpg",
     label: "Structural Crack",
     severity: "Shut Down",
     desc: "Through-wall, water may penetrate",
@@ -60,6 +63,7 @@ const DEFECTS: Defect[] = [
   },
   {
     icon: StackSimple,
+    photo: "/lesson-images/defect-cards/delamination.jpg",
     label: "Delamination",
     severity: "Action Required",
     desc: "Layers separating, tap to detect",
@@ -68,6 +72,7 @@ const DEFECTS: Defect[] = [
   },
   {
     icon: ArrowsOutLineHorizontal,
+    photo: "/lesson-images/defect-cards/joint.jpg",
     label: "Joint Lip / Gap",
     severity: "Shut Down",
     desc: "Misalignment at flume joints",
@@ -76,6 +81,7 @@ const DEFECTS: Defect[] = [
   },
   {
     icon: Drop,
+    photo: "/lesson-images/defect-cards/discolouration.jpg",
     label: "Discolouration",
     severity: "Monitor",
     desc: "Chemical exposure or UV damage",
@@ -84,6 +90,7 @@ const DEFECTS: Defect[] = [
   },
   {
     icon: Target,
+    photo: "/lesson-images/defect-cards/puncture.jpg",
     label: "Puncture",
     severity: "Shut Down",
     desc: "Through-wall hole, water ingress",
@@ -93,7 +100,7 @@ const DEFECTS: Defect[] = [
 ];
 
 export function DefectRecognition() {
-  // Explicit in-view trigger — see IncidentChain for why inherited whileInView
+  // Explicit in-view trigger â€” see IncidentChain for why inherited whileInView
   // is unreliable inside the lesson page's animation context.
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.2 });
@@ -136,6 +143,16 @@ export function DefectRecognition() {
                 <p className="text-[13px] font-bold text-stone-800 leading-tight flex-1">
                   {d.label}
                 </p>
+              </div>
+
+              {/* The defect itself — real reference photo */}
+              <div className="h-28 overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={d.photo}
+                  alt={`${d.label} on a waterslide flume`}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.04]"
+                />
               </div>
 
               <div className="p-3.5">
