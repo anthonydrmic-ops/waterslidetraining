@@ -6,6 +6,7 @@ import {
   animate,
   useInView,
   useMotionValue,
+  useTransform,
   useReducedMotion,
 } from "framer-motion";
 
@@ -42,11 +43,21 @@ export function FlowMeterCheck() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.35 });
 
-  // Needle rotation (degrees past START). Rises into the OEM band on scroll,
+  // Needle angle in degrees past START. Rises into the OEM band on scroll,
   // then jitters randomly inside a small bounded window forever - like a real
-  // analogue gauge reading live flow. No fixed rhythm: each flick picks a
-  // random target, duration and pause.
+  // analogue gauge reading live flow. The needle is drawn as a line from the
+  // fixed hub to a tip whose coordinates are computed from this angle, so the
+  // base physically cannot leave the pivot.
   const needle = useMotionValue(0);
+  const NEEDLE_LEN = R - 28;
+  const tipX = useTransform(
+    needle,
+    (deg) => CX + NEEDLE_LEN * Math.cos(((START + deg) * Math.PI) / 180)
+  );
+  const tipY = useTransform(
+    needle,
+    (deg) => CY + NEEDLE_LEN * Math.sin(((START + deg) * Math.PI) / 180)
+  );
 
   useEffect(() => {
     const HOME = NEEDLE_HOME - START;
@@ -132,29 +143,17 @@ export function FlowMeterCheck() {
           </text>
         </motion.g>
 
-        {/* Needle — sweeps up into the band, then wanders randomly within it */}
-        <motion.g
-          style={{
-            rotate: needle,
-            transformBox: "view-box",
-            transformOrigin: `${CX}px ${CY}px`,
-          }}
-        >
-          {(() => {
-            const tip = arcPoint(START, R - 28);
-            return (
-              <line
-                x1={CX}
-                y1={CY}
-                x2={tip.x}
-                y2={tip.y}
-                stroke="#0B3A66"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-            );
-          })()}
-        </motion.g>
+        {/* Needle — base pinned to the hub, tip position computed from the
+            angle, so it pivots exactly like an odometer needle */}
+        <motion.line
+          x1={CX}
+          y1={CY}
+          x2={tipX}
+          y2={tipY}
+          stroke="#0B3A66"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
         <circle cx={CX} cy={CY} r="10" fill="#0B3A66" />
         <circle cx={CX} cy={CY} r="4" fill="#ffffff" />
 

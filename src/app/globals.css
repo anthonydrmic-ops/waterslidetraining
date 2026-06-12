@@ -215,6 +215,24 @@ html {
     stroke-dashoffset: -16;
   }
 }
+.flow-arrow {
+  opacity: 0.3;
+  animation: flow-arrow-pulse 1.9s ease-out infinite;
+}
+@keyframes flow-arrow-pulse {
+  0% {
+    opacity: 0.3;
+  }
+  14% {
+    opacity: 0.95;
+  }
+  38% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0.3;
+  }
+}
 
 /* ---------------------------------------------------------------------------
    Wrong-answer feedback — a brief horizontal shake on an incorrectly chosen

@@ -6,13 +6,37 @@ const FLUME_D =
   "M100 100 C130 100, 150 120, 202 210 C240 280, 300 300, 352 305 C395 308, 440 318, 502 338 C540 348, 590 352, 640 355";
 const RETURN_D = "M722 418 L722 455 L80 455 L80 85";
 
-// Flow arrows along the flume: position + rotation following the descent.
-const FLOW_ARROWS = [
-  { x: 140, y: 112, angle: 18 },
-  { x: 243, y: 250, angle: 48 },
-  { x: 400, y: 314, angle: 10 },
-  { x: 560, y: 350, angle: 6 },
+// The flume path's four cubic segments, so arrow positions and angles can be
+// computed exactly ON the curve instead of hand-placed.
+type Pt = [number, number];
+const FLUME_SEGS: [Pt, Pt, Pt, Pt][] = [
+  [[100, 100], [130, 100], [150, 120], [202, 210]],
+  [[202, 210], [240, 280], [300, 300], [352, 305]],
+  [[352, 305], [395, 308], [440, 318], [502, 338]],
+  [[502, 338], [540, 348], [590, 352], [640, 355]],
 ];
+
+function bezAt(seg: [Pt, Pt, Pt, Pt], u: number) {
+  const m = 1 - u;
+  const c = (i: 0 | 1) =>
+    m * m * m * seg[0][i] + 3 * m * m * u * seg[1][i] + 3 * m * u * u * seg[2][i] + u * u * u * seg[3][i];
+  // Derivative for the tangent (direction of travel)
+  const d = (i: 0 | 1) =>
+    3 * m * m * (seg[1][i] - seg[0][i]) + 6 * m * u * (seg[2][i] - seg[1][i]) + 3 * u * u * (seg[3][i] - seg[2][i]);
+  return { x: c(0), y: c(1), angle: (Math.atan2(d(1), d(0)) * 180) / Math.PI };
+}
+
+// Flow arrows: evenly spread down the descent, each sitting exactly on the
+// path centreline and rotated to its local slope.
+const FLOW_ARROWS = [
+  { seg: 0, u: 0.35 },
+  { seg: 0, u: 0.8 },
+  { seg: 1, u: 0.4 },
+  { seg: 1, u: 0.8 },
+  { seg: 2, u: 0.45 },
+  { seg: 2, u: 0.9 },
+  { seg: 3, u: 0.55 },
+].map(({ seg, u }) => bezAt(FLUME_SEGS[seg], u));
 
 export function SlideCrossSection() {
   const reduce = useReducedMotion();
@@ -99,27 +123,17 @@ export function SlideCrossSection() {
           strokeDasharray="4 22"
         />
 
-        {/* Water flow arrows — pulse in sequence down the slide, tracing the
-            direction of travel over and over */}
+        {/* Water flow arrows — sitting exactly on the flume centreline, pulsing
+            in sequence down the descent (CSS keyframes, staggered delays) */}
         {FLOW_ARROWS.map((a, i) => (
-          <motion.path
+          <path
             key={i}
-            d="M-9 -8 L9 0 L-9 8 L-4 0 Z"
-            fill="#1F7A8C"
+            className={reduce ? undefined : "flow-arrow"}
+            d="M-8 -7 L9 0 L-8 7 L-3.5 0 Z"
+            fill="#ffffff"
+            opacity={reduce ? 0.85 : undefined}
             transform={`translate(${a.x} ${a.y}) rotate(${a.angle})`}
-            initial={false}
-            animate={reduce ? { opacity: 0.4 } : { opacity: [0.18, 0.85, 0.18] }}
-            transition={
-              reduce
-                ? undefined
-                : {
-                    duration: 2,
-                    times: [0, 0.25, 1],
-                    repeat: Infinity,
-                    ease: "easeOut",
-                    delay: i * 0.4,
-                  }
-            }
+            style={reduce ? undefined : { animationDelay: `${i * 0.26}s` }}
           />
         ))}
 
