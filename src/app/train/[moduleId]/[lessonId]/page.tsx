@@ -1165,7 +1165,7 @@ function SectionRenderer({
             <WarningOctagon size={15} weight="fill" className="text-red-600" />
           </div>
           <div>
-            <p className="text-sm text-red-900/80 leading-relaxed font-medium break-words">
+            <p className="text-sm text-red-900/80 leading-relaxed font-medium break-words [text-wrap:balance]">
               {section.body}
             </p>
             {section.source && (

@@ -1357,7 +1357,7 @@ export const modules: Module[] = [
           },
           {
             type: "critical",
-            body: "The following conditions require immediate shutdown - no exceptions, no 'monitoring it for a while':",
+            body: "These conditions require immediate shutdown - no exceptions, no 'monitoring it for a while':",
           },
           {
             type: "checklist",
