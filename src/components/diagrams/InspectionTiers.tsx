@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { CalendarCheck, CalendarBlank, UserGear, Detective } from "@phosphor-icons/react";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
@@ -51,6 +51,7 @@ const rowVariant = {
 };
 
 export function InspectionTiers() {
+  const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.25 });
 
@@ -76,7 +77,10 @@ export function InspectionTiers() {
           style={{
             background: "linear-gradient(180deg, #22c55e, #eab308, #f97316, #ef4444)",
           }}
-        />
+        >
+          {/* Probe dot stepping down the tiers - inspection going deeper */}
+          {!reduce && <span className="tier-probe" aria-hidden />}
+        </motion.div>
         <div className="space-y-2.5">
           {TIERS.map((tier, i) => {
             const Icon = tier.icon;
