@@ -162,7 +162,6 @@ export function ExitLoop() {
   const ry = useMotionValue(HELIX.point(0).y - 4);
   const ro = useMotionValue(0);
   const [behind, setBehind] = useState(false);
-  const [face, setFace] = useState(1);
 
   useEffect(() => {
     if (reduce || !inView) return;
@@ -174,21 +173,14 @@ export function ExitLoop() {
       });
 
     // Rider position derives from the helix parameter - behind the column on
-    // the far side, facing the direction of travel.
+    // the far side.
     const place = (t: number) => {
       const p = HELIX.point(t);
       rx.set(p.x);
       ry.set(p.y - 4);
       setBehind(p.back);
     };
-    let lastX = HELIX.point(rv.get()).x;
-    const unsub = rv.on("change", (t) => {
-      const p = HELIX.point(t);
-      if (p.x > lastX + 0.5) setFace(1);
-      else if (p.x < lastX - 0.5) setFace(-1);
-      lastX = p.x;
-      place(t);
-    });
+    const unsub = rv.on("change", place);
 
     (async () => {
       await wait(800);
@@ -197,7 +189,6 @@ export function ExitLoop() {
         setPhase(0);
         rv.set(0);
         place(0);
-        setFace(1);
         animate(ro, 1, { duration: 0.45, delay: 0.2 });
         await wait(DISPATCH_MS);
         if (!alive) return;
