@@ -10,7 +10,8 @@ export async function GET() {
 
   const supabase = getSupabaseAdmin();
   if (!supabase) {
-    return NextResponse.json({ licensed: true });
+    // Can't verify entitlement without the database — report not licensed.
+    return NextResponse.json({ licensed: false });
   }
 
   const { data: user } = await supabase

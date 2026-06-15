@@ -96,6 +96,9 @@ function TrainingPageInner() {
   const [selectedTier, setSelectedTier] = useState("team");
   const [loading, setLoading] = useState(false);
   const [licensed, setLicensed] = useState<boolean | null>(null);
+  const [promo, setPromo] = useState("");
+  const [promoMsg, setPromoMsg] = useState<string | null>(null);
+  const [promoLoading, setPromoLoading] = useState(false);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -143,6 +146,34 @@ function TrainingPageInner() {
       alert("Payment system is being configured. Check back soon.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRedeem = async () => {
+    if (!isSignedIn) {
+      router.push("/sign-in?redirect_url=/training/slidesure");
+      return;
+    }
+    const code = promo.trim();
+    if (!code) return;
+    setPromoLoading(true);
+    setPromoMsg(null);
+    try {
+      const res = await fetch("/api/redeem", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        router.push("/train");
+      } else {
+        setPromoMsg(data.error || "That code isn't valid");
+      }
+    } catch {
+      setPromoMsg("Something went wrong. Please try again.");
+    } finally {
+      setPromoLoading(false);
     }
   };
 
@@ -413,34 +444,44 @@ function TrainingPageInner() {
                   </a>
                 </p>
               </motion.div>
+
+              {/* Promo code redemption */}
+              <motion.div variants={fadeUp} className="mt-10 max-w-sm mx-auto text-center">
+                <p className="text-[11px] font-medium text-stone-400 mb-2.5">
+                  Have a promo code?
+                </p>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={promo}
+                    onChange={(e) => {
+                      setPromo(e.target.value);
+                      setPromoMsg(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleRedeem();
+                    }}
+                    placeholder="Enter code"
+                    className="flex-1 px-4 py-2.5 rounded-full border border-stone-200 bg-white text-sm text-stone-700 placeholder:text-stone-300 outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/15 transition-all duration-300"
+                  />
+                  <button
+                    onClick={handleRedeem}
+                    disabled={promoLoading || !promo.trim()}
+                    className="px-5 py-2.5 rounded-full bg-stone-900 text-white text-sm font-medium hover:bg-stone-700 active:scale-[0.97] transition-all duration-300 disabled:opacity-40 shrink-0"
+                  >
+                    {promoLoading ? "..." : "Redeem"}
+                  </button>
+                </div>
+                {promoMsg && (
+                  <p className="text-[11px] text-red-500 mt-2">{promoMsg}</p>
+                )}
+              </motion.div>
             </>
           )}
 
         </motion.div>
       </div>
 
-      {/* Dev skip button */}
-      <Link
-        href="/train?dev=true"
-        style={{
-          position: "fixed",
-          bottom: "1rem",
-          right: "1rem",
-          padding: "0.4rem 0.8rem",
-          fontSize: "0.65rem",
-          fontWeight: 500,
-          color: "rgba(107, 114, 128, 0.4)",
-          background: "transparent",
-          border: "1px solid rgba(107, 114, 128, 0.15)",
-          borderRadius: "6px",
-          letterSpacing: "0.05em",
-          transition: "all 0.3s ease",
-          zIndex: 50,
-          textDecoration: "none",
-        }}
-      >
-        Dev
-      </Link>
     </div>
   );
 }
