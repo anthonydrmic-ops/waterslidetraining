@@ -210,7 +210,7 @@ function Ladder({ data }: { data: LadderData }) {
       initial="hidden"
       animate={inView ? "show" : "hidden"}
     >
-      <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-4 text-center">
+      <p className="text-[11px] uppercase tracking-widest text-stone-400 font-semibold mb-4 text-center">
         {data.title}
       </p>
       <div className="relative">
@@ -220,16 +220,27 @@ function Ladder({ data }: { data: LadderData }) {
             hidden: { scaleY: 0 },
             show: { scaleY: 1, transition: { duration: 0.9, ease: EASE } },
           }}
-          className="absolute left-[15px] top-4 bottom-4 w-px bg-stone-200 origin-top"
+          className="absolute left-[18px] top-5 bottom-5 w-[2px] bg-stone-200 origin-top"
         />
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {data.steps.map((step, i) => {
             const color = TONE_COLOR[step.tone];
+            // Scan wave lights each step in sequence, top to bottom, so the eye
+            // reads them in order. One pass per ~4.9s loop (shared scan CSS).
+            const delay = `${(i * (4.9 / data.steps.length)).toFixed(2)}s`;
             return (
               <motion.div key={i} variants={stepVariant} custom={i} className="flex items-start gap-3">
                 <div
-                  className="relative z-10 w-8 h-8 rounded-full bg-white border-2 flex items-center justify-center shrink-0 text-[11px] font-bold"
-                  style={{ borderColor: color, color }}
+                  className={`relative z-10 w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-[13px] font-bold text-white ${
+                    reduce ? "" : "scan-dot"
+                  }`}
+                  style={
+                    {
+                      background: color,
+                      ["--glow"]: color,
+                      animationDelay: reduce ? undefined : delay,
+                    } as React.CSSProperties
+                  }
                 >
                   {step.tone === "danger" && !reduce && (
                     <span
@@ -241,13 +252,19 @@ function Ladder({ data }: { data: LadderData }) {
                   {i + 1}
                 </div>
                 <div
-                  className="flex-1 rounded-2xl border bg-white px-3.5 py-3"
-                  style={{ borderColor: `${color}30` }}
+                  className={`flex-1 rounded-2xl border bg-white px-4 py-3 ${reduce ? "" : "scan-block"}`}
+                  style={
+                    {
+                      borderColor: `${color}33`,
+                      ["--glow"]: `${color}44`,
+                      animationDelay: reduce ? undefined : delay,
+                    } as React.CSSProperties
+                  }
                 >
-                  <p className="text-[12.5px] font-bold leading-tight" style={{ color }}>
+                  <p className="text-[14px] font-bold leading-tight" style={{ color }}>
                     {step.label}
                   </p>
-                  <p className="text-[11px] text-stone-500 leading-snug mt-0.5">{step.detail}</p>
+                  <p className="text-[12px] text-stone-600 leading-snug mt-1">{step.detail}</p>
                 </div>
               </motion.div>
             );

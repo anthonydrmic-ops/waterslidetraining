@@ -126,10 +126,20 @@ function Rider({
   const y = useTransform([progress, exit], ([p, e]: number[]) => pointAt(p).y - 6 + e * (EXIT.y - LAND.y));
   // Tilt along the slope while descending; level out once in the pool.
   const rotate = useTransform([progress, exit], ([p, e]: number[]) => (e > 0.02 ? 0 : angleAt(p)));
+  // Crossfade from the lying ride pose to a standing walk as the rider climbs
+  // out of the pool toward the steps. Riders who never exit keep e at 0, so
+  // they stay in the ride pose.
+  const lyingOpacity = useTransform(exit, [0, 0.12], [1, 0]);
+  const standOpacity = useTransform(exit, [0.05, 0.2], [0, 1]);
+  // Lift the standing figure so its feet sit on the deck, not at slide centre.
+  const standY = useTransform(standOpacity, [0, 1], [0, -8]);
   return (
     <motion.g style={{ x, y, opacity }}>
-      <motion.g style={{ rotate }}>
+      <motion.g style={{ rotate, opacity: lyingOpacity }}>
         <RiderGlyph color={color} animated />
+      </motion.g>
+      <motion.g style={{ opacity: standOpacity, y: standY }}>
+        <StandingRider color={color} />
       </motion.g>
       <text
         y={-16}
@@ -145,6 +155,30 @@ function Rider({
         {letter}
       </text>
     </motion.g>
+  );
+}
+
+// An upright person mid-stride, for a rider walking out of the pool. White
+// underlay keeps it legible on the deck; the gentle bob comes from CSS.
+function StandingRider({ color }: { color: string }) {
+  return (
+    <g className="walk-bob" aria-hidden>
+      {/* White underlay for contrast */}
+      <g stroke="#ffffff" strokeWidth="4.4" strokeLinecap="round" fill="none">
+        <path d="M -1.5 2 L -4 12" />
+        <path d="M 1.5 2 L 5 10.5" />
+      </g>
+      {/* Back leg and forward (striding) leg */}
+      <path d="M -1.5 2 L -4 12" stroke={color} strokeWidth="2.6" strokeLinecap="round" fill="none" />
+      <path d="M 1.5 2 L 5 10.5" stroke={color} strokeWidth="2.6" strokeLinecap="round" fill="none" />
+      {/* Torso */}
+      <rect x="-3.4" y="-9" width="6.8" height="11.5" rx="3.2" fill={color} />
+      {/* Swinging arm */}
+      <path d="M 1 -6 L 5.4 -2.2" stroke={color} strokeWidth="2.4" strokeLinecap="round" fill="none" />
+      {/* Head under a coloured swim cap */}
+      <circle cx="0" cy="-13" r="3.5" fill="#e7b98a" />
+      <path d="M -3.5 -13.6 A 3.5 3.5 0 0 1 3.5 -13.6 Z" fill={color} />
+    </g>
   );
 }
 
