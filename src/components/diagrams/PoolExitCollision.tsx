@@ -158,24 +158,28 @@ function Rider({
   );
 }
 
-// An upright person mid-stride, for a rider walking out of the pool. White
-// underlay keeps it legible on the deck; the gentle bob comes from CSS.
+// An upright person mid-stride, for a rider walking out of the pool. Built
+// from the SAME vocabulary as RiderGlyph - white underlay, colour-stroke
+// limbs at the same weights, skin head under a coloured swim cap - so it
+// reads as the same rider now standing rather than a different figure.
 function StandingRider({ color }: { color: string }) {
   return (
     <g className="walk-bob" aria-hidden>
-      {/* White underlay for contrast */}
-      <g stroke="#ffffff" strokeWidth="4.4" strokeLinecap="round" fill="none">
-        <path d="M -1.5 2 L -4 12" />
-        <path d="M 1.5 2 L 5 10.5" />
+      {/* White underlay for contrast (matches RiderGlyph) */}
+      <g stroke="#ffffff" strokeLinecap="round" fill="none">
+        <path d="M 0 -9 L 0 2" strokeWidth="7.4" />
+        <path d="M 0 2 L -3.5 12" strokeWidth="5" />
+        <path d="M 0 2 L 4 11" strokeWidth="5" />
       </g>
-      {/* Back leg and forward (striding) leg */}
-      <path d="M -1.5 2 L -4 12" stroke={color} strokeWidth="2.6" strokeLinecap="round" fill="none" />
-      <path d="M 1.5 2 L 5 10.5" stroke={color} strokeWidth="2.6" strokeLinecap="round" fill="none" />
-      {/* Torso */}
-      <rect x="-3.4" y="-9" width="6.8" height="11.5" rx="3.2" fill={color} />
-      {/* Swinging arm */}
-      <path d="M 1 -6 L 5.4 -2.2" stroke={color} strokeWidth="2.4" strokeLinecap="round" fill="none" />
-      {/* Head under a coloured swim cap */}
+      <circle cx="0" cy="-13" r="4.6" fill="#ffffff" />
+      {/* Legs - one striding forward, same weights as the rider's legs */}
+      <path d="M 0 2 L -3.5 12" stroke={color} strokeWidth="3.4" strokeLinecap="round" fill="none" />
+      <path d="M 0 2 L 4 11" stroke={color} strokeWidth="2.8" strokeLinecap="round" fill="none" />
+      {/* Torso - thick stroke like the rider's reclined torso */}
+      <path d="M 0 -9 L 0 2" stroke={color} strokeWidth="5" strokeLinecap="round" fill="none" />
+      {/* Arm swinging forward */}
+      <path d="M 0 -6 L 4.4 -1.6" stroke={color} strokeWidth="2.6" strokeLinecap="round" fill="none" />
+      {/* Head - skin tone under a coloured swim cap (identical to RiderGlyph) */}
       <circle cx="0" cy="-13" r="3.5" fill="#e7b98a" />
       <path d="M -3.5 -13.6 A 3.5 3.5 0 0 1 3.5 -13.6 Z" fill={color} />
     </g>

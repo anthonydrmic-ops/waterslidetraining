@@ -15,7 +15,7 @@ const LEVELS = [
     when: "Minor injury, operational issue",
     actions: ["Stop dispatch", "Clear the area", "Basic first aid"],
     color: "#16a34a",
-    w: 684,
+    w: 700,
   },
   {
     n: 2,
@@ -23,7 +23,7 @@ const LEVELS = [
     when: "Significant injury, mechanical failure",
     actions: ["Assess severity", "Coordinate team", "Contact management"],
     color: "#ca8a04",
-    w: 588,
+    w: 604,
   },
   {
     n: 3,
@@ -31,7 +31,7 @@ const LEVELS = [
     when: "Serious injury, structural failure",
     actions: ["Facility shutdown", "External notification", "Investigation"],
     color: "#ea580c",
-    w: 492,
+    w: 508,
   },
   {
     n: 4,
@@ -39,14 +39,14 @@ const LEVELS = [
     when: "Life-threatening, spinal, drowning",
     actions: ["Call 000", "Secure scene", "Preserve evidence"],
     color: "#dc2626",
-    w: 396,
+    w: 412,
   },
 ];
 
 const CX = 360;
-const TIER_H = 78;
-const GAP = 16;
-const Y0 = 28;
+const TIER_H = 86;
+const GAP = 18;
+const Y0 = 30;
 const tierY = (i: number) => Y0 + i * (TIER_H + GAP);
 const neckY = (i: number) => tierY(i) + TIER_H + GAP / 2; // gap between tier i and i+1
 
@@ -78,7 +78,7 @@ const tierVariant = {
 
 // Approximate an SVG chip's width from its text length (no auto-sizing in SVG).
 function chipWidth(text: string) {
-  return text.length * 5.4 + 20;
+  return text.length * 5.9 + 22;
 }
 
 const NECK_NOTE = ["Most close here", "Fewer escalate", "Only the most serious"];
@@ -88,7 +88,7 @@ export function EmergencyResponse() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.25 });
 
-  const totalH = tierY(LEVELS.length - 1) + TIER_H + 28;
+  const totalH = tierY(LEVELS.length - 1) + TIER_H + 30;
 
   return (
     <motion.div
@@ -97,7 +97,7 @@ export function EmergencyResponse() {
       initial="hidden"
       animate={inView ? "show" : "hidden"}
     >
-      <p className="text-[11px] uppercase tracking-widest text-stone-400 font-semibold mb-3 text-center">
+      <p className="text-[11.5px] uppercase tracking-widest text-stone-400 font-semibold mb-3 text-center">
         Emergency Escalation - The Funnel Narrows By Design
       </p>
 
@@ -122,7 +122,7 @@ export function EmergencyResponse() {
         })}
 
         {/* Inflow marker */}
-        <text x={CX} y={16} textAnchor="middle" fontSize="9" fontWeight="700" fill="#a8a29e" letterSpacing="0.12em" fontFamily="system-ui">
+        <text x={CX} y={17} textAnchor="middle" fontSize="10" fontWeight="700" fill="#a8a29e" letterSpacing="0.12em" fontFamily="system-ui">
           INCIDENTS IN
         </text>
 
@@ -135,7 +135,7 @@ export function EmergencyResponse() {
               style={{ ["--drop" as string]: `${t.drop}px`, animationDelay: `${t.delay}s` } as React.CSSProperties}
               cx={CX}
               cy={INFLOW_Y}
-              r={4}
+              r={4.5}
               fill="#0ea5e9"
             />
           ))}
@@ -145,28 +145,28 @@ export function EmergencyResponse() {
           const y = tierY(i);
           const x1 = CX - lvl.w / 2;
           const isApex = i === LEVELS.length - 1;
-          let chipX = x1 + 58;
+          let chipX = x1 + 60;
           return (
             <motion.g key={i} variants={tierVariant} custom={i} style={{ transformBox: "fill-box", transformOrigin: "center" }}>
               {/* Tier body (opaque so tokens read as passing behind, through the necks) */}
-              <rect x={x1} y={y} width={lvl.w} height={TIER_H} rx={16} fill="#ffffff" stroke={lvl.color} strokeOpacity={0.34} strokeWidth={1.5} />
-              <rect x={x1} y={y} width={lvl.w} height={TIER_H} rx={16} fill={lvl.color} opacity={0.04} />
-              <rect x={x1} y={y + 10} width={4} height={TIER_H - 20} rx={2} fill={lvl.color} />
+              <rect x={x1} y={y} width={lvl.w} height={TIER_H} rx={17} fill="#ffffff" stroke={lvl.color} strokeOpacity={0.34} strokeWidth={1.5} />
+              <rect x={x1} y={y} width={lvl.w} height={TIER_H} rx={17} fill={lvl.color} opacity={0.04} />
+              <rect x={x1} y={y + 12} width={4} height={TIER_H - 24} rx={2} fill={lvl.color} />
 
               {/* Level badge */}
-              <circle cx={x1 + 32} cy={y + 39} r={15} fill={lvl.color} />
-              <text x={x1 + 32} y={y + 44} textAnchor="middle" fontSize={15} fontWeight={800} fill="#ffffff" fontFamily="system-ui">
+              <circle cx={x1 + 34} cy={y + 43} r={16} fill={lvl.color} />
+              <text x={x1 + 34} y={y + 48} textAnchor="middle" fontSize={16} fontWeight={800} fill="#ffffff" fontFamily="system-ui">
                 {lvl.n}
               </text>
               {isApex && !reduce && (
-                <circle className="svg-ping" cx={x1 + 32} cy={y + 39} r={15} fill="none" stroke={lvl.color} strokeWidth={2} style={{ transformBox: "fill-box", transformOrigin: "center" }} />
+                <circle className="svg-ping" cx={x1 + 34} cy={y + 43} r={16} fill="none" stroke={lvl.color} strokeWidth={2} style={{ transformBox: "fill-box", transformOrigin: "center" }} />
               )}
 
               {/* Label + when */}
-              <text x={x1 + 56} y={y + 28} fontSize={13.5} fontWeight={800} fill={lvl.color} fontFamily="system-ui">
+              <text x={x1 + 60} y={y + 32} fontSize={15} fontWeight={800} fill={lvl.color} fontFamily="system-ui">
                 Level {lvl.n} - {lvl.role}
               </text>
-              <text x={x1 + 56} y={y + 44} fontSize={10.5} fontStyle="italic" fill="#a8a29e" fontFamily="system-ui">
+              <text x={x1 + 60} y={y + 50} fontSize={11.5} fontStyle="italic" fill="#a8a29e" fontFamily="system-ui">
                 When: {lvl.when}
               </text>
 
@@ -177,9 +177,9 @@ export function EmergencyResponse() {
                 chipX += w + 8;
                 return (
                   <g key={j}>
-                    <rect x={cxStart} y={y + 54} width={w} height={18} rx={9} fill={lvl.color} opacity={0.1} />
-                    <circle cx={cxStart + 9} cy={y + 63} r={2} fill={lvl.color} opacity={0.6} />
-                    <text x={cxStart + 15} y={y + 67} fontSize={10.5} fontWeight={500} fill={lvl.color} fontFamily="system-ui">
+                    <rect x={cxStart} y={y + 60} width={w} height={20} rx={10} fill={lvl.color} opacity={0.1} />
+                    <circle cx={cxStart + 10} cy={y + 70} r={2.2} fill={lvl.color} opacity={0.6} />
+                    <text x={cxStart + 17} y={y + 74} fontSize={11.5} fontWeight={500} fill={lvl.color} fontFamily="system-ui">
                       {action}
                     </text>
                   </g>
@@ -200,12 +200,12 @@ export function EmergencyResponse() {
                 show: { opacity: 1, transition: { duration: 0.4, delay: 0.7 + i * 0.15 } },
               }}
             >
-              <circle cx={CX} cy={y} r={8} fill="#16a34a" />
-              <path d={`M${CX - 3.4} ${y} l2.6 2.8 l4.4 -5`} stroke="#ffffff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              <circle cx={CX} cy={y} r={9} fill="#16a34a" />
+              <path d={`M${CX - 3.8} ${y} l2.9 3.1 l4.9 -5.6`} stroke="#ffffff" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" fill="none" />
               {!reduce && (
-                <circle className="svg-ping" cx={CX} cy={y} r={8} fill="none" stroke="#16a34a" strokeWidth={1.6} style={{ transformBox: "fill-box", transformOrigin: "center", animationDelay: `${1.2 + i * 0.5}s` }} />
+                <circle className="svg-ping" cx={CX} cy={y} r={9} fill="none" stroke="#16a34a" strokeWidth={1.6} style={{ transformBox: "fill-box", transformOrigin: "center", animationDelay: `${1.2 + i * 0.5}s` }} />
               )}
-              <text x={CX + 16} y={y + 3.5} fontSize={9.5} fontStyle="italic" fill="#16a34a" fontFamily="system-ui">
+              <text x={CX + 18} y={y + 3.5} fontSize={10.5} fontStyle="italic" fill="#16a34a" fontFamily="system-ui">
                 {NECK_NOTE[i]}
               </text>
             </motion.g>
@@ -218,7 +218,7 @@ export function EmergencyResponse() {
           hidden: { opacity: 0 },
           show: { opacity: 1, transition: { duration: 0.5, delay: 0.9 } },
         }}
-        className="text-[11px] text-stone-400 text-center mt-3 leading-snug [text-wrap:balance]"
+        className="text-[12px] text-stone-400 text-center mt-3 leading-snug [text-wrap:balance]"
       >
         Severity rises as the funnel narrows - a well-run facility resolves most incidents at
         Level 1, and almost none should ever reach Level 4.
