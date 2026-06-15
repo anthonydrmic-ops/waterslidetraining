@@ -2017,6 +2017,14 @@ export const modules: Module[] = [
             body: "The manufacturer sets a minimum AND a maximum weight for every slide, and both matter. A rider under the minimum may not carry enough momentum to clear the flume - a stall risk that is most dangerous in enclosed sections. A rider over the maximum carries more speed than the slide was engineered for, risking overshoot on curves and at the run-out. Multi-rider rafts add a third number: a combined weight window that the whole raft must land inside. The only reliable way to confirm a combined raft weight is calibrated scales at dispatch - estimating a group's total weight by eye fails exactly when it matters most.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/22-rider-scales.jpg",
+            alt: "A flat platform scale set flush into the wet deck at a raft waterslide's dispatch, a digital weight readout on a post beside it and a yellow raft waiting at the flume entry behind",
+            aspect: "4:3",
+            heading: "A weigh-in scale at the dispatch platform",
+            body: "A platform scale set into the deck at the raft loading point, with a digital readout on the post. The combined weight is confirmed here against the OEM window before the raft is dispatched - measured, never estimated.",
+          },
+          {
             type: "oem-reference",
             body: "On the Verruckt raft slide in Kansas City, riders were required to weigh in together on a scale at the tower: the three-person raft had to total between 400 and 550 pounds (roughly 180 to 250 kilograms) before it could be dispatched.",
             source: "Verruckt operating requirements, Schlitterbahn Kansas City (KSHB)",
