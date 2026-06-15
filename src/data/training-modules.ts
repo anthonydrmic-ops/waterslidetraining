@@ -1408,6 +1408,14 @@ export const modules: Module[] = [
             body: "Wind is a shutdown trigger with a number attached. On open flumes, wind pushes and slows riders mid-slide - light riders most of all - which destroys the travel-time assumptions your dispatch intervals rest on. Wind also blows debris into flumes and catch pools, and makes work and communication on a high tower unsafe. Because the effect depends on the slide's height, shape and exposure, the closure threshold is specific to each ride: it is set by the manufacturer and the site risk assessment, and it lives in the Ride Operations Manual. Facilities monitor with an anemometer mounted at the highest dispatch platform - wind at the tower is always stronger than wind felt on the pool deck.",
           },
           {
+            type: "image",
+            imageSrc: "/lesson-images/20-anemometer.jpg",
+            alt: "A cup anemometer and a weatherproof digital wind-speed display clamped to the galvanised handrail of a waterslide tower platform, with the aquatic centre and pools below",
+            aspect: "4:3",
+            heading: "A cup anemometer at the dispatch platform",
+            body: "A cup anemometer mounted high on the tower rail with its reading on a weatherproof display. Mount it where the wind actually hits the ride - up at the dispatch platform, not down on the sheltered deck.",
+          },
+          {
             heading: "No Anemometer? Use the Beaufort Scale",
             type: "text",
             body: "If your facility has no anemometer (or it fails mid-shift), you are not reduced to guessing. The Beaufort scale - devised by Royal Navy officer Francis Beaufort in 1805 and still used in official marine forecasts today - estimates wind speed from what the wind is visibly doing around you. You read the trees, the flags and the water instead of an instrument. It is less precise than a measurement, so treat a Beaufort estimate conservatively: if the observed effects put you near your slide's limit, act as if you are at it.",
