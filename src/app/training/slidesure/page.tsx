@@ -273,7 +273,7 @@ function TrainingPageInner() {
         </div>
       </nav>
 
-      <div className="max-w-[1200px] mx-auto px-6 pt-28 pb-16">
+      <div className="max-w-[1200px] mx-auto px-6 pt-28 pb-28 md:pb-16">
         <motion.div variants={stagger} initial="hidden" animate="show">
           {/* Hero - compact with the title overlaid, so the plan info sits high
               on the page instead of being pushed below a tall image. */}
@@ -587,6 +587,31 @@ function TrainingPageInner() {
 
         </motion.div>
       </div>
+
+      {/* Mobile sticky buy bar - price + CTA follow on scroll */}
+      {licensed !== true && (
+        <div className="md:hidden fixed bottom-0 inset-x-0 z-40 px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] bg-white/90 backdrop-blur-md border-t border-stone-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+          <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
+            <div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-xl font-bold tracking-tight text-stone-900">${activePerSeat * seats}</span>
+                {mounted && launchActive && selectedTierObj.regular > selectedTierObj.launch && (
+                  <span className="text-xs text-stone-300 line-through">${selectedTierObj.regular * seats}</span>
+                )}
+              </div>
+              <p className="text-[11px] text-stone-400">{selectedTierObj.name} · {seats} {seats === 1 ? "seat" : "seats"}</p>
+            </div>
+            <button
+              onClick={() => handlePurchase(selectedTier)}
+              disabled={loading || !isLoaded}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--cta)] text-white font-medium hover:bg-[var(--cta-dark)] active:scale-[0.97] transition-all duration-300 shadow-[0_4px_16px_rgba(240,90,40,0.25)] disabled:opacity-60"
+            >
+              {loading ? "…" : "Checkout"}
+              <ArrowRight size={15} weight="bold" />
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
