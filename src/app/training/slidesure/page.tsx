@@ -301,7 +301,7 @@ function TrainingPageInner() {
           {/* Hero - compact with the title overlaid, so the plan info sits high
               on the page instead of being pushed below a tall image. */}
           <motion.div variants={fadeUp} className="mb-8">
-            <div className="relative w-full h-[42vh] min-h-[240px] max-h-[440px] rounded-3xl overflow-hidden ring-1 ring-stone-200/60 shadow-[0_20px_50px_rgba(11,58,102,0.12)]">
+            <div className="relative w-full h-[48vh] min-h-[260px] max-h-[480px] rounded-3xl overflow-hidden ring-1 ring-stone-200/60 shadow-[0_20px_50px_rgba(11,58,102,0.12)]">
               <Image
                 src="/lesson-images/00-marketing-hero-v2.jpg"
                 alt="Two riders on tubes racing down a multi-lane waterslide, colourful intertwined flumes towering behind them against a blue sky"
@@ -375,7 +375,7 @@ function TrainingPageInner() {
           {/* Course Card */}
           <motion.div variants={fadeUp} className="mb-8">
             <div className="card-shell">
-              <div className="card-core p-6 md:p-7">
+              <div className="card-core p-5 md:p-6">
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="flex-1">
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
@@ -387,7 +387,7 @@ function TrainingPageInner() {
                           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-100 text-[10px] font-semibold uppercase tracking-wider text-emerald-600 mb-1">
                             Available Now
                           </div>
-                          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-stone-900">
+                          <h2 className="text-lg md:text-xl font-bold tracking-tight text-stone-900">
                             Waterslide Safety & Competency Program
                           </h2>
                         </div>
@@ -404,7 +404,7 @@ function TrainingPageInner() {
                         </span>
                       </div>
                     </div>
-                    <p className="text-sm text-stone-400 leading-relaxed mb-5">
+                    <p className="text-[13px] text-stone-400 leading-relaxed mb-4">
                       Comprehensive training covering system understanding, inspections,
                       surface management, operations, defect recognition, water quality,
                       incident prevention, and emergency response. Includes final
@@ -413,7 +413,7 @@ function TrainingPageInner() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {features.map((feature, i) => (
-                        <div key={i} className="flex items-center gap-2 text-sm text-stone-500">
+                        <div key={i} className="flex items-center gap-2 text-[13px] text-stone-500">
                           <CheckCircle size={14} weight="fill" className="text-emerald-500 shrink-0" />
                           {feature}
                         </div>
