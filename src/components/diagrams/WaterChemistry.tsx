@@ -5,30 +5,58 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
-type Param = {
-  label: string;
-  // Numeric scale ends (what the left/right of the track represent) and the
-  // ideal band, so the green zone is positioned/sized to the REAL range rather
-  // than a fixed centre block.
-  scaleMin: number;
-  scaleMax: number;
-  idealLow: number;
-  idealHigh: number;
-  lowLabel: string;
-  lowRisk: string;
-  target: string;
-  highLabel: string;
-  highRisk: string;
-  color: string;
+// Zone colours: bright green = ideal, dim green = OK/acceptable, red = danger.
+const ZONE_FILL: Record<string, string> = {
+  ideal: "rgba(34, 197, 94, 0.9)",
+  ok: "rgba(34, 197, 94, 0.3)",
+  red: "rgba(239, 68, 68, 0.24)",
 };
 
-// Free chlorine upper figure is the 10 mg/L regulatory maximum (the level at
-// which bathers must be cleared), per AU aquatic facility guidelines.
+type Zone = { to: number; kind: "red" | "ok" | "ideal" };
+
+type Param = {
+  label: string;
+  scaleMin: number;
+  scaleMax: number;
+  zones: Zone[]; // contiguous, each runs from the previous boundary up to `to`
+  idealLow: number;
+  idealHigh: number;
+  target: string; // ideal range, shown in the chip
+  lowRisk: string;
+  lowThresh: string; // where the low danger zone begins ("below X")
+  highRisk: string;
+  highThresh: string; // where the high danger zone begins ("above X")
+  color: string; // label/identity colour only
+};
+
+// FAC scale runs to 15 so the danger zone past the 10 mg/L regulatory maximum
+// has room to read; ideal is the bright-green sweet spot, OK the acceptable
+// operating band up to the limit.
 const params: Param[] = [
-  { label: "pH Level", scaleMin: 6.0, scaleMax: 9.0, idealLow: 7.2, idealHigh: 7.8, lowLabel: "6.0", lowRisk: "Corrosive", target: "7.2 – 7.8", highLabel: "9.0", highRisk: "Scaling", color: "#1F7A8C" },
-  { label: "FAC (Indoor)", scaleMin: 0, scaleMax: 10, idealLow: 1, idealHigh: 3, lowLabel: "0", lowRisk: "Infection risk", target: "1.0 – 3.0 ppm", highLabel: "10+ ppm", highRisk: "Surface damage", color: "#16a34a" },
-  { label: "FAC (Outdoor)", scaleMin: 0, scaleMax: 10, idealLow: 2, idealHigh: 4, lowLabel: "0", lowRisk: "Infection risk", target: "2.0 – 4.0 ppm", highLabel: "10+ ppm", highRisk: "Surface damage", color: "#16a34a" },
-  { label: "LSI Index", scaleMin: -2.0, scaleMax: 2.0, idealLow: -0.3, idealHigh: 0.3, lowLabel: "-2.0", lowRisk: "Dissolves surfaces", target: "-0.3 to +0.3", highLabel: "+2.0", highRisk: "Heavy scaling", color: "#0B3A66" },
+  {
+    label: "pH Level", scaleMin: 6.0, scaleMax: 9.0,
+    zones: [{ to: 7.0, kind: "red" }, { to: 7.2, kind: "ok" }, { to: 7.8, kind: "ideal" }, { to: 8.0, kind: "ok" }, { to: 9.0, kind: "red" }],
+    idealLow: 7.2, idealHigh: 7.8, target: "7.2 – 7.8",
+    lowRisk: "Corrosive", lowThresh: "7.0", highRisk: "Scaling", highThresh: "8.0", color: "#1F7A8C",
+  },
+  {
+    label: "FAC (Indoor)", scaleMin: 0, scaleMax: 15,
+    zones: [{ to: 1, kind: "red" }, { to: 3, kind: "ideal" }, { to: 10, kind: "ok" }, { to: 15, kind: "red" }],
+    idealLow: 1, idealHigh: 3, target: "1 – 3 ppm",
+    lowRisk: "Infection risk", lowThresh: "1 ppm", highRisk: "Surface damage", highThresh: "10 ppm", color: "#16a34a",
+  },
+  {
+    label: "FAC (Outdoor)", scaleMin: 0, scaleMax: 15,
+    zones: [{ to: 2, kind: "red" }, { to: 4, kind: "ideal" }, { to: 10, kind: "ok" }, { to: 15, kind: "red" }],
+    idealLow: 2, idealHigh: 4, target: "2 – 4 ppm",
+    lowRisk: "Infection risk", lowThresh: "2 ppm", highRisk: "Surface damage", highThresh: "10 ppm", color: "#16a34a",
+  },
+  {
+    label: "LSI Index", scaleMin: -2.0, scaleMax: 2.0,
+    zones: [{ to: -0.5, kind: "red" }, { to: -0.3, kind: "ok" }, { to: 0.3, kind: "ideal" }, { to: 0.5, kind: "ok" }, { to: 2.0, kind: "red" }],
+    idealLow: -0.3, idealHigh: 0.3, target: "-0.3 to +0.3",
+    lowRisk: "Dissolves surfaces", lowThresh: "-0.5", highRisk: "Heavy scaling", highThresh: "+0.5", color: "#0B3A66",
+  },
 ];
 
 export function WaterChemistry() {
@@ -44,7 +72,7 @@ export function WaterChemistry() {
           prod); entrance motion stays on framer one-shots. */}
       <style>{`
         @keyframes wcPulse {
-          0% { transform: scale(1); opacity: 0.45; }
+          0% { transform: scale(1); opacity: 0.4; }
           70%, 100% { transform: scale(2.6); opacity: 0; }
         }
       `}</style>
@@ -55,12 +83,9 @@ export function WaterChemistry() {
 
       <div className="space-y-2.5">
         {params.map((p, i) => {
-          // Position the ideal band on the real min–max scale.
           const span = p.scaleMax - p.scaleMin;
-          const leftPct = ((p.idealLow - p.scaleMin) / span) * 100;
-          const rightPct = ((p.idealHigh - p.scaleMin) / span) * 100;
-          const bandPct = rightPct - leftPct;
-          const centerPct = (leftPct + rightPct) / 2;
+          const centerPct = (((p.idealLow + p.idealHigh) / 2 - p.scaleMin) / span) * 100;
+          let cursor = p.scaleMin;
 
           return (
             <motion.div
@@ -77,28 +102,31 @@ export function WaterChemistry() {
                 </span>
                 <span
                   className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                  style={{
-                    color: p.color,
-                    backgroundColor: `color-mix(in srgb, ${p.color} 12%, transparent)`,
-                  }}
+                  style={{ color: "#15803d", backgroundColor: "rgba(34,197,94,0.12)" }}
                 >
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: p.color }} />
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#22c55e" }} />
                   Ideal {p.target}
                 </span>
               </div>
 
-              {/* Track: red (too low) · colour (ideal, positioned to scale) · red (too high) */}
+              {/* Track: red · ideal (bright) · ok (dim) · red — positioned to scale */}
               <div className="relative h-3">
                 <div className="absolute inset-0 flex rounded-full overflow-hidden ring-1 ring-stone-200/60 bg-stone-100">
-                  <div className="h-full bg-red-400/20" style={{ width: `${leftPct}%` }} />
-                  <motion.div
-                    className="h-full"
-                    style={{ width: `${bandPct}%`, backgroundColor: `color-mix(in srgb, ${p.color} 32%, white)` }}
-                    initial={{ opacity: reduce ? 1 : 0 }}
-                    animate={inView ? { opacity: 1 } : { opacity: reduce ? 1 : 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 + i * 0.12, ease: EASE }}
-                  />
-                  <div className="h-full bg-red-400/20" style={{ width: `${100 - rightPct}%` }} />
+                  {p.zones.map((z, zi) => {
+                    const w = ((z.to - cursor) / span) * 100;
+                    cursor = z.to;
+                    const isIdeal = z.kind === "ideal";
+                    return (
+                      <motion.div
+                        key={zi}
+                        className="h-full"
+                        style={{ width: `${w}%`, backgroundColor: ZONE_FILL[z.kind] }}
+                        initial={{ opacity: reduce ? 1 : isIdeal ? 0 : 0.5 }}
+                        animate={inView ? { opacity: 1 } : { opacity: reduce ? 1 : isIdeal ? 0 : 0.5 }}
+                        transition={{ duration: 0.5, delay: 0.2 + i * 0.12, ease: EASE }}
+                      />
+                    );
+                  })}
                 </div>
 
                 {/* Operating point drifts up from the under-treated (low) end and
@@ -116,25 +144,22 @@ export function WaterChemistry() {
                   {!reduce && (
                     <span
                       className="absolute inset-0 m-auto w-3.5 h-3.5 rounded-full"
-                      style={{ backgroundColor: p.color, animation: "wcPulse 2.6s cubic-bezier(0,0,0.2,1) infinite" }}
+                      style={{ backgroundColor: "#1c1917", animation: "wcPulse 2.6s cubic-bezier(0,0,0.2,1) infinite" }}
                     />
                   )}
-                  <span
-                    className="relative block w-3.5 h-3.5 rounded-full ring-2 ring-white shadow-sm"
-                    style={{ backgroundColor: p.color }}
-                  />
+                  <span className="relative block w-3.5 h-3.5 rounded-full bg-stone-900 ring-2 ring-white shadow-sm" />
                 </motion.div>
               </div>
 
-              {/* Scale ends: value + what goes wrong */}
+              {/* Danger ends: threshold + what goes wrong */}
               <div className="flex items-start justify-between mt-2 text-[11px] leading-tight">
                 <div className="text-left">
-                  <span className="font-bold text-red-500">{p.lowLabel}</span>
-                  <span className="block text-stone-400">{p.lowRisk}</span>
+                  <span className="font-semibold text-red-500">{p.lowRisk}</span>
+                  <span className="block text-stone-400">below {p.lowThresh}</span>
                 </div>
                 <div className="text-right">
-                  <span className="font-bold text-red-500">{p.highLabel}</span>
-                  <span className="block text-stone-400">{p.highRisk}</span>
+                  <span className="font-semibold text-red-500">{p.highRisk}</span>
+                  <span className="block text-stone-400">above {p.highThresh}</span>
                 </div>
               </div>
             </motion.div>
@@ -142,14 +167,27 @@ export function WaterChemistry() {
         })}
       </div>
 
-      <motion.p
+      {/* Legend */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.4, delay: 0.2 + params.length * 0.12 }}
-        className="text-[11px] text-stone-400 text-center mt-3.5"
+        className="flex items-center justify-center flex-wrap gap-x-5 gap-y-1.5 mt-3.5 text-[10px] font-medium text-stone-500"
       >
+        <span className="inline-flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded-[4px]" style={{ backgroundColor: ZONE_FILL.ideal }} /> Ideal
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded-[4px]" style={{ backgroundColor: ZONE_FILL.ok }} /> OK
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded-[4px]" style={{ backgroundColor: ZONE_FILL.red }} /> Out of range
+        </span>
+      </motion.div>
+
+      <p className="text-[11px] text-stone-400 text-center mt-2.5">
         LSI (Langelier Saturation Index) = water&apos;s tendency to scale or corrode
-      </motion.p>
+      </p>
     </div>
   );
 }
