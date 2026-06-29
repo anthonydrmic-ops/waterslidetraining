@@ -1416,6 +1416,11 @@ export const modules: Module[] = [
             body: "A cup anemometer mounted high on the tower rail with its reading on a weatherproof display. Mount it where the wind actually hits the ride - up at the dispatch platform, not down on the sheltered deck.",
           },
           {
+            heading: "Handheld Anemometers - a Low-Cost Backup",
+            type: "text",
+            body: "Not every reading has to come from the fixed tower unit. A handheld anemometer is a pocket-sized, battery-powered wind meter you hold up into the wind for an instant digital reading. Most use a small rotating vane (impeller): the wind spins the vane and the device converts that spin into a wind speed, typically showing current, average and maximum gust. Good field units read to within about 3% of actual - more than precise enough to check a slide against its limit. Their real strength is cost and portability. A pocket vane meter is a small fraction of the price of a fixed, mast-mounted anemometer with its own weatherproof display and wiring, so a site can easily justify keeping one - or several - on hand. Use one to spot-check the wind right at the dispatch platform, to cross-check a fixed anemometer you are unsure of, or as the immediate backup when a fixed unit fails mid-shift. Hold it up at tower-rail height, point the vane into the wind, and give the reading a few seconds to settle - then judge against the gust, not just the average. One caveat: a handheld reading is a snapshot from one spot at one moment, so it supplements continuous tower monitoring rather than replacing a properly sited fixed anemometer.",
+          },
+          {
             heading: "No Anemometer? Use the Beaufort Scale",
             type: "text",
             body: "If your facility has no anemometer (or it fails mid-shift), you are not reduced to guessing. The Beaufort scale - devised by Royal Navy officer Francis Beaufort in 1805 and still used in official marine forecasts today - estimates wind speed from what the wind is visibly doing around you. You read the trees, the flags and the water instead of an instrument. It is less precise than a measurement, so treat a Beaufort estimate conservatively: if the observed effects put you near your slide's limit, act as if you are at it.",
