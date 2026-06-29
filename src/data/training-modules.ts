@@ -1991,8 +1991,8 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/07-dispatch-position-v2.jpg",
-            alt: "A hi-vis attendant at the dispatch console on the top platform while a rider sits waiting in the flume mouth, the dispatch indicator showing red",
+            imageSrc: "/lesson-images/07-dispatch-position-v3.jpg",
+            alt: "A lifeguard in a yellow lifeguard shirt at the dispatch console on the top platform while a rider sits waiting in the flume mouth, the dispatch indicator showing red",
             aspect: "4:3",
             body: "The rider holds at the flume mouth until the operator confirms the slide and exit are clear - the indicator stays red until then.",
           },
@@ -2222,8 +2222,8 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/14-dispatch-signal.jpg",
-            alt: "A rider in a tube waiting in the flume mouth while a hi-vis attendant with a radio holds the dispatch light on red",
+            imageSrc: "/lesson-images/14-dispatch-signal-v2.jpg",
+            alt: "A rider in a tube waiting in the flume mouth while a pool lifeguard in a yellow and red uniform with a radio holds the dispatch light on red",
             aspect: "4:3",
             body: "Held at red - the rider waits in the flume mouth until the operator confirms the interval and clearance.",
           },
