@@ -350,12 +350,12 @@ function TrainingPageInner() {
           )}
 
           {/* Course Card */}
-          <motion.div variants={fadeUp} className="mb-14">
+          <motion.div variants={fadeUp} className="mb-8">
             <div className="card-shell">
-              <div className="card-core p-8 md:p-10">
+              <div className="card-core p-6 md:p-7">
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-3">
                       <div className="w-12 h-12 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center">
                         <ShieldCheck size={24} weight="duotone" className="text-[var(--accent)]" />
                       </div>
@@ -368,14 +368,14 @@ function TrainingPageInner() {
                         </h2>
                       </div>
                     </div>
-                    <p className="text-sm text-stone-400 leading-relaxed mb-6 max-w-[55ch]">
+                    <p className="text-sm text-stone-400 leading-relaxed mb-4">
                       Comprehensive training covering system understanding, inspections,
                       surface management, operations, defect recognition, water quality,
                       incident prevention, and emergency response. Includes final
                       assessment with certification.
                     </p>
 
-                    <div className="flex flex-wrap gap-3 mb-6">
+                    <div className="flex flex-wrap gap-3 mb-5">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 text-stone-500 text-xs font-medium">
                         <Clock size={12} /> 8-12 hours
                       </span>
