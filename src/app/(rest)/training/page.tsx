@@ -120,28 +120,29 @@ export default function TrainingLandingPage() {
         <section className="section">
           <div className="container">
             <div className="reveal" style={{ textAlign: "center", marginBottom: "4rem" }}>
-              <span className="eyebrow">Coming Soon</span>
-              <h2 style={{ marginTop: "1.5rem", marginBottom: "1rem" }}>We&apos;re building something great</h2>
-              <p style={{ maxWidth: "55ch", margin: "0 auto" }}>Our comprehensive training and certification platform is currently under development. Stay tuned for industry-leading courses designed to elevate your team&apos;s capabilities.</p>
+              <span className="eyebrow">Our Courses</span>
+              <h2 style={{ marginTop: "1.5rem", marginBottom: "1rem" }}>Training programs</h2>
+              <p style={{ maxWidth: "55ch", margin: "0 auto" }}>SlideSure, our waterslide safety and competency program, is available now. More industry-leading courses are in development - register your interest to hear the moment they launch.</p>
             </div>
 
             <div className="bento-grid bento-grid--3">
-              {/* SlideSure - Coming Soon */}
-              <div className="card-shell reveal reveal-delay-1" style={{ opacity: 0.6 }}>
+              {/* SlideSure - Available Now */}
+              <a href="/training/slidesure" className="card-shell reveal reveal-delay-1" style={{ display: "block", textDecoration: "none", color: "inherit", cursor: "pointer" }}>
                 <div className="card-core" style={{ display: "flex", flexDirection: "column", minHeight: "340px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
                     <div className="icon-circle icon-circle--teal" style={{ marginBottom: 0 }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
-                    <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.25)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#059669" }}>Available Now</span>
                   </div>
                   <h3 style={{ marginBottom: "0.75rem" }}>SlideSure - Waterslide Safety &amp; Competency Program</h3>
                   <p style={{ flex: 1 }}>Comprehensive waterslide operator training covering system understanding, inspections, surface management, water quality, incident prevention and emergency response.</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>In Development</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "1.5rem", color: "var(--teal, #1F7A8C)", fontWeight: 600, fontSize: "0.85rem" }}>
+                    View Course
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                   </div>
                 </div>
-              </div>
+              </a>
 
               {/* Coming Soon - Emergency Planning & Response */}
               <div className="card-shell reveal reveal-delay-2" style={{ opacity: 0.6 }}>
