@@ -140,9 +140,9 @@ export default function TrainingLandingPage() {
               .ss-live-card:hover .ss-default-text { display: none; }
               .ss-live-card:hover .ss-hover-text { display: inline; }
             `}</style>
-            <div className="bento-grid bento-grid--3">
+            <div style={{ display: "flex", justifyContent: "center" }}>
               {/* SlideSure - Available Now */}
-              <a href="/training/slidesure" className="card-shell reveal reveal-delay-1 ss-live-card" style={{ display: "block", textDecoration: "none", color: "inherit", cursor: "pointer" }}>
+              <a href="/training/slidesure" className="card-shell reveal reveal-delay-1 ss-live-card" style={{ display: "block", textDecoration: "none", color: "inherit", cursor: "pointer", maxWidth: "440px", width: "100%" }}>
                 <div className="card-core" style={{ display: "flex", flexDirection: "column", minHeight: "340px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
                     <div className="icon-circle icon-circle--teal" style={{ marginBottom: 0 }}>
@@ -159,30 +159,6 @@ export default function TrainingLandingPage() {
                   </div>
                 </div>
               </a>
-
-              {/* Coming Soon - details hidden until launch */}
-              <div className="card-shell reveal reveal-delay-2" style={{ opacity: 0.55 }}>
-                <div className="card-core" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: "340px" }}>
-                  <div className="icon-circle" style={{ marginBottom: "1rem", background: "rgba(107, 114, 128, 0.08)", color: "#6B7280" }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  </div>
-                  <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
-                  <h3 style={{ marginTop: "1rem", marginBottom: "0.4rem", color: "var(--mid-grey)" }}>New Program</h3>
-                  <p style={{ fontSize: "0.85rem", color: "var(--mid-grey)", maxWidth: "26ch" }}>In development. Details to be announced.</p>
-                </div>
-              </div>
-
-              {/* Coming Soon - details hidden until launch */}
-              <div className="card-shell reveal reveal-delay-3" style={{ opacity: 0.55 }}>
-                <div className="card-core" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: "340px" }}>
-                  <div className="icon-circle" style={{ marginBottom: "1rem", background: "rgba(107, 114, 128, 0.08)", color: "#6B7280" }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  </div>
-                  <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
-                  <h3 style={{ marginTop: "1rem", marginBottom: "0.4rem", color: "var(--mid-grey)" }}>New Program</h3>
-                  <p style={{ fontSize: "0.85rem", color: "var(--mid-grey)", maxWidth: "26ch" }}>In development. Details to be announced.</p>
-                </div>
-              </div>
             </div>
 
             {/* Notify CTA */}

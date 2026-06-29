@@ -41,8 +41,8 @@ const tiers = [
     name: "Individual",
     icon: User,
     seats: "1 user",
-    price: 149,
-    perSeat: 149,
+    price: 99,
+    perSeat: 99,
     description: "For independent operators and freelancers",
     popular: false,
   },
@@ -51,8 +51,8 @@ const tiers = [
     name: "Team",
     icon: Users,
     seats: "Up to 10 users",
-    price: 99,
-    perSeat: 99,
+    price: 89,
+    perSeat: 89,
     description: "For small parks and single-attraction teams",
     popular: true,
   },
@@ -437,12 +437,12 @@ function TrainingPageInner() {
                     </Link>
                   </p>
                 )}
-                <p className="text-[11px] text-stone-300 mt-4">
-                  Need 50+ seats?{" "}
-                  <a href="mailto:info@restgroup.com.au" className="text-[var(--accent)] hover:underline">
-                    Contact us for enterprise pricing
+                <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-5 py-3 rounded-2xl border border-stone-200 bg-stone-50">
+                  <span className="text-sm font-semibold text-stone-700">Need more than 50 seats?</span>
+                  <a href="mailto:info@restgroup.com.au?subject=Enterprise%20training%20enquiry" className="text-sm font-semibold text-[var(--accent)] hover:underline">
+                    Contact us for enterprise pricing &rarr;
                   </a>
-                </p>
+                </div>
                 <p className="text-[11px] text-stone-400 mt-5 max-w-md mx-auto leading-relaxed">
                   By purchasing you agree to our{" "}
                   <a href="/terms" className="text-[var(--accent)] hover:underline">Terms &amp; Conditions</a>. The training

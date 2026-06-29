@@ -16,9 +16,9 @@ export const COURSES = {
     name: "Waterslide Safety & Competency Program",
     description: "Comprehensive waterslide operator training with certification",
     prices: {
-      individual: { seats: 1, pricePerSeat: 14900 }, // $149.00 in cents
-      team: { seats: 10, pricePerSeat: 9900 },        // $99.00
-      business: { seats: 50, pricePerSeat: 7900 },     // $79.00
+      individual: { seats: 1, pricePerSeat: 9900 }, // $99.00 in cents
+      team: { seats: 10, pricePerSeat: 8900 },        // $89.00 per seat
+      business: { seats: 50, pricePerSeat: 7900 },     // $79.00 per seat
     },
   },
 } as const;
