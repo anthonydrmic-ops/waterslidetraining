@@ -1,25 +1,12 @@
 -- SlideSure Schema v2 - Run AFTER the initial schema
--- Adds: quiz question pool, certificate verification
-
--- Quiz question pool (server-side, never sent to client with answers)
-create table quiz_questions (
-  id text primary key, -- e.g. 'q1-1-1'
-  lesson_id text not null, -- e.g. '1-1'
-  module_id text not null, -- e.g. 'system-understanding'
-  question text not null,
-  options text[] not null,
-  correct_index int not null,
-  explanation text not null,
-  type text not null default 'knowledge', -- knowledge, scenario, defect
-  created_at timestamptz default now()
-);
-
-create index idx_quiz_lesson on quiz_questions(lesson_id);
-create index idx_quiz_module on quiz_questions(module_id);
-
--- RLS for quiz_questions - no direct client access (service role only)
-alter table quiz_questions enable row level security;
--- No policies = no anon/authenticated access. Only service_role can read.
+-- Adds: certificate verification
+--
+-- NOTE: a server-side quiz_questions pool table used to live here. It was
+-- removed because quizzes are graded client-side from src/data/training-modules.ts
+-- (the /api/quiz route that read this table was never wired into the UI). If an
+-- older v2 already created the table in your Supabase project, it is inert
+-- (RLS denies all client access) and can be dropped with:
+--   drop table if exists quiz_questions;
 
 -- Certificate verification
 alter table user_progress add column if not exists cert_id text unique;

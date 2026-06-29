@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { getTotalLessons } from "@/data/training-modules";
 import { NextResponse } from "next/server";
 
 // GET /api/dashboard - fetch team progress for admin dashboard
@@ -69,14 +70,19 @@ export async function GET() {
     .select("user_id, completed_lessons, completed_modules, quiz_scores, certified, certification_date, user_name")
     .in("user_id", memberIds);
 
-  // Total lessons count (29 lessons across 9 modules + 1 assessment)
-  const TOTAL_LESSONS = 30;
+  // Total lessons across every module incl. the final assessment. Derived from
+  // the course data so it can't drift (a finished learner's completed_lessons
+  // reaches exactly this count → 100%).
+  const TOTAL_LESSONS = getTotalLessons();
 
   const teamMembers = members.map((member) => {
     const progress = progressData?.find((p) => p.user_id === member.id);
     const completedLessons = progress?.completed_lessons?.length || 0;
     const completedModules = progress?.completed_modules?.length || 0;
-    const progressPct = Math.round((completedLessons / TOTAL_LESSONS) * 100);
+    const progressPct = Math.min(
+      100,
+      Math.round((completedLessons / TOTAL_LESSONS) * 100)
+    );
 
     return {
       id: member.id,

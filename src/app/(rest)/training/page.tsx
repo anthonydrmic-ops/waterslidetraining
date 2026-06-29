@@ -1,30 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 
 export default function TrainingLandingPage() {
-  const [showPasswordBox, setShowPasswordBox] = useState(false);
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (showPasswordBox && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [showPasswordBox]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === "godaddysucks") {
-      window.location.href = "/training/slidesure";
-    } else {
-      setError(true);
-      setPassword("");
-      setTimeout(() => setError(false), 2000);
-    }
-  };
-
   useEffect(() => {
     const reveals = document.querySelectorAll(".reveal");
     const revealObserver = new IntersectionObserver(
@@ -157,7 +135,7 @@ export default function TrainingLandingPage() {
                     </div>
                     <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
                   </div>
-                  <h3 style={{ marginBottom: "0.75rem" }}>SlideSure - Waterslide Safety &amp; Competency</h3>
+                  <h3 style={{ marginBottom: "0.75rem" }}>SlideSure - Waterslide Safety &amp; Competency Program</h3>
                   <p style={{ flex: 1 }}>Comprehensive waterslide operator training covering system understanding, inspections, surface management, water quality, incident prevention and emergency response.</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>In Development</span>
@@ -259,13 +237,23 @@ export default function TrainingLandingPage() {
           <div className="container reveal" style={{ textAlign: "center" }}>
             <span className="eyebrow eyebrow--light">Questions?</span>
             <h2 style={{ color: "var(--white)", marginTop: "1rem", marginBottom: "1rem" }}>Need a custom training program?</h2>
-            <p style={{ color: "rgba(255,255,255,0.65)", margin: "0 auto 2.5rem", maxWidth: "55ch" }}>We develop bespoke training and capability programs tailored to your organisation&apos;s specific needs and assets.</p>
+            <p style={{ color: "rgba(255,255,255,0.65)", margin: "0 auto 1rem", maxWidth: "55ch" }}>We develop bespoke training and capability programs tailored to your organisation&apos;s specific needs and assets.</p>
+            <p style={{ color: "rgba(255,255,255,0.55)", margin: "0 auto 2.5rem", maxWidth: "55ch", fontSize: "0.95rem" }}>Already training with us? If you spot something or have feedback on a course, we&apos;d genuinely love to hear it - your input is valued and helps shape how these programs evolve.</p>
             <a href="/contact" className="btn-primary">
               Get in Touch
               <span className="btn-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </span>
             </a>
+          </div>
+        </section>
+
+        {/* Currency of content disclaimer */}
+        <section className="section" style={{ paddingTop: "2.5rem", paddingBottom: "2.5rem", borderTop: "1px solid rgba(107,114,128,0.14)" }}>
+          <div className="container reveal" style={{ maxWidth: "76ch", margin: "0 auto", textAlign: "center" }}>
+            <p style={{ fontSize: "0.8rem", lineHeight: 1.75, color: "rgba(107,114,128,0.95)", margin: 0 }}>
+              <strong style={{ color: "#4B5563", fontWeight: 600 }}>Currency of content.</strong> Every course on this platform reflects the Australian Standards, work health and safety legislation and regulatory guidance in force at the time of publication. As those standards are revised and the regulatory landscape evolves, our training is subject to ongoing review and may be amended or updated accordingly. Material is provided to support operator competency and should always be read alongside the current instruments and the direction of your relevant regulator.
+            </p>
           </div>
         </section>
       </main>
@@ -303,138 +291,6 @@ export default function TrainingLandingPage() {
         </div>
       </footer>
 
-      {/* Admin Button - bottom right corner */}
-      <button
-        onClick={() => setShowPasswordBox(true)}
-        style={{
-          position: "fixed",
-          bottom: "1rem",
-          right: "1rem",
-          padding: "0.4rem 0.8rem",
-          fontSize: "0.65rem",
-          fontWeight: 500,
-          color: "rgba(107, 114, 128, 0.4)",
-          background: "transparent",
-          border: "1px solid rgba(107, 114, 128, 0.15)",
-          borderRadius: "6px",
-          cursor: "pointer",
-          letterSpacing: "0.05em",
-          transition: "all 0.3s ease",
-          zIndex: 50,
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = "rgba(107, 114, 128, 0.7)";
-          e.currentTarget.style.borderColor = "rgba(107, 114, 128, 0.3)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = "rgba(107, 114, 128, 0.4)";
-          e.currentTarget.style.borderColor = "rgba(107, 114, 128, 0.15)";
-        }}
-      >
-        Admin
-      </button>
-
-      {/* Password Dialog */}
-      {showPasswordBox && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 100,
-            backdropFilter: "blur(4px)",
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setShowPasswordBox(false);
-              setPassword("");
-              setError(false);
-            }
-          }}
-        >
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              background: "var(--white, #fff)",
-              borderRadius: "16px",
-              padding: "2rem",
-              width: "100%",
-              maxWidth: "360px",
-              margin: "0 1rem",
-              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.15)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
-              <h3 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--charcoal, #1A1A1A)", margin: 0, fontFamily: "var(--font-body)" }}>Admin Access</h3>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowPasswordBox(false);
-                  setPassword("");
-                  setError(false);
-                }}
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "4px",
-                  color: "var(--mid-grey, #6B7280)",
-                  fontSize: "1.2rem",
-                  lineHeight: 1,
-                }}
-              >
-                &times;
-              </button>
-            </div>
-            <input
-              ref={inputRef}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-              style={{
-                width: "100%",
-                padding: "0.75rem 1rem",
-                border: `1.5px solid ${error ? "#ef4444" : "rgba(107, 114, 128, 0.2)"}`,
-                borderRadius: "10px",
-                fontSize: "0.875rem",
-                outline: "none",
-                fontFamily: "var(--font-body)",
-                boxSizing: "border-box",
-                transition: "border-color 0.2s ease",
-                background: error ? "rgba(239, 68, 68, 0.04)" : "transparent",
-              }}
-            />
-            {error && (
-              <p style={{ color: "#ef4444", fontSize: "0.75rem", marginTop: "0.5rem", marginBottom: 0 }}>
-                Incorrect password
-              </p>
-            )}
-            <button
-              type="submit"
-              style={{
-                width: "100%",
-                marginTop: "1rem",
-                padding: "0.75rem",
-                background: "var(--navy, #0B3A66)",
-                color: "#fff",
-                border: "none",
-                borderRadius: "10px",
-                fontSize: "0.85rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                fontFamily: "var(--font-body)",
-                transition: "background 0.2s ease",
-              }}
-            >
-              Continue
-            </button>
-          </form>
-        </div>
-      )}
     </>
   );
 }

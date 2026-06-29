@@ -13,7 +13,7 @@ export function getStripe(): Stripe | null {
 // Course pricing config
 export const COURSES = {
   "waterslide-safety": {
-    name: "Waterslide Safety & Competency Training",
+    name: "Waterslide Safety & Competency Program",
     description: "Comprehensive waterslide operator training with certification",
     prices: {
       individual: { seats: 1, pricePerSeat: 14900 }, // $149.00 in cents

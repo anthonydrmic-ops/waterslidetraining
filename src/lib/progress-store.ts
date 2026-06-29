@@ -46,26 +46,56 @@ function apiAvailable(): boolean {
   return !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 }
 
+function readLocal(): UserProgress | null {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return null;
+    return { ...defaultProgress, ...JSON.parse(stored) };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Merge a server snapshot with the locally-cached one so progress can never
+ * regress. Completions are monotonic (they only ever grow, except via an
+ * explicit reset — which clears localStorage too, so the floor goes with it).
+ * Without this floor a stale or read-after-write-lagged GET could blank out a
+ * lesson the user just finished, which showed up as "completed lesson 2 of 3
+ * but the overview won't confirm it's done." Scalars (certified, position,
+ * name) take the server value; sets are unioned; per-lesson quiz scores keep
+ * the server entry when present and otherwise retain any local-only entry.
+ */
+function mergeProgress(server: UserProgress, local: UserProgress): UserProgress {
+  return {
+    ...server,
+    completedLessons: Array.from(
+      new Set([...server.completedLessons, ...local.completedLessons])
+    ),
+    completedModules: Array.from(
+      new Set([...server.completedModules, ...local.completedModules])
+    ),
+    quizScores: { ...local.quizScores, ...server.quizScores },
+  };
+}
+
 async function load(): Promise<UserProgress> {
   if (typeof window === "undefined") return defaultProgress;
+
+  const local = readLocal();
 
   if (apiAvailable()) {
     try {
       const res = await fetch("/api/progress");
       if (res.ok) {
         const data = await res.json();
-        return { ...defaultProgress, ...data };
+        const server = { ...defaultProgress, ...data };
+        return local ? mergeProgress(server, local) : server;
       }
     } catch { /* fall through to localStorage */ }
   }
 
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return defaultProgress;
-    return { ...defaultProgress, ...JSON.parse(stored) };
-  } catch {
-    return defaultProgress;
-  }
+  return local ?? defaultProgress;
 }
 
 async function persist(progress: UserProgress): Promise<void> {

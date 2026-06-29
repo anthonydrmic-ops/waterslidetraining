@@ -289,7 +289,7 @@ export const modules: Module[] = [
           {
             type: "critical",
             body: "Being excluded from registration does NOT remove your safety duties. Even an unregistered gravity waterslide must still be maintained, inspected and tested as necessary, including a thorough inspection by a competent person at least once every 12 months. Inadequate design, installation, inspection, maintenance and training have caused serious waterslide injuries.",
-            source: "Safe Work Australia, Guide for Amusement Devices; WorkSafe WA water slide guidance",
+            source: "Model WHS Regulations (annual inspection of amusement devices) and Safe Work Australia, General Guide for Amusement Devices; supporting example: WorkSafe WA water slide guidance (Bulletin No. 7)",
           },
           {
             type: "diagram",

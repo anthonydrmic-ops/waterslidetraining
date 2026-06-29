@@ -1,6 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { modules } from "@/data/training-modules";
 import { NextResponse } from "next/server";
+
+// The final assessment is the single lesson inside the "assessment" module.
+// Derive its id from the course data so the cert score never silently goes null
+// if the lesson id changes (it is "9-1", not the literal "final-assessment").
+const ASSESSMENT_LESSON_ID =
+  modules.find((m) => m.id === "assessment")?.lessons[0]?.id ?? "9-1";
 
 function generateCertId(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -57,7 +64,7 @@ export async function POST(request: Request) {
     .eq("user_id", dbUser.id)
     .single();
 
-  const finalScore = progress?.quiz_scores?.["final-assessment"];
+  const finalScore = progress?.quiz_scores?.[ASSESSMENT_LESSON_ID];
 
   // Generate unique cert ID
   let certId = generateCertId();

@@ -249,7 +249,7 @@ function TrainingPageInner() {
               REST Group Training
             </div>
             <h1 className="text-3xl md:text-5xl font-bold tracking-tighter text-stone-900 mb-3">
-              SlideSure - Waterslide Safety
+              SlideSure - Waterslide Safety and Competency Program
             </h1>
           </motion.div>
 
@@ -327,7 +327,7 @@ function TrainingPageInner() {
                           Available Now
                         </div>
                         <h2 className="text-xl md:text-2xl font-bold tracking-tight text-stone-900">
-                          Waterslide Safety & Competency
+                          Waterslide Safety & Competency Program
                         </h2>
                       </div>
                     </div>

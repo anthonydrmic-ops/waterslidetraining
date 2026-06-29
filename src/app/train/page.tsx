@@ -152,6 +152,26 @@ export default function TrainPage() {
     return () => clearTimeout(minTimer);
   }, []);
 
+  // Re-sync progress whenever the overview regains focus or is restored from
+  // the back/forward cache. Returning here after finishing a lesson must show
+  // it ticked off — without this, the bfcache can re-display the stale page
+  // (mount effect won't re-run), so a just-completed lesson looks unfinished.
+  // Refresh-only: no welcome/badge side effects, so it's safe to run often.
+  useEffect(() => {
+    const resync = () => {
+      if (document.visibilityState === "hidden") return;
+      refreshProgress().then(setProgress);
+    };
+    window.addEventListener("focus", resync);
+    document.addEventListener("visibilitychange", resync);
+    window.addEventListener("pageshow", resync);
+    return () => {
+      window.removeEventListener("focus", resync);
+      document.removeEventListener("visibilitychange", resync);
+      window.removeEventListener("pageshow", resync);
+    };
+  }, []);
+
   const totalLessons = getTotalLessons();
   const completionPct = mounted ? getCompletionPercentage(totalLessons) : 0;
   const completedCount = mounted ? progress.completedLessons.length : 0;

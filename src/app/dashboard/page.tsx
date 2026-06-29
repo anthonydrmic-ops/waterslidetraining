@@ -143,7 +143,7 @@ export default function DashboardPage() {
                 <motion.div variants={fadeUp} className="mb-6">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-xs font-medium text-[var(--accent)]">
                     <Certificate size={14} weight="duotone" />
-                    {data.license.course_id === "waterslide-safety" ? "Waterslide Safety & Competency" : data.license.course_id}
+                    {data.license.course_id === "waterslide-safety" ? "Waterslide Safety & Competency Program" : data.license.course_id}
                     {" - "}
                     {data.license.used_seats}/{data.license.total_seats} seats used
                   </div>
