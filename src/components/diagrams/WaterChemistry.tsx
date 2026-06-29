@@ -7,22 +7,28 @@ const EASE = [0.32, 0.72, 0, 1] as const;
 
 type Param = {
   label: string;
-  low: string;
+  // Numeric scale ends (what the left/right of the track represent) and the
+  // ideal band, so the green zone is positioned/sized to the REAL range rather
+  // than a fixed centre block.
+  scaleMin: number;
+  scaleMax: number;
+  idealLow: number;
+  idealHigh: number;
+  lowLabel: string;
   lowRisk: string;
   target: string;
-  high: string;
+  highLabel: string;
   highRisk: string;
   color: string;
 };
 
-// Free chlorine upper figure corrected to the 10 mg/L regulatory maximum
-// (the level at which bathers must be cleared), per AU aquatic facility
-// guidelines — not the earlier "5.0+".
+// Free chlorine upper figure is the 10 mg/L regulatory maximum (the level at
+// which bathers must be cleared), per AU aquatic facility guidelines.
 const params: Param[] = [
-  { label: "pH Level", low: "6.0", lowRisk: "Corrosive", target: "7.2 – 7.8", high: "9.0", highRisk: "Scaling", color: "#1F7A8C" },
-  { label: "FAC (Indoor)", low: "0", lowRisk: "Infection risk", target: "1.0 – 3.0 ppm", high: "10+ ppm", highRisk: "Surface damage", color: "#16a34a" },
-  { label: "FAC (Outdoor)", low: "0", lowRisk: "Infection risk", target: "2.0 – 4.0 ppm", high: "10+ ppm", highRisk: "Surface damage", color: "#16a34a" },
-  { label: "LSI Index", low: "-2.0", lowRisk: "Dissolves surfaces", target: "-0.3 to +0.3", high: "+2.0", highRisk: "Heavy scaling", color: "#0B3A66" },
+  { label: "pH Level", scaleMin: 6.0, scaleMax: 9.0, idealLow: 7.2, idealHigh: 7.8, lowLabel: "6.0", lowRisk: "Corrosive", target: "7.2 – 7.8", highLabel: "9.0", highRisk: "Scaling", color: "#1F7A8C" },
+  { label: "FAC (Indoor)", scaleMin: 0, scaleMax: 10, idealLow: 1, idealHigh: 3, lowLabel: "0", lowRisk: "Infection risk", target: "1.0 – 3.0 ppm", highLabel: "10+ ppm", highRisk: "Surface damage", color: "#16a34a" },
+  { label: "FAC (Outdoor)", scaleMin: 0, scaleMax: 10, idealLow: 2, idealHigh: 4, lowLabel: "0", lowRisk: "Infection risk", target: "2.0 – 4.0 ppm", highLabel: "10+ ppm", highRisk: "Surface damage", color: "#16a34a" },
+  { label: "LSI Index", scaleMin: -2.0, scaleMax: 2.0, idealLow: -0.3, idealHigh: 0.3, lowLabel: "-2.0", lowRisk: "Dissolves surfaces", target: "-0.3 to +0.3", highLabel: "+2.0", highRisk: "Heavy scaling", color: "#0B3A66" },
 ];
 
 export function WaterChemistry() {
@@ -48,86 +54,92 @@ export function WaterChemistry() {
       </p>
 
       <div className="space-y-2.5">
-        {params.map((p, i) => (
-          <motion.div
-            key={p.label}
-            initial={{ opacity: 0, y: 12 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-            transition={{ duration: 0.45, delay: i * 0.12, ease: EASE }}
-            className="rounded-2xl bg-white ring-1 ring-stone-200/70 px-4 py-3.5"
-          >
-            {/* Header: parameter + safe-range chip */}
-            <div className="flex items-center justify-between gap-3 mb-2.5">
-              <span className="text-sm font-bold tracking-tight" style={{ color: p.color }}>
-                {p.label}
-              </span>
-              <span
-                className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
-                style={{
-                  color: p.color,
-                  backgroundColor: `color-mix(in srgb, ${p.color} 12%, transparent)`,
-                }}
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: p.color }}
-                />
-                Safe {p.target}
-              </span>
-            </div>
+        {params.map((p, i) => {
+          // Position the ideal band on the real min–max scale.
+          const span = p.scaleMax - p.scaleMin;
+          const leftPct = ((p.idealLow - p.scaleMin) / span) * 100;
+          const rightPct = ((p.idealHigh - p.scaleMin) / span) * 100;
+          const bandPct = rightPct - leftPct;
+          const centerPct = (leftPct + rightPct) / 2;
 
-            {/* Track: red (too low) · colour (safe) · red (too high) */}
-            <div className="relative h-3">
-              <div className="absolute inset-0 flex rounded-full overflow-hidden ring-1 ring-stone-200/60">
-                <div className="w-1/4 h-full bg-red-400/20" />
-                <motion.div
-                  className="w-1/2 h-full"
-                  style={{ backgroundColor: `color-mix(in srgb, ${p.color} 32%, white)`, transformOrigin: "center" }}
-                  initial={{ scaleX: reduce ? 1 : 0.2 }}
-                  animate={inView ? { scaleX: 1 } : { scaleX: reduce ? 1 : 0.2 }}
-                  transition={{ duration: 0.55, delay: 0.2 + i * 0.12, ease: EASE }}
-                />
-                <div className="w-1/4 h-full bg-red-400/20" />
+          return (
+            <motion.div
+              key={p.label}
+              initial={{ opacity: 0, y: 12 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              transition={{ duration: 0.45, delay: i * 0.12, ease: EASE }}
+              className="rounded-2xl bg-white ring-1 ring-stone-200/70 px-4 py-3.5"
+            >
+              {/* Header: parameter + ideal-range chip */}
+              <div className="flex items-center justify-between gap-3 mb-2.5">
+                <span className="text-sm font-bold tracking-tight" style={{ color: p.color }}>
+                  {p.label}
+                </span>
+                <span
+                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
+                  style={{
+                    color: p.color,
+                    backgroundColor: `color-mix(in srgb, ${p.color} 12%, transparent)`,
+                  }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: p.color }} />
+                  Ideal {p.target}
+                </span>
               </div>
 
-              {/* Operating point drifts in from the low end and settles in the
-                  middle of the safe band — the job of daily dosing. */}
-              <motion.div
-                className="absolute top-1/2"
-                style={{ translateX: "-50%", translateY: "-50%" }}
-                initial={{ left: reduce ? "50%" : "13%", opacity: reduce ? 1 : 0 }}
-                animate={inView ? { left: "50%", opacity: 1 } : {}}
-                transition={{
-                  left: { type: "spring", stiffness: 55, damping: 14, delay: 0.45 + i * 0.12 },
-                  opacity: { duration: 0.3, delay: 0.45 + i * 0.12 },
-                }}
-              >
-                {!reduce && (
-                  <span
-                    className="absolute inset-0 m-auto w-3.5 h-3.5 rounded-full"
-                    style={{ backgroundColor: p.color, animation: "wcPulse 2.6s cubic-bezier(0,0,0.2,1) infinite" }}
+              {/* Track: red (too low) · colour (ideal, positioned to scale) · red (too high) */}
+              <div className="relative h-3">
+                <div className="absolute inset-0 flex rounded-full overflow-hidden ring-1 ring-stone-200/60 bg-stone-100">
+                  <div className="h-full bg-red-400/20" style={{ width: `${leftPct}%` }} />
+                  <motion.div
+                    className="h-full"
+                    style={{ width: `${bandPct}%`, backgroundColor: `color-mix(in srgb, ${p.color} 32%, white)` }}
+                    initial={{ opacity: reduce ? 1 : 0 }}
+                    animate={inView ? { opacity: 1 } : { opacity: reduce ? 1 : 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 + i * 0.12, ease: EASE }}
                   />
-                )}
-                <span
-                  className="relative block w-3.5 h-3.5 rounded-full ring-2 ring-white shadow-sm"
-                  style={{ backgroundColor: p.color }}
-                />
-              </motion.div>
-            </div>
+                  <div className="h-full bg-red-400/20" style={{ width: `${100 - rightPct}%` }} />
+                </div>
 
-            {/* Danger ends: value + what goes wrong */}
-            <div className="flex items-start justify-between mt-2 text-[11px] leading-tight">
-              <div className="text-left">
-                <span className="font-bold text-red-500">{p.low}</span>
-                <span className="block text-stone-400">{p.lowRisk}</span>
+                {/* Operating point drifts up from the under-treated (low) end and
+                    settles in the middle of the ideal band — the job of dosing. */}
+                <motion.div
+                  className="absolute top-1/2"
+                  style={{ translateX: "-50%", translateY: "-50%" }}
+                  initial={{ left: reduce ? `${centerPct}%` : "4%", opacity: reduce ? 1 : 0 }}
+                  animate={inView ? { left: `${centerPct}%`, opacity: 1 } : {}}
+                  transition={{
+                    left: { type: "spring", stiffness: 55, damping: 14, delay: 0.45 + i * 0.12 },
+                    opacity: { duration: 0.3, delay: 0.45 + i * 0.12 },
+                  }}
+                >
+                  {!reduce && (
+                    <span
+                      className="absolute inset-0 m-auto w-3.5 h-3.5 rounded-full"
+                      style={{ backgroundColor: p.color, animation: "wcPulse 2.6s cubic-bezier(0,0,0.2,1) infinite" }}
+                    />
+                  )}
+                  <span
+                    className="relative block w-3.5 h-3.5 rounded-full ring-2 ring-white shadow-sm"
+                    style={{ backgroundColor: p.color }}
+                  />
+                </motion.div>
               </div>
-              <div className="text-right">
-                <span className="font-bold text-red-500">{p.high}</span>
-                <span className="block text-stone-400">{p.highRisk}</span>
+
+              {/* Scale ends: value + what goes wrong */}
+              <div className="flex items-start justify-between mt-2 text-[11px] leading-tight">
+                <div className="text-left">
+                  <span className="font-bold text-red-500">{p.lowLabel}</span>
+                  <span className="block text-stone-400">{p.lowRisk}</span>
+                </div>
+                <div className="text-right">
+                  <span className="font-bold text-red-500">{p.highLabel}</span>
+                  <span className="block text-stone-400">{p.highRisk}</span>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
       <motion.p
