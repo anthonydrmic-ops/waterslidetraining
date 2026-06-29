@@ -445,9 +445,10 @@ function TrainingPageInner() {
                 </p>
                 <p className="text-[11px] text-stone-400 mt-5 max-w-md mx-auto leading-relaxed">
                   By purchasing you agree to our{" "}
-                  <a href="/terms" className="text-[var(--accent)] hover:underline">Terms &amp; Conditions</a>. This is a
-                  competency training program and statement of completion - not a nationally accredited (RTO/VET)
-                  qualification or a statutory licence.
+                  <a href="/terms" className="text-[var(--accent)] hover:underline">Terms &amp; Conditions</a>. The training
+                  is provided by Comfy Chaos Pty Ltd and offered via REST Group; your payment is processed securely and may
+                  appear as Comfy Chaos on your statement. This is a competency training program and statement of
+                  completion - not a nationally accredited (RTO/VET) qualification or a statutory licence.
                 </p>
               </motion.div>
 

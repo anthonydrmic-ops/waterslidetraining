@@ -111,8 +111,9 @@ export default function TermsPage() {
 
               <Term n="1" title="Agreement to these terms">
                 These terms govern your access to and use of the SlideSure training program and any
-                related content, certificates and services provided by REST Group Asia Pacific Pty Ltd
-                (&ldquo;REST Group&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;). By purchasing, enrolling
+                related content, certificates and services. The training is provided by Comfy Chaos Pty Ltd
+                (&ldquo;Comfy Chaos&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) and is offered for sale via the
+                REST Group Asia Pacific Pty Ltd (&ldquo;REST Group&rdquo;) website. By purchasing, enrolling
                 in, or using the training you agree to these terms. If you are agreeing on behalf of an
                 organisation, you confirm you are authorised to do so.
               </Term>
@@ -128,14 +129,14 @@ export default function TermsPage() {
               </Term>
 
               <Term n="3" title="Not a nationally accredited qualification">
-                The certificate issued on completion is a <strong>statement of completion and competency
-                issued by REST Group</strong>. It is <strong>not</strong> a nationally recognised
-                qualification or unit of competency under the Australian Vocational Education and Training
-                (VET) framework, REST Group is <strong>not</strong> a Registered Training Organisation
-                (RTO), and the certificate is <strong>not</strong> a statutory licence, ticket or
-                high-risk-work licence. It does not, by itself, authorise any person to operate plant where
-                a regulator, employer or insurer requires a specific licence, ticket or accreditation.
-                Where such requirements apply, they must be met separately.
+                The certificate issued on completion is a <strong>statement of completion and
+                competency</strong>. It is <strong>not</strong> a nationally recognised qualification or
+                unit of competency under the Australian Vocational Education and Training (VET) framework;
+                neither Comfy Chaos nor REST Group is a <strong>Registered Training Organisation (RTO)</strong>;
+                and the certificate is <strong>not</strong> a statutory licence, ticket or high-risk-work
+                licence. It does not, by itself, authorise any person to operate plant where a regulator,
+                employer or insurer requires a specific licence, ticket or accreditation. Where such
+                requirements apply, they must be met separately.
               </Term>
 
               <Term n="4" title="Currency of content">
@@ -166,22 +167,25 @@ export default function TermsPage() {
                 reliance on the content, or any act or omission of any person. Where our liability cannot
                 be excluded but can be limited, our liability is limited (at our option) to re-supplying
                 the training or paying the cost of having it re-supplied, or to the amount you paid for the
-                training.
+                training. These exclusions and limitations also apply, to the same extent, for the benefit
+                of REST Group and the directors, employees and contractors of each of us.
               </Term>
 
               <Term n="7" title="Licences, access and acceptable use">
                 Access is granted on a per-seat basis for the named user or the number of seats purchased.
                 Accounts and access must not be shared beyond your licence. The content is the intellectual
-                property of REST Group and is provided for your internal training use only; you may not
+                property of Comfy Chaos and is provided for your internal training use only; you may not
                 copy, redistribute, resell, or create derivative works from it without our written consent.
               </Term>
 
               <Term n="8" title="Payments and refunds">
-                Prices are in Australian dollars and payments are processed securely by our payment
-                provider. Because the training is digital content that is accessed immediately, change-of-mind
-                refunds may not be available once you have started the course. This does not affect your
-                rights under the Australian Consumer Law, including to a remedy where the training is not of
-                acceptable quality or does not match its description. For any billing issue, contact us.
+                Prices are in Australian dollars and payments are processed securely by our payment provider
+                (Stripe) on behalf of Comfy Chaos. Your card or bank statement may therefore show
+                &ldquo;Comfy Chaos&rdquo; rather than REST Group or SlideSure. Because the training is
+                digital content that is accessed immediately, change-of-mind refunds may not be available
+                once you have started the course. This does not affect your rights under the Australian
+                Consumer Law, including to a remedy where the training is not of acceptable quality or does
+                not match its description. For any billing issue, contact us.
               </Term>
 
               <Term n="9" title="Privacy">
@@ -191,9 +195,9 @@ export default function TermsPage() {
               </Term>
 
               <Term n="10" title="Governing law">
-                These terms are governed by the laws of Australia and the State or Territory in which REST
-                Group Asia Pacific Pty Ltd has its principal place of business, and you submit to the
-                non-exclusive jurisdiction of the courts of that place.
+                These terms are governed by the laws of Australia and the State or Territory in which Comfy
+                Chaos Pty Ltd has its principal place of business, and you submit to the non-exclusive
+                jurisdiction of the courts of that place.
               </Term>
 
               <Term n="11" title="Contact">
@@ -236,7 +240,7 @@ export default function TermsPage() {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2026 REST Group Asia Pacific Pty Ltd</p>
+          <p>&copy; 2026 REST Group Asia Pacific Pty Ltd · SlideSure training provided by Comfy Chaos Pty Ltd</p>
         </div>
       </footer>
     </>
