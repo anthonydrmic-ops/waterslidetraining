@@ -36,9 +36,12 @@ export async function POST(request: Request) {
     // Upsert user
     const { data: existing } = await supabase
       .from("users")
-      .select("id")
+      .select("id, org_id")
       .eq("clerk_user_id", clerkUserId)
       .single();
+
+    let userId = existing?.id as string | undefined;
+    let orgId = existing?.org_id as string | null | undefined;
 
     if (existing) {
       await supabase
@@ -53,15 +56,38 @@ export async function POST(request: Request) {
           email,
           full_name: fullName,
         })
-        .select("id")
+        .select("id, org_id")
         .single();
 
       // Create empty progress record for the new user
       if (newUser) {
+        userId = newUser.id;
+        orgId = newUser.org_id;
         await supabase.from("user_progress").upsert(
           { user_id: newUser.id },
           { onConflict: "user_id" }
         );
+      }
+    }
+
+    // Link a no-login buyer to the licence they paid for: if this email bought a
+    // licence (stored as buyer_email) and they aren't in an org yet, make them
+    // the org admin so they can manage and distribute seats.
+    if (userId && !orgId && email) {
+      const { data: lic } = await supabase
+        .from("licenses")
+        .select("org_id")
+        .eq("buyer_email", email)
+        .eq("status", "active")
+        .not("org_id", "is", null)
+        .order("purchased_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (lic?.org_id) {
+        await supabase
+          .from("users")
+          .update({ org_id: lic.org_id, role: "admin" })
+          .eq("id", userId);
       }
     }
   }

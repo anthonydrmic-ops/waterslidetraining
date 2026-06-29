@@ -40,9 +40,11 @@ const tiers = [
     id: "individual",
     name: "Individual",
     icon: User,
-    seats: "1 user",
-    price: 99,
-    perSeat: 99,
+    seatsLabel: "1 user",
+    minSeats: 1,
+    maxSeats: 1,
+    regular: 149,
+    launch: 99,
     description: "For independent operators and freelancers",
     popular: false,
   },
@@ -50,9 +52,11 @@ const tiers = [
     id: "team",
     name: "Team",
     icon: Users,
-    seats: "Up to 10 users",
-    price: 89,
-    perSeat: 89,
+    seatsLabel: "2-10 users",
+    minSeats: 2,
+    maxSeats: 10,
+    regular: 119,
+    launch: 89,
     description: "For small parks and single-attraction teams",
     popular: true,
   },
@@ -60,13 +64,18 @@ const tiers = [
     id: "business",
     name: "Business",
     icon: Buildings,
-    seats: "Up to 50 users",
-    price: 79,
-    perSeat: 79,
+    seatsLabel: "11-50 users",
+    minSeats: 11,
+    maxSeats: 50,
+    regular: 99,
+    launch: 79,
     description: "For multi-attraction facilities and chains",
     popular: false,
   },
 ];
+
+// Launch pricing runs through the end of July 2026 (AEST).
+const LAUNCH_END = new Date("2026-07-31T23:59:59+10:00").getTime();
 
 const features = [
   "9 comprehensive training modules",
@@ -94,11 +103,43 @@ function TrainingPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [selectedTier, setSelectedTier] = useState("team");
+  const [seats, setSeats] = useState(2); // team default (its min)
+  const [launchActive, setLaunchActive] = useState(true);
+  const [mounted, setMounted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
   const [loading, setLoading] = useState(false);
   const [licensed, setLicensed] = useState<boolean | null>(null);
   const [promo, setPromo] = useState("");
   const [promoMsg, setPromoMsg] = useState<string | null>(null);
   const [promoLoading, setPromoLoading] = useState(false);
+
+  const selectedTierObj = tiers.find((t) => t.id === selectedTier)!;
+  const activePerSeat = launchActive ? selectedTierObj.launch : selectedTierObj.regular;
+
+  const selectTier = (id: string) => {
+    setSelectedTier(id);
+    const t = tiers.find((x) => x.id === id)!;
+    setSeats(t.minSeats);
+  };
+
+  // Live launch countdown to the end of July (AEST).
+  useEffect(() => {
+    setMounted(true);
+    const update = () => {
+      const diff = LAUNCH_END - Date.now();
+      setLaunchActive(diff > 0);
+      const s = Math.max(0, Math.floor(diff / 1000));
+      setTimeLeft({
+        d: Math.floor(s / 86400),
+        h: Math.floor((s % 86400) / 3600),
+        m: Math.floor((s % 3600) / 60),
+        s: s % 60,
+      });
+    };
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -117,11 +158,6 @@ function TrainingPageInner() {
   }, [isLoaded, isSignedIn, searchParams, router]);
 
   const handlePurchase = async (tier: string) => {
-    if (!isSignedIn) {
-      router.push("/sign-in?redirect_url=/training/slidesure");
-      return;
-    }
-
     setLoading(true);
     try {
       const res = await fetch("/api/checkout", {
@@ -130,20 +166,19 @@ function TrainingPageInner() {
         body: JSON.stringify({
           courseId: "waterslide-safety",
           tier,
+          seats,
         }),
       });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
-      } else if (data.error === "Unauthorized") {
-        router.push("/sign-in?redirect_url=/training/slidesure");
       } else {
         console.error("Checkout error:", data);
-        alert("Payment system is being configured. Check back soon.");
+        alert("Couldn't start checkout. Please try again, or contact info@restgroup.com.au.");
       }
     } catch (err) {
       console.error("Checkout exception:", err);
-      alert("Payment system is being configured. Check back soon.");
+      alert("Couldn't connect to checkout. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -178,12 +213,9 @@ function TrainingPageInner() {
   };
 
   const ctaLabel = () => {
-    if (loading) return "Redirecting to checkout...";
-    if (!isLoaded) return "Loading...";
-    if (!isSignedIn) {
-      return `Create Account & Purchase`;
-    }
-    return `Purchase ${tiers.find((t) => t.id === selectedTier)?.name} Plan`;
+    if (loading) return "Redirecting to secure checkout…";
+    if (!isLoaded) return "Loading…";
+    return "Continue to secure checkout";
   };
 
   return (
@@ -243,27 +275,32 @@ function TrainingPageInner() {
 
       <div className="max-w-[1200px] mx-auto px-6 pt-28 pb-16">
         <motion.div variants={stagger} initial="hidden" animate="show">
-          {/* Header */}
-          <motion.div variants={fadeUp} className="text-center mb-14">
-            <div className="eyebrow bg-stone-100 border border-stone-200/60 text-stone-500 mb-5 mx-auto w-fit">
-              REST Group Training
-            </div>
-            <h1 className="text-3xl md:text-5xl font-bold tracking-tighter text-stone-900 mb-3">
-              SlideSure - Waterslide Safety and Competency Program
-            </h1>
-          </motion.div>
-
-          {/* Hero image */}
-          <motion.div variants={fadeUp} className="mb-14">
-            <div className="relative w-full aspect-video rounded-3xl overflow-hidden ring-1 ring-stone-200/60 shadow-[0_20px_50px_rgba(11,58,102,0.12)]">
+          {/* Hero - compact with the title overlaid, so the plan info sits high
+              on the page instead of being pushed below a tall image. */}
+          <motion.div variants={fadeUp} className="mb-8">
+            <div className="relative w-full h-[42vh] min-h-[240px] max-h-[440px] rounded-3xl overflow-hidden ring-1 ring-stone-200/60 shadow-[0_20px_50px_rgba(11,58,102,0.12)]">
               <Image
                 src="/lesson-images/00-marketing-hero-v2.jpg"
                 alt="Two riders on tubes racing down a multi-lane waterslide, colourful intertwined flumes towering behind them against a blue sky"
                 fill
-                preload={true}
+                priority
                 sizes="(max-width: 1200px) 100vw, 1140px"
                 className="object-cover"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/5" />
+              {mounted && launchActive && (
+                <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--cta)] text-white text-[11px] font-semibold uppercase tracking-wider shadow-lg">
+                  🔥 July launch offer
+                </div>
+              )}
+              <div className="absolute inset-x-0 bottom-0 p-6 md:p-9">
+                <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/15 border border-white/25 backdrop-blur-sm text-white text-[10px] font-semibold uppercase tracking-wider mb-3">
+                  REST Group Training
+                </div>
+                <h1 className="text-2xl md:text-4xl font-bold tracking-tighter text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] max-w-[24ch]">
+                  SlideSure - Waterslide Safety & Competency Program
+                </h1>
+              </div>
             </div>
           </motion.div>
 
@@ -367,23 +404,46 @@ function TrainingPageInner() {
           {/* Pricing - hide if already licensed */}
           {licensed !== true && (
             <>
-              <motion.div variants={fadeUp} className="mb-10">
+              {/* Launch offer + live countdown */}
+              {mounted && launchActive && (
+                <motion.div variants={fadeUp} className="mb-6">
+                  <div className="rounded-2xl border-2 border-[var(--cta)]/20 bg-[var(--cta)]/[0.05] px-5 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-xl">🔥</span>
+                      <div>
+                        <p className="text-sm font-bold text-stone-800">July launch pricing - up to $50/seat off</p>
+                        <p className="text-xs text-stone-500">Founding price for all of July. Regular pricing returns 1 August.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {([["Days", timeLeft.d], ["Hrs", timeLeft.h], ["Min", timeLeft.m], ["Sec", timeLeft.s]] as const).map(([label, val]) => (
+                        <div key={label} className="flex flex-col items-center px-2.5 py-1.5 rounded-xl bg-white border border-stone-200 min-w-[46px]">
+                          <span className="text-base font-bold font-mono text-stone-900 tabular-nums">{String(val).padStart(2, "0")}</span>
+                          <span className="text-[9px] uppercase tracking-wider text-stone-400">{label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              <motion.div variants={fadeUp} className="mb-8">
                 <h2 className="text-2xl font-bold tracking-tight text-stone-900 text-center mb-2">
                   Choose Your Plan
                 </h2>
                 <p className="text-stone-400 text-sm text-center mb-8">
-                  All plans include full course access and certification. Per-seat pricing.
+                  All plans include full course access and certification. Per-seat pricing - pick how many seats you need.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   {tiers.map((tier) => {
                     const Icon = tier.icon;
                     const isSelected = selectedTier === tier.id;
-
+                    const price = launchActive ? tier.launch : tier.regular;
                     return (
                       <button
                         key={tier.id}
-                        onClick={() => setSelectedTier(tier.id)}
+                        onClick={() => selectTier(tier.id)}
                         className={`card-shell text-left transition-all duration-300 ${
                           isSelected ? "ring-2 ring-[var(--cta)] ring-offset-2" : ""
                         }`}
@@ -400,12 +460,15 @@ function TrainingPageInner() {
                             </div>
                             <div>
                               <p className="font-bold text-stone-900">{tier.name}</p>
-                              <p className="text-[11px] text-stone-400">{tier.seats}</p>
+                              <p className="text-[11px] text-stone-400">{tier.seatsLabel}</p>
                             </div>
                           </div>
-                          <div className="mb-3">
-                            <span className="text-3xl font-bold tracking-tight text-stone-900">${tier.price}</span>
-                            <span className="text-sm text-stone-400"> /seat</span>
+                          <div className="mb-3 flex items-baseline gap-2 flex-wrap">
+                            <span className="text-3xl font-bold tracking-tight text-stone-900">${price}</span>
+                            <span className="text-sm text-stone-400">/seat</span>
+                            {launchActive && tier.regular > tier.launch && (
+                              <span className="text-sm text-stone-300 line-through">${tier.regular}</span>
+                            )}
                           </div>
                           <p className="text-xs text-stone-400 leading-relaxed">{tier.description}</p>
                         </div>
@@ -415,34 +478,70 @@ function TrainingPageInner() {
                 </div>
               </motion.div>
 
-              {/* CTA */}
-              <motion.div variants={fadeUp} className="text-center">
+              {/* Seat selector + total + CTA */}
+              <motion.div variants={fadeUp} className="max-w-md mx-auto text-center">
+                {selectedTierObj.maxSeats > 1 && (
+                  <div className="flex items-center justify-between gap-4 mb-4 px-5 py-4 rounded-2xl border border-stone-200 bg-white text-left">
+                    <div>
+                      <p className="text-sm font-semibold text-stone-700">How many seats?</p>
+                      <p className="text-xs text-stone-400">{selectedTierObj.minSeats}-{selectedTierObj.maxSeats} for {selectedTierObj.name}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setSeats((s) => Math.max(selectedTierObj.minSeats, s - 1))}
+                        disabled={seats <= selectedTierObj.minSeats}
+                        className="w-9 h-9 rounded-full bg-stone-100 text-stone-600 text-lg font-bold flex items-center justify-center hover:bg-stone-200 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        &minus;
+                      </button>
+                      <span className="w-8 text-center text-lg font-bold font-mono text-stone-900 tabular-nums">{seats}</span>
+                      <button
+                        type="button"
+                        onClick={() => setSeats((s) => Math.min(selectedTierObj.maxSeats, s + 1))}
+                        disabled={seats >= selectedTierObj.maxSeats}
+                        className="w-9 h-9 rounded-full bg-stone-100 text-stone-600 text-lg font-bold flex items-center justify-center hover:bg-stone-200 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between mb-4 px-1">
+                  <span className="text-sm text-stone-500">{seats} {seats === 1 ? "seat" : "seats"} &times; ${activePerSeat}</span>
+                  <span className="text-2xl font-bold tracking-tight text-stone-900">
+                    ${activePerSeat * seats}
+                    <span className="text-sm font-normal text-stone-400"> AUD</span>
+                  </span>
+                </div>
+
                 <button
                   onClick={() => handlePurchase(selectedTier)}
                   disabled={loading || !isLoaded}
-                  className="group inline-flex items-center gap-2.5 px-10 py-4 rounded-full bg-[var(--cta)] text-white font-medium transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[var(--cta-dark)] active:scale-[0.97] shadow-[0_4px_16px_rgba(240,90,40,0.25)] disabled:opacity-60"
+                  className="w-full group inline-flex items-center justify-center gap-2.5 px-10 py-4 rounded-full bg-[var(--cta)] text-white font-medium transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-[var(--cta-dark)] active:scale-[0.97] shadow-[0_4px_16px_rgba(240,90,40,0.25)] disabled:opacity-60"
                 >
                   {ctaLabel()}
-                  <ArrowRight
-                    size={16}
-                    weight="bold"
-                    className="group-hover:translate-x-0.5 transition-transform duration-300"
-                  />
+                  <ArrowRight size={16} weight="bold" className="group-hover:translate-x-0.5 transition-transform duration-300" />
                 </button>
-                {!isSignedIn && isLoaded && (
-                  <p className="text-[11px] text-stone-400 mt-3">
-                    Already have an account?{" "}
-                    <Link href="/sign-in?redirect_url=/training/slidesure" className="text-[var(--accent)] hover:underline">
-                      Sign in
-                    </Link>
-                  </p>
-                )}
+
+                <p className="text-[11px] text-stone-400 mt-3">
+                  No account needed to buy - you&apos;ll get a code to share seats with your team.
+                  {isLoaded && !isSignedIn && (
+                    <>
+                      {" "}Already a member?{" "}
+                      <Link href="/sign-in?redirect_url=/training/slidesure" className="text-[var(--accent)] hover:underline">Sign in</Link>
+                    </>
+                  )}
+                </p>
+
                 <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-5 py-3 rounded-2xl border border-stone-200 bg-stone-50">
                   <span className="text-sm font-semibold text-stone-700">Need more than 50 seats?</span>
                   <a href="mailto:info@restgroup.com.au?subject=Enterprise%20training%20enquiry" className="text-sm font-semibold text-[var(--accent)] hover:underline">
                     Contact us for enterprise pricing &rarr;
                   </a>
                 </div>
+
                 <p className="text-[11px] text-stone-400 mt-5 max-w-md mx-auto leading-relaxed">
                   By purchasing you agree to our{" "}
                   <a href="/terms" className="text-[var(--accent)] hover:underline">Terms &amp; Conditions</a>. The training

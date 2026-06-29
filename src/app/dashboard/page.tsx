@@ -10,6 +10,8 @@ import {
   ChartBar,
   Crown,
   Certificate,
+  Copy,
+  Check,
 } from "@phosphor-icons/react";
 import Link from "next/link";
 
@@ -43,6 +45,7 @@ interface DashboardData {
     used_seats: number;
     status: string;
     course_id: string;
+    join_code: string | null;
   } | null;
   isAdmin: boolean;
 }
@@ -52,6 +55,17 @@ export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState<"code" | "link" | null>(null);
+
+  const copy = async (text: string, which: "code" | "link") => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(which);
+      setTimeout(() => setCopied(null), 1800);
+    } catch {
+      /* clipboard unavailable */
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -146,6 +160,60 @@ export default function DashboardPage() {
                     {data.license.course_id === "waterslide-safety" ? "Waterslide Safety & Competency Program" : data.license.course_id}
                     {" - "}
                     {data.license.used_seats}/{data.license.total_seats} seats used
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Invite team — share the join code so staff can claim seats */}
+              {data?.isAdmin && data?.license?.join_code && (
+                <motion.div variants={fadeUp} className="mb-10">
+                  <div className="card-shell">
+                    <div className="card-core p-6">
+                      <div className="flex items-start justify-between gap-4 flex-wrap">
+                        <div>
+                          <h2 className="text-base font-bold tracking-tight text-stone-800 mb-1">Invite your team</h2>
+                          <p className="text-sm text-stone-400 max-w-[44ch]">
+                            Share this code (or link) with your staff. Each person signs in, enters the code and
+                            claims a seat — until your{" "}
+                            {data.license.total_seats - data.license.used_seats} remaining seats run out.
+                          </p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="text-2xl font-bold font-mono text-stone-900">
+                            {data.license.used_seats}/{data.license.total_seats}
+                          </p>
+                          <p className="text-[10px] uppercase tracking-wider text-stone-400">Seats claimed</p>
+                        </div>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-3 mt-5">
+                        <button
+                          onClick={() => copy(data.license!.join_code!, "code")}
+                          className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 hover:bg-stone-100 active:scale-[0.99] transition-all text-left"
+                        >
+                          <span>
+                            <span className="block text-[10px] uppercase tracking-wider text-stone-400 font-semibold">Team code</span>
+                            <span className="block text-lg font-bold font-mono tracking-wider text-stone-900">{data.license.join_code}</span>
+                          </span>
+                          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--accent)] shrink-0">
+                            {copied === "code" ? <Check size={14} weight="bold" className="text-emerald-500" /> : <Copy size={14} />}
+                            {copied === "code" ? "Copied" : "Copy"}
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => copy(`${window.location.origin}/training/join?code=${data.license!.join_code}`, "link")}
+                          className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-stone-50 border border-stone-200 hover:bg-stone-100 active:scale-[0.99] transition-all text-left"
+                        >
+                          <span className="min-w-0">
+                            <span className="block text-[10px] uppercase tracking-wider text-stone-400 font-semibold">Share link</span>
+                            <span className="block text-xs text-stone-500 truncate">/training/join?code={data.license.join_code}</span>
+                          </span>
+                          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--accent)] shrink-0">
+                            {copied === "link" ? <Check size={14} weight="bold" className="text-emerald-500" /> : <Copy size={14} />}
+                            {copied === "link" ? "Copied" : "Copy"}
+                          </span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               )}

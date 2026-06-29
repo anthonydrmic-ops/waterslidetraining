@@ -42,7 +42,7 @@ export async function GET() {
   // Get license info
   const { data: license } = await supabase
     .from("licenses")
-    .select("total_seats, used_seats, status, course_id")
+    .select("total_seats, used_seats, status, course_id, join_code")
     .eq("org_id", currentUser.org_id)
     .eq("status", "active")
     .order("purchased_at", { ascending: false })

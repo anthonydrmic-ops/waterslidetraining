@@ -1,27 +1,44 @@
 import { auth } from "@clerk/nextjs/server";
-import { getStripe, COURSES, type PriceTier } from "@/lib/stripe";
+import {
+  getStripe,
+  COURSES,
+  tierConfig,
+  perSeatPrice,
+  clampSeats,
+  isLaunchActive,
+  type PriceTier,
+} from "@/lib/stripe";
 import { NextResponse } from "next/server";
 
-// POST /api/checkout - create Stripe checkout session
+// POST /api/checkout - create a Stripe checkout session.
+// Auth is OPTIONAL: a buyer can purchase seats without an account and distribute
+// them afterwards via the join code. If signed in, we attach their Clerk id so
+// the purchase can be linked to them as the org admin.
 export async function POST(request: Request) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   const stripe = getStripe();
   if (!stripe) return NextResponse.json({ error: "Stripe not configured" }, { status: 503 });
 
-  const body = await request.json();
-  const courseId = body.courseId as string;
+  let userId: string | null = null;
+  try {
+    userId = (await auth()).userId;
+  } catch {
+    userId = null;
+  }
+
+  const body = await request.json().catch(() => ({}));
+  const courseId = (body.courseId as string) || "waterslide-safety";
   const tier = body.tier as PriceTier;
-  const customSeats = body.seats as number | undefined;
+
+  const t = tierConfig(courseId, tier);
+  if (!t) return NextResponse.json({ error: "Invalid course or tier" }, { status: 400 });
+
+  const seats = clampSeats(courseId, tier, body.seats);
+  const perSeat = perSeatPrice(courseId, tier);
+  if (!seats || !perSeat) {
+    return NextResponse.json({ error: "Invalid configuration" }, { status: 400 });
+  }
 
   const course = COURSES[courseId as keyof typeof COURSES];
-  if (!course) return NextResponse.json({ error: "Invalid course" }, { status: 400 });
-
-  const pricing = course.prices[tier];
-  if (!pricing) return NextResponse.json({ error: "Invalid tier" }, { status: 400 });
-
-  const seats = tier === "business" && customSeats ? Math.max(customSeats, pricing.seats) : pricing.seats;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   const session = await stripe.checkout.sessions.create({
@@ -32,10 +49,10 @@ export async function POST(request: Request) {
         price_data: {
           currency: "aud",
           product_data: {
-            name: `${course.name} - ${tier.charAt(0).toUpperCase() + tier.slice(1)} (${seats} seats)`,
+            name: `${course.name} - ${t.label} (${seats} ${seats === 1 ? "seat" : "seats"})`,
             description: course.description,
           },
-          unit_amount: pricing.pricePerSeat,
+          unit_amount: perSeat,
         },
         quantity: seats,
       },
@@ -44,9 +61,10 @@ export async function POST(request: Request) {
       courseId,
       tier,
       seats: String(seats),
-      clerkUserId: userId,
+      launch: isLaunchActive() ? "1" : "0",
+      ...(userId ? { clerkUserId: userId } : {}),
     },
-    success_url: `${appUrl}/training/slidesure?purchased=true`,
+    success_url: `${appUrl}/training/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${appUrl}/training/slidesure`,
   });
 
