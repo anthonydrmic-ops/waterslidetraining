@@ -443,6 +443,12 @@ function TrainingPageInner() {
                     Contact us for enterprise pricing
                   </a>
                 </p>
+                <p className="text-[11px] text-stone-400 mt-5 max-w-md mx-auto leading-relaxed">
+                  By purchasing you agree to our{" "}
+                  <a href="/terms" className="text-[var(--accent)] hover:underline">Terms &amp; Conditions</a>. This is a
+                  competency training program and statement of completion - not a nationally accredited (RTO/VET)
+                  qualification or a statutory licence.
+                </p>
               </motion.div>
 
               {/* Promo code redemption */}

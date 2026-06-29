@@ -277,6 +277,7 @@ export default function TrainingLandingPage() {
               <li><a href="/services">Services</a></li>
               <li><a href="/training">Training</a></li>
               <li><a href="/contact">Contact</a></li>
+              <li><a href="/terms">Terms &amp; Conditions</a></li>
             </ul>
           </div>
           <div>

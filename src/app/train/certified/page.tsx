@@ -318,6 +318,9 @@ export default function CertifiedPage() {
                     <p className="text-[10px] text-stone-400 mt-8 leading-relaxed">
                       A REST Group product. Standards-aligned waterslide operator training.
                     </p>
+                    <p className="text-[9px] text-stone-300 mt-1.5 leading-relaxed max-w-[52ch] mx-auto">
+                      Statement of completion and competency - not a nationally accredited (RTO/VET) qualification or statutory licence.
+                    </p>
                   </div>
                 </div>
               </div>
