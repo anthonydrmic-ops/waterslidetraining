@@ -2031,11 +2031,11 @@ export const modules: Module[] = [
           },
           {
             type: "image",
-            imageSrc: "/lesson-images/22-rider-scales.jpg",
-            alt: "A flat platform scale set flush into the wet deck at a raft waterslide's dispatch, a digital weight readout on a post beside it and a yellow raft waiting at the flume entry behind",
-            aspect: "4:3",
+            imageSrc: "/lesson-images/22-rider-scales-v2.jpg",
+            alt: "Two young riders stand on a raised platform scale set to the side of a waterslide dispatch, clear of the rider path, while a pool lifeguard in yellow and red reads a green go/no-go light confirming they are within the weight limit",
+            aspect: "16:9",
             heading: "A weigh-in scale at the dispatch platform",
-            body: "A platform scale set into the deck at the raft loading point, with a digital readout on the post. The combined weight is confirmed here against the OEM window before the raft is dispatched - measured, never estimated.",
+            body: "A raised platform scale set to the side of the dispatch, clear of the rider path. A simple red/green light gives the operator an at-a-glance pass or fail - so a rider over the weight window is caught before they ride. Measured, never estimated.",
           },
           {
             type: "oem-reference",
@@ -2608,7 +2608,7 @@ export const modules: Module[] = [
           {
             heading: "Cracks",
             type: "text",
-            body: "Cracks are signs of structural damage that requires immediate attention. They indicate that the FRP has been stressed beyond its design limits. Fiberglass must be applied on both sides of the part for repair. If damage is too severe, the part may need full replacement.",
+            body: "Structural cracks - those that penetrate the laminate or run through-wall - require immediate attention. They indicate the FRP has been stressed beyond its design limits and water can get into the structure. Repair means applying fiberglass to both sides of the part; if the damage is too severe, the part may need full replacement. This is distinct from fine hairline cracks in the surface gelcoat (crazing), which are monitored and documented rather than shut down immediately - unless they progress.",
           },
           {
             heading: "Punctures and Holes",
@@ -2626,7 +2626,7 @@ export const modules: Module[] = [
           },
         ],
         keyTakeaways: [
-          "Cracks indicate stress beyond design limits - immediate shutdown",
+          "Structural cracks indicate stress beyond design limits - immediate shutdown; fine hairline gelcoat cracks are monitored, not shut down",
           "Punctures compromise slide integrity and allow water ingress",
           "Fractures on bolting flanges are critical structural failures",
           "All structural defects = immediate removal from service",
@@ -2650,7 +2650,7 @@ export const modules: Module[] = [
           {
             id: "q5-1-2",
             question:
-              "What does a crack in the FRP flume indicate structurally?",
+              "What does a structural crack in the FRP flume indicate?",
             options: [
               "Normal surface wear from rider friction over time",
               "The FRP has been stressed beyond its design limits",
@@ -2659,7 +2659,7 @@ export const modules: Module[] = [
             ],
             correctIndex: 1,
             explanation:
-              "Cracks in FRP indicate the material has been stressed beyond its design limits. They are not surface wear - they are structural failures requiring immediate attention and professional repair, including fiberglass application on both sides of the damaged part.",
+              "A structural crack in FRP indicates the material has been stressed beyond its design limits. It is not surface wear - it is a structural failure requiring immediate attention and professional repair, including fiberglass application on both sides of the damaged part. (Fine hairline gelcoat cracks - crazing - are surface-level and monitored, not shut down.)",
             type: "knowledge",
           },
           {
