@@ -45,7 +45,7 @@ interface Defect {
 const DEFECTS: Defect[] = [
   {
     icon: Pulse,
-    photo: "/lesson-images/defect-cards/hairline.jpg",
+    photo: "/lesson-images/defect-cards/hairline-v2.jpg",
     label: "Hairline Crack",
     severity: "Monitor",
     desc: "Surface only, no structural risk yet",
