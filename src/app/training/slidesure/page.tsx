@@ -310,17 +310,17 @@ function TrainingPageInner() {
                 sizes="(max-width: 1200px) 100vw, 1140px"
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-bl from-black/70 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/20 to-transparent" />
               {mounted && launchActive && (
-                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--cta)] text-white text-[11px] font-semibold uppercase tracking-wider shadow-lg">
+                <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--cta)] text-white text-[11px] font-semibold uppercase tracking-wider shadow-lg">
                   🔥 July launch offer
                 </div>
               )}
-              <div className="absolute top-0 right-0 p-6 md:p-8 text-right max-w-[72%] md:max-w-[58%]">
+              <div className="absolute top-0 left-0 p-6 md:p-8 text-left max-w-[72%] md:max-w-[58%]">
                 <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/15 border border-white/25 backdrop-blur-sm text-white text-[10px] font-semibold uppercase tracking-wider mb-3">
                   REST Group Training
                 </div>
-                <h1 className="text-2xl md:text-4xl font-bold tracking-tighter text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] max-w-[24ch] ml-auto">
+                <h1 className="text-2xl md:text-4xl font-bold tracking-tighter text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] max-w-[24ch]">
                   SlideSure - Waterslide Safety & Competency Program
                 </h1>
               </div>
