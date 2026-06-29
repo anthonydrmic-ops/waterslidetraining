@@ -83,15 +83,26 @@ export async function POST(request: Request) {
       }
     }
 
-    // Create license
-    await supabase.from("licenses").insert({
-      org_id: orgId,
-      course_id: courseId,
-      total_seats: parseInt(seats),
-      used_seats: 1, // purchaser auto-enrolled
-      stripe_subscription_id: session.subscription?.toString() || session.id,
-      status: "active",
-    });
+    // Create license — idempotently. Stripe retries webhooks, so guard against
+    // creating a duplicate licence for the same checkout (which would inflate
+    // seat counts). The session id is unique per checkout and stable on retries.
+    const subId = session.subscription?.toString() || session.id;
+    const { data: existingLicense } = await supabase
+      .from("licenses")
+      .select("id")
+      .eq("stripe_subscription_id", subId)
+      .maybeSingle();
+
+    if (!existingLicense) {
+      await supabase.from("licenses").insert({
+        org_id: orgId,
+        course_id: courseId,
+        total_seats: parseInt(seats),
+        used_seats: 1, // purchaser auto-enrolled
+        stripe_subscription_id: subId,
+        status: "active",
+      });
+    }
 
     // Auto-enroll the purchaser
     const { data: license } = await supabase
