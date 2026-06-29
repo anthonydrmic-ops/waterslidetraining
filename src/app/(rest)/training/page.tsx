@@ -125,57 +125,62 @@ export default function TrainingLandingPage() {
               <p style={{ maxWidth: "55ch", margin: "0 auto" }}>SlideSure, our waterslide safety and competency program, is available now. More industry-leading courses are in development - register your interest to hear the moment they launch.</p>
             </div>
 
+            <style>{`
+              .ss-live-card { transition: transform .4s cubic-bezier(0.32,0.72,0,1), box-shadow .4s ease; }
+              .ss-live-card:hover { transform: translateY(-5px) scale(1.012); box-shadow: 0 18px 42px rgba(22,163,74,0.22); }
+              .ss-live-card .card-core { transition: background .35s ease; }
+              .ss-live-card:hover .card-core { background: linear-gradient(180deg, rgba(16,185,129,0.08), rgba(16,185,129,0.015)); }
+              .ss-live-card .ss-badge { transition: transform .3s ease; }
+              .ss-live-card:hover .ss-badge { transform: scale(1.06); }
+              .ss-live-card .ss-cta { color: var(--teal, #1F7A8C); transition: color .3s ease; }
+              .ss-live-card:hover .ss-cta { color: #16a34a; }
+              .ss-live-card .ss-cta svg { transition: transform .3s ease; }
+              .ss-live-card:hover .ss-cta svg { transform: translateX(4px); }
+              .ss-live-card .ss-hover-text { display: none; }
+              .ss-live-card:hover .ss-default-text { display: none; }
+              .ss-live-card:hover .ss-hover-text { display: inline; }
+            `}</style>
             <div className="bento-grid bento-grid--3">
               {/* SlideSure - Available Now */}
-              <a href="/training/slidesure" className="card-shell reveal reveal-delay-1" style={{ display: "block", textDecoration: "none", color: "inherit", cursor: "pointer" }}>
+              <a href="/training/slidesure" className="card-shell reveal reveal-delay-1 ss-live-card" style={{ display: "block", textDecoration: "none", color: "inherit", cursor: "pointer" }}>
                 <div className="card-core" style={{ display: "flex", flexDirection: "column", minHeight: "340px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
                     <div className="icon-circle icon-circle--teal" style={{ marginBottom: 0 }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.25)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#059669" }}>Available Now</span>
+                    <span className="ss-badge" style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.25)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#059669" }}>Available Now</span>
                   </div>
                   <h3 style={{ marginBottom: "0.75rem" }}>SlideSure - Waterslide Safety &amp; Competency Program</h3>
                   <p style={{ flex: 1 }}>Comprehensive waterslide operator training covering system understanding, inspections, surface management, water quality, incident prevention and emergency response.</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "1.5rem", color: "var(--teal, #1F7A8C)", fontWeight: 600, fontSize: "0.85rem" }}>
-                    View Course
+                  <div className="ss-cta" style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginTop: "1.5rem", fontWeight: 600, fontSize: "0.85rem" }}>
+                    <span className="ss-default-text">View Course</span>
+                    <span className="ss-hover-text">Course Available</span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                   </div>
                 </div>
               </a>
 
-              {/* Coming Soon - Emergency Planning & Response */}
-              <div className="card-shell reveal reveal-delay-2" style={{ opacity: 0.6 }}>
-                <div className="card-core" style={{ display: "flex", flexDirection: "column", minHeight: "340px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-                    <div className="icon-circle icon-circle--orange" style={{ marginBottom: 0 }}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                    </div>
-                    <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
+              {/* Coming Soon - details hidden until launch */}
+              <div className="card-shell reveal reveal-delay-2" style={{ opacity: 0.55 }}>
+                <div className="card-core" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: "340px" }}>
+                  <div className="icon-circle" style={{ marginBottom: "1rem", background: "rgba(107, 114, 128, 0.08)", color: "#6B7280" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                   </div>
-                  <h3 style={{ marginBottom: "0.75rem" }}>Emergency Planning &amp; Response</h3>
-                  <p style={{ flex: 1 }}>Structured emergency planning training aligned to AS 3745 with a leisure industry focus. Covers emergency procedures, evacuation planning and incident response for aquatics, stadiums, parks, attractions and tourism sites.</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>AS 3745 Aligned</span>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>In Development</span>
-                  </div>
+                  <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
+                  <h3 style={{ marginTop: "1rem", marginBottom: "0.4rem", color: "var(--mid-grey)" }}>New Program</h3>
+                  <p style={{ fontSize: "0.85rem", color: "var(--mid-grey)", maxWidth: "26ch" }}>In development. Details to be announced.</p>
                 </div>
               </div>
 
-              {/* Coming Soon - Entertainment Staging & Rigging */}
-              <div className="card-shell reveal reveal-delay-3" style={{ opacity: 0.6 }}>
-                <div className="card-core" style={{ display: "flex", flexDirection: "column", minHeight: "340px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.5rem" }}>
-                    <div className="icon-circle icon-circle--navy" style={{ marginBottom: 0 }}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                    </div>
-                    <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
+              {/* Coming Soon - details hidden until launch */}
+              <div className="card-shell reveal reveal-delay-3" style={{ opacity: 0.55 }}>
+                <div className="card-core" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", minHeight: "340px" }}>
+                  <div className="icon-circle" style={{ marginBottom: "1rem", background: "rgba(107, 114, 128, 0.08)", color: "#6B7280" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                   </div>
-                  <h3 style={{ marginBottom: "0.75rem" }}>Entertainment Staging &amp; Rigging</h3>
-                  <p style={{ flex: 1 }}>Arena operations and technical rigging fundamentals for arena crew, riggers and event technicians. Covers CAD map interpretation, thrust calculations, SR/SR ratings, staging safety and interfacing with touring production teams.</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.04)", border: "1px solid rgba(107, 114, 128, 0.08)", fontSize: "0.75rem", color: "var(--mid-grey)" }}>In Development</span>
-                  </div>
+                  <span style={{ display: "inline-flex", alignItems: "center", padding: "0.2rem 0.6rem", borderRadius: "100px", background: "rgba(107, 114, 128, 0.08)", border: "1px solid rgba(107, 114, 128, 0.12)", fontSize: "0.6rem", fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.15em", color: "#6B7280" }}>Coming Soon</span>
+                  <h3 style={{ marginTop: "1rem", marginBottom: "0.4rem", color: "var(--mid-grey)" }}>New Program</h3>
+                  <p style={{ fontSize: "0.85rem", color: "var(--mid-grey)", maxWidth: "26ch" }}>In development. Details to be announced.</p>
                 </div>
               </div>
             </div>
