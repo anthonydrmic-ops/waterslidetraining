@@ -197,7 +197,11 @@ function TrainingPageInner() {
         window.location.href = data.url;
       } else {
         console.error("Checkout error:", data);
-        alert("Couldn't start checkout. Please try again, or contact info@restgroup.com.au.");
+        alert(
+          data?.detail
+            ? `Checkout error: ${data.detail}`
+            : "Couldn't start checkout. Please try again, or contact info@restgroup.com.au."
+        );
       }
     } catch (err) {
       console.error("Checkout exception:", err);

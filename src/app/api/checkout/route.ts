@@ -41,32 +41,41 @@ export async function POST(request: Request) {
   const course = COURSES[courseId as keyof typeof COURSES];
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    allow_promotion_codes: true,
-    line_items: [
-      {
-        price_data: {
-          currency: "aud",
-          product_data: {
-            name: `${course.name} - ${t.label} (${seats} ${seats === 1 ? "seat" : "seats"})`,
-            description: course.description,
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      allow_promotion_codes: true,
+      line_items: [
+        {
+          price_data: {
+            currency: "aud",
+            product_data: {
+              name: `${course.name} - ${t.label} (${seats} ${seats === 1 ? "seat" : "seats"})`,
+              description: course.description,
+            },
+            unit_amount: perSeat,
           },
-          unit_amount: perSeat,
+          quantity: seats,
         },
-        quantity: seats,
+      ],
+      metadata: {
+        courseId,
+        tier,
+        seats: String(seats),
+        launch: isLaunchActive() ? "1" : "0",
+        ...(userId ? { clerkUserId: userId } : {}),
       },
-    ],
-    metadata: {
-      courseId,
-      tier,
-      seats: String(seats),
-      launch: isLaunchActive() ? "1" : "0",
-      ...(userId ? { clerkUserId: userId } : {}),
-    },
-    success_url: `${appUrl}/training/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${appUrl}/training/slidesure`,
-  });
+      success_url: `${appUrl}/training/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${appUrl}/training/slidesure`,
+    });
 
-  return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    // Surface the real Stripe error instead of throwing a bare 500 (which the
+    // client could only report as "couldn't connect"). The detail is logged to
+    // the Vercel function logs and returned so the cause is visible.
+    console.error("Stripe checkout.sessions.create failed:", err);
+    const detail = err instanceof Error ? err.message : "Unknown error";
+    return NextResponse.json({ error: "Checkout failed", detail }, { status: 500 });
+  }
 }
